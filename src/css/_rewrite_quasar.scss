@@ -1,0 +1,16 @@
+.page-profile {
+  .q-menu.q-position-engine.scroll {
+    overflow-x: hidden !important;
+    padding-left: 5px;
+    .q-item__label {
+      padding-left: 5px;
+    }
+  }
+}
+
+.card-body.no-padding {
+  padding: 0;
+  .row {
+    padding: 5px 10px;
+  }
+}

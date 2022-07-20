@@ -1,0 +1,322 @@
+<template>
+  <div class="page-person-detail container q-mt-xl">
+
+<!--    <top-bar-->
+<!--      v-bind:title="title"-->
+<!--      v-bind:back_icon="back_icon"-->
+<!--      v-bind:back_link="back_link"-->
+<!--      v-bind:callBack="callBack"-->
+<!--    ></top-bar>-->
+
+    <div class="pb-3 bg-white col-xl-8 box-show ml-auto mr-auto">
+      <q-form @submit="saveProfile">
+        <div class="ml-auto mr-auto">
+          <UploadPhoto :uploadUrl="uploadUrl"></UploadPhoto>
+        </div>
+
+        <q-tabs v-model="tab" class="text-teal">
+          <q-tab class="pl-0" name="Name" label="Name" />
+          <q-tab class="pl-0" name="Contact" label="Contact" />
+          <q-tab class="pl-0" name="Golf" label="Golf" />
+          <q-tab class="pl-0" name="Voorkeuren" label="Voorkeuren" />
+        </q-tabs>
+
+        <q-tab-panels v-model="tab" animated class="p-0">
+          <q-tab-panel class="p-0" name="Name">
+            <q-input
+              v-model="form.relFirstName"
+              :label="$t('Initials')"
+              placeholder="Your initials"
+              lazy-rules
+            />
+
+            <q-input
+              v-model="form.relCallName"
+              :label="$t('First name')"
+              placeholder="Your first name"
+              lazy-rules
+            />
+
+            <q-input
+              v-model="form.relPrefix"
+              :label="$t('Prefix')"
+              placeholder="Your Prefix"
+              lazy-rules
+            />
+
+            <q-input
+              v-model="form.relName"
+              :label="$t('Last name')"
+              placeholder="Your last name"
+              lazy-rules
+            />
+
+            <q-input
+              v-model="form.relAddress1"
+              :label="$t('Straat')"
+              placeholder="Your street name"
+              lazy-rules
+            />
+
+            <q-input
+              v-model="form.relPostalCode"
+              :label="$t('Postcode')"
+              placeholder="Your zipcode"
+              lazy-rules
+            />
+
+            <q-input
+              v-model="form.relCity"
+              :label="$t('Woonplaats')"
+              placeholder="Your city/village"
+              lazy-rules
+            />
+          </q-tab-panel>
+          <q-tab-panel class="p-0" name="Contact">
+            <q-input
+              v-model="form.relPhone"
+              :label="$t('Phone number')"
+              placeholder="Your phone number"
+              lazy-rules
+            />
+
+            <q-input
+              v-model="form.relPhoneMobile"
+              :label="$t('Mobiel telefoonnummer')"
+              placeholder="Your mobile phone number"
+              lazy-rules
+            />
+
+            <q-input
+              v-model="form.relEmail"
+              :label="$t('Email adres')"
+              placeholder="Your email address"
+              lazy-rules
+            />
+          </q-tab-panel>
+          <q-tab-panel class="p-0" name="Golf">
+            <q-input
+              v-model="form.relGolferId"
+              :label="$t('NGF-nummer')"
+              placeholder="Your NGF-number"
+              lazy-rules
+              readonly
+            />
+
+            <q-input
+              v-model="form.relHandicap"
+              :label="$t('Speelsterkte')"
+              placeholder="Your playing HCP"
+              lazy-rules
+              readonly
+            />
+          </q-tab-panel>
+          <q-tab-panel class="p-0" name="Voorkeuren">
+            <q-select
+              v-model="relVisibilityLevel"
+              :options="visibilityArray"
+              label="Zichtbaarheid in ledenboekje"
+              emit-value
+              map-options
+            />
+
+            <br />
+
+            <q-toggle
+              v-model="relMagazineGolfNL"
+              label="Golfers magazine ontvangen"
+            />
+
+            <br />
+
+            <q-toggle
+              v-model="relEmailnewsletterNGF"
+              label="E-mail nieuwsbrief NGF ontvangen"
+            />
+
+            <br />
+
+            <q-toggle
+              v-model="relInvoiceByEmail"
+              label="Factuur per e-mail ontvangen"
+            />
+          </q-tab-panel>
+        </q-tab-panels>
+
+        <div class="text-center mt-4">
+          <q-btn label="Opslaan" type="submit" color="primary" />
+        </div>
+
+        <div class="text-center mt-4">
+          <q-btn
+            label="Uitloggen"
+            color="primary"
+            outline
+            v-on:click="logout"
+          />
+        </div>
+      </q-form>
+    </div>
+  </div>
+</template>
+
+<script>
+import UploadPhoto from "../components/UploadPhoto";
+// import TopBar from "../components/TopBar";
+
+export default {
+  components: {
+    UploadPhoto
+  },
+  data: function () {
+    return {
+      back_icon: "fa-home",
+      back_link: "/",
+      title: "Profiel",
+      callBack: undefined,
+
+      currentUser: {},
+      flagList: [
+        {
+          img: "../assets/images/nl.png",
+          name: "Netherlands (+31)",
+          value: "NL(+31)",
+        },
+        {
+          img: "../assets/images/gb.png",
+          name: "Great Brittain (+44)",
+          value: "EN(+44)",
+        },
+      ],
+      tab: "Name",
+      activeName: "first",
+      uploading: "",
+      form: {
+        relFirstName: "",
+        relCallName: "",
+        relPrefix: "",
+        relName: "",
+        relAddress1: "",
+        relPostalCode: "",
+        relCity: "",
+        relCouNr: "",
+        relPhone: "",
+        mobile_relCouNr: "",
+        relPhoneMobile: "",
+        relEmail: "",
+        relGolferId: "",
+        relHandicap: "",
+        relNr: "",
+        relImage: "",
+        relMagazineGolfNL: false,
+        relInvoiceByEmail: false,
+        relEmailnewsletterNGF: false,
+        relVisibilityLevel: 0,
+      },
+      visibilityArray: [
+        { value: 0, label: "Niet zichtbaan" },
+        { value: 1, label: "Naam en speelsterkte" },
+        { value: 2, label: "Naam, speelsterkte en e-mailadres" },
+        {
+          value: 3,
+          label: "Naam, speelsterkte, e-mailadres en telefoonnummer",
+        },
+      ],
+      uploadUrl: "/api/golfer/relation/avatar-upload",
+    };
+  },
+  computed: {
+    relMagazineGolfNL: {
+      get: function () {
+        return (
+          this.form.relMagazineGolfNL != null && this.form.relMagazineGolfNL > 0
+        );
+      },
+      set: function (value) {
+        this.form.relMagazineGolfNL = value ? 1 : 0;
+      },
+    },
+    relInvoiceByEmail: {
+      get: function () {
+        return (
+          this.form.relInvoiceByEmail != null && this.form.relInvoiceByEmail > 0
+        );
+      },
+      set: function (value) {
+        this.form.relInvoiceByEmail = value ? 1 : 0;
+      },
+    },
+    relEmailnewsletterNGF: {
+      get: function () {
+        return (
+          this.form.relEmailnewsletterNGF != null &&
+          this.form.relEmailnewsletterNGF > 0
+        );
+      },
+      set: function (value) {
+        this.form.relEmailnewsletterNGF = value ? 1 : 0;
+      },
+    },
+    relVisibilityLevel: {
+      get: function () {
+        return this.form.relVisibilityLevel != null &&
+          this.form.relVisibilityLevel > 0
+          ? this.form.relVisibilityLevel
+          : 0;
+      },
+      set: function (value) {
+        this.form.relVisibilityLevel = value;
+      },
+    },
+  },
+  methods: {
+    saveProfile() {
+      const payload = Object.assign(this.form, {
+        relNr: this.currentUser.relNr,
+      });
+      this.$http.put(`golfer/relation`, payload);
+    },
+    logout() {
+      this.$ls.removeItem("currentUser");
+      this.$router.push("/login");
+    },
+    onLogout() {
+      this.$confirm("Will log out, Whether or not to continue?", "Prompt", {
+        confirmButtonText: "Confirm",
+        cancelButtonText: "Cancel",
+        type: "warning",
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "Successful exit!",
+          });
+          this.$ls.clear();
+          this.$router.push("/");
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "Cancel out!",
+          });
+        });
+    },
+  },
+  created() {
+    document.body.classList.add("page-profile");
+    if (this.$ls.getItem("currentUser")) {
+      this.$http.get(`golfer/relation/detail`).then((res) => {
+        this.form = Object.assign({}, res);
+        if (
+          this.currentUser.relCouNr &&
+          this.flagList[this.currentUser.relCouNr]
+        ) {
+          this.form.relCouNr = this.flagList[this.currentUser.relCouNr].value;
+          this.form.mobile_relCouNr =
+            this.flagList[this.currentUser.relCouNr].value;
+        }
+      });
+    }
+  },
+};
+</script>

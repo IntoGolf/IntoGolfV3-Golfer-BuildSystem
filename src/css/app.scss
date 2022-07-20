@@ -1,0 +1,64 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,600,700");
+
+// define color here
+@import "_variables";
+@import "rewrite_quasar";
+@import "addToCalender";
+
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: "Nunito", sans-serif;
+  background-color: $body-bg;
+}
+
+.page-title {
+  margin: 20px 1px 0 0;
+  font-size: 34px;
+  font-weight: 600;
+  text-align: center;
+  color: #12263f;
+}
+
+.sub-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+  color: $sub-title;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.banner-title {
+  font-size: 0.9rem;
+  border-color: rgba(18, 38, 63, 0.1);
+  background-color: #12263f;
+}
+
+.container-dropdown-login-username {
+  .login-name {
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+.grecaptcha-badge {
+  display: none;
+}
+
+.itg-text-overflow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itg-q-item {
+  background-color: white;
+}

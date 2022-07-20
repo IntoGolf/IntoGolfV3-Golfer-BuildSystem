@@ -1,0 +1,85 @@
+// Body
+$body-bg: #f8fafc;
+
+// Typography
+$font-family-sans-serif: "Nunito", sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+// Colors
+$blue: #3490dc;
+$indigo: #6574cd;
+$purple: #9561e2;
+$pink: #f66d9b;
+$red: #e3342f;
+$orange: #f6993f;
+$yellow: #ffed4a;
+$green: #38c172;
+$teal: #4dc0b5;
+$cyan: #6cb2eb;
+$border: #edf2f9;
+$success: #00da77;
+
+$lightGreyBlue: #95aac9;
+
+// home handicap score
+$scoreUp: #e63757;
+$scoreUpBgc: rgba(250, 215, 221, 0.25);
+$scoreDown: #090;
+$scoreDownBgc: rgba(0, 215, 0, 0.25);
+
+// sidebar
+$link-active: #000;
+$bg-link-hover: #f0faff;
+
+$primary: #2c7be5;
+$secondary: #008691;
+
+$sub-title: #95aac9;
+
+.color-sub-title {
+  color: $sub-title !important;
+}
+
+.color-primary {
+  color: $primary;
+}
+
+.text-secondary {
+  color: $secondary;
+}
+.text-black {
+  color: #12263f;
+}
+
+.text-gray-blue {
+  color: $lightGreyBlue !important;
+}
+
+.text-weight {
+  font-weight: 600;
+}
+
+.text-success {
+  color: #00da77 !important;
+}
+
+.golfer-cursor {
+  cursor: pointer;
+}
+
+.bg-color {
+  background-color: #fff;
+}
+
+.box-show {
+  box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.05);
+}
+
+.box-border {
+  border: solid 1px $border;
+}
+
+.golfer-border {
+  border-color: $border;
+}
