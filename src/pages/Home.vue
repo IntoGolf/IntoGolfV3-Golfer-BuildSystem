@@ -62,6 +62,7 @@
         <span class="title"><i class="far fa-list-alt"></i>Wedstrijden</span>
       </div>
       <div
+          v-if="toNGF"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/NGF')"
       >

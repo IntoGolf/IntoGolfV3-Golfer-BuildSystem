@@ -39,7 +39,7 @@
       v-if="match.ideal && mySubscription == null"
       inline-actions
       rounded
-      class="bg-orange text-white"
+      class="bg-orange text-white q-mb-md"
     >
       Voor deze wedstrijd is betaling via iDeal vereist. Na inschrijving word u
       doorgestuurd naar de betaling. Wanneer de betaling niet wordt afgerond
@@ -172,7 +172,7 @@ export default {
       return result;
     },
     doIHaveGuests: function () {
-      return this.match.players.filter(player => player.relNrDoor == this.currentUser.relNr && player.relNr != this.currentUser.relNr && player.guest);
+      return this.match.players.filter(player => player.relNrDoor == this.currentUser.relNr && player.relNr != this.currentUser.relNr && player.guest).length > 0;
     },
   },
   methods: {
