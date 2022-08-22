@@ -8,7 +8,7 @@
             src="~assets/images/logo_nw.svg"
             style="width: 100px;"
         />
-        <h4>Noordwijkse GolfClub</h4>
+        <h4>Demo GolfClub</h4>
       </div>
     </div>
 
