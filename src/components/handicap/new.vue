@@ -156,7 +156,7 @@
 
           <!--Step 5: confirmation-->
           <div id="div-scorecard-details" v-if="scorecard.step == 5">
-            <div class="row">
+            <div class="row q-mt-md">
               <div class="col" style="font-weight: bold">Datum</div>
               <div class="col text-right itg-text-overflow">
                 {{ scorecard.date }}
@@ -426,7 +426,7 @@ export default {
         remarks: "",
         marker: "",
 
-        course: 1,
+        course: 2,
         loop: "",
         tee: "",
         category: "",
@@ -530,13 +530,14 @@ export default {
       let result = [];
       let femaleTees = [13, 14, 15, 16, 17];
       this.lus.baan_lus_tees.forEach(function (item) {
-        if (
-            (that.currentUser.relGender == 1 || that.currentUser.relGender == null  &&
-                !femaleTees.includes(item.bltCategory)) ||
-            (that.currentUser.relGender == 2 &&
-                femaleTees.includes(item.bltCategory))
-        ) {
-          result.push(item);
+        if (that.$ls.getItem("currentUser").value.relGender == 1) {
+          if (!femaleTees.includes(item.bltCategory)) {
+            result.push(item);
+          }
+        } else {
+          if (femaleTees.includes(item.bltCategory)) {
+            result.push(item);
+          }
         }
       });
       return result;
@@ -762,7 +763,7 @@ export default {
       }
 
       if (type == 1) {
-        this.scorecard.course = 1;
+        this.scorecard.course = 2;
         this.onChangeBaan(this.scorecard.course);
       }
 

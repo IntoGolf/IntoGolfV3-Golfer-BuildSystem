@@ -109,7 +109,7 @@ export default {
   },
   computed: {
     cardInMemory: function () {
-      return this.$ls.getItem('scorecard')  == undefined;
+      return this.$ls.getItem('scorecard').value  != null;
     },
   },
   methods: {
@@ -125,7 +125,7 @@ export default {
       return text;
     },
     handlePauzedScorecard: function () {
-      let scorecard = this.$ls.getItem("scorecard");
+      let scorecard = this.$ls.getItem("scorecard").value;
       let card = { details: { ...scorecard } };
       this.$emit("handleOpenScorecard", card);
     },

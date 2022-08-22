@@ -1,93 +1,89 @@
 <template>
-  <div class="page-reset-password">
-    <div class="container mt-2 mb-4">
-      <div class="bt-row justify-content-center">
-        <div class="col-lg-7 col-md-9 col-xl-5">
-          <div class="card-body box-border rounded bg-white">
-            <div class="form-group mb-4">
-              <div class="text-center">
-                <img src="../assets/images/logo-black.svg" alt="logo" />
-                <h3 class="page-title mb-2">Reset password</h3>
-              </div>
-            </div>
-            <div class="form-group">
-              <el-form :model="form" ref="form">
-                <el-form-item
-                  prop="email"
-                  label="Email address"
-                  :rules="[
-                    {
-                      required: true,
-                      message: 'Please enter email address',
-                      trigger: 'blur',
-                    },
-                    {
-                      type: 'email',
-                      message: 'Please enter the correct email address',
-                      trigger: ['blur', 'change'],
-                    },
-                  ]"
-                >
-                  <el-input
-                    v-model="form.email"
-                    placeholder="Enter email address"
-                    auto-complete="new-email"
-                  ></el-input>
-                </el-form-item>
-                <el-form-item
-                  prop="password"
-                  label="Password"
-                  :rules="[
-                    {
-                      required: true,
-                      message: 'Please enter the password',
-                      trigger: 'blur',
-                    },
-                  ]"
-                >
-                  <el-input
-                    v-model="form.password"
-                    placeholder="Enter the password"
-                    show-password
-                    auto-complete="new-password"
-                  ></el-input>
-                </el-form-item>
-                <el-form-item
-                  prop="passwordAgain"
-                  label="Confirm Password"
-                  :rules="[
-                    {
-                      required: true,
-                      message: 'Please enter your password again',
-                      trigger: 'blur',
-                    },
-                  ]"
-                >
-                  <el-input
-                    v-model="form.passwordAgain"
-                    placeholder="Enter the password again"
-                    show-password
-                  ></el-input>
-                </el-form-item>
-              </el-form>
-            </div>
-            <div class="form-group bt-row mb-3 mt-4">
-              <div class="col-md-12 mt-2">
-                <button
-                  type="submit"
-                  class="btn btn-primary btn-block"
-                  @click="onResetPassword('form')"
-                >
-                  Reset password
-                </button>
-              </div>
-            </div>
+
+  <q-page-container>
+
+    <q-card class="my-card q-ml-auto q-mr-auto q-mt-xl">
+
+      <q-card-section>
+
+        <div class="row justify-center q-mt-sm">
+          <div class="col-4 text-center">
+            <img
+                src="../assets/images/logo-black.svg"
+                class="logo"
+                alt="logo"/>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+
+        <div class="row justify-center q-mt-md">
+          <div class="col text-center text-h5">
+            Reset wachtwoord
+          </div>
+        </div>
+
+        <div class="row q-mt-md">
+
+          <div class="col">
+
+            <q-form
+                @submit="login($event)"
+                @reset="onResetPassword"
+                class="q-gutter-sm">
+
+              <q-input
+                  v-model="form.email"
+                  label="Nieuw e-mailadres"
+                  lazy-rules
+                  :rules="[ val => val && val.length > 0 || 'Voer aub uw e-mailadres in']"/>
+
+              <q-input
+                  v-model="form.password"
+                  label="Nieuw wachtwoord"
+                  lazy-rules
+                  :rules="[ val => val && val.length > 0 || 'Voer aub uw gewenste wachtwoord in']"/>
+
+              <q-input
+                  v-model="form.passwordAgain"
+                  label="Bevestig wachtwoord"
+                  lazy-rules
+                  :rules="[ val => val && val.length > 0 || 'Voer aub uw e-wachtwoord in']"/>
+
+              <div class="text-center">
+
+                <q-btn
+                    label="Opslaan"
+                    v-on:click="onResetPassword"
+                    color="primary"/>
+
+                <q-btn
+                    flat
+                    label="Terug naar inloggen"
+                    v-on:click="$router.push('/');"
+                    color="primary"/>
+
+              </div>
+
+            </q-form>
+
+          </div>
+        </div>
+
+      </q-card-section>
+
+    </q-card>
+
+  </q-page-container>
+
 </template>
+
+<style lang="sass" scoped>
+
+.my-card
+  width: 100%
+  max-width: 320px
+
+</style>
+
 <script>
 export default {
   data: function () {
@@ -107,39 +103,24 @@ export default {
     onVerifyCode() {
       this.$router.push("/reset/password");
     },
-    onResetPassword(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          if (this.form.password === this.form.passwordAgain) {
-            this.$http
-              .post("golfer/public/auth/reset-password", this.form)
-              .then(() => {
-                this.$router.push("/");
-                this.$message({
-                  message: "Password reset successfully.",
-                  type: "success",
-                });
+    onResetPassword() {
+      if (this.form.password === this.form.passwordAgain) {
+        this.$http
+            .post("golfer/public/auth/reset-password", this.form)
+            .then(() => {
+              this.$router.push("/");
+              this.$message({
+                message: "Password reset successfully.",
+                type: "success",
               });
-          } else {
-            this.$message({
-              type: "warning",
-              message: "Inconsistent password entry!",
             });
-          }
-        } else {
-          return false;
-        }
-      });
+      } else {
+        this.$message({
+          type: "warning",
+          message: "Inconsistent password entry!",
+        });
+      }
     },
   },
 };
 </script>
-<style lang="scss" scoped>
-@import "../css/_variables";
-
-.page-reset-password {
-  .card-body {
-    box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.05);
-  }
-}
-</style>

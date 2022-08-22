@@ -1,5 +1,6 @@
 <template>
-  <q-page>
+
+  <q-page class="q-ma-md">
 
     <main v-if="showHole == 0">
 
@@ -11,23 +12,20 @@
               <q-item-section class="text-h6 text-center q-pt-md q-pb-md">
                 {{ title }}
 
-                <q-btn-group unelevated spread>
+                <q-btn-group class="q-mt-md" size="small" unelevated spread>
                   <q-btn
                       v-show="scorecard.ngf_card_id.length == 0"
-                      outline
                       color="secondary"
                       label="opslaan"
                       @click="handleSave"
                   />
                   <q-btn
-                      outline
                       color="secondary"
                       label="sluiten"
                       @click="onClose"
                   />
                   <q-btn
                       v-show="scorecard.course != -1 && scorecard.course != 993 && scorecard.course_country_code == 'NL'"
-                      outline
                       color="secondary"
                       label="score"
                       @click="showHole = 9"/>

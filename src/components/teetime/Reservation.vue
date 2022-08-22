@@ -2,7 +2,7 @@
 
   <div class="q-page q-pa-md">
 
-    <q-card class="bg-green-4 text-white q-mb-md">
+    <q-card class="bg-green-6 text-white q-mb-md">
 
       <q-card-section class="text-h6">
         Algemeen

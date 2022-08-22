@@ -25,7 +25,7 @@
       </q-toolbar>
     </q-header>
 
-      <router-view />
+      <router-view class="web-width" />
 
   </q-layout>
 </template>

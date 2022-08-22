@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h5>Inschrijven {{ match.name }}</h5>
+    <h5 class="q-mb-sm q-mt-sm">Inschrijven {{ match.name }}</h5>
 
     <q-select
       v-if="player.details.id == 0"
@@ -13,6 +13,7 @@
       :options="relations"
       option-value="relNr"
       option-label="full_name"
+      :option-disable="(item) => item === null ? true : item.disabled != ''"
       @filter="filterFn"
     >
       <template v-slot:no-option>
@@ -43,7 +44,9 @@
       label="Tee"
     />
 
-    <div v-for="(pOption, index) in player.details.options" :key="index">
+    <div v-for="(pOption, index) in player.details.options"
+         :key="index"
+         class="q-mb-md">
       <q-select
         v-model="pOption.mpoValue"
         :options="optionArray"
@@ -164,7 +167,7 @@ export default {
             tee.baan_lus_tee_soort.Geslacht == "V")
         ) {
           array.push({
-            id: tee.bltId,
+            id: tee.bltCategory,
             label: tee.baan_lus_tee_soort.Achtergrond,
           });
         }
@@ -215,8 +218,10 @@ export default {
             that.id = res.data.id;
             that.url = res.data.url;
           } else {
-            console.log("ok");
-            that.$message.success("Inschrijving is verwerkt");
+            that.$q.notify ({
+              type: 'positive',
+              message: 'Inschrijving is verwerkt'
+            });
             that.handleCloseSubscribe();
           }
         });
@@ -236,7 +241,12 @@ export default {
           this.$http
             .post(`golfer/match/unsubscribe`, this.player)
             .then(function () {
-              that.$message.success("Uitschrijving is verwerkt");
+
+              that.$q.notify ({
+                type: 'positive',
+                message: 'Uitschrijving is verwerkt'
+              });
+
               that.handleCloseSubscribe();
             });
         });

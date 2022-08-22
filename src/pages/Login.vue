@@ -6,8 +6,8 @@
 
       <q-card-section>
 
-        <div class="row justify-center q-mt-sm">
-          <div class="col-4 text-center">
+        <div class="row q-mt-sm">
+          <div class="col text-center">
             <img
                 src="../assets/images/logo-black.svg"
                 class="logo"
@@ -15,43 +15,39 @@
           </div>
         </div>
 
-        <div class="row justify-center q-mt-md">
+        <div class="row q-mt-md q-mb-md">
           <div class="col text-center text-h5">
-            Login with your account
+            Login met uw account
           </div>
         </div>
 
-        <div class="row q-mt-md">
+        <q-input
+            filled
+            v-model="form.relEmail"
+            label="Uw e-mailadres"
+            lazy-rules
+            :rules="[ val => val && val.length > 0 || 'Voer aub uw e-mailadres in']"/>
 
-          <div class="col">
+        <q-input
+            :type="isPwd ? 'password' : 'text'"
+            filled
+            v-model="form.repPassword"
+            label="Uw wachtwoord"
+            lazy-rules
+            :rules="[ val => val && val.length > 0 || 'Voer aub uw e-wachtwoord in']">
+          <template v-slot:append>
+            <q-icon
+                :name="isPwd ? 'visibility_off' : 'visibility'"
+                class="cursor-pointer"
+                @click="isPwd = !isPwd"
+            />
+          </template>
+        </q-input>
 
-            <q-form
-                @submit="login($event)"
-                @reset="onReserPassword"
-                class="q-gutter-sm">
-
-              <q-input
-                  filled
-                  v-model="form.relEmail"
-                  label="Uw e-mailadres"
-                  lazy-rules
-                  :rules="[ val => val && val.length > 0 || 'Voer aub uw e-mailadres in']"/>
-
-              <q-input
-                  filled
-                  v-model="form.repPassword"
-                  label="Uw wachtwoord"
-                  lazy-rules
-                  :rules="[ val => val && val.length > 0 || 'Voer aub uw e-wachtwoord in']"/>
-
-              <div>
-                <q-btn label="Inloggen" type="submit" color="primary"/>
-                <q-btn label="Wachtwoord vergeten" type="reset" color="primary" flat class="q-ml-sm"/>
-              </div>
-
-            </q-form>
-
-          </div>
+        <div class="text-center">
+          <q-btn label="Inloggen" v-on:click="onlogin" color="primary"/>
+          <q-btn label="Wachtwoord vergeten" v-on:click="onResetPassword" color="primary" flat class="q-mt-md"/>
+          <q-btn label="Inschrijven" v-on:click="onSignup" color="primary" flat/>
         </div>
 
       </q-card-section>
@@ -62,41 +58,47 @@
 
 </template>
 
-<style lang="sass" scoped>
-.my-card
-  width: 100%
-  max-width: 320px
-</style>
-
 <script>
-// @ is an alias to /src
 
 export default {
   name: "Login",
   data: function () {
     return {
       form: {
-        relEmail: "",
-        repPassword: "",
+        relEmail: "laurens@intogolf.nl",
+        repPassword: "Test543@!",
       },
-      passwordShow: false,
+      isPwd: true,
     };
   },
   methods: {
-    onResetPassword() {
-      this.$router.push("verify/code");
+    onResetPassword: function () {
+      this.$router.push("verify-code");
     },
-    onSignup() {
+    onSignup: function () {
       this.$router.push("sign-up");
     },
-    login() {
+    onlogin: function () {
       this.$q.loading.show();
       this.$http
           .post("golfer/auth/login", this.form)
           .then((res) => {
             if (res) {
+
               this.$ls.setItem('authorization', res.relation_password.apiToken, 1000 * 60 * 60 * 24 * 7);
               this.$ls.setItem('currentUser', res, 1000 * 60 * 60 * 24 * 7);
+
+
+              if (this.$ls.getItem('currentUserPref').value == null) {
+
+                let currentUserPref={
+                  matchList: {
+                    subFilter:0
+                  }
+                }
+                this.$ls.setItem('currentUserPref', currentUserPref, 1000 * 60 * 60 * 24 * 7);
+              }
+
               this.$q.loading.hide();
               this.$router.push("/");
             }
@@ -108,41 +110,3 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-@import "../css/_variables";
-
-.home {
-  .logo {
-    width: 4rem;
-  }
-
-  .card-body {
-    box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.05);
-
-    .input-password {
-      height: 2rem;
-    }
-  }
-
-  .divider-line {
-    .rectangle {
-      width: 37%;
-      height: 1px;
-      background-color: #d2ddef;
-      vertical-align: center;
-    }
-  }
-
-  .form-login {
-    .input-append-icon {
-      position: relative;
-
-      .container-icon {
-        position: absolute;
-        top: 45px;
-        right: 10px;
-      }
-    }
-  }
-}
-</style>

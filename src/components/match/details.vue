@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <div class="row">
-      <div class="col">
+      <div class="col q-pa-md">
         <details-list
           v-if="page == 1"
           :match="match"
@@ -18,6 +18,7 @@
           v-if="page == 1 && match.UitslagenGereed != 1"
           :match="match"
           :currentUser="currentUser"
+          v-on:handleSubscribe="handleSubscribe"
           v-on:handleSubscribeMember="handleSubscribeMember"
           v-on:handleSubscribeGuest="handleSubscribeGuest"
         />

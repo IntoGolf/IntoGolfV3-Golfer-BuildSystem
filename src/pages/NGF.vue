@@ -1,14 +1,9 @@
 <template>
-  <div class="page-NGF container q-mt-xl" v-loading="loading">
 
-<!--    <top-bar-->
-<!--      v-bind:title="title"-->
-<!--      v-bind:back_icon="back_icon"-->
-<!--      v-bind:back_link="back_link"-->
-<!--      v-bind:callBack="callBack"-->
-<!--    ></top-bar>-->
+  <q-page-container class="q-mt-md">
 
     <div class="row mt-5">
+
       <img
         ref="ngfCard"
         :src="blobUrl"
@@ -19,10 +14,12 @@
           left: cardLeft,
           transform: cardTransform,
         }"
-        class="img-fluid ngf_card"
-      />
+        class="img-fluid ngf_card"/>
+
     </div>
-  </div>
+
+  </q-page-container>
+
 </template>
 
 <style lang="scss" scoped>
@@ -104,9 +101,9 @@ export default {
 
     imgPos: function (scale) {
       let headerOffset = 40;
-      let widthOffset = 30;
+      let widthOffset = 10;
       let cardHeight = 505;
-      let cardWidth = 900;
+      let cardWidth = 600;
 
       let vh = document.documentElement.clientHeight - headerOffset;
       let vw = document.documentElement.clientWidth - widthOffset;

@@ -12,8 +12,7 @@
             Hole {{ hole.number }}
 
             <q-btn
-                class="full-width"
-                outline
+                class="full-width q-mt-md q-mb-md"
                 color="secondary"
                 label="Holes"
                 @click="handleSwitchHoles"

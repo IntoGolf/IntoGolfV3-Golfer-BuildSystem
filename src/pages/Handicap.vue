@@ -2,14 +2,6 @@
 
   <q-page-container>
 
-<!--    <top-bar-->
-<!--      v-bind:title="title"-->
-<!--      v-bind:back_icon="back_icon"-->
-<!--      v-bind:back_link="back_link"-->
-<!--      v-bind:callBack="callBack"-->
-<!--      v-on:handleCloseScorecard="handleCloseScorecard"-->
-<!--    />-->
-
     <handicap-list
       v-if="page == 1"
       :handicapList="handicapList"
@@ -51,17 +43,13 @@ export default {
       page: 0,
       type: 1,
 
-      back_icon: "fa-home",
-      back_link: "/",
-      title: "Handicap",
-      callBack: undefined,
-
+      scorecard: Object,
       handicapList: false,
     };
   },
   created: function () {
     if (this.$route.query.action != undefined) {
-      let scorecard = this.$ls.getItem("scorecard");
+      let scorecard = this.$ls.getItem("scorecard").value;
       this.scorecard = { ...scorecard };
       this.scorecard.type = 1;
       this.page = 2;
@@ -88,15 +76,7 @@ export default {
       if (scorecard.details.is_penalty_score) {
         return;
       }
-
-      this.back_link = "/handicap";
-      this.back_icon = "fa-arrow-left";
-      this.callBack = function () {
-        this.$emit("handleCloseScorecard", false);
-      };
-
       this.scorecard = scorecard.details;
-      // this.type = type;
       this.scorecard.type = 1;
       this.page = 2;
     },
@@ -107,23 +87,12 @@ export default {
     },
 
     handleNewScorecard: function (type) {
-      this.back_link = "/handicap";
-      this.back_icon = "fa-arrow-left";
-      this.callBack = function () {
-        this.$emit("handleCloseScorecard", false);
-      };
-
       this.type = type;
       this.page = 3;
     },
 
     handleCloseScorecard: function (reload) {
-      this.back_link = "/";
-      this.back_icon = "fa-home";
-      this.callBack = undefined;
-
       this.handicapList = false;
-
       let that = this;
       if (reload) {
         this.$http.get("golfer/handicap/all").then((res) => {

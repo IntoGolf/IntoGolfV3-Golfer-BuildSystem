@@ -1,24 +1,25 @@
 <template>
-  <q-page-container>
+
+  <q-page-container class="web-width">
+
     <div class="row">
-      <div class="col text-center">
+      <div class="col text-center q-pt-lg">
         <q-img
-          v-if="system_logo"
-          :src="system_logo"
-          style="width: 40px; height: 40px"
+            src="~assets/images/logo_nw.svg"
+            style="width: 100px;"
         />
-        <h4>Golfbaan't Balletjes</h4>
+        <h4>Noordwijkse GolfClub</h4>
       </div>
     </div>
 
-    <div v-if="matchId > 0" class="row">
+    <div v-if="match != null" class="row q-mb-md">
       <div class="col text-center">
         <q-btn
-          outline
-          color="secondary"
-          v-on:click="$router.push('/match?id=' + matchId)"
+            outline
+            color="secondary"
+            v-on:click="$router.push('/match?id=' + match.matchId)"
         >
-          Wedstrijdscore
+          Wedstrijd {{match.name}}
         </q-btn>
       </div>
     </div>
@@ -26,9 +27,9 @@
     <div v-if="cardInMemory" class="row q-mb-md">
       <div class="col text-center">
         <q-btn
-          outline
-          color="secondary"
-          @click="$router.push('/handicap?action=pauzed')"
+            outline
+            color="secondary"
+            @click="$router.push('/handicap?action=pauzed')"
         >
           Gepauzeerde scorekaart
         </q-btn>
@@ -37,76 +38,73 @@
 
     <div class="row q-pl-md q-pr-md q-gutter-sm">
       <div
-        class="col text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/reservations')"
-      >
+          class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/reservations')">
         <span class="title"
-          ><i class="far fa-calendar-star"></i>Starttijden</span
-        >
+        ><i class="far fa-calendar-star"></i>Starttijden</span>
       </div>
 
       <div
-        v-if="toNGF"
-        class="col text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/handicap')"
+          v-if="toNGF"
+          class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/handicap')"
       >
         <span class="title"><i class="far fa-golf-ball"></i>Handicap</span>
       </div>
 
-      <div
-        class="col text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/match')"
-      >
-        <span class="title"><i class="far fa-list-alt"></i>Wedstrijden</span>
-      </div>
     </div>
 
     <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
       <div
-        class="col text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/NGF')"
+          class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/match')"
+      >
+        <span class="title"><i class="far fa-list-alt"></i>Wedstrijden</span>
+      </div>
+      <div
+          class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/NGF')"
       >
         <span class="title"><i class="far fa-calendar-star"></i>NGF-Pas</span>
       </div>
+    </div>
 
+    <div class="row text-h6 q-pl-md q-pr-md q-pt-sm q-gutter-sm">
       <div
-        v-if="toNGF"
-        class="col text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/members')"
+          v-if="toNGF"
+          class="col text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/members')"
       >
         <span class="title"><i class="far fa-golf-ball"></i>Ledenlijst</span>
       </div>
 
       <div
-        class="col text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/messages')"
+          class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/messages')"
       >
-        <span class="title"><i class="far fa-list-alt"></i>Berichten</span>
+        <span class="title">
+          <i class="far fa-list-alt"></i>
+          Berichten {{ unreadCount > 0 ? '(' + unreadCount + ')' : ''}}
+        </span>
       </div>
     </div>
 
     <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
       <div
-        class="col text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/profile')"
+          class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/profile')"
       >
         <span class="title"><i class="far fa-calendar-star"></i>Profiel</span>
       </div>
 
       <div
-        v-if="toNGF"
-        class="col text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/members')"
+          v-if="toNGF"
+          class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/')"
       >
-        <span class="title"><i class="far fa-golf-ball"></i>Vrij</span>
+        <span class="title"><i class="far fa-golf-ball"></i>Aanmelden</span>
       </div>
 
-      <div
-        class="col text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/messages')"
-      >
-        <span class="title"><i class="far fa-list-alt"></i>Vrij</span>
-      </div>
     </div>
 
     <!--
@@ -139,6 +137,7 @@
       <span class="title"><i class="far fa-shopping-cart"></i>Facturen</span>
     </div>
     -->
+
   </q-page-container>
 </template>
 
@@ -147,52 +146,35 @@ export default {
   components: {},
   data() {
     return {
-      system_logo: "",
-      matchId: 0,
+      system_logo: '../../src/assets/images/logo_nw.svg',
+      match: null,
       toNGF: false,
-      unreadCount: 0,
-      currentUser: {},
-      gameScore: -3.4,
-      userDropdownValue: null,
-      userDropDownOptions: ["logout"],
+      messageList: [],
     };
   },
   created() {
-    console.log(this.$dayjs());
     this.loadMessageList();
     this.loadSetting();
-    this.currentUser = this.$ls.getItem("currentUser");
   },
   computed: {
-    gameScoreText() {
-      if (this.gameScore >= 0) {
-        return "+" + this.gameScore;
-      } else {
-        return this.gameScore;
-      }
-    },
     cardInMemory: function () {
-      return this.$ls.getItem('scorecard') == undefined;
+      return this.$ls.getItem('scorecard').value != null;
     },
+    unreadCount: function() {
+      return this.messageList.filter(message => message.message_opened == null).length;
+    }
   },
   methods: {
-    getUnreadMsgCount(list) {
-      let unreadCount = 0;
-      list.forEach((message) => {
-        unreadCount += message.message_opened == null ? 1 : 0;
-      });
-      this.unreadCount = unreadCount;
-    },
     loadSetting() {
       this.$http.get(`golfer/public/setting`).then((res) => {
         // this.system_logo = res.system_logo;
-        this.matchId = res.match ? res.match.matchId : null;
+        this.match = res.match ? res.match : null;
         this.toNGF = res.toNGF;
       });
     },
     loadMessageList() {
       this.$http.get(`golfer/message/all`).then((res) => {
-        this.getUnreadMsgCount(res.data);
+        this.messageList = res.data;
       });
     },
   },

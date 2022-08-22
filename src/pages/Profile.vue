@@ -1,15 +1,11 @@
 <template>
-  <div class="page-person-detail container q-mt-xl">
 
-<!--    <top-bar-->
-<!--      v-bind:title="title"-->
-<!--      v-bind:back_icon="back_icon"-->
-<!--      v-bind:back_link="back_link"-->
-<!--      v-bind:callBack="callBack"-->
-<!--    ></top-bar>-->
+  <q-page-container class="q-mt-md">
 
-    <div class="pb-3 bg-white col-xl-8 box-show ml-auto mr-auto">
+    <div class="pb-3 bg-white">
+
       <q-form @submit="saveProfile">
+
         <div class="ml-auto mr-auto">
           <UploadPhoto :uploadUrl="uploadUrl"></UploadPhoto>
         </div>
@@ -21,7 +17,7 @@
           <q-tab class="pl-0" name="Voorkeuren" label="Voorkeuren" />
         </q-tabs>
 
-        <q-tab-panels v-model="tab" animated class="p-0">
+        <q-tab-panels v-model="tab" class="p-0">
           <q-tab-panel class="p-0" name="Name">
             <q-input
               v-model="form.relFirstName"
@@ -72,6 +68,7 @@
               lazy-rules
             />
           </q-tab-panel>
+
           <q-tab-panel class="p-0" name="Contact">
             <q-input
               v-model="form.relPhone"
@@ -94,6 +91,7 @@
               lazy-rules
             />
           </q-tab-panel>
+
           <q-tab-panel class="p-0" name="Golf">
             <q-input
               v-model="form.relGolferId"
@@ -111,6 +109,7 @@
               readonly
             />
           </q-tab-panel>
+
           <q-tab-panel class="p-0" name="Voorkeuren">
             <q-select
               v-model="relVisibilityLevel"
@@ -143,21 +142,28 @@
           </q-tab-panel>
         </q-tab-panels>
 
-        <div class="text-center mt-4">
-          <q-btn label="Opslaan" type="submit" color="primary" />
+        <div class="text-center q-mt-md q-pb-md">
+
+          <q-btn
+              label="Opslaan"
+              type="submit"
+              color="primary" />
+
+          <q-btn
+              label="Uitloggen"
+              color="primary"
+              outline
+              class="q-ml-md"
+              v-on:click="logout"/>
+
         </div>
 
-        <div class="text-center mt-4">
-          <q-btn
-            label="Uitloggen"
-            color="primary"
-            outline
-            v-on:click="logout"
-          />
-        </div>
       </q-form>
+
     </div>
-  </div>
+
+  </q-page-container>
+
 </template>
 
 <script>

@@ -310,6 +310,7 @@ export default {
         fltCrlNr1: this.selectedCourseItem.crlNr,
         fltCrlNr2: this.selectedTimeItem.sttCrlNrNext,
         fltOrigin: 2,
+        fltComNr:71,
 
         fltNr: this.selectedTimeItem.sttRefNr,
         fltTime: this.selectedTimeItem.sttTimeFrom,

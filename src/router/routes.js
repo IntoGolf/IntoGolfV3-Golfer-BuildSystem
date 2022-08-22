@@ -50,7 +50,7 @@ const routes = [
     children: [{path: "", component: () => import("pages/Messages.vue")}],
     meta: {
       requiresAuth: true,
-      title: "Message",
+      title: "Berichten",
     },
   },
   // {
@@ -110,7 +110,7 @@ const routes = [
     children: [{path: "", component: () => import("pages/Reservations.vue")}],
     meta: {
       requiresAuth: false,
-      title: "Reservations",
+      title: "Starttijden",
     },
   },
   {
@@ -120,7 +120,7 @@ const routes = [
     children: [{path: "", component: () => import("pages/Profile.vue")}],
     meta: {
       requiresAuth: true,
-      title: "Personal Details",
+      title: "Profiel",
     },
   },
   {
@@ -176,7 +176,7 @@ const routes = [
     component: () => import("../pages/404"),
   },
   {
-    path: "/verify/code",
+    path: "/verify-code",
     name: "verifyCode",
     component: () => import("../pages/SendVerifyCode"),
     meta: { requiresAuth: false },

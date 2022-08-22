@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h5>Inschrijven {{ match.name }}</h5>
+    <h5 class="q-mb-sm q-mt-sm">Inschrijven {{ match.name }}</h5>
 
     <q-input
       v-model="player.details.Description"
       type="text"
       label="Opmerking"
-    />
+      class="q-mb-md"/>
 
     <q-select
       v-if="match.allow_select_tee == 1"
@@ -14,9 +14,10 @@
       :options="teesArray"
       hint="Selecteer uw tee"
       label="Tee"
-    />
+      class="q-mb-md"/>
 
-    <div v-for="(pOption, index) in player.details.options" :key="index">
+    <div v-for="(pOption, index) in player.details.options"
+         :key="index" class="q-mb-md">
       <q-select
         v-model="pOption.mpoValue"
         :options="optionArray"
@@ -28,7 +29,7 @@
       v-if="doIHaveGuests"
       inline-actions
       rounded
-      class="bg-orange text-white"
+      class="bg-orange text-white q-mb-md"
     >
       U kunt niet uitschrijven voor deze wedstrijd zolang u gasten heeft
       ingeschreven.
@@ -137,6 +138,7 @@ export default {
       let that = this;
       let array = [];
       this.match.baan_lus.baan_lus_tees.forEach(function (tee) {
+        console.log(tee);
         if (
           (that.player.relation.relGender == 1 &&
             tee.baan_lus_tee_soort.Geslacht == "M") ||
@@ -144,7 +146,7 @@ export default {
             tee.baan_lus_tee_soort.Geslacht == "V")
         ) {
           array.push({
-            id: tee.bltId,
+            id: tee.bltCategory,
             label: tee.baan_lus_tee_soort.Achtergrond,
           });
         }
@@ -170,18 +172,7 @@ export default {
       return result;
     },
     doIHaveGuests: function () {
-      let that = this;
-      let count = 0;
-      this.match.players.forEach(function (player) {
-        if (
-          player.relNrDoor == that.currentUser.relNr &&
-          player.relNr != that.currentUser.relNr &&
-          player.relation.relGrpNr1 == null
-        ) {
-          count++;
-        }
-      });
-      return count > 0;
+      return this.match.players.filter(player => player.relNrDoor == this.currentUser.relNr && player.relNr != this.currentUser.relNr && player.guest);
     },
   },
   methods: {
@@ -205,7 +196,12 @@ export default {
             that.id = res.data.id;
             that.url = res.data.url;
           } else {
-            that.$message.success("Inschrijving is verwerkt");
+
+            that.$q.notify ({
+              type: 'positive',
+              message: 'Inschrijving is verwerkt'
+            });
+
             that.handleCloseSubscribe();
           }
         });
@@ -225,7 +221,12 @@ export default {
           this.$http
             .post(`golfer/match/unsubscribe`, this.player)
             .then(function () {
-              that.$message.success("Uitschrijving is verwerkt");
+
+              that.$q.notify ({
+                type: 'positive',
+                message: 'Uitschrijving is verwerkt'
+              });
+
               that.handleCloseSubscribe();
             });
         });

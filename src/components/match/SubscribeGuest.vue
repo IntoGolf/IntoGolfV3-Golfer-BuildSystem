@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h5>Inschrijven {{ match.name }}</h5>
+    <h5 class="q-mb-sm q-mt-sm">Inschrijven {{ match.name }}</h5>
 
     <q-input
       v-model="player.relation.relCallName"
@@ -206,7 +206,7 @@ export default {
             tee.baan_lus_tee_soort.Geslacht == "V")
         ) {
           array.push({
-            id: tee.bltId,
+            id: tee.bltCategory,
             label: tee.baan_lus_tee_soort.Achtergrond,
           });
         }
@@ -299,7 +299,10 @@ export default {
             that.id = res.data.id;
             that.url = res.data.url;
           } else {
-            that.$message.success("Inschrijving is verwerkt");
+            that.$q.notify ({
+              type: 'positive',
+              message: 'Inschrijving is verwerkt'
+            });
             that.handleCloseSubscribe();
           }
         });
@@ -319,7 +322,12 @@ export default {
           this.$http
             .post(`golfer/match/unsubscribe`, this.player)
             .then(function () {
-              that.$message.success("Uitschrijving is verwerkt");
+
+              that.$q.notify ({
+                type: 'positive',
+                message: 'Uitschrijving is verwerkt'
+              });
+
               that.handleCloseSubscribe();
             });
         });

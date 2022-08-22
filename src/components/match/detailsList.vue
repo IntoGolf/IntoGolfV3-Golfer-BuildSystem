@@ -42,15 +42,15 @@
       <div class="col text-bold">Inschrijfgeld</div>
 
       <div class="col overflow-hidden text-right">
-        {{ match.fee }}
+        {{ $filters.money(match.fee) }}
       </div>
     </div>
 
     <div v-if="match.LidAddGuest == 1" class="row q-pb-sm">
-      <div class="col font-weight-bold">Inschrijfgeld gast</div>
+      <div class="col text-bold">Inschrijfgeld gast</div>
 
       <div class="col overflow-hidden text-right">
-        {{ match.feeGuest }}
+        {{ $filters.money(match.feeGuest) }}
       </div>
     </div>
 
@@ -62,7 +62,7 @@
       </div>
     </div>
 
-    <q-btn-group spread v-if="match.UitslagenGereed != 1">
+    <q-btn-group spread v-if="match.UitslagenGereed != 1 && match.StartlijstGereed != 1">
       <q-btn
         v-if="
           openForSubscription &&
@@ -78,7 +78,8 @@
         v-if="
           openForSubscription &&
           mySubscription != null &&
-          specialRules.length == 0
+          specialRules.length == 0  &&
+          match.StartlijstGereed != 1
         "
         color="secondary"
         label="Mijn inschrijving"
@@ -86,14 +87,19 @@
       />
 
       <q-btn
-        v-if="
-          inScorecardWindow &&
-          mySubscription != null &&
-          specialRules.length == 0
-        "
+        v-if="mySubscription != null"
         color="secondary"
         label="Score invoeren"
         @click="handleEnterScore"
+      />
+    </q-btn-group>
+
+    <q-btn-group spread>
+      <q-btn
+          v-if="inScorecardWindow && mySubscription != null"
+          color="secondary"
+          label="Score invoeren"
+          @click="handleEnterScore"
       />
     </q-btn-group>
 
@@ -102,15 +108,18 @@
         match.LidAddGuest == 1 &&
         match.UitslagenGereed != 1 &&
         openForSubscription &&
-        specialRules.length == 0
+        specialRules.length == 0 &&
+        match.StartlijstGereed != 1
       "
       class="pt-2 pb-1"
     >
-      <div class="row">
-        <div class="col">Gasten meenemen</div>
+      <div class="row q-mt-sm">
+        <div class="col text-h6">Gasten meenemen</div>
       </div>
 
-      <div class="row">
+      <q-separator />
+
+      <div class="row q-mt-sm q-mb-sm">
         <div class="col">
           Voor deze wedstrijd is het toegestaan dat leden gasten meenemen. U
           kunt uw gast hier inschrijven. U bent verantwoordelijk voor de
@@ -132,7 +141,7 @@
       </div>
     </div>
 
-    <div v-if="match.UitslagenGereed != 1 && openForSubscription" class="pt-2">
+    <div v-if="match.UitslagenGereed != 1 && openForSubscription && match.StartlijstGereed != 1" class="pt-2">
       <div class="row q-mt-sm">
         <div class="col text-h6">Lid inschrijven</div>
       </div>

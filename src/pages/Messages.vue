@@ -1,81 +1,135 @@
 <template>
-  <div class="page-messages container q-mt-xl">
 
-<!--    <top-bar-->
-<!--      v-bind:title="title"-->
-<!--      v-bind:back_icon="back_icon"-->
-<!--      v-bind:back_link="back_link"-->
-<!--      v-bind:callBack="callBack"-->
-<!--    ></top-bar>-->
+  <q-page-container class="q-mt-md">
 
-    <q-list
-      bordered
-      class="col-xl-8 box-show bg-white ml-auto mr-auto rounded-borders p-2"
-    >
-      <q-expansion-item
-        v-for="(item, index) in list"
-        :key="index"
-        @show="setMessageOpened(item)"
-        expand-separator
-        icon="perm_identity"
-        :class="{ 'text-weight-bold': item.message_opened == null }"
-        :label="item.msgTitle"
-        :caption="item.msgTimeStamp"
-      >
-        <q-card>
-          <q-card-section>
-            <div class="mb-1 icon-container">
-              <i class="fal fa-clock mr-1"></i>
-              {{ item.msgTo }}
+    <q-card
+        v-if="list.length == 0">
+
+      <q-card-section
+          class="text-center text-h6">
+        {{ no_messages }}
+      </q-card-section>
+
+    </q-card>
+
+    <div v-else>
+
+      <q-card
+          class="q-mb-md"
+          v-for="(item, index) in unreadMessages"
+          :key="index">
+
+        <q-card-section>
+
+          <div class="row">
+
+            <div class="col">
+              <div class="text-h6">{{ item.msgTitle }}</div>
+              <div class="text-subtitle2">{{ $dayjs(item.msgFrom).format("DD-MM-YYYY") }}</div>
             </div>
-            <p>{{ item.msgText }}</p>
-          </q-card-section>
-        </q-card>
-      </q-expansion-item>
-    </q-list>
-  </div>
+
+            <div
+                v-show="item.message_opened == null"
+                class="col-auto q-pt-sm">
+              <q-btn
+                  v-on:click="setMessagesOpened(item)"
+                  color="white"
+                  text-color="black"
+                  size="sm">
+                gelezen
+              </q-btn>
+            </div>
+
+          </div>
+
+        </q-card-section>
+
+        <q-separator/>
+
+        <q-card-section v-html="item.msgText"/>
+
+      </q-card>
+
+      <div class="text-h6 q-mb-md q-mt-md">
+        Gelezen berichten
+      </div>
+
+      <q-card
+          class="q-mb-md"
+          v-for="(item, index) in readMessages"
+          :key="index">
+
+        <q-card-section>
+
+          <div class="row">
+
+            <div class="col">
+              <div class="text-h6">{{ item.msgTitle }}</div>
+              <div class="text-subtitle2">{{ $dayjs(item.msgFrom).format("DD-MM-YYYY") }}</div>
+            </div>
+
+            <div
+                v-show="item.message_opened == null"
+                class="col-auto q-pt-sm">
+              <q-btn
+                  v-on:click="setMessagesOpened(item)"
+                  color="white"
+                  text-color="black"
+                  size="sm">
+                gelezen
+              </q-btn>
+            </div>
+
+          </div>
+
+        </q-card-section>
+
+        <q-separator/>
+
+        <q-card-section v-html="item.msgText"/>
+
+      </q-card>
+
+    </div>
+
+  </q-page-container>
+
 </template>
 
 <script>
-// import TopBar from "../components/TopBar";
 
 export default {
   data() {
     return {
-      page: "list",
-
-      back_icon: "fa-home",
-      back_link: "/",
-      title: "Berichten",
-      callBack: undefined,
-
       listUrl: "golfer/message/all",
       openedUrl: "golfer/message/setOpened",
+      no_messages: "Er zijn op dit moment geen berichten",
       list: [],
-      selectedItem: null,
-      currentUser: this.$ls.getItem("currentUser"),
     };
+  },
+  computed: {
+    unreadMessages: function() {
+      return this.list.filter(message => message.message_opened == null);
+    },
+    readMessages: function() {
+      return this.list.filter(message => message.message_opened != null);
+    }
   },
   created() {
     this.loadList();
   },
-  filters: {},
   methods: {
-    loadList() {
-      this.selectedItem = null;
+    loadList: function() {
       let that = this;
       this.$http.get(this.listUrl).then((res) => {
         that.list = res.data;
       });
     },
-    setMessageOpened(item) {
-      this.selectedItem = item;
-      this.$http.post(this.openedUrl, this.selectedItem);
-    },
-    getAvatar(item) {
-      let url = process.env.VUE_APP_BASE_URL;
-      return url + "/images/avatar-blank.jpeg";
-    },
+    setMessagesOpened(item) {
+        this.$http.post(this.openedUrl, item).then(() => {
+          this.loadList();
+        });
+    }
   },
 };
 </script>

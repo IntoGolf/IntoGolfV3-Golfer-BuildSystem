@@ -1,4 +1,5 @@
 <template>
+
   <q-page-container class="q-pa-md">
 
 <!--    <top-bar-->
@@ -8,8 +9,9 @@
 <!--      v-bind:callBack="callBack"-->
 <!--    />-->
 
-    <div class="row q-mt-md bg-white">
+    <div class="row q-pa-md q-mt-md bg-white">
       <div class="col">
+
         <main v-show="focusedItem === null">
           <div class="row q-mb-md">
             <div class="col">
@@ -42,7 +44,7 @@
 
         <main v-if="focusedItem !== null">
           <div class="row q-mt-md">
-            <div class="col text-h4">Relatie</div>
+            <div class="col text-h5">Relatie</div>
           </div>
 
           <q-separator spaced />
@@ -123,6 +125,7 @@
             />
           </div>
         </main>
+
       </div>
     </div>
   </q-page-container>

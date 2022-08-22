@@ -2,26 +2,24 @@
   <div class="p-0 m-0">
     <q-list bordered separator>
       <q-item class="itg-q-item">
-        <q-item-section class="col-2"> Hole </q-item-section>
-        <q-item-section class="col-2"> Par </q-item-section>
-        <q-item-section class="col-6 text-center"> Slagen </q-item-section>
-        <q-item-section class="col-2"> Stb </q-item-section>
+        <q-item-section class="col-2 text-left text-bold"> Hole </q-item-section>
+        <q-item-section class="col-2 text-left text-bold"> Par </q-item-section>
+        <q-item-section class="col-6 text-center text-bold"> Slagen </q-item-section>
+        <q-item-section class="col-2 text-center text-bold"> Punten </q-item-section>
       </q-item>
 
       <q-item
         class="itg-q-item"
         v-for="(hole, index) in holesArray"
         :key="index"
-        v-show="hole.par > 0"
-      >
-        <h2 class="d-none">{{ hole.sl }}</h2>
-        <q-item-section class="col-2">
+        v-show="hole.par > 0">
+        <q-item-section class="col-2 text-left text-bold">
           {{ hole.nr }}
         </q-item-section>
-        <q-item-section class="col-2">
+        <q-item-section class="col-2 text-left">
           {{ hole.par }}
         </q-item-section>
-        <q-item-section class="col-6">
+        <q-item-section class="col-6 text-center">
           <div class="row">
             <div class="col-4" style="padding: 0px; text-align: left">
               <q-btn
@@ -59,7 +57,7 @@
             </div>
           </div>
         </q-item-section>
-        <q-item-section class="col-2">
+        <q-item-section class="col-2 text-center">
           {{ hole.stab }}
         </q-item-section>
       </q-item>
@@ -69,7 +67,7 @@
           <q-item-label class="itg-text-overflow">Totaal punten</q-item-label>
         </q-item-section>
         <q-item-section class="col-2">
-          <q-item-label class="itg-text-overflow text-right"
+          <q-item-label class="itg-text-overflow text-center" style="font-size: 1.2em"
             >{{ total_stableford }}
           </q-item-label>
         </q-item-section>
@@ -93,12 +91,19 @@ export default {
   props: ["player"],
   data() {
     return {
-      total_stableford: 0,
       holesArray: [],
       local_player: this.player,
     };
   },
-  computed: {},
+  computed: {
+    total_stableford: function() {
+      let total_stableford = 0;
+      this.holesArray.forEach(function (hole) {
+        total_stableford += hole.stab;
+      });
+      return total_stableford;
+    },
+  },
   created: function () {
     this.handleInitiateScore();
   },
@@ -159,14 +164,7 @@ export default {
     onScoreChangeHandler: function (hole, value) {
       hole.sl += value;
       hole.sl = hole.sl == 0 ? 1 : hole.sl;
-
       hole.stab = this.calcStab(hole.par, hole.hsl, hole.sl);
-
-      let that = this;
-      this.total_stableford = 0;
-      this.holesArray.forEach(function (hole) {
-        that.total_stableford += hole.stab;
-      });
     },
   },
 };
