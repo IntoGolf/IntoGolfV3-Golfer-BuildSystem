@@ -50,6 +50,11 @@ const minuteToTime = function (minute) {
   return hrs + ":" + min;
 };
 
+const timeToMinute = function (time) {
+  let array = time.split(':');
+  return (parseInt(array[0]) * 60) + parseInt(array[1]);
+};
+
 const money = function (number, decimal = 1) {
   return (
     "€" +
@@ -63,6 +68,7 @@ export default ({ app }) => {
   app.config.globalProperties.$filters = {
     unixToDate,
     minuteToTime,
+    timeToMinute,
     diffTime,
     capitalizeFirstLetter,
     money,

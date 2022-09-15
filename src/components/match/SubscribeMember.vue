@@ -3,62 +3,63 @@
     <h5 class="q-mb-sm q-mt-sm">Inschrijven {{ match.name }}</h5>
 
     <q-select
-      v-if="player.details.id == 0"
-      v-model="relation"
-      use-input
-      hide-selected
-      fill-input
-      input-debounce="0"
-      label="Zoek relatie"
-      :options="relations"
-      option-value="relNr"
-      option-label="full_name"
-      :option-disable="(item) => item === null ? true : item.disabled != ''"
-      @filter="filterFn"
+        v-if="player.details.id == 0"
+        v-model="relation"
+        use-input
+        hide-selected
+        fill-input
+        input-debounce="0"
+        label="Zoek relatie"
+        :options="relations"
+        option-value="relNr"
+        option-label="full_name"
+        :option-disable="(item) => item === null ? true : item.disabled != ''"
+        @filter="filterFn"
     >
       <template v-slot:no-option>
         <q-item>
-          <q-item-section class="text-grey"> No results </q-item-section>
+          <q-item-section class="text-grey"> No results</q-item-section>
         </q-item>
       </template>
     </q-select>
 
     <q-input
-      v-if="player.details.relNr > 0"
-      v-model="player.details.relation.full_name"
-      :disable="true"
-      label="Standard"
+        v-if="player.details.relNr > 0"
+        v-model="player.details.relation.full_name"
+        :disable="true"
+        label="Standard"
     />
 
     <q-input
-      v-model="player.details.Description"
-      type="text"
-      label="Opmerking"
+        class="q-mb-md"
+        v-model="player.details.Description"
+        type="text"
+        label="Opmerking"
     />
 
     <q-select
-      v-if="match.allow_select_tee == 1"
-      v-model="tee"
-      :options="teesArray"
-      hint="Selecteer uw tee"
-      label="Tee"
+        v-if="match.allow_select_tee == 1"
+        v-model="tee"
+        :options="teesArray"
+        hint="Selecteer uw tee"
+        label="Tee"
     />
 
     <div v-for="(pOption, index) in player.details.options"
          :key="index"
          class="q-mb-md">
       <q-select
-        v-model="pOption.mpoValue"
-        :options="optionArray"
-        :label="pOption.label"
+          v-model="pOption.mpoValue"
+          :options="optionArray"
+          :label="pOption.label"
       />
     </div>
 
     <q-banner
-      v-if="match.ideal && aSubscription == null"
-      inline-actions
-      rounded
-      class="bg-orange text-white"
+        v-if="match.ideal && aSubscription == null"
+        inline-actions
+        rounded
+        class="bg-orange text-white"
     >
       Voor deze wedstrijd is betaling via iDeal vereist. Na inschrijving word u
       doorgestuurd naar de betaling. Wanneer de betaling niet wordt afgerond
@@ -67,33 +68,33 @@
 
     <q-btn-group spread mt-4>
       <q-btn
-        v-if="!match.ideal || aSubscription != null"
-        :disabled="player.details.id == 0 && relation == null"
-        color="secondary"
-        label="Opslaan"
-        @click="handleSubscribe"
+          v-if="!match.ideal || aSubscription != null"
+          :disabled="player.details.id == 0 && relation == null"
+          color="secondary"
+          label="Opslaan"
+          @click="handleSubscribe"
       />
       <q-btn
-        v-if="match.ideal && aSubscription == null"
-        :disabled="player.details.id == 0 && relation == null"
-        color="secondary"
-        label="Betaal"
-        @click="handleSubscribe"
+          v-if="match.ideal && aSubscription == null"
+          :disabled="player.details.id == 0 && relation == null"
+          color="secondary"
+          label="Betaal"
+          @click="handleSubscribe"
       />
       <q-btn
-        v-if="aSubscription != null"
-        color="secondary"
-        label="Uitschrijven"
-        @click="handleUnSubscribe"
+          v-if="aSubscription != null"
+          color="secondary"
+          label="Uitschrijven"
+          @click="handleUnSubscribe"
       />
-      <q-btn color="secondary" label="Sluiten" @click="handleCloseSubscribe" />
+      <q-btn color="secondary" label="Sluiten" @click="handleCloseSubscribe"/>
     </q-btn-group>
 
     <payment
-      v-if="id.length > 0"
-      :id="id"
-      :url="url"
-      v-on:handleCloseSubscribe="handleCloseSubscribe"
+        v-if="id.length > 0"
+        :id="id"
+        :url="url"
+        v-on:handleCloseSubscribe="handleCloseSubscribe"
     ></payment>
   </div>
 </template>
@@ -133,8 +134,8 @@ export default {
         options: [],
       },
       optionArray: [
-        { value: 0, label: "Nee" },
-        { value: 1, label: "ja" },
+        {value: 0, label: "Nee"},
+        {value: 1, label: "ja"},
       ],
       tee: null,
       relation: null,
@@ -151,7 +152,7 @@ export default {
     } else {
       this.player.details.matchId = this.match.id;
       this.player.details.relNrDoor = this.currentUser.relNr;
-      this.player.details.options = { ...this.match.options };
+      this.player.details.options = {...this.match.options};
     }
     this.tee = this.defaultTee;
   },
@@ -161,10 +162,10 @@ export default {
       let array = [];
       this.match.baan_lus.baan_lus_tees.forEach(function (tee) {
         if (
-          (that.player.relation.relGender == 1 &&
-            tee.baan_lus_tee_soort.Geslacht == "M") ||
-          (that.player.relation.relGender == 2 &&
-            tee.baan_lus_tee_soort.Geslacht == "V")
+            (that.player.relation.relGender == 1 &&
+                tee.baan_lus_tee_soort.Geslacht == "M") ||
+            (that.player.relation.relGender == 2 &&
+                tee.baan_lus_tee_soort.Geslacht == "V")
         ) {
           array.push({
             id: tee.bltCategory,
@@ -212,44 +213,44 @@ export default {
       this.player.is_desktop = this.$q.platform.is.desktop === true ? 1 : 0;
 
       this.$http
-        .post(`golfer/match/subscribe`, this.player)
-        .then(function (res) {
-          if (res.data.url.length > 0) {
-            that.id = res.data.id;
-            that.url = res.data.url;
-          } else {
-            that.$q.notify ({
-              type: 'positive',
-              message: 'Inschrijving is verwerkt'
-            });
-            that.handleCloseSubscribe();
-          }
-        });
+          .post(`golfer/match/subscribe`, this.player)
+          .then(function (res) {
+            if (res.data.url.length > 0) {
+              that.id = res.data.id;
+              that.url = res.data.url;
+            } else {
+              that.$q.notify({
+                type: 'positive',
+                message: 'Inschrijving is verwerkt'
+              });
+              that.handleCloseSubscribe();
+            }
+          });
     },
 
     handleUnSubscribe: function () {
       let that = this;
 
       this.$q
-        .dialog({
-          title: "Wedstrijd deelname annuleren",
-          message: "Wilt u doorgaan??",
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(() => {
-          this.$http
-            .post(`golfer/match/unsubscribe`, this.player)
-            .then(function () {
+          .dialog({
+            title: "Wedstrijd deelname annuleren",
+            message: "Wilt u doorgaan??",
+            cancel: true,
+            persistent: true,
+          })
+          .onOk(() => {
+            this.$http
+                .post(`golfer/match/unsubscribe`, this.player)
+                .then(function () {
 
-              that.$q.notify ({
-                type: 'positive',
-                message: 'Uitschrijving is verwerkt'
-              });
+                  that.$q.notify({
+                    type: 'positive',
+                    message: 'Uitschrijving is verwerkt'
+                  });
 
-              that.handleCloseSubscribe();
-            });
-        });
+                  that.handleCloseSubscribe();
+                });
+          });
     },
 
     async filterFn(val, update, abort) {
@@ -259,12 +260,12 @@ export default {
 
       let that = this;
       await this.$http
-        .get(`golfer/relation/${this.match.id}/search/${val}`)
-        .then((response) => {
-          update(() => {
-            that.relations = response;
+          .get(`golfer/relation/${this.match.id}/search/${val}`)
+          .then((response) => {
+            update(() => {
+              that.relations = response;
+            });
           });
-        });
     },
   },
 };

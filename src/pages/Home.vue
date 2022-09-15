@@ -5,10 +5,23 @@
     <div class="row">
       <div class="col text-center q-pt-lg">
         <q-img
-            src="~assets/images/logo_nw.svg"
-            style="width: 100px;"
+            src="~assets/images/logo_amh.png"
+            style="width: 200px;"
         />
-        <h4>Demo GolfClub</h4>
+        <h4>GolfClub<br>Almeerderhout</h4>
+      </div>
+    </div>
+
+    <div v-if="teetime != null" class="row q-mb-md">
+      <div class="col text-center">
+        <q-btn
+            outline
+            color="secondary"
+            v-on:click="$router.push('/checkin?id=' + teetime.flpNr)"
+        >
+          Aanmelden starttijd <br>
+          {{ $filters.minuteToTime(teetime.fltTime1) }}
+        </q-btn>
       </div>
     </div>
 
@@ -149,6 +162,7 @@ export default {
     return {
       system_logo: '../../src/assets/images/logo_nw.svg',
       match: null,
+      teetime: null,
       toNGF: false,
       messageList: [],
     };
@@ -170,6 +184,7 @@ export default {
       this.$http.get(`golfer/public/setting`).then((res) => {
         // this.system_logo = res.system_logo;
         this.match = res.match ? res.match : null;
+        this.teetime = res.teetime ? res.teetime : null;
         this.toNGF = res.toNGF;
       });
     },

@@ -114,7 +114,8 @@ export default {
   },
   methods: {
     subtext: function (card) {
-      let text = this.$options.filters.date(card.datetime, "DD-MM-YYYY HH:mm");
+      let text = '';
+      // this.$options.filters.date(card.datetime, "DD-MM-YYYY HH:mm");
       if (card.is_penalty_score) {
         text += " penalty score";
       } else if (card.inBest) {

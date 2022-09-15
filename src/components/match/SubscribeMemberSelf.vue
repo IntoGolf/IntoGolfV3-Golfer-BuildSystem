@@ -137,8 +137,8 @@ export default {
     teesArray: function () {
       let that = this;
       let array = [];
+      console.log(this.match);
       this.match.baan_lus.baan_lus_tees.forEach(function (tee) {
-        console.log(tee);
         if (
           (that.player.relation.relGender == 1 &&
             tee.baan_lus_tee_soort.Geslacht == "M") ||

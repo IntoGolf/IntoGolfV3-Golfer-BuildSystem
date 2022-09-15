@@ -46,20 +46,20 @@
 
     <div class="row q-mt-md">
 
-      <div class="col-5 q-pr-sm">
-        Holes:
-        <q-btn-group unelevated spread class="full-width">
-          <q-btn
-              v-for="(item, index) of filterForm.holes"
-              :key="index"
-              :label="item"
-              :color="form.holes === item ? 'secondary' : 'white'"
-              :text-color="form.holes === item ? '' : 'black'"
-              @click="handleFilterHole(item)"
-          />
-        </q-btn-group>
+<!--      <div class="col-5 q-pr-sm">-->
+<!--        Holes:-->
+<!--        <q-btn-group unelevated spread class="full-width">-->
+<!--          <q-btn-->
+<!--              v-for="(item, index) of filterForm.holes"-->
+<!--              :key="index"-->
+<!--              :label="item"-->
+<!--              :color="form.holes === item ? 'secondary' : 'white'"-->
+<!--              :text-color="form.holes === item ? '' : 'black'"-->
+<!--              @click="handleFilterHole(item)"-->
+<!--          />-->
+<!--        </q-btn-group>-->
 
-      </div>
+<!--      </div>-->
 
       <div class="col-7">
         Spelers:
@@ -68,16 +68,14 @@
               v-for="(item, index) of filterForm.players"
               :key="index"
               :label="item"
-              :color="form.size === item ? 'secondary' : 'white'"
-              :text-color="form.size === item ? '' : 'black'"
+              :color="form.fltSize === item ? 'secondary' : 'white'"
+              :text-color="form.fltSize === item ? '' : 'black'"
               @click="handleFilterPlayers(item)"
           />
         </q-btn-group>
       </div>
 
-    </div>
-
-    <div class="row q-mt-md">
+      <p class="q-mt-sm q-mb-sm"><i>Voor het reserveren van 18 holes reserveert u eerst 9 holes waarna u een 2de 9 holes kunt bijboeken.</i></p>
 
     </div>
 
@@ -108,7 +106,7 @@
 
     <q-separator/>
 
-    <div class="row q-gutter-xs" style="max-height: 400px; overflow: scroll">
+    <div class="row q-gutter-xs" style="max-height: 600px; overflow: scroll">
 
       <div
           v-for="(course, cKey) of teetimes"
@@ -124,7 +122,6 @@
           <div class="col bg-green-3 q-pa-sm">
 
             {{ $filters.minuteToTime(time.sttTimeFrom) }}
-
 
           </div>
 
@@ -170,10 +167,10 @@
             <div class="col text-right">{{ form.fltSize }}</div>
           </div>
 
-          <div class="row q-mt-xs">
-            <div class="col text-left text-bold">Holes</div>
-            <div class="col text-right">{{ form.holes }}</div>
-          </div>
+<!--          <div class="row q-mt-xs">-->
+<!--            <div class="col text-left text-bold">Holes</div>-->
+<!--            <div class="col text-right">{{ form.holes }}</div>-->
+<!--          </div>-->
 
           <div class="row q-mt-xs">
             <div class="col text-left text-bold">Baan</div>
@@ -208,6 +205,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
   </q-page>
 </template>
 
@@ -231,7 +229,7 @@ export default {
         fltTime: "",
         fltCrlNr1: "",
         fltCrlNr2: "",
-        fltSize: 4,
+        fltSize: 3,
         players: [],
         holes: 9,
         size: 3
@@ -260,8 +258,6 @@ export default {
 
     loadTeetimes: function () {
       let currentUser = this.$ls.getItem("currentUser").value;
-      console.log('aa');
-      console.log(currentUser);
       this.loading = true;
       this.$http
           .get("golfer/public/teetimes/get", {
@@ -286,7 +282,7 @@ export default {
     handleReservation: function () {
       let flight_players = [];
 
-      for (let i = 0; i < this.selectedTimeItem.sttMaxPlayers; i++) {
+      for (let i = 0; i < this.form.fltSize; i++) {
         flight_players.push({
           flpNr: null,
           flpSide: i + 1,
@@ -299,14 +295,13 @@ export default {
       }
 
       let currentUser = this.$ls.getItem("currentUser").value;
-      console.log(currentUser)
       flight_players[0].flpRelNr = currentUser.relNr;
       flight_players[0].flpName = currentUser.full_name2;
 
       const info = {
         // fltNr: null,
         fltDate: this.form.fltDate,
-        fltSize: this.selectedTimeItem.sttMaxPlayers,
+        fltSize: this.form.fltSize,
         fltCrlNr1: this.selectedCourseItem.crlNr,
         fltCrlNr2: this.selectedTimeItem.sttCrlNrNext,
         fltOrigin: 2,
@@ -344,7 +339,7 @@ export default {
     },
 
     handleFilterPlayers: function (n) {
-      this.form.size = n;
+      this.form.fltSize = n;
     },
   },
 };

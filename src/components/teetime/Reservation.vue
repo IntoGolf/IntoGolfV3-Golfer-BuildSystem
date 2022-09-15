@@ -2,7 +2,7 @@
 
   <div class="q-page q-pa-md">
 
-    <q-card class="bg-green-6 text-white q-mb-md">
+    <q-card class="q-mb-md">
 
       <q-card-section class="text-h6">
         Algemeen
@@ -22,8 +22,13 @@
         </div>
 
         <div class="row">
-          <div class="col text-bold">Lus(sen)</div>
+          <div class="col text-bold">Lus uit</div>
           <div class="col-8 text-right">{{ local_flight.loop1.crlName }}</div>
+        </div>
+
+        <div v-if="local_flight.fltCrlNr2 > 0" class="row">
+          <div class="col text-bold">Lus in</div>
+          <div class="col-8 text-right">{{ $filters.minuteToTime(local_flight.fltTime2) + ' - ' + local_flight.loop2.crlName }}</div>
         </div>
 
         <div class="row">
@@ -40,11 +45,14 @@
       <q-card-section>
 
         <div v-if="myBooking" class="row q-gutter-md">
-          <div class="col">
-            <q-btn v-on:click="handleCancelFlight" outline class="full-width">Annuleer</q-btn>
+          <div v-if="canCancel" class="col">
+            <q-btn v-on:click="handleCancelFlight" class="full-width" >Annuleer</q-btn>
+          </div>
+          <div v-if="canCancel" class="col">
+            <q-btn v-on:click="handleSaveFlight" class="full-width" >Opslaan</q-btn>
           </div>
           <div class="col">
-            <q-btn v-on:click="handleSaveFlight" outline class="full-width">Opslaan</q-btn>
+            <q-btn v-on:click="handleBook18" class="full-width">18</q-btn>
           </div>
         </div>
 
@@ -53,27 +61,19 @@
     </q-card>
 
     <q-card
-        class="my-card bg-teal-1 q-pa-md q-mb-md"
+        class="q-pa-md q-mb-md"
         v-for="item in myBookingsArray"
-        :key="item.key"
-    >
+        :key="item.key">
+
       <div class="row">
-        <div class="col text-h6">
+        <div class="col-10 text-h6">
           Speler {{ item.flpSide }}
         </div>
         <div
             class="col-2 text-right"
-            v-if="
-            item.flpNr != null &&
-            item.flpName != null &&
-            item.flpCarNr == null &&
-            (myBooking || item.flpRelNr == currentUser.relNr)
-          "
-        >
-          <q-icon
-              class="fal fa-trash"
-              v-on:click="handleCancelPlayer(item)"
-          ></q-icon>
+            v-on:click="handleCancelPlayer(item)"
+            v-if="item.flpNr != null && item.flpName != null && item.flpCarNr == null && (myBooking || item.flpRelNr == currentUser.relNr)">
+          Annuleer
         </div>
       </div>
 
@@ -115,28 +115,55 @@
       <q-input
           v-if="item.flpTypeNw == 1"
           v-model="item.flpEmail"
-          label="E-mailadres"
-      />
+          label="E-mailadres"/>
 
       <q-input
           v-if="item.flpName != null && item.flpTypeNw == undefined"
           :disable="item.flpRelNr > 0 || !myBooking"
           v-model="item.flpName"
-          label="Naam"
-      />
+          label="Naam"/>
 
       <q-input
           v-if="
-          item.flpType == 1 &&
-          item.flpName != null &&
-          item.flpTypeNw == undefined &&
-          myBooking
-        "
+            item.flpType == 1 &&
+            item.flpName != null &&
+            item.flpTypeNw == undefined &&
+            myBooking"
           v-model="item.flpEmail"
-          label="E-mailadres"
-      />
+          label="E-mailadres"/>
+
     </q-card>
+
   </div>
+
+  <q-dialog v-if="dialogVisible" v-model="dialogVisible">
+
+    <q-card style="max-width: 320px; width: 95%">
+
+      <q-card-section class="text-h6">
+        Uw tweede 9
+
+        <q-btn class="float-right" flat v-on:click="dialogVisible = false">Sluiten</q-btn>
+      </q-card-section>
+
+      <q-separator/>
+
+      <q-card-section>
+
+        <div
+            class="q-ma-xs button-second-nine"
+            v-for="(time, key) in timesFor18"
+            :key="key"
+            v-on:click="onBook18(time)">
+          {{ time.crlName + ' ' + time.sttTimeFromText }}
+        </div>
+
+      </q-card-section>
+
+    </q-card>
+
+  </q-dialog>
+
 </template>
 
 <script>
@@ -155,9 +182,23 @@ export default {
         // {value: 3, label: 'Vriend'}
       ],
       currentUser: this.$ls.getItem("currentUser"),
+      teetimes: [],
+      dialogVisible: false
     };
   },
   computed: {
+    canCancel: function() {
+
+      if (this.$dayjs(this.$filters.unixToDate(this.local_flight.fltDate)).isBefore(this.$dayjs())) {
+        return false;
+      }
+
+      if (this.$dayjs(this.$filters.unixToDate(this.local_flight.fltDate)).isAfter(this.$dayjs())) {
+        return true;
+      }
+
+      return this.local_flight.fltTime1+20 < this.$filters.timeToMinute(this.$dayjs().format('HH:mm'))
+    },
     myBookingsArray: function () {
       return this.local_flight.flight_players.filter(
           (item) => item.flpCarNr == null && (this.myBooking || item.flpName != null)
@@ -166,6 +207,27 @@ export default {
     myBooking: function () {
       return this.flight.flight_players[0].flpRelNr == this.currentUser.relNr;
     },
+    timesFor18: function () {
+
+      let array = [];
+      let that = this;
+
+      this.teetimes.forEach(function (loop) {
+
+        loop.times.forEach(function (time) {
+
+          array.push({
+            crlNr: loop.crlNr,
+            crlName: loop.crlName,
+            sttTimeFrom: time.sttTimeFrom,
+            sttTimeFromText: that.$filters.minuteToTime(time.sttTimeFrom),
+          })
+
+        });
+      });
+
+      return array;
+    }
   },
   methods: {
     handleSaveFlight: function (close) {
@@ -252,10 +314,49 @@ export default {
                 newPlayer
             );
 
-            that.$message.success("De deelname van " + name + " is geannuleerd");
+            //that.$message.success("De deelname van " + name + " is geannuleerd");
 
             this.handleSaveFlight(false);
           });
+    },
+
+    handleBook18: function () {
+      let currentUser = this.$ls.getItem("currentUser").value;
+      console.log(this.flight.fltDate);
+      let that = this;
+      this.$http
+          .get("golfer/public/teetimes/get", {
+            params: {
+              date: this.$filters.unixToDate(this.flight.fltDate, "YYYY-MM-DD"),
+              relNr: currentUser.relNr
+            },
+          })
+          .then((res) => {
+            res.payload.forEach(function (loop, lIndex) {
+              let array = [];
+              Object.entries(loop.times).forEach(function (time) {
+                if (time[1].sttTimeFrom > that.flight.fltTime1 + 130) {
+                  array.push(time[1])
+                }
+              })
+              res.payload[lIndex].times = array;
+            })
+
+            this.teetimes = res.payload;
+            this.loading = false;
+
+            this.dialogVisible = true;
+
+          });
+
+
+    },
+
+    onBook18: function (object) {
+      console.log(object);
+      this.local_flight.fltCrlNr2 = object.crlNr;
+      this.local_flight.fltTime2 = object.sttTimeFrom;
+      this.handleSaveFlight();
     },
 
     async filterFn(val, update, abort) {

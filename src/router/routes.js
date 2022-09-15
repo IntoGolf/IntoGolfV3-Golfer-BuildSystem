@@ -34,6 +34,16 @@ const routes = [
       title: "Handicap",
     },
   },
+  {
+    path: "/checkin",
+    name: "CheckIn",
+    component: () => import("layouts/PageLayout.vue"),
+    children: [{path: "", component: () => import("pages/CheckIn.vue")}],
+    meta: {
+      requiresAuth: true,
+      title: "Starttijd inchecken",
+    },
+  },
   // {
   //   path: '/meerronden_list_mobile',
   //   name: 'MeerrondenListMobile',
