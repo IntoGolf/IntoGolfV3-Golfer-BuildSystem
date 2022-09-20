@@ -96,7 +96,7 @@ export default {
       let that = this;
       if (reload) {
         this.$http.get("golfer/scorecards").then((res) => {
-          that.handicapList = res.data;
+          that.handicapList = res;
         });
       }
       this.page = 1;
