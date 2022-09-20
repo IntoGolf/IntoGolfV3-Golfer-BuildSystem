@@ -13,17 +13,6 @@
       </div>
     </div>
 
-    <div v-if="teetime != null" class="row q-mb-md">
-      <div class="col text-center">
-        <q-btn
-            outline
-            color="secondary"
-            v-on:click="$router.push('/checkin?id=' + teetime.flpNr)">
-          Aanmelden starttijd {{ $filters.minuteToTime(teetime.fltTime1) }}
-        </q-btn>
-      </div>
-    </div>
-
     <div class="row q-mb-md">
 
       <div
@@ -47,6 +36,17 @@
         </div>
 
 
+      </div>
+    </div>
+
+    <div v-if="teetime != null" class="row q-mb-md">
+      <div class="col text-center">
+        <q-btn
+            outline
+            color="secondary"
+            v-on:click="$router.push('/checkin?id=' + teetime.flpNr)">
+          Aanmelden starttijd {{ $filters.minuteToTime(teetime.fltTime1) }}
+        </q-btn>
       </div>
     </div>
 
