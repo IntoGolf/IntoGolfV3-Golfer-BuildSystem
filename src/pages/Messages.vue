@@ -101,8 +101,8 @@
 export default {
   data() {
     return {
-      listUrl: "golfer/message/all",
-      openedUrl: "golfer/message/setOpened",
+      listUrl: "golfer/messages",
+      openedUrl: "golfer/message",
       no_messages: "Er zijn op dit moment geen berichten",
       list: [],
     };
@@ -122,7 +122,7 @@ export default {
     loadList: function() {
       let that = this;
       this.$http.get(this.listUrl).then((res) => {
-        that.list = res.data;
+        that.list = res;
       });
     },
     setMessagesOpened(item) {

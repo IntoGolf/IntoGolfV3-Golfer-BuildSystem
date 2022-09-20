@@ -6,6 +6,14 @@
 
       <q-card-section class="text-h6">
         Algemeen
+
+        <q-btn
+            v-on:click="$emit('handleClose')"
+            size="small"
+            color="primary"
+            class="float-right"
+            label="sluiten"/>
+
       </q-card-section>
 
       <q-separator inset/>
@@ -189,6 +197,8 @@ export default {
   computed: {
     canCancel: function() {
 
+      return true;
+
       if (this.$dayjs(this.$filters.unixToDate(this.local_flight.fltDate)).isBefore(this.$dayjs())) {
         return false;
       }
@@ -233,7 +243,7 @@ export default {
     handleSaveFlight: function (close) {
       let that = this;
       this.loading = false;
-      this.$http.post(`golfer/flight/create`, this.local_flight).then((res) => {
+      this.$http.post(`golfer/booking`, this.local_flight).then((res) => {
         that.local_flight = res.data.flight;
 
         if (res.data.errors.length > 0) {
@@ -275,8 +285,7 @@ export default {
           .onOk(() => {
             this.loading = false;
             this.local_flight.fltCarNr = 1;
-            this.$http
-                .post(`golfer/flight/create`, this.local_flight)
+            this.$http.post(`golfer/booking`, this.local_flight)
                 .then((res) => {
                   that.$emit("handleClose");
                 });
@@ -296,8 +305,6 @@ export default {
           .onOk(() => {
             player.flpCarNr = 1;
 
-            let name = player.flpName;
-
             let newPlayer = {
               flpNr: null,
               flpSide: player.flpSide,
@@ -314,8 +321,6 @@ export default {
                 newPlayer
             );
 
-            //that.$message.success("De deelname van " + name + " is geannuleerd");
-
             this.handleSaveFlight(false);
           });
     },
@@ -324,8 +329,7 @@ export default {
       let currentUser = this.$ls.getItem("currentUser").value;
       console.log(this.flight.fltDate);
       let that = this;
-      this.$http
-          .get("golfer/public/teetimes/get", {
+      this.$http.get("golfer/teetimes", {
             params: {
               date: this.$filters.unixToDate(this.flight.fltDate, "YYYY-MM-DD"),
               relNr: currentUser.relNr
@@ -353,7 +357,6 @@ export default {
     },
 
     onBook18: function (object) {
-      console.log(object);
       this.local_flight.fltCrlNr2 = object.crlNr;
       this.local_flight.fltTime2 = object.sttTimeFrom;
       this.handleSaveFlight();
@@ -365,8 +368,7 @@ export default {
       }
 
       let that = this;
-      await this.$http
-          .get(`golfer/relation/0/search/${val}`)
+      await this.$http.get(`golfer/relation/0/search/${val}`)
           .then((response) => {
             update(() => {
               that.relations = response;

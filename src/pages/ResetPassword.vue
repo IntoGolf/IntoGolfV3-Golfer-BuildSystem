@@ -105,8 +105,7 @@ export default {
     },
     onResetPassword() {
       if (this.form.password === this.form.passwordAgain) {
-        this.$http
-            .post("golfer/public/auth/reset-password", this.form)
+        this.$http.post("golfer/reset-password", this.form)
             .then(() => {
               this.$router.push("/");
               this.$message({

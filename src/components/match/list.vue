@@ -166,8 +166,8 @@ export default {
     },
 
     loadList() {
-      this.$http.get("golfer/match/all").then((res) => {
-        this.list = res.data;
+      this.$http.get("golfer/events").then((res) => {
+        this.list = res;
       });
     },
 

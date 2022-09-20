@@ -87,7 +87,7 @@ export default {
 
     onCheckIn: function() {
       let flight = {flpNr: this.$route.query.id};
-      this.$http.post("golfer/checkin",flight).then((res) => {
+      this.$http.post("golfer/booking/checkin",flight).then((res) => {
 
         setTimeout(this.onGoHome, 3000);
 

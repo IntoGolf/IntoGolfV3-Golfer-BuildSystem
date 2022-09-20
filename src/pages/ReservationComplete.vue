@@ -128,8 +128,7 @@ export default {
           type: "warning",
         })
           .then(() => {
-            this.$http
-              .post("golfer/flight/send-email", {
+            this.$http.post("golfer/flight/send-email", {
                 fltNr: flightInfo.flight.fltNr,
               })
               .then(function () {

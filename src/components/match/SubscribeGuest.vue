@@ -292,8 +292,7 @@ export default {
 
       this.player.is_desktop = this.$q.platform.is.desktop === true ? 1 : 0;
       this.player.details.Bron = 2;
-      this.$http
-        .post(`golfer/match/subscribe`, this.player)
+      this.$http.post(`golfer/event/player`, this.player)
         .then(function (res) {
           if (res.data.url.length > 0) {
             that.id = res.data.id;
@@ -319,8 +318,7 @@ export default {
           persistent: true,
         })
         .onOk(() => {
-          this.$http
-            .post(`golfer/match/unsubscribe`, this.player)
+          this.$http.delete(`golfer/event/player`, this.player)
             .then(function () {
 
               that.$q.notify ({

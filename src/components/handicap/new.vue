@@ -872,9 +872,9 @@ export default {
 
     loadBanen() {
       let that = this;
-      this.$http.get("golfer/handicap/banen").then((res) => {
-        this.banen = res.data.banen;
-        this.teeSoorten = res.data.teeSoorten;
+      this.$http.get("golfer/courses").then((res) => {
+        this.banen = res.banen;
+        this.teeSoorten = res.teeSoorten;
         this.banenSelectOptions = this.banenArry;
 
         this.handleNewScorecard(that.type);
@@ -882,7 +882,7 @@ export default {
     },
 
     loadCountries() {
-      this.$http.get("golfer/handicap/getCountries").then((res) => {
+      this.$http.get("golfer/countries").then((res) => {
         this.countries = res.data;
       });
     },

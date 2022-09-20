@@ -280,7 +280,7 @@ export default {
       const payload = Object.assign(this.form, {
         relNr: this.currentUser.relNr,
       });
-      this.$http.put(`golfer/relation`, payload);
+      this.$http.post(`golfer/user`, payload);
     },
     logout() {
       this.$ls.removeItem("currentUser");
@@ -310,19 +310,23 @@ export default {
   },
   created() {
     document.body.classList.add("page-profile");
-    if (this.$ls.getItem("currentUser")) {
-      this.$http.get(`golfer/relation/detail`).then((res) => {
-        this.form = Object.assign({}, res);
-        if (
-          this.currentUser.relCouNr &&
-          this.flagList[this.currentUser.relCouNr]
-        ) {
-          this.form.relCouNr = this.flagList[this.currentUser.relCouNr].value;
-          this.form.mobile_relCouNr =
-            this.flagList[this.currentUser.relCouNr].value;
-        }
-      });
-    }
+    console.log(this.$ls.getItem("currentUser").value);
+
+    this.form = Object.assign({}, this.$ls.getItem("currentUser").value);
+
+    // if (this.$ls.getItem("currentUser")) {
+    //   this.$http.get(`golfer/user`).then((res) => {
+    //     this.form = Object.assign({}, res);
+    //     if (
+    //       this.currentUser.relCouNr &&
+    //       this.flagList[this.currentUser.relCouNr]
+    //     ) {
+    //       this.form.relCouNr = this.flagList[this.currentUser.relCouNr].value;
+    //       this.form.mobile_relCouNr =
+    //         this.flagList[this.currentUser.relCouNr].value;
+    //     }
+    //   });
+    // }
   },
 };
 </script>

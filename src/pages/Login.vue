@@ -80,14 +80,14 @@ export default {
     },
     onlogin: function () {
       this.$q.loading.show();
-      this.$http
-          .post("golfer/auth/login", this.form)
+      this.$http.post("golfer/login", this.form)
           .then((res) => {
             if (res) {
-
+              console.log(res.relation_password.apiToken);
               this.$ls.setItem('authorization', res.relation_password.apiToken, 1000 * 60 * 60 * 24 * 7);
               this.$ls.setItem('currentUser', res, 1000 * 60 * 60 * 24 * 7);
 
+              console.log(this.$ls.getItem('authorization').value)
 
               if (this.$ls.getItem('currentUserPref').value == null) {
 

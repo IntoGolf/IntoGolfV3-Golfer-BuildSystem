@@ -5,10 +5,11 @@
     <div class="row">
       <div class="col text-center q-pt-lg">
         <q-img
-            src="~assets/images/logo_amh.png"
-            style="width: 200px;"
+            :src="system_logo"
+            style="max-width: 400px; max-height: 150px"
+            :fit="'scale-down'"
         />
-        <h4>GolfClub<br>Almeerderhout</h4>
+        <div class="text-h4 q-mb-md">{{ system_organisation_name }}</div>
       </div>
     </div>
 
@@ -17,11 +18,35 @@
         <q-btn
             outline
             color="secondary"
-            v-on:click="$router.push('/checkin?id=' + teetime.flpNr)"
-        >
-          Aanmelden starttijd <br>
-          {{ $filters.minuteToTime(teetime.fltTime1) }}
+            v-on:click="$router.push('/checkin?id=' + teetime.flpNr)">
+          Aanmelden starttijd {{ $filters.minuteToTime(teetime.fltTime1) }}
         </q-btn>
+      </div>
+    </div>
+
+    <div class="row q-mb-md">
+
+      <div
+          class="col"
+          v-for="(hour,key) in weatherHours"
+          :key="key">
+        <div class="row">
+          <div class="col text-center">
+            {{ $dayjs(hour.time).format('HH:mm') }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col text-center">
+            <img :src="'https://' + hour.condition.icon"/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col text-center">
+            {{ hour.condition.text }}
+          </div>
+        </div>
+
+
       </div>
     </div>
 
@@ -30,8 +55,7 @@
         <q-btn
             outline
             color="secondary"
-            v-on:click="$router.push('/match?id=' + match.matchId)"
-        >
+            v-on:click="$router.push('/match?id=' + match.matchId)">
           Wedstrijd {{match.name}}
         </q-btn>
       </div>
@@ -157,19 +181,24 @@
 
 <script>
 export default {
-  components: {},
+  components: {
+
+  },
   data() {
     return {
-      system_logo: '../../src/assets/images/logo_nw.svg',
+      system_logo: '',
+      system_organisation_name: '',
       match: null,
       teetime: null,
-      toNGF: false,
+      toNGF: this.$ls.getItem('currentUser').value.to_ngf,
       messageList: [],
+      weather: null
     };
   },
   created() {
     this.loadMessageList();
     this.loadSetting();
+    this.loadWeather();
   },
   computed: {
     cardInMemory: function () {
@@ -177,21 +206,43 @@ export default {
     },
     unreadCount: function() {
       return this.messageList.filter(message => message.message_opened == null).length;
+    },
+    weatherHours: function() {
+      if (this.weather == null) {
+        return [];
+      }
+
+      let hour = parseInt(this.$dayjs().format('H'));
+      hour = hour > 20 ? 20 : hour;
+
+      return this.weather.forecast.forecastday[0].hour.slice(hour,hour+4);
     }
   },
   methods: {
     loadSetting() {
-      this.$http.get(`golfer/public/setting`).then((res) => {
-        // this.system_logo = res.system_logo;
-        this.match = res.match ? res.match : null;
-        this.teetime = res.teetime ? res.teetime : null;
-        this.toNGF = res.toNGF;
+      this.$http.get(`golfer/settings`).then((res) => {
+        this.system_logo = res.system_logo;
+        this.system_organisation_name = res.system_organisation_name;
+        this.match = res.match;
+        this.teetime = res.teetime;
       });
     },
     loadMessageList() {
-      this.$http.get(`golfer/message/all`).then((res) => {
-        this.messageList = res.data;
+      this.$http.get(`golfer/messages`).then((res) => {
+        this.messageList = res;
       });
+    },
+    loadWeather() {
+
+      if (this.$ls.getItem('weather').value && 1==2) {
+        this.weather = this.$ls.getItem('weather').value;
+      } else {
+        this.$http.get(`golfer/weather`).then((res) => {
+          this.weather = res;
+          this.$ls.setItem('weather', res);
+        });
+      }
+
     },
   },
 };

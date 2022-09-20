@@ -89,7 +89,7 @@ export default {
   methods: {
     loadResults: function() {
       let that = this;
-      this.$http.get(`golfer/match/getResults/` + this.match.id)
+      this.$http.get(`golfer/event/result/` + this.match.id)
           .then(res => {
             that.resultArray = res.data;
           });

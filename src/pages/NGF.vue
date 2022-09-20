@@ -75,8 +75,7 @@ export default {
   methods: {
     loadCard() {
       let that = this;
-      this.$http
-        .get("golfer/handicap/card")
+      this.$http.get("golfer/user/NgfMembershipCard")
         .then((res) => {
           that.blobUrl = "data:image/png;base64," + res.base64;
           that.rotate();

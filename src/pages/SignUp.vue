@@ -297,7 +297,7 @@ export default {
       this.inviteVisible = true;
     }
 
-    this.$http.get(`golfer/public/relation-groups/get`).then((res) => {
+    this.$http.get(`golfer/relation-groups`).then((res) => {
       that.relationGroups = res;
       this.account_form.relGrpNr1 = that.relationGroupArray[0];
     });
@@ -335,8 +335,7 @@ export default {
       //       // recaptcha verify success
       //       if (res.success) {
       that.loading = true;
-      that.$http
-          .post(`golfer/public/auth/sign-up`, that.account_form)
+      that.$http.post(`golfer/sign-up`, that.account_form)
           .then((signUp) => {
             that.loading = false;
             that.$message.success(signUp.message);

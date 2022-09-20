@@ -6,7 +6,7 @@
         :action="getUploadUrl()"
         :show-file-list="false"
         :headers="{
-          relNr: form.relNr || 0,
+          relNr: relNr || 0,
           authorization: 'Bearer ' + this.$ls.getItem('Authorization'),
         }"
         :on-progress="handleAvatarUploading"
@@ -14,8 +14,8 @@
         :before-upload="beforeAvatarUpload"
       >
         <img
-          v-if="form.relImage"
-          :src="form.relImage"
+          v-if="relImage"
+          :src="relImage"
           class="avatar mt-3"
           ref="uploadElementIMG"
         />
@@ -40,22 +40,10 @@ export default {
   props: ["uploadUrl"],
   data() {
     return {
-      form: {
-        relNr: "",
-        relImage: "",
-      },
+      relNr: this.$ls.getItem("currentUser").value.relNr,
+      relImage: this.$ls.getItem("currentUser").value.relImage,
       uploading: "",
-      currentUser: {},
     };
-  },
-  created() {
-    if (this.$ls.getItem("currentUser")) {
-      this.currentUser = this.$ls.getItem("currentUser");
-      this.$http.get(`golfer/relation/detail`).then((res) => {
-        this.form.relNr = res.relNr;
-        this.form.relImage = res.relImage;
-      });
-    }
   },
   methods: {
     getUploadUrl() {
@@ -82,9 +70,9 @@ export default {
     handleAvatarSuccess(res, file) {
       // this.imageUrl = URL.createObjectURL(file.raw);
       if (res.data && res.data) {
-        this.form.relImage = res.data;
+        this.relImage = res.data;
       } else {
-        this.form.relImage = URL.createObjectURL(file.raw);
+        this.relImage = URL.createObjectURL(file.raw);
       }
       this.uploading.close();
     },

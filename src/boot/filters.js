@@ -34,6 +34,10 @@ const unixToDate = function (timestamp, formatString = "DD-MM-YYYY") {
   return dayjs.unix(unixTimestamp).format(formatString);
 };
 
+const dateToUnix = function (value, formatString = 'DD-MM-YYYY') {
+  return  Math.round((dayjs(value, formatString).unix() / 86400) + 719528);
+};
+
 const diffTime = function (datetime) {
   return dayjs(datetime).fromNow(true);
 };
@@ -67,6 +71,7 @@ const money = function (number, decimal = 1) {
 export default ({ app }) => {
   app.config.globalProperties.$filters = {
     unixToDate,
+    dateToUnix,
     minuteToTime,
     timeToMinute,
     diffTime,

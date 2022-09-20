@@ -36,8 +36,7 @@ export default {
   beforeMount: function () {
     if (this.$route.query.id != undefined) {
       let that = this;
-      this.$http
-        .get(`golfer/match/detail/` + this.$route.query.id)
+      this.$http.get(`golfer/event/` + this.$route.query.id)
         .then((res) => {
           that.match = res.data;
           that.page = 5;

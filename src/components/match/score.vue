@@ -120,10 +120,8 @@ export default {
         that.local_player.match_score["hcsH" + hole.nr + "_sl"] = hole.sl;
       });
 
-      this.$http
-        .post(`golfer/match/setMatchScore`, this.local_player.match_score)
-        .then((res) => {
-          that.local_player.match_score = res.data;
+      this.$http.post(`golfer/event/result`, this.local_player.match_score)
+        .then(() => {
           that.$emit("handleClose");
         });
     },

@@ -169,8 +169,7 @@ export default {
   methods: {
     loadList() {
       let that = this;
-      this.$http
-        .get("golfer/memberList?search=" + this.searchValue)
+      this.$http.get("golfer/relation/0/search/" + this.searchValue)
         .then((res) => {
           that.list = res;
           that.loading = false;

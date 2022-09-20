@@ -130,8 +130,7 @@ export default {
   },
   methods: {
     onVerifyCode() {
-      this.$http
-          .post("golfer/public/auth/check-verify-code", this.form)
+      this.$http.post("golfer/public/auth/check-verify-code", this.form)
           .then(() => {
             this.$router.push({
               query: {
@@ -148,8 +147,7 @@ export default {
       this.$message("TODO");
     },
     onSendCode() {
-      this.$http
-          .post("golfer/public/auth/send-email-verify-code", this.form)
+      this.$http.post("golfer/send-email-verify-code", this.form)
           .then(() => {
             this.verifyCodeDialogVisible = true;
           });

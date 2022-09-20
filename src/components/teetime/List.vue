@@ -63,9 +63,9 @@ export default {
   methods: {
     loadReservationList() {
       this.loading = true;
-      this.$http.get("golfer/reservations").then((res) => {
+      this.$http.get("golfer/bookings").then((res) => {
         this.loading = false;
-        this.openData = res.data;
+        this.openData = res;
       });
     },
 

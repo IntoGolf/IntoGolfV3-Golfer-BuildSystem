@@ -139,8 +139,8 @@ export default {
     handleRefreshMatch: function () {
       let that = this;
       this.loading = true;
-      this.$http.get(`golfer/match/detail/` + this.match.id).then((res) => {
-        that.match = res.data;
+      this.$http.get(`golfer/event/` + this.match.id).then((res) => {
+        that.match = res;
       });
     },
     handleClose: function () {

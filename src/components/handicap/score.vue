@@ -284,7 +284,7 @@ export default {
     },
 
     handleSave: function () {
-      this.$http.post("golfer/handicap", this.scorecard).then((res) => {
+      this.$http.post("golfer/scorecard", this.scorecard).then((res) => {
         this.$ls.removeItem('scorecard');
         this.$emit("handleCloseScorecard", true);
       });

@@ -28,7 +28,7 @@
 
                   <q-btn
                       v-close-popup
-                      label="Close"
+                      label="Closee"
                       color="primary"
                       flat/>
 
@@ -46,20 +46,20 @@
 
     <div class="row q-mt-md">
 
-<!--      <div class="col-5 q-pr-sm">-->
-<!--        Holes:-->
-<!--        <q-btn-group unelevated spread class="full-width">-->
-<!--          <q-btn-->
-<!--              v-for="(item, index) of filterForm.holes"-->
-<!--              :key="index"-->
-<!--              :label="item"-->
-<!--              :color="form.holes === item ? 'secondary' : 'white'"-->
-<!--              :text-color="form.holes === item ? '' : 'black'"-->
-<!--              @click="handleFilterHole(item)"-->
-<!--          />-->
-<!--        </q-btn-group>-->
+      <div class="col-5 q-pr-sm">
+        Holes:
+        <q-btn-group unelevated spread class="full-width">
+          <q-btn
+              v-for="(item, index) of filterForm.holes"
+              :key="index"
+              :label="item"
+              :color="form.holes === item ? 'secondary' : 'white'"
+              :text-color="form.holes === item ? '' : 'black'"
+              @click="handleFilterHole(item)"
+          />
+        </q-btn-group>
 
-<!--      </div>-->
+      </div>
 
       <div class="col-7">
         Spelers:
@@ -244,6 +244,7 @@ export default {
     date: function (newValue, oldValue) {
       this.form.fltDate = newValue;
       this.loadTeetimes();
+      this.$refs.qDateTeeTime.hide();
     }
   },
   methods: {
@@ -259,8 +260,7 @@ export default {
     loadTeetimes: function () {
       let currentUser = this.$ls.getItem("currentUser").value;
       this.loading = true;
-      this.$http
-          .get("golfer/public/teetimes/get", {
+      this.$http.get("golfer/teetimes", {
             params: {
               date: this.$dayjs(this.form.fltDate).format("YYYY-MM-DD"),
               relNr: currentUser.relNr
@@ -300,15 +300,15 @@ export default {
 
       const info = {
         // fltNr: null,
-        fltDate: this.form.fltDate,
+        test: this.form.fltDate,
+        fltDate: this.$filters.dateToUnix(this.form.fltDate,'YYYY-MM-DD'),
         fltSize: this.form.fltSize,
         fltCrlNr1: this.selectedCourseItem.crlNr,
-        fltCrlNr2: this.selectedTimeItem.sttCrlNrNext,
+        fltCrlNr2: this.form.holes == 18 ? this.selectedTimeItem.sttCrlNrNext : null,
         fltOrigin: 2,
-        fltComNr:71,
 
         fltNr: this.selectedTimeItem.sttRefNr,
-        fltTime: this.selectedTimeItem.sttTimeFrom,
+        fltTime1: this.selectedTimeItem.sttTimeFrom,
 
         flight_players: flight_players,
 
@@ -318,10 +318,9 @@ export default {
       };
 
       let that = this;
-      this.$http
-          .post(`golfer/flight/create`, info)
+      this.$http.post(`golfer/booking`, info)
           .then((res) => {
-            that.flight = res.data.flight;
+            that.flight = res.flight;
             this.$emit("handleOpenFlight", that.flight);
           })
           .catch((error) => {

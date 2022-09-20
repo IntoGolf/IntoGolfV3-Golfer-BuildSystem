@@ -95,7 +95,7 @@ export default {
       this.handicapList = false;
       let that = this;
       if (reload) {
-        this.$http.get("golfer/handicap/all").then((res) => {
+        this.$http.get("golfer/scorecards").then((res) => {
           that.handicapList = res.data;
         });
       }

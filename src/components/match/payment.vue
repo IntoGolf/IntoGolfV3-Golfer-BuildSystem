@@ -60,8 +60,7 @@ export default {
 
     handleStatusCheck: function () {
       let that = this;
-      this.$http
-        .get(`golfer/public/payment/checkPaymentStatusById/${this.id}`)
+      this.$http.get(`golfer/payment/status/${this.id}`)
         .then((res) => {
           that.status = res.opmStatus;
           that.isDesktop = res.opmIsDesktop;
