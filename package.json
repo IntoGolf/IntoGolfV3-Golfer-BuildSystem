@@ -1,6 +1,6 @@
 {
   "name": "intogolf-app-golfer",
-  "version": "0.1.27",
+  "version": "0.1.29",
   "description": "IntoGolfV3 Golfer app",
   "productName": "IntoGolfV3 Golfer app",
   "author": "IntoGolf <info@intogolf.nl>",
@@ -32,6 +32,7 @@
     "vue-qr": "^4.0.9",
     "vue-recaptcha-v3": "^2.0.1",
     "vue-router": "^4.0.0",
+    "vue3-qrcode-reader": "^0.0.1",
     "vue3-storage": "^0.1.11",
     "yarn": "^1.22.18"
   },

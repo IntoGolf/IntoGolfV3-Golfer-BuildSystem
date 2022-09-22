@@ -75,8 +75,6 @@
         </q-btn-group>
       </div>
 
-      <p class="q-mt-sm q-mb-sm"><i>Voor het reserveren van 18 holes reserveert u eerst 9 holes waarna u een 2de 9 holes kunt bijboeken.</i></p>
-
     </div>
 
     <div v-if="teetimes.length > 0" class="row">
@@ -114,14 +112,15 @@
           class="col text-grey-8 text-bold">
 
         <div
-            v-for="(time, tKey) of course.times"
+            v-for="(time, tKey) of timeFilter(course.times)"
             :key="tKey"
             class="row text-center q-pt-xs"
             @click="handleOpenDialog(time, course)">
 
-          <div class="col bg-green-3 q-pa-sm">
+          <div class="col  q-pa-sm" :class="time.sttRefNr>0?'bg-blue-3':'bg-green-3'">
 
-            {{ $filters.minuteToTime(time.sttTimeFrom) }}
+            {{ $filters.minuteToTime(time.sttTimeFrom) }} <br>
+            <i v-show="time.sttRefNr>0">merged</i>
 
           </div>
 
@@ -249,6 +248,13 @@ export default {
   },
   methods: {
 
+    timeFilter: function(array) {
+      return array.filter((time) =>
+          (time.sttPlayers >= this.form.fltSize) &&
+          (this.form.holes == 9 || (time.sttAvailable18 && this.form.holes == 18)) &&
+          ((this.form.holes == 9) || (time.sttCrlNrNext > 0 && this.form.holes == 18)))
+    },
+
     optionsFn(date) {
       return this.$dayjs(date) >= this.$dayjs().add(-1, 'day') && this.$dayjs(date) <= this.$dayjs().add(21, 'day')
     },
@@ -299,22 +305,14 @@ export default {
       flight_players[0].flpName = currentUser.full_name2;
 
       const info = {
-        // fltNr: null,
-        test: this.form.fltDate,
+        fltNr: this.selectedTimeItem.sttRefNr,
+        fltTime1: this.selectedTimeItem.sttTimeFrom,
         fltDate: this.$filters.dateToUnix(this.form.fltDate,'YYYY-MM-DD'),
         fltSize: this.form.fltSize,
         fltCrlNr1: this.selectedCourseItem.crlNr,
         fltCrlNr2: this.form.holes == 18 ? this.selectedTimeItem.sttCrlNrNext : null,
         fltOrigin: 2,
-
-        fltNr: this.selectedTimeItem.sttRefNr,
-        fltTime1: this.selectedTimeItem.sttTimeFrom,
-
         flight_players: flight_players,
-
-        holes: this.form.holes,
-        courseItem: this.selectedCourseItem,
-        timeItem: this.selectedTimeItem,
       };
 
       let that = this;

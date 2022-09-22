@@ -155,9 +155,9 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: `DelflandApp`,
-        short_name: `DelflandApp`,
-        description: `delfland app`,
+        name: `GolferApp`,
+        short_name: `GolferApp`,
+        description: `GolferApp`,
         display: "standalone",
         orientation: "portrait",
         background_color: "#ffffff",
