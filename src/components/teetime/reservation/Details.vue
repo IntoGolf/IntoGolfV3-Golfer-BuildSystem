@@ -19,58 +19,102 @@
 
     <q-card-section>
 
-      <div class="row">
+      <div class="row q-mb-sm">
         <div class="col text-bold">Slot</div>
         <div class="col-8 text-right">
           {{ slot }}
         </div>
       </div>
 
-      <div class="row">
+      <div class="row q-mb-sm">
         <div class="col text-bold">Lus uit</div>
         <div class="col-8 text-right">
           {{ local_flight.loop1.crlName }}
         </div>
       </div>
 
-      <div v-if="local_flight.fltCrlNr2 > 0" class="row">
+      <div v-if="local_flight.fltCrlNr2 > 0" class="row q-mb-sm">
         <div class="col text-bold">Lus in</div>
         <div class="col-8 text-right">
           {{ courseLoop }}
         </div>
       </div>
 
-      <div class="row">
+      <div class="row q-mb-sm">
         <div class="col text-bold">Boeker</div>
         <div class="col-8 text-right">
           {{ bookerName }}
         </div>
       </div>
 
-      <div class="row">
+      <div class="row q-mb-sm">
         <div class="col text-bold">Spelers</div>
         <div class="col-8 text-right">
           {{ flight.fltSize }}
         </div>
       </div>
 
+      <div class="row q-mb-sm">
+        <div class="col text-bold">Intro ruimte</div>
+        <div class="col-8 text-right">
+          {{ flight.IntroMax - flight.IntroCount }}X
+        </div>
+      </div>
+
+      <div class="row q-mb-sm">
+        <div class="col text-bold">Greenfee</div>
+        <div class="col-8 text-right">
+          {{ flight.flight_players[0].greenfee == null ? '-' : flight.flight_players[0].greenfee.grfName }}
+        </div>
+      </div>
+
+      <div class="row q-mb-sm">
+        <div class="col text-bold">Greenfee tarief</div>
+        <div class="col-8 text-right">
+          {{
+            flight.flight_players[0].flpPrice == null ? $filters.money(0) : $filters.money(flight.flight_players[0].flpPrice)
+          }}
+        </div>
+      </div>
+
+      <div class="row q-mb-sm">
+        <div class="col text-bold">Greenfee totaal</div>
+        <div class="col-8 text-right">
+          {{ $filters.money(total) }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col text-bold">Vervalt op</div>
+        <div class="col-8 text-right">
+          {{ $dayjs(flight.fltTimestamp).add(30, 'minutes').format('dddd D MMM HH:mm') }}
+        </div>
+      </div>
+
     </q-card-section>
 
-    <q-separator v-if="myBooking"/>
+    <q-separator v-if="isMyBooking"/>
 
     <q-card-section>
 
-      <div v-if="myBooking" class="row q-gutter-md">
+      <div v-if="isMyBooking" class="row q-gutter-md">
         <div v-if="canCancel" class="col">
           <q-btn
               v-on:click="$emit('handleClose')"
-              class="q-mr-md"
+              class="q-mr-sm"
               color="primary"
               label="sluiten"/>
           <q-btn
               v-on:click="handleBook18"
+              class="q-mr-sm"
               color="primary"
               label="Wijzig 18"/>
+          <q-btn
+              v-show="!paid"
+              v-on:click="onPay"
+              class="float-right"
+              color="primary"
+              label="Betaal"/>
         </div>
       </div>
 
@@ -96,7 +140,8 @@ export default {
   },
   data: function () {
     return {
-      local_flight: this.flight
+      local_flight: this.flight,
+      currentUser: this.$ls.getItem("currentUser").value,
     }
   },
   computed: {
@@ -118,16 +163,27 @@ export default {
     },
     bookerName: function () {
       return this.flight.flight_players[0].flpName;
+    },
+    isMyBooking: function () {
+      return this.flight.flight_players[0].flpRelNr == this.currentUser.relNr;
+    },
+    total: function () {
+      return this.flight.flight_players.reduce(function (result, item) {
+        return result + item.flpPrice;
+      }, 0);
+    },
+    paid: function () {
+      return this.flight.flight_players.filter(player => player.flpBilNr > 0).length > 0;
     }
   },
   methods: {
     handleCancel: function () {
       this.local_flight.fltCarNr = 1;
-      this.$emit('handleSave', this.local_flight)
+      this.$emit('handleSave', this.local_flight, true)
     },
     handleBook18: function () {
       let currentUser = this.$ls.getItem("currentUser").value;
-      console.log(this.flight.fltDate);
+
       let that = this;
       this.$http.get("golfer/teetimes", {
         params: {
@@ -155,6 +211,16 @@ export default {
 
 
     },
-  },
+    onPay: function () {
+
+      this.$http.get("golfer/pay", {
+        params: {
+          fltNr: this.flight.fltNr
+        },
+      }).then((res) => {
+        window.location.href = res.url;
+      })
+    }
+  }
 };
 </script>

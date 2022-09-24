@@ -52,4 +52,5 @@ export const message = {
   },
   "Traffic Channels": "Traffic Channels",
   "Course Occupation Overview": "Course Occupation Overview",
+  CancelPlayer: "Annuleer speler",
 };

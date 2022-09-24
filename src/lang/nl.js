@@ -67,6 +67,7 @@ export const message = {
   "Selected date": "Geselecteerde datum",
   "No, cancel": "Nee, cancel",
   Cancel: "Cancel",
+  CancelPlayer: "Annuleer speler",
   "Yes, move": "Ja, verplaats",
   "Confirm move teetime": "Bevestig verplaatsing",
   "Are you sure to move this teetime?":

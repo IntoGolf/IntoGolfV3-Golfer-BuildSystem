@@ -16,12 +16,12 @@
 
     <div class="row">
       <div class="col">
-        <q-list v-if="openData.length > 0" separator>
+        <q-list v-if="array.length > 0" separator>
           <q-item
             clickable
             class="full-width bg-white shadow-1 q-mb-sm"
             v-ripple
-            v-for="(item, index) in openData"
+            v-for="(item, index) in array"
             v-on:click="handleOpenFlight(item)"
             v-bind:key="index"
           >
@@ -54,32 +54,21 @@
 
 <script>
 export default {
+  props: {
+    array: Array
+  },
   data() {
     return {
-      loading: false,
-      openData: [],
+      loading: false
     };
   },
   methods: {
-    loadReservationList() {
-      this.loading = true;
-      this.$http.get("golfer/bookings").then((res) => {
-        this.loading = false;
-        this.openData = res;
-      });
-    },
-
     handleOpenFlight: function (flight) {
       this.$emit("handleOpenFlight", flight);
     },
-
     handleOpenNew: function () {
       this.$emit("handleOpenBooking");
     },
-  },
-
-  created() {
-    this.loadReservationList();
-  },
+  }
 };
 </script>

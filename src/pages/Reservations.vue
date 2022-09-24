@@ -11,7 +11,9 @@
 
     <List
       v-if="page == LIST"
+      :array="array"
       v-on:handleClose="handleClose"
+      v-on:loadReservationList="loadReservationList"
       v-on:handleOpenFlight="handleOpenFlight"
       v-on:handleOpenBooking="handleOpenBooking"
     />
@@ -24,6 +26,7 @@
 
     <Booking
       v-if="page == BOOKING"
+      v-on:loadReservationList="loadReservationList"
       v-on:handleClose="handleClose"
       v-on:handleOpenFlight="handleOpenFlight"
     />
@@ -47,6 +50,7 @@ export default {
       LIST: "list",
       RESERVATION: "reservation",
       BOOKING: "booking",
+      array: [],
 
       page: null,
       loading: false,
@@ -60,9 +64,18 @@ export default {
     };
   },
   created: function () {
-    this.page = this.LIST;
+    this.loadReservationList();
   },
   methods: {
+    loadReservationList() {
+      this.loading = true;
+      this.$http.get("golfer/bookings").then((res) => {
+        this.loading = false;
+        this.array = res;
+        console.log(this.array);
+        this.page = this.LIST;
+      });
+    },
     handleOpenFlight: function (flight) {
       this.back_icon = "fa-arrow-left";
       this.back_link = "/reservations";
@@ -83,7 +96,6 @@ export default {
       this.flight = flight;
       this.page = this.RESERVATION;
     },
-
     handleOpenBooking: function () {
       this.back_icon = "fa-arrow-left";
       this.back_link = "/reservations";
@@ -94,7 +106,6 @@ export default {
 
       this.page = this.BOOKING;
     },
-
     handleClose: function () {
       this.back_icon = "fa-home";
       this.back_link = "/";
@@ -104,6 +115,7 @@ export default {
       this.flight = null;
 
       this.page = this.LIST;
+      this.loadReservationList();
     },
   },
 };

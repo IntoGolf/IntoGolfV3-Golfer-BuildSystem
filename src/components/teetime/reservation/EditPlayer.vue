@@ -4,11 +4,11 @@
 
     <q-card-section class="text-h6">
 
-      Speler {{ player.flpSide }}
+      {{ title }}
 
       <q-btn
-          v-if="canCancel"
-          v-on:click="handleCancel"
+          v-if="showCancelBtn"
+          v-on:click="onCancel"
           color="accent"
           size="md"
           class="float-right"
@@ -37,7 +37,7 @@
           v-model="flpHandicap"/>
 
       <q-input
-          v-show="!scan"
+          v-show="!scan && player.flpRelNr == null"
           class="q-mb-sm"
           :readonly="player.flpRelNr > 0"
           label="E-mailadres"
@@ -45,7 +45,7 @@
           v-model="flpEmail"/>
 
       <q-input
-          v-show="!scan"
+          v-show="!scan && player.flpRelNr == null"
           class="q-mb-sm"
           :readonly="player.flpRelNr > 0"
           label="Telefoonnummer"
@@ -53,16 +53,44 @@
           v-model="flpPhone"/>
 
       <q-input
-          v-show="!scan"
+          v-show="!scan && player.flpRelNr == null"
           class="q-mb-sm"
+          :disable="flpIntro == 1"
           :readonly="player.flpRelNr > 0"
           label="Golfservicenummer"
           outlined counter maxlength="10" clearable
           v-model="flpGsn"/>
 
+      <div v-show="showIntroMessage && player.flpRelNr == null">
+        <i>{{ textIntroMessage }}</i><br>
+      </div>
+
+      <div v-show="showExceedIntroodMessage && player.flpRelNr == null">
+        <i>{{ textExceedIntroodMessage }}</i><br>
+      </div>
+
+      <div v-show="showExceedIntrosMessage && player.flpRelNr == null">
+        <i>{{ textExceedIntrosMessage }}</i><br>
+      </div>
+
+      <q-toggle
+          v-show="player.flpRelNr == 0"
+          v-model="flpIntro"
+          :disable="disableIntoToggle"
+          :true-value="1"
+          :false-value="null"
+          label="Introducee"
+          left-label/>
+      <br>
+
+      <div v-show="showIntroodMessage && player.flpRelNr == null">
+        <br><i>{{ textIntroodMessage }}</i>
+      </div>
+
       <qrcode-stream
           v-if="scan"
-          @decode="onDecode" @init="onInit"/>
+          @decode="onDecode"
+          @init="onInit"/>
 
     </q-card-section>
 
@@ -71,22 +99,32 @@
     <q-card-section>
 
       <q-btn
+          v-show="!scan"
           v-on:click="handleSave"
           class="q-mr-sm"
           color="primary"
           label="Opslaan"/>
 
       <q-btn
-          v-on:click="$emit('handleCloseEditPlayer',player)"
+          v-show="!scan"
+          v-on:click="$emit('handleCloseEditPlayer')"
           class="q-mr-sm"
           color="primary"
           label="Sluiten"/>
 
       <q-btn
+          v-show="scan"
+          v-on:click="scan = false"
+          class="q-mr-sm"
+          color="primary"
+          label="Sluiten"/>
+
+      <q-btn
+          v-show="!scan"
           v-on:click="scan = true"
           class="q-mr-sm"
           color="primary"
-          label="Scan"/>
+          label="Scan NGF"/>
 
     </q-card-section>
 
@@ -108,6 +146,7 @@ export default {
   },
   data: function () {
     return {
+      title: 'Speler ' + this.player.flpSide,
       local_flight: this.flight,
       local_player: this.player,
       flpName: this.player.flpName,
@@ -115,7 +154,16 @@ export default {
       flpEmail: this.player.flpEmail,
       flpPhone: this.player.flpPhone,
       flpGsn: this.player.flpGsn,
-      scan: false
+      flpIntro: this.player.flpIntro,
+      scan: false,
+      IntroMax:1,
+      Intros: 0,
+      titleCancel: "Speler annuleren",
+      messageCancel: "U annuleert de deelname van deze speler en kunt hierna een andere speler aan de flight toevoegen, wilt u doorgaan?",
+      textIntroMessage: "Wenst u deze speler te introduceren voer dan het GSN nummer van de speler in.",
+      textExceedIntroodMessage: "Deze speler is over de introductie limiet van " + this.IntroMax + " intoducties en kan nier meer worden geintroduceerd.",
+      textExceedIntrosMessage: "U kunt niet meer introduceren u heeft het maximum aantal van " + this.flight.IntroMax + " introducties bereikt.",
+      textIntroodMessage: "U introduceert deze speler, voordat u start moet het GSN nummer gevalideerd worden. U kunt dit doen door op onderstaande knop \"SCAN NGF\" te klikken of bij de caddiemaster.\""
     };
   },
   computed: {
@@ -129,30 +177,66 @@ export default {
       }
       return this.local_flight.fltTime1 + 20 < this.$filters.timeToMinute(this.$dayjs().format('HH:mm'))
     },
-  },
-  watch: {
-    flpHandicap: function(newValue) {
-      this.flpHandicap = newValue.replace(",", ".");
+    showIntroMessage: function() {
+      return this.flpIntro == null && this.flight.IntroMax > this.flight.IntroCount && this.IntroMax > this.Intros;
+    },
+    showExceedIntroodMessage: function() {
+      return this.flpGsn != null && this.flpGsn.length == 10 && this.IntroMax > 0 && this.IntroMax < this.Intros;
+    },
+    showExceedIntrosMessage: function() {
+      return this.flpIntro == null && this.flight.IntroMax <= this.flight.IntroCount;
+    },
+    showIntroodMessage: function() {
+      return this.flpIntro == 1;
+    },
+    showCancelBtn: function() {
+      return this.canCancel && !this.scan;
+    },
+    disableIntoToggle: function() {
+      return this.flpGsn == null || this.flpGsn.length < 10 || this.flight.IntroMax <= this.flight.IntroCount || this.IntroMax <= this.Intros;
     }
   },
+  watch: {
+    flpHandicap: function (newValue) {
+      this.flpHandicap = newValue.replace(",", ".");
+    },
+    flpGsn: function (newValue) {
+      if (newValue.length < 10) {
+        return;
+      }
+
+      let data = {
+        params: {
+          fltDate: this.flight.fltDate,
+          flpGsn: newValue
+        }
+      }
+
+      this.$http.get('golfer/intros', data).then((res) => {
+        this.IntroMax = res.IntroMax;
+        this.Intros = res.Intros;
+      });
+
+    },
+  },
   methods: {
-    handleCancel: function () {
+    onCancel: function () {
       this.$q
           .dialog({
-            title: "Speler annuleren",
-            message: "U annuleert de deelname van deze speler, wilt u doorgaan?",
+            title: this.titleCancel,
+            message: this.messageCancel,
             cancel: true,
             persistent: true,
           })
           .onOk(() => {
             //cancel selected player
-            let player = this.local_flight.flight_players.find(player => player.flpNr = this.player.flpNr);
-            player.flpCarNr = 1;
+            let index = this.local_flight.flight_players.findIndex(player => player.flpNr == this.player.flpNr);
+            this.local_flight.flight_players[index].flpCarNr = 1;
 
             //add new player to flight to fill the canceled player spot
             let newPlayer = {
               flpNr: null,
-              flpSide: player.flpSide,
+              flpSide: this.local_flight.flight_players[index].flpSide,
               flpRelNr: null,
               flpName: null,
               flpEmail: "",
@@ -162,13 +246,14 @@ export default {
 
             //insert the player on the canceld player spot
             this.local_flight.flight_players.splice(
-                player.flpSide - 1,
+                this.local_flight.flight_players[index].flpSide - 1,
                 0,
                 newPlayer
             );
 
             //save the flight without closing it
             this.$emit('handleSave', this.local_flight);
+            this.$emit('handleCloseEditPlayer');
           });
     },
     handleSave: function () {
@@ -177,16 +262,14 @@ export default {
       this.local_player.flpEmail = this.flpEmail;
       this.local_player.flpPhone = this.flpPhone;
       this.local_player.flpGsn = this.flpGsn;
+      this.local_player.flpIntro = this.flpIntro;
       this.$emit('handleSave', this.local_flight);
     },
     onDecode: function (decodedString) {
-
       this.flpName = decodedString.substring(11, 59).trim();
       this.flpHandicap = decodedString.substring(77, 82).trim();
       this.flpGsn = decodedString.substring(83, 95).trim();
       this.flpGender = decodedString.substring(82, 83).trim();
-
-      console.log(decodedString);
       this.scan = false;
     },
     onInit(promise) {

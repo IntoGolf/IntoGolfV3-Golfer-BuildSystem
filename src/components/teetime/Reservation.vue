@@ -2,25 +2,25 @@
 
   <q-page class="q-page q-pa-md">
 
-    <comp-details
-        v-show="editPlayer == null"
-        :flight="flight"
-        v-on:handleSave="handleSave"
-        v-on:handleClose="handleClose"/>
+    <div v-if="editPlayer == null">
+      <comp-details
+          :flight="local_flight"
+          v-on:handleSave="handleSave"
+          v-on:handleClose="handleClose"/>
 
-    <comp-player
-        v-show="editPlayer == null"
-        v-for="(player,key) in playerArray"
-        :key="key"
-        :flight="flight"
-        :player="player"
-        class="q-mb-md"
-        v-on:handleEditPlayer="handleEditPlayer"
-        v-on:handleSave="handleSave"/>
+      <comp-player
+          v-for="(player,key) in playerArray"
+          :key="key"
+          :flight="local_flight"
+          :player="player"
+          class="q-mb-md"
+          v-on:handleEditPlayer="handleEditPlayer"
+          v-on:handleSave="handleSave"/>
+    </div>
 
     <comp-edit-player
         v-if="editPlayer"
-        :flight="flight"
+        :flight="local_flight"
         :player="editPlayer"
         v-on:handleSave="handleSave"
         v-on:handleCloseEditPlayer="handleCloseEditPlayer"/>
@@ -49,21 +49,22 @@ export default {
       loading: false,
       currentUser: this.$ls.getItem("currentUser").value,
       dialogVisible: false,
-      editPlayer: null
+      editPlayer: null,
+      local_flight: {...this.flight}
     };
   },
   computed: {
     playerArray: function () {
-      return this.flight.flight_players.filter(
+      return this.local_flight.flight_players.filter(
           (item) => item.flpSide != 1 && item.flpCarNr == null && (this.isMyBooking || item.flpName != null)
       );
     },
     isMyBooking: function () {
-      return this.flight.flight_players[0].flpRelNr == this.currentUser.relNr;
+      return this.local_flight.flight_players[0].flpRelNr == this.currentUser.relNr;
     }
   },
   methods: {
-    handleSave: function (flight) {
+    handleSave: function (flight, close, index) {
       let that = this;
       this.loading = false;
       this.$http.post(`golfer/booking`, flight).then((res) => {
@@ -82,17 +83,25 @@ export default {
 
         } else {
 
-          that.$q
-              .dialog({
-                title: "Bevestiging",
-                message:
-                    "Uw wijzigingen zijn opgeslagen, wilt u de flight sluiten?",
-                cancel: true,
-                persistent: true,
-              })
-              .onOk(() => {
-                this.$emit("handleClose");
-              });
+          this.local_flight = res.flight;
+
+          // that.$q
+          //     .dialog({
+          //       title: "Bevestiging",
+          //       message:
+          //           "Uw wijzigingen zijn opgeslagen, wilt u de flight sluiten?",
+          //       cancel: true,
+          //       persistent: true,
+          //     })
+          //     .onOk(() => {
+          //       this.$emit("handleClose");
+          //     });
+        }
+
+        if (index > -1) {
+          this.handleEditPlayer(this.local_flight.flight_players[index]);
+        } else if (close) {
+          this.$emit("handleClose");
         }
 
       });
@@ -100,10 +109,10 @@ export default {
     handleClose: function () {
       this.$emit("handleClose");
     },
-    handleEditPlayer: function(player) {
+    handleEditPlayer: function (player) {
       this.editPlayer = player;
     },
-    handleCloseEditPlayer: function(player) {
+    handleCloseEditPlayer: function () {
       this.editPlayer = null;
     }
   }
