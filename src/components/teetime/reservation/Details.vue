@@ -7,7 +7,7 @@
       Uw starttijd
 
       <q-btn
-          v-show="canCancel"
+          v-show="canCancel && !paid"
           v-on:click="handleCancel"
           color="accent"
           class="float-right"
