@@ -84,12 +84,24 @@
         </div>
       </div>
 
-      <div class="row">
+      <div
+          v-show="!paid"
+          class="row">
         <div class="col text-bold">Vervalt op</div>
         <div class="col-8 text-right">
           {{ $dayjs(flight.fltTimestamp).add(30, 'minutes').format('dddd D MMM HH:mm') }}
         </div>
       </div>
+
+      <div
+          v-show="paid"
+          class="row">
+        <div class="col text-bold">Status</div>
+        <div class="col-8 text-right">
+          Betaald
+        </div>
+      </div>
+
 
     </q-card-section>
 

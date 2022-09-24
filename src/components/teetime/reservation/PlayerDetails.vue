@@ -80,6 +80,7 @@
     <q-card-section>
 
       <q-btn
+          v-show="!paid"
           v-on:click="$emit('handleEditPlayer',player)"
           class="q-mr-md"
           color="primary"
@@ -114,6 +115,9 @@ export default {
     },
     isMyBooking: function () {
       return this.flight.flight_players[0].flpRelNr == this.currentUser.relNr;
+    },
+    paid: function () {
+      return this.flight.flight_players.filter(player => player.flpBilNr > 0).length > 0;
     }
   },
   methods: {
