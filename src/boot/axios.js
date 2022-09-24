@@ -8,6 +8,7 @@ const baseURL = process.env.VUE_APP_BASE_URL;
 
 axios.interceptors.request.use(
     (config) => {
+        console.log(baseURL);
         Loading.show();
         config.url = `${baseURL}/api/${config.url}`;
         if (ls.getItem("authorization")) {
