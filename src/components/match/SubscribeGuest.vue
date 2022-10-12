@@ -318,7 +318,7 @@ export default {
           persistent: true,
         })
         .onOk(() => {
-          this.$http.delete(`golfer/event/player`, this.player)
+          this.$http.delete(`golfer/event/player`, {data:this.player})
             .then(function () {
 
               that.$q.notify ({

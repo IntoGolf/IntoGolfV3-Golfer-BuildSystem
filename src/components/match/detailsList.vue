@@ -4,7 +4,7 @@
       <div class="col text-h6">Details {{ match.name }}</div>
     </div>
 
-    <q-separator />
+    <q-separator/>
 
     <div class="row q-pb-sm q-pt-sm">
       <div class="col text-bold">Datum</div>
@@ -64,33 +64,34 @@
 
     <q-btn-group spread v-if="match.UitslagenGereed != 1 && match.StartlijstGereed != 1">
       <q-btn
-        v-if="
+          v-if="
           openForSubscription &&
           mySubscription == null &&
           specialRules.length == 0
         "
-        color="secondary"
-        label="Inschrijven"
-        @click="handleSubscribe"
+          color="secondary"
+          label="Inschrijven"
+          @click="handleSubscribe"
       />
 
       <q-btn
-        v-if="
+          v-if="
           openForSubscription &&
           mySubscription != null &&
           specialRules.length == 0  &&
           match.StartlijstGereed != 1
         "
-        color="secondary"
-        label="Mijn inschrijving"
-        @click="handleSubscribe"
+          color="secondary"
+          label="Mijn inschrijving"
+          @click="handleSubscribe"
       />
 
       <q-btn
-        v-if="mySubscription != null"
-        color="secondary"
-        label="Score invoeren"
-        @click="handleEnterScore"
+          v-if="mySubscription != null"
+          :disable="mySubscription.match_score == null || !$dayjs(match.playingDate).isToday()"
+          color="secondary"
+          label="Score invoeren"
+          @click="handleEnterScore"
       />
     </q-btn-group>
 
@@ -104,20 +105,20 @@
     </q-btn-group>
 
     <div
-      v-if="
+        v-if="
         match.LidAddGuest == 1 &&
         match.UitslagenGereed != 1 &&
         openForSubscription &&
         specialRules.length == 0 &&
         match.StartlijstGereed != 1
       "
-      class="pt-2 pb-1"
+        class="pt-2 pb-1"
     >
       <div class="row q-mt-sm">
         <div class="col text-h6">Gasten meenemen</div>
       </div>
 
-      <q-separator />
+      <q-separator/>
 
       <div class="row q-mt-sm q-mb-sm">
         <div class="col">
@@ -131,11 +132,11 @@
       <div class="row mt-2">
         <div class="col">
           <q-btn
-            color="secondary"
-            class="full-width"
-            label="Gast inschrijven"
-            :disabled="mySubscription == null"
-            @click="handleSubscribeGuest"
+              color="secondary"
+              class="full-width"
+              label="Gast inschrijven"
+              :disabled="mySubscription == null"
+              @click="handleSubscribeGuest"
           />
         </div>
       </div>
@@ -146,7 +147,7 @@
         <div class="col text-h6">Lid inschrijven</div>
       </div>
 
-      <q-separator />
+      <q-separator/>
 
       <div class="row q-mt-sm q-mb-sm">
         <div class="col">
@@ -159,10 +160,10 @@
       <div class="row q-mb-md">
         <div class="col">
           <q-btn
-            color="secondary"
-            class="full-width"
-            label="Lid inschrijven"
-            @click="handleSubscribeMember"
+              color="secondary"
+              class="full-width"
+              label="Lid inschrijven"
+              @click="handleSubscribeMember"
           />
         </div>
       </div>
@@ -172,7 +173,11 @@
 
 <script>
 export default {
-  props: ["match", "mySubscription", "currentUser"],
+  props: {
+    match: Object,
+    mySubscription: Object,
+    currentUser: Object
+  },
   data() {
     return {};
   },
@@ -185,49 +190,49 @@ export default {
 
     inScorecardWindow: function () {
       let startDate = this.$dayjs(
-        this.match.playingDate + " " + this.match.startingTime
+          this.match.playingDate + " " + this.match.startingTime
       );
       return (
-        this.mySubscription !== null &&
-        this.$dayjs() > startDate &&
-        this.$dayjs() < startDate.add(6, "hours") &&
-        this.match.UitslagenGereed != 1
+          this.mySubscription !== null &&
+          this.$dayjs() > startDate &&
+          this.$dayjs() < startDate.add(6, "hours") &&
+          this.match.UitslagenGereed != 1
       );
     },
 
     specialRules: function () {
       if (
-        this.match.restrictionBySex != 0 &&
-        this.match.restrictionBySex != this.currentUser.relGender
+          this.match.restrictionBySex != 0 &&
+          this.match.restrictionBySex != this.currentUser.relGender
       ) {
         return (
-          "Dit is een wedstrijd voor " +
-          (this.match.restrictionBySex == 1 ? "heren" : "dames") +
-          " u kunt niet inschrijven,"
+            "Dit is een wedstrijd voor " +
+            (this.match.restrictionBySex == 1 ? "heren" : "dames") +
+            " u kunt niet inschrijven,"
         );
       }
 
       if (
-        this.currentUser.age < this.match.Min_Age ||
-        this.currentUser.relHandicap > this.match.Max_Age
+          this.currentUser.age < this.match.Min_Age ||
+          this.currentUser.relHandicap > this.match.Max_Age
       ) {
         return (
-          "Voor deze wedstrijd is een restrictie op leeftijd van kracht, de minimale leeftijd voor deelname is " +
-          this.match.Min_Age +
-          " en de maximale leeftijd is " +
-          this.match.Max_Age
+            "Voor deze wedstrijd is een restrictie op leeftijd van kracht, de minimale leeftijd voor deelname is " +
+            this.match.Min_Age +
+            " en de maximale leeftijd is " +
+            this.match.Max_Age
         );
       }
 
       if (
-        this.currentUser.relHandicap < this.match.handicapFemaleMin ||
-        this.currentUser.relHandicap > this.match.handicapFemaleMax
+          this.currentUser.relHandicap < this.match.handicapFemaleMin ||
+          this.currentUser.relHandicap > this.match.handicapFemaleMax
       ) {
         return (
-          "Voor deze wedstrijd is een restrictie op handicap van kracht, de minimale handicap voor deelname is " +
-          this.match.handicapFemaleMin +
-          " en de maximale handicap is " +
-          this.match.handicapFemaleMax
+            "Voor deze wedstrijd is een restrictie op handicap van kracht, de minimale handicap voor deelname is " +
+            this.match.handicapFemaleMin +
+            " en de maximale handicap is " +
+            this.match.handicapFemaleMax
         );
       }
 
@@ -244,6 +249,7 @@ export default {
     },
 
     handleEnterScore: function () {
+      console.log(this.mySubscription);
       this.$emit("handleEnterScore", this.mySubscription);
     },
 

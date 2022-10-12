@@ -12,7 +12,7 @@
         label="Zoek relatie"
         :options="relations"
         option-value="relNr"
-        option-label="full_name"
+        option-label="test"
         :option-disable="(item) => item === null ? true : item.disabled != ''"
         @filter="filterFn"
     >
@@ -41,8 +41,7 @@
         v-if="match.allow_select_tee == 1"
         v-model="tee"
         :options="teesArray"
-        hint="Selecteer uw tee"
-        label="Tee"
+        label="Selecteer de gewenste tee"
     />
 
     <div v-for="(pOption, index) in player.details.options"
@@ -66,7 +65,7 @@
       wordt u uitgeschreven.
     </q-banner>
 
-    <q-btn-group spread mt-4>
+    <q-btn-group spread class="q-mt-md">
       <q-btn
           v-if="!match.ideal || aSubscription != null"
           :disabled="player.details.id == 0 && relation == null"
@@ -238,7 +237,7 @@ export default {
             persistent: true,
           })
           .onOk(() => {
-            this.$http.delete(`golfer/event/player`, this.player)
+            this.$http.delete(`golfer/event/player`, {data:this.player})
                 .then(function () {
 
                   that.$q.notify({

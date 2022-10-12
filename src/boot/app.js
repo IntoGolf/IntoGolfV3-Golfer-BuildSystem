@@ -12,6 +12,10 @@ dayjs.locale("NL");
 let isBetween = require('dayjs/plugin/isBetween');
 dayjs.extend(isBetween);
 
+let isToday = require('dayjs/plugin/isToday')
+dayjs.extend(isToday)
+
+
 export const lsWatcher = createWatcher({
   prefix: "gofler__",
   storage: "local",
