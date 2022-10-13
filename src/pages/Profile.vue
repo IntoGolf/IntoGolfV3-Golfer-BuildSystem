@@ -279,6 +279,7 @@ export default {
   },
   methods: {
     saveProfile() {
+      this.$ls.setItem('currentUser', this.form, 1000 * 60 * 60 * 24 * 7);
       const payload = Object.assign(this.form, {
         relNr: this.currentUser.relNr,
       });
@@ -312,23 +313,7 @@ export default {
   },
   created() {
     document.body.classList.add("page-profile");
-    console.log(this.$ls.getItem("currentUser").value);
-
     this.form = Object.assign({}, this.$ls.getItem("currentUser").value);
-
-    // if (this.$ls.getItem("currentUser")) {
-    //   this.$http.get(`golfer/user`).then((res) => {
-    //     this.form = Object.assign({}, res);
-    //     if (
-    //       this.currentUser.relCouNr &&
-    //       this.flagList[this.currentUser.relCouNr]
-    //     ) {
-    //       this.form.relCouNr = this.flagList[this.currentUser.relCouNr].value;
-    //       this.form.mobile_relCouNr =
-    //         this.flagList[this.currentUser.relCouNr].value;
-    //     }
-    //   });
-    // }
   },
 };
 </script>

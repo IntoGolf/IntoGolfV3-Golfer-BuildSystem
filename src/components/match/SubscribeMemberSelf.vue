@@ -36,7 +36,7 @@
     </q-banner>
 
     <q-banner
-      v-if="match.ideal && mySubscription == null"
+      v-if="match.ideal && match.fee > 0 && mySubscription == null"
       inline-actions
       rounded
       class="bg-orange text-white q-mb-md"
@@ -48,13 +48,13 @@
 
     <q-btn-group spread class="mt-4">
       <q-btn
-        v-if="!match.ideal || mySubscription != null"
+        v-if="!(match.ideal && match.fee > 0) || mySubscription != null"
         color="secondary"
         label="Opslaan"
         @click="handleSubscribe"
       />
       <q-btn
-        v-if="match.ideal && mySubscription == null"
+        v-if="match.ideal && match.fee > 0 && mySubscription == null"
         color="secondary"
         label="Betaal"
         @click="handleSubscribe"
@@ -137,7 +137,7 @@ export default {
     teesArray: function () {
       let that = this;
       let array = [];
-      console.log(this.match);
+
       this.match.baan_lus.baan_lus_tees.forEach(function (tee) {
         if (
           (that.player.relation.relGender == 1 &&
@@ -182,6 +182,8 @@ export default {
 
     handleSubscribe: function () {
       let that = this;
+
+      this.player.details.relNr = this.currentUser.relNr;
 
       if (this.tee) {
         this.player.details.startingTeeId = this.tee.id;

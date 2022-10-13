@@ -24,7 +24,7 @@
     </q-select>
 
     <q-input
-        v-if="player.details.relNr > 0"
+        v-if="player.details.relNr > 0 && player.details.relation"
         v-model="player.details.relation.full_name"
         :disable="true"
         label="Standard"
@@ -122,7 +122,7 @@ export default {
           Bron: 2,
         },
         relation: {
-          relNr: "demo",
+          relNr: null,
           relName: "demo",
           relCallName: "test",
           relGender: 1,
@@ -203,6 +203,7 @@ export default {
 
       if (this.player.details.id == 0) {
         this.player.details.relNr = this.relation.relNr;
+        this.player.relation.relNr = this.relation.relNr;
       }
 
       if (this.tee) {

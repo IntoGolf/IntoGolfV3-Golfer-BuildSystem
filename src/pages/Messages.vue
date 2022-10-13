@@ -15,7 +15,7 @@
     <div v-else>
 
       <q-card
-          class="q-mb-md"
+          class="q-mb-md q-mt-md"
           v-for="(item, index) in unreadMessages"
           :key="index">
 
@@ -50,7 +50,9 @@
 
       </q-card>
 
-      <div class="text-h6 q-mb-md q-mt-md">
+      <div
+          v-show="readMessages.length > 0"
+          class="text-h6 q-mb-md q-mt-md">
         Gelezen berichten
       </div>
 
