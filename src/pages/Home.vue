@@ -2,7 +2,7 @@
 
   <q-page-container class="web-width">
 
-    <div class="row">
+    <div class="row" style="height: 230px">
       <div class="col text-center q-pt-lg">
         <q-img
             :src="system_logo"
@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <div class="row q-mb-md">
+    <div class="row q-mb-md" style="height: 135px">
 
       <div
           class="col"

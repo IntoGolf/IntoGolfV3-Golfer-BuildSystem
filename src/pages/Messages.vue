@@ -1,6 +1,6 @@
 <template>
 
-  <q-page-container class="q-mt-md">
+  <q-page-container class="q-pa-md">
 
     <q-card
         v-if="list.length == 0">

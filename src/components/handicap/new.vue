@@ -623,7 +623,7 @@ export default {
             this.scorecard.courserate > 20 &&
             this.scorecard.courserate < 100 &&
             this.scorecard.sloperate > 0 &&
-            this.scorecard.sloperate < 100 &&
+            this.scorecard.sloperate < 200 &&
             this.scorecard.total_par > 0 &&
             this.scorecard.total_par < 100
         );
@@ -647,8 +647,8 @@ export default {
     validSlopeRating: function () {
       return [
         (val) =>
-            (this.scorecard.sloperate > 0 && this.scorecard.sloperate < 100) ||
-            "Waarde van de sloperating moet tussen 0 en 100 liggen",
+            (this.scorecard.sloperate > 0 && this.scorecard.sloperate < 200) ||
+            "Waarde van de sloperating moet tussen 0 en 200 liggen",
       ];
     },
     validTotalPar: function () {

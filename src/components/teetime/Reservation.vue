@@ -3,6 +3,7 @@
   <q-page class="q-page q-pa-md">
 
     <div v-if="editPlayer == null">
+
       <comp-details
           :flight="local_flight"
           v-on:handleSave="handleSave"

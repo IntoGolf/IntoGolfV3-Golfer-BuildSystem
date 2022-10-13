@@ -11,133 +11,135 @@
         </div>
 
         <q-tabs v-model="tab" class="text-teal">
-          <q-tab class="pl-0" name="Name" label="Name" />
-          <q-tab class="pl-0" name="Contact" label="Contact" />
-          <q-tab class="pl-0" name="Golf" label="Golf" />
-          <q-tab class="pl-0" name="Voorkeuren" label="Voorkeuren" />
+          <q-tab class="pl-0" name="Name" label="Naam"/>
+          <q-tab class="pl-0" name="Contact" label="Contact"/>
+          <q-tab class="pl-0" name="Golf" label="Golf"/>
+          <q-tab class="pl-0" name="Voorkeuren" label="Voorkeuren"/>
         </q-tabs>
 
         <q-tab-panels v-model="tab" class="p-0">
           <q-tab-panel class="p-0" name="Name">
             <q-input
-              v-model="form.relFirstName"
-              :label="$t('Initials')"
-              placeholder="Your initials"
-              lazy-rules
+                v-model="form.relFirstName"
+                :label="$t('Initialen')"
+                lazy-rules
             />
 
             <q-input
-              v-model="form.relCallName"
-              :label="$t('First name')"
-              placeholder="Your first name"
-              lazy-rules
+                v-model="form.relCallName"
+                :label="$t('Voornaam')"
+                lazy-rules
             />
 
             <q-input
-              v-model="form.relPrefix"
-              :label="$t('Prefix')"
-              placeholder="Your Prefix"
-              lazy-rules
+                v-model="form.relPrefix"
+                :label="$t('Tussenvoegsel')"
+                lazy-rules
             />
 
             <q-input
-              v-model="form.relName"
-              :label="$t('Last name')"
-              placeholder="Your last name"
-              lazy-rules
+                v-model="form.relName"
+                :label="$t('Achternaam')"
+                lazy-rules
             />
 
             <q-input
-              v-model="form.relAddress1"
-              :label="$t('Straat')"
-              placeholder="Your street name"
-              lazy-rules
+                v-model="form.relAddress1"
+                :label="$t('Straat')"
+                lazy-rules
+            />
+
+            <div class="row q-col-gutter-md">
+              <q-input
+                  v-model="form.relAddressStreetNumber"
+                  :label="$t('Huisnummer')"
+                  lazy-rules
+              />
+
+              <q-input
+                  v-model="form.relAddressStreetAddition"
+                  :label="$t('Toevoeging')"
+                  lazy-rules
+              />
+            </div>
+
+            <q-input
+                v-model="form.relPostalCode"
+                :label="$t('Postcode')"
+                lazy-rules
             />
 
             <q-input
-              v-model="form.relPostalCode"
-              :label="$t('Postcode')"
-              placeholder="Your zipcode"
-              lazy-rules
-            />
-
-            <q-input
-              v-model="form.relCity"
-              :label="$t('Woonplaats')"
-              placeholder="Your city/village"
-              lazy-rules
+                v-model="form.relCity"
+                :label="$t('Woonplaats')"
+                lazy-rules
             />
           </q-tab-panel>
 
           <q-tab-panel class="p-0" name="Contact">
             <q-input
-              v-model="form.relPhone"
-              :label="$t('Phone number')"
-              placeholder="Your phone number"
-              lazy-rules
+                v-model="form.relPhone"
+                :label="$t('Phone number')"
+                lazy-rules
             />
 
             <q-input
-              v-model="form.relPhoneMobile"
-              :label="$t('Mobiel telefoonnummer')"
-              placeholder="Your mobile phone number"
-              lazy-rules
+                v-model="form.relPhoneMobile"
+                :label="$t('Mobiel telefoonnummer')"
+                lazy-rules
             />
 
             <q-input
-              v-model="form.relEmail"
-              :label="$t('Email adres')"
-              placeholder="Your email address"
-              lazy-rules
+                v-model="form.relEmail"
+                :label="$t('Emailadres')"
+                lazy-rules
             />
           </q-tab-panel>
 
           <q-tab-panel class="p-0" name="Golf">
             <q-input
-              v-model="form.relGolferId"
-              :label="$t('NGF-nummer')"
-              placeholder="Your NGF-number"
-              lazy-rules
-              readonly
+                v-model="form.relGsn"
+                :label="$t('Golfservicenummer')"
+                lazy-rules
+                readonly
             />
 
             <q-input
-              v-model="form.relHandicap"
-              :label="$t('Speelsterkte')"
-              placeholder="Your playing HCP"
-              lazy-rules
-              readonly
+                v-model="form.relHandicap"
+                :label="$t('Speelsterkte')"
+                lazy-rules
+                readonly
             />
           </q-tab-panel>
 
           <q-tab-panel class="p-0" name="Voorkeuren">
             <q-select
-              v-model="relVisibilityLevel"
-              :options="visibilityArray"
-              label="Zichtbaarheid in ledenboekje"
-              emit-value
-              map-options
+                v-model="relVisibilityLevel"
+                :options="visibilityArray"
+                label="Zichtbaarheid in ledenboekje"
+                emit-value
+                map-options
             />
 
-            <br />
+            <br/>
 
             <q-toggle
-              v-model="relMagazineGolfNL"
-              label="Golfers magazine ontvangen"
+                v-model="relMagazineGolfNL"
+                label="Golfers magazine ontvangen"
             />
 
-            <br />
+            <br/>
 
             <q-toggle
-              v-model="relEmailnewsletterNGF"
-              label="E-mail nieuwsbrief NGF ontvangen"
+                v-model="relEmailnewsletterNGF"
+                label="E-mail nieuwsbrief NGF ontvangen"
             />
 
-            <br />
+            <br/>
 
             <q-toggle
-              v-model="relInvoiceByEmail"
-              label="Factuur per e-mail ontvangen"
+                v-model="relInvoiceByEmail"
+                label="Factuur per e-mail ontvangen"
             />
           </q-tab-panel>
         </q-tab-panels>
@@ -147,7 +149,7 @@
           <q-btn
               label="Opslaan"
               type="submit"
-              color="primary" />
+              color="primary"/>
 
           <q-btn
               label="Uitloggen"
@@ -220,9 +222,9 @@ export default {
         relVisibilityLevel: 0,
       },
       visibilityArray: [
-        { value: 0, label: "Niet zichtbaan" },
-        { value: 1, label: "Naam en speelsterkte" },
-        { value: 2, label: "Naam, speelsterkte en e-mailadres" },
+        {value: 0, label: "Niet zichtbaan"},
+        {value: 1, label: "Naam en speelsterkte"},
+        {value: 2, label: "Naam, speelsterkte en e-mailadres"},
         {
           value: 3,
           label: "Naam, speelsterkte, e-mailadres en telefoonnummer",
@@ -235,7 +237,7 @@ export default {
     relMagazineGolfNL: {
       get: function () {
         return (
-          this.form.relMagazineGolfNL != null && this.form.relMagazineGolfNL > 0
+            this.form.relMagazineGolfNL != null && this.form.relMagazineGolfNL > 0
         );
       },
       set: function (value) {
@@ -245,7 +247,7 @@ export default {
     relInvoiceByEmail: {
       get: function () {
         return (
-          this.form.relInvoiceByEmail != null && this.form.relInvoiceByEmail > 0
+            this.form.relInvoiceByEmail != null && this.form.relInvoiceByEmail > 0
         );
       },
       set: function (value) {
@@ -255,8 +257,8 @@ export default {
     relEmailnewsletterNGF: {
       get: function () {
         return (
-          this.form.relEmailnewsletterNGF != null &&
-          this.form.relEmailnewsletterNGF > 0
+            this.form.relEmailnewsletterNGF != null &&
+            this.form.relEmailnewsletterNGF > 0
         );
       },
       set: function (value) {
@@ -266,9 +268,9 @@ export default {
     relVisibilityLevel: {
       get: function () {
         return this.form.relVisibilityLevel != null &&
-          this.form.relVisibilityLevel > 0
-          ? this.form.relVisibilityLevel
-          : 0;
+        this.form.relVisibilityLevel > 0
+            ? this.form.relVisibilityLevel
+            : 0;
       },
       set: function (value) {
         this.form.relVisibilityLevel = value;
@@ -292,20 +294,20 @@ export default {
         cancelButtonText: "Cancel",
         type: "warning",
       })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "Successful exit!",
+          .then(() => {
+            this.$message({
+              type: "success",
+              message: "Successful exit!",
+            });
+            this.$ls.clear();
+            this.$router.push("/");
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "Cancel out!",
+            });
           });
-          this.$ls.clear();
-          this.$router.push("/");
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "Cancel out!",
-          });
-        });
     },
   },
   created() {

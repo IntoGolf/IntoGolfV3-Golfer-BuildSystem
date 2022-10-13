@@ -191,7 +191,16 @@ export default {
   methods: {
     handleCancel: function () {
       this.local_flight.fltCarNr = 1;
-      this.$emit('handleSave', this.local_flight, true)
+      this.$q
+          .dialog({
+            title: "Starttijd annuleren",
+            message: "Wilt u doorgaan?",
+            cancel: true,
+            persistent: true,
+          })
+          .onOk(() => {
+            this.$emit('handleSave', this.local_flight, true)
+          });
     },
     handleBook18: function () {
       let currentUser = this.$ls.getItem("currentUser").value;
