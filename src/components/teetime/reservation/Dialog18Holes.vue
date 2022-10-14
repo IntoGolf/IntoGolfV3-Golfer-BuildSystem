@@ -1,6 +1,8 @@
 <template>
 
-  <q-dialog>
+  <q-dialog
+      ref="dialog_h18"
+      @hide="onDialogHide">
 
     <q-card style="max-width: 320px; width: 95%">
 
@@ -39,7 +41,8 @@
 
 export default {
   props: {
-    flight: Object
+    flight: Object,
+    dialogVisible: Boolean
   },
   data: function () {
     return {
@@ -47,33 +50,33 @@ export default {
       local_flight: {...this.flight}
     };
   },
+  watch: {
+    dialogVisible: function(newValue) {
+      if (newValue) {
+        this.$refs.dialog_h18.show()
+      } else {
+        this.$refs.dialog_h18.hide()
+      }
+    }
+  },
   computed: {
-
-    timesFor18: function () {
+    filteredArray: function () {
+      let that = this;
+      let result = [];
 
       this.teetimes.forEach(function (loop, lIndex) {
-        let array = [];
         Object.entries(loop.times).forEach(function (time) {
           if (time[1].sttTimeFrom > that.flight.fltTime1 + 130) {
-            array.push(time[1])
+            result.push({
+              crlNr: loop.crlNr,
+              crlName: loop.crlName,
+              sttTimeFrom: time[1].sttTimeFrom,
+              sttTimeFromText: that.$filters.minuteToTime(time[1].sttTimeFrom),
+            });
           }
         })
-        this.teetimes[lIndex].times = array;
       })
-
-      return this.teetimes;
-    },
-
-    filteredArray: function () {
-      let array = [];
-
-      this.teetimes.entries(loop.times).forEach(function (time) {
-        if (time[1].sttTimeFrom > that.flight.fltTime1 + 130) {
-          array.push(time[1])
-        }
-      })
-
-      return array;
+      return result;
     }
   },
   created() {
@@ -86,10 +89,15 @@ export default {
         this.teetimes = res.payload;
       });
     },
-    handleSave: function() {
+    handleSave: function(object) {
       this.local_flight.fltCrlNr2 = object.crlNr;
       this.local_flight.fltTime2 = object.sttTimeFrom;
-
+      this.$http.post(`golfer/booking`, this.local_flight).then((res) => {
+        this.$emit('handleClose',res.flight);
+      });
+    },
+    onDialogHide: function() {
+      this.$emit('handleClose');
     }
   }
 };

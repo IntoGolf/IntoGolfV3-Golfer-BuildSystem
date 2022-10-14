@@ -117,7 +117,7 @@
               color="primary"
               label="sluiten"/>
           <q-btn
-              v-on:click="handleBook18"
+              v-on:click="dialogVisible = true"
               class="q-mr-sm"
               color="primary"
               label="Wijzig 18"/>
@@ -133,7 +133,8 @@
     </q-card-section>
 
     <comp-dialog18-holes
-        :flight="flight"/>
+        :dialogVisible="dialogVisible"
+        :flight="flight" v-on:handleClose="handleClose18"/>
 
   </q-card>
 
@@ -153,39 +154,40 @@ export default {
   data: function () {
     return {
       local_flight: this.flight,
+      dialogVisible: false,
       currentUser: this.$ls.getItem("currentUser").value,
     }
   },
   computed: {
     canCancel: function () {
       return true;
-      if (this.$dayjs(this.$filters.unixToDate(this.flight.fltDate)).isBefore(this.$dayjs())) {
+      if (this.$dayjs(this.$filters.unixToDate(this.local_flight.fltDate)).isBefore(this.$dayjs())) {
         return false;
       }
-      if (this.$dayjs(this.$filters.unixToDate(this.flight.fltDate)).isAfter(this.$dayjs())) {
+      if (this.$dayjs(this.$filters.unixToDate(this.local_flight.fltDate)).isAfter(this.$dayjs())) {
         return true;
       }
-      return this.flight.fltTime1 + 20 < this.$filters.timeToMinute(this.$dayjs().format('HH:mm'))
+      return this.local_flight.fltTime1 + 20 < this.$filters.timeToMinute(this.$dayjs().format('HH:mm'))
     },
     slot: function () {
-      return this.$dayjs(this.$filters.unixToDate(this.flight.fltDate) + ' ' + this.$filters.minuteToTime(this.flight.fltTime1), 'DD-MM-YYYY H:mm').format('dddd D MMM HH:mm')
+      return this.$dayjs(this.$filters.unixToDate(this.local_flight.fltDate) + ' ' + this.$filters.minuteToTime(this.local_flight.fltTime1), 'DD-MM-YYYY H:mm').format('dddd D MMM HH:mm')
     },
     courseLoop: function () {
-      return this.$filters.minuteToTime(this.flight.fltTime2) + ' - ' + this.flight.loop2.crlName
+      return this.$filters.minuteToTime(this.local_flight.fltTime2) + ' - ' + this.local_flight.loop2.crlName
     },
     bookerName: function () {
-      return this.flight.flight_players[0].flpName;
+      return this.local_flight.flight_players[0].flpName;
     },
     isMyBooking: function () {
-      return this.flight.flight_players[0].flpRelNr == this.currentUser.relNr;
+      return this.local_flight.flight_players[0].flpRelNr == this.currentUser.relNr;
     },
     total: function () {
-      return this.flight.flight_players.reduce(function (result, item) {
+      return this.local_flight.flight_players.reduce(function (result, item) {
         return result + item.flpPrice;
       }, 0);
     },
     paid: function () {
-      return this.flight.flight_players.filter(player => player.flpBilNr > 0).length > 0;
+      return this.local_flight.flight_players.filter(player => player.flpBilNr > 0).length > 0;
     }
   },
   methods: {
@@ -202,35 +204,18 @@ export default {
             this.$emit('handleSave', this.local_flight, true)
           });
     },
-    handleBook18: function () {
-      let currentUser = this.$ls.getItem("currentUser").value;
-
-      let that = this;
-      this.$http.get("golfer/teetimes", {
-        params: {
-          date: this.$filters.unixToDate(this.flight.fltDate, "YYYY-MM-DD"),
-          relNr: currentUser.relNr
-        },
-      })
-          .then((res) => {
-            res.payload.forEach(function (loop, lIndex) {
-              let array = [];
-              Object.entries(loop.times).forEach(function (time) {
-                if (time[1].sttTimeFrom > that.flight.fltTime1 + 130) {
-                  array.push(time[1])
-                }
-              })
-              res.payload[lIndex].times = array;
-            })
-
-            this.teetimes = res.payload;
-            this.loading = false;
-
-            this.dialogVisible = true;
-
+    handleSave: function () {
+      this.local_flight.fltCarNr = 1;
+      this.$q
+          .dialog({
+            title: "Starttijd annuleren",
+            message: "Wilt u doorgaan?",
+            cancel: true,
+            persistent: true,
+          })
+          .onOk(() => {
+            this.$emit('handleSave', this.local_flight, true)
           });
-
-
     },
     onPay: function () {
 
@@ -241,6 +226,12 @@ export default {
       }).then((res) => {
         window.location.href = res.url;
       })
+    },
+    handleClose18: function (flight) {
+      if (flight != undefined) {
+        this.local_flight = flight;
+      }
+      this.dialogVisible = false;
     }
   }
 };

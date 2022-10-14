@@ -1,169 +1,171 @@
 <template>
-  <div>
 
-    <div
-        v-for="hole in scorecard.holes"
-        :key="'Hole_' + hole.number"
-        v-show="hole.number == showHole"
-    >
-      <q-list bordered separator>
-        <q-item class="itg-q-item">
-          <q-item-section class="text-h6 text-center">
-            Hole {{ hole.number }}
+  <div
+      v-for="hole in scorecard.holes"
+      :key="'Hole_' + hole.number"
+      v-show="hole.number == showHole">
 
-            <q-btn
-                class="full-width q-mt-md q-mb-md"
-                color="secondary"
-                label="Holes"
-                @click="handleSwitchHoles"
-            />
+    <q-list bordered separator>
 
-          </q-item-section>
-        </q-item>
+      <q-item class="itg-q-item">
+        <q-item-section class="text-h6 text-center">
+          Hole {{ hole.number }}
 
-        <q-item class="itg-q-item">
-          <q-item-section>
-            <q-item-label class="font-weight-bold">Lengte</q-item-label>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label class="text-right">{{ hole.distance }}</q-item-label>
-          </q-item-section>
-        </q-item>
+          <q-btn
+              class="full-width q-mt-md q-mb-md"
+              color="secondary"
+              label="Holes"
+              @click="handleSwitchHoles"
+          />
 
-        <q-item class="itg-q-item">
-          <q-item-section>
-            <q-item-label class="font-weight-bold">Par</q-item-label>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label class="text-right">{{ hole.par }}</q-item-label>
-          </q-item-section>
-        </q-item>
+        </q-item-section>
+      </q-item>
 
-        <q-item class="itg-q-item">
-          <q-item-section>
-            <q-item-label class="font-weight-bold"
-            >Persoonlijke par
-            </q-item-label
+      <q-item class="itg-q-item">
+        <q-item-section>
+          <q-item-label class="font-weight-bold">Lengte</q-item-label>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label class="text-right">{{ hole.distance }}</q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item class="itg-q-item">
+        <q-item-section>
+          <q-item-label class="font-weight-bold">Par</q-item-label>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label class="text-right">{{ hole.par }}</q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item class="itg-q-item">
+        <q-item-section>
+          <q-item-label class="font-weight-bold"
+          >Persoonlijke par
+          </q-item-label
+          >
+        </q-item-section>
+        <q-item-section>
+          <q-item-label class="text-right"
+          >{{ plHcpHole(hole) }}
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item class="itg-q-item">
+        <q-item-section>
+          <q-item-label class="font-weight-bold">StrokeIndex</q-item-label>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label class="text-right"
+          >{{ hole.strokeindex }}
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item class="itg-q-item">
+        <q-item-section>
+          <q-item-label class="font-weight-bold">Slagen</q-item-label>
+        </q-item-section>
+
+        <q-item-section>
+          <div class="row">
+            <div
+                class="col"
+                style="padding: 0px; text-align: left"
+                v-show="scorecard.ngf_card_id.length == 0"
             >
-          </q-item-section>
-          <q-item-section>
-            <q-item-label class="text-right"
-            >{{ plHcpHole(hole) }}
-            </q-item-label>
-          </q-item-section>
-        </q-item>
+              <q-btn
+                  round
+                  outline
+                  color="secondary"
+                  label="-"
+                  @click="onScoreChangeHandler(hole, -1)"
+              />
+            </div>
 
-        <q-item class="itg-q-item">
-          <q-item-section>
-            <q-item-label class="font-weight-bold">StrokeIndex</q-item-label>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label class="text-right"
-            >{{ hole.strokeindex }}
-            </q-item-label>
-          </q-item-section>
-        </q-item>
+            <div
+                class="col text-center"
+                style="padding-top: 10px; font-weight: bold"
+                v-show="scorecard.ngf_card_id.length == 0"
+            >
+              <q-item-label>{{ hole.strokes }}</q-item-label>
+            </div>
 
-        <q-item class="itg-q-item">
-          <q-item-section>
-            <q-item-label class="font-weight-bold">Slagen</q-item-label>
-          </q-item-section>
+            <div
+                class="col text-right"
+                style="padding-top: 10px; font-weight: bold"
+                v-show="scorecard.ngf_card_id.length > 0"
+            >
+              <q-item-label>{{ hole.strokes }}</q-item-label>
+            </div>
 
-          <q-item-section>
-            <div class="row">
-              <div
-                  class="col"
-                  style="padding: 0px; text-align: left"
-                  v-show="scorecard.ngf_card_id.length == 0"
-              >
-                <q-btn
-                    round
-                    outline
-                    color="secondary"
-                    label="-"
-                    @click="onScoreChangeHandler(hole, -1)"
-                />
-              </div>
-
-              <div
-                  class="col text-center"
-                  style="padding-top: 10px; font-weight: bold"
-                  v-show="scorecard.ngf_card_id.length == 0"
-              >
-                <q-item-label>{{ hole.strokes }}</q-item-label>
-              </div>
-
-              <div
-                  class="col text-right"
-                  style="padding-top: 10px; font-weight: bold"
-                  v-show="scorecard.ngf_card_id.length > 0"
-              >
-                <q-item-label>{{ hole.strokes }}</q-item-label>
-              </div>
-
-              <div
-                  class="col"
-                  style="
+            <div
+                class="col"
+                style="
                   padding: 0px;
                   text-align: right;
                   font-size: 18px;
                   font-weight: bold;
                 "
-                  v-show="scorecard.ngf_card_id.length == 0"
-              >
-                <q-btn
-                    round
-                    outline
-                    color="secondary"
-                    label="+"
-                    @click="onScoreChangeHandler(hole, 1)"
-                />
-              </div>
-            </div>
-
-            <q-item-label
-                class="text-right"
-                v-show="scorecard.ngf_card_id.length > 0 && 1 == 2"
+                v-show="scorecard.ngf_card_id.length == 0"
             >
-              {{ hole.strokes }}
-            </q-item-label>
-          </q-item-section>
-        </q-item>
+              <q-btn
+                  round
+                  outline
+                  color="secondary"
+                  label="+"
+                  @click="onScoreChangeHandler(hole, 1)"
+              />
+            </div>
+          </div>
 
-        <q-item class="itg-q-item">
-          <q-item-section>
-            <q-item-label class="font-weight-bold">Hole punten</q-item-label>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label class="text-right"
-            >{{ hole.stableford }}
-            </q-item-label>
-          </q-item-section>
-        </q-item>
+          <q-item-label
+              class="text-right"
+              v-show="scorecard.ngf_card_id.length > 0 && 1 == 2"
+          >
+            {{ hole.strokes }}
+          </q-item-label>
+        </q-item-section>
+      </q-item>
 
-        <q-item class="itg-q-item">
-          <q-item-section>
-            <q-item-label class="font-weight-bold">Totaal punten</q-item-label>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label class="text-right"
-            >{{ scorecard.total_stableford }}
-            </q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
+      <q-item class="itg-q-item">
+        <q-item-section>
+          <q-item-label class="font-weight-bold">Hole punten</q-item-label>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label class="text-right"
+          >{{ hole.stableford }}
+          </q-item-label>
+        </q-item-section>
+      </q-item>
 
-      <q-btn-group class="mt-3" spread>
+      <q-item class="itg-q-item">
+        <q-item-section>
+          <q-item-label class="font-weight-bold">Totaal punten</q-item-label>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label class="text-right"
+          >{{ scorecard.total_stableford }}
+          </q-item-label>
+        </q-item-section>
+      </q-item>
 
-        <q-btn color="secondary" @click="prevHole" icon="chevron_left"/>
+    </q-list>
 
-        <q-btn color="secondary" @click="handleCloseHoles" icon="close"/>
+    <q-btn-group class="mt-3" spread>
 
-        <q-btn color="secondary" @click="nextHole" icon="chevron_right"/>
+      <q-btn color="secondary" @click="prevHole" icon="chevron_left"/>
 
-      </q-btn-group>
-    </div>
+      <q-btn color="secondary" @click="handleCloseHoles" icon="close"/>
+
+      <q-btn color="secondary" @click="nextHole" icon="chevron_right"/>
+
+    </q-btn-group>
+
   </div>
+
 </template>
 
 <style lang="scss" scoped>
@@ -174,10 +176,14 @@ q-item-label {
 
 <script>
 export default {
-  props: ["scorecardData"],
+  props: {
+    currentUser: Object,
+    scorecardData: Object,
+    teeArray: Array,
+    courseArray: Array,
+  },
   data() {
     return {
-      currentUser: Object.assign(this.$ls.getItem("currentUser")),
       showHole: 1,
       hole: {
         strokes: 0,

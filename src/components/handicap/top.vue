@@ -24,7 +24,7 @@ export default {
     },
 
     onCancelScorecard: function () {
-      this.$emit("handleCloseScorecard");
+      this.$emit("handleCloseScorecard", true);
     },
   },
 };

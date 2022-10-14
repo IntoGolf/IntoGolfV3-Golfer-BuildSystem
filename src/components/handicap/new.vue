@@ -56,18 +56,13 @@
           <!--Step 2: course-->
           <div v-if="scorecard.step == 2">
             <q-select
-                ref="selectbaan"
                 v-model="scorecard.course"
-                :options="banenSelectOptions"
+                :options="banenArry"
                 use-input
-                input-debounce="0"
-                @filter="filterFn"
-                option-value="value"
-                option-label="label"
-                @input="onChangeBaan"
+                @input-value="filterBanen"
                 behavior="menu"
-                emit-value
                 map-options
+                emit-value
             >
             </q-select>
 
@@ -173,7 +168,7 @@
             <div class="row">
               <div class="col" style="font-weight: bold">Baan</div>
               <div class="col text-right itg-text-overflow">
-                {{ scorecard.course_name }}
+                {{ baan.baaName }}
               </div>
             </div>
 
@@ -393,6 +388,7 @@
           </q-form>
         </div>
       </q-card-section>
+
     </q-card>
   </q-page>
 </template>
@@ -412,7 +408,10 @@
 
 <script>
 export default {
-  props: ["type", "artificialDate"],
+  props: {
+    type:Number,
+    artificialDate:Date
+  },
   data() {
     return {
       scorecard: {
@@ -437,9 +436,9 @@ export default {
         course_country_code: "NL",
 
         handicap:
-            Object.assign(this.$ls.getItem("currentUser")).relHandicap == null
+            this.$ls.getItem("currentUser").relHandicap == null
                 ? 54
-                : Object.assign(this.$ls.getItem("currentUser")).relHandicap,
+                : this.$ls.getItem("currentUser").relHandicap,
         courserate: "",
         sloperate: "",
         total_par: "",
@@ -516,7 +515,7 @@ export default {
       countries: [],
       currentUser: Object.assign(this.$ls.getItem("currentUser")),
       banenSelectOptions: [],
-      baan: [],
+      baanFilter: '',
       lus: [],
     };
   },
@@ -530,7 +529,7 @@ export default {
       let result = [];
       let femaleTees = [13, 14, 15, 16, 17];
       this.lus.baan_lus_tees.forEach(function (item) {
-        if (that.$ls.getItem("currentUser").value.relGender == 1) {
+        if (that.currentUser.relGender == 1) {
           if (!femaleTees.includes(item.bltCategory)) {
             result.push(item);
           }
@@ -567,18 +566,19 @@ export default {
       return result;
     },
     banenArry: function () {
-      let result = [];
-      this.banen.forEach(function (baan) {
-        result.push({label: baan.baaClubName, value: baan.baaId});
-      });
-      return result;
+      let array = this.banen;
+      if (this.baanFilter != '') {
+        array = this.banen.filter(baan => baan.baaClubName.toLowerCase().indexOf(this.baanFilter) > -1);
+      }
+      return array.map(baan => ({label: baan.baaClubName, value: baan.baaId}));
+    },
+    baan: function () {
+      return this.banen.find(baan => baan.baaId == this.scorecard.course);
     },
     validDate: function () {
       if (this.scorecard.date == "" || this.scorecard.date == null) {
         return false;
       }
-
-      console.log(this.artificialDate);
 
       let artDate = new Date(this.artificialDate);
       let varDate = new Date(this.scorecard.date);
@@ -696,17 +696,17 @@ export default {
 
     teeColor: function (tee) {
 
-      if([7,17].indexOf(tee.bltCategory) > -1) {
+      if ([7, 17].indexOf(tee.bltCategory) > -1) {
         return "bg-grey-6";
-      } else if([9,13].indexOf(tee.bltCategory) > -1) {
+      } else if ([9, 13].indexOf(tee.bltCategory) > -1) {
         return "bg-yellow-6";
-      } else if([10,14].indexOf(tee.bltCategory) > -1) {
+      } else if ([10, 14].indexOf(tee.bltCategory) > -1) {
         return "bg-blue-6";
-      } else if([11,15].indexOf(tee.bltCategory) > -1) {
+      } else if ([11, 15].indexOf(tee.bltCategory) > -1) {
         return "bg-red-6";
-      } else if([12,16].indexOf(tee.bltCategory) > -1) {
+      } else if ([12, 16].indexOf(tee.bltCategory) > -1) {
         return "bg-orange-6";
-      } else if(tee.bltCategory == 8) {
+      } else if (tee.bltCategory == 8) {
         return "bg-white";
       }
 
@@ -763,8 +763,7 @@ export default {
       }
 
       if (type == 1) {
-        this.scorecard.course = 2;
-        this.onChangeBaan(this.scorecard.course);
+        this.scorecard.course = this.currentUser.relHomeClub;
       }
 
       if (type == 2) {
@@ -800,9 +799,9 @@ export default {
         course_country_code: "NL",
 
         handicap:
-            Object.assign(this.$ls.getItem("currentUser")).relHandicap == null
+            this.currentUser.relHandicap == null
                 ? 54
-                : Object.assign(this.$ls.getItem("currentUser")).relHandicap,
+                : this.currentUser.relHandicap,
         courserate: "",
         sloperate: "",
         total_par: "",
@@ -817,27 +816,17 @@ export default {
         is_qualifying: true,
       };
 
-      this.$emit("handleCloseScorecard", false);
+      this.$emit("handleCloseScorecard", true);
     },
 
     onSummarize: function () {
       this.scorecard.step = 5;
     },
 
-    onChangeBaan: function (baaId) {
-      let that = this;
-      this.banen.forEach((item) => {
-        if (item.baaId == baaId) {
-          that.baan = item;
-          that.scorecard.course = baaId;
-          that.scorecard.course_name = item.baaClubName;
-        }
-      });
-    },
-
     onChangeLus: function (lus) {
+      console.log(lus);
       this.lus = lus;
-      this.scorecard.loop = lus.bnlId;
+      this.scorecard.loop = lus.bnlLusNr;
       this.scorecard.loop_name = lus.bnlName;
       this.scorecard.step = 4;
     },
@@ -875,7 +864,6 @@ export default {
       this.$http.get("golfer/courses").then((res) => {
         this.banen = res.banen;
         this.teeSoorten = res.teeSoorten;
-        this.banenSelectOptions = this.banenArry;
 
         this.handleNewScorecard(that.type);
       });
@@ -886,21 +874,8 @@ export default {
         this.countries = res.data;
       });
     },
-
-    filterFn(val, update) {
-      if (val === "") {
-        update(() => {
-          this.banenSelectOptions = this.banenArry;
-        });
-        return;
-      }
-
-      update(() => {
-        const needle = val.toLowerCase();
-        this.banenSelectOptions = this.banenArry.filter(
-            (v) => v.label.toLowerCase().indexOf(needle) > -1
-        );
-      });
+    filterBanen(val) {
+      this.baanFilter = val;
     },
   },
 };

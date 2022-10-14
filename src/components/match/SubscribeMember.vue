@@ -67,14 +67,14 @@
 
     <q-btn-group spread class="q-mt-md">
       <q-btn
-          v-if="!match.ideal || aSubscription != null"
+          v-if="!(match.ideal && match.fee > 0) || mySubscription != null"
           :disabled="player.details.id == 0 && relation == null"
           color="secondary"
           label="Opslaan"
           @click="handleSubscribe"
       />
       <q-btn
-          v-if="match.ideal && aSubscription == null"
+          v-if="match.ideal && match.fee > 0 && mySubscription == null"
           :disabled="player.details.id == 0 && relation == null"
           color="secondary"
           label="Betaal"

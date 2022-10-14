@@ -1,226 +1,202 @@
 <template>
 
-  <q-page class="q-ma-md">
+  <q-card>
 
     <main v-if="showHole == 0">
 
-      <q-card>
-        <q-card-section>
-          <q-list bordered separator>
+      <q-list bordered separator>
 
-            <q-item class="itg-q-item">
-              <q-item-section class="text-h6 text-center q-pt-md q-pb-md">
-                {{ title }}
+        <q-item class="itg-q-item">
 
-                <q-btn-group class="q-mt-md" size="small" unelevated spread>
-                  <q-btn
-                      v-show="scorecard.ngf_card_id.length == 0"
-                      color="secondary"
-                      label="opslaan"
-                      @click="handleSave"
-                  />
-                  <q-btn
-                      color="secondary"
-                      label="sluiten"
-                      @click="onClose"
-                  />
-                  <q-btn
-                      v-show="scorecard.course != -1 && scorecard.course != 993 && scorecard.course_country_code == 'NL'"
-                      color="secondary"
-                      label="score"
-                      @click="showHole = 9"/>
-                </q-btn-group>
+          <q-item-section class="text-h6 text-center q-pt-md q-pb-md">
+
+            {{ title }}
+
+            <q-btn-group class="q-mt-md q-gutter-sm" size="small" unelevated spread>
+              <q-btn
+                  v-show="local_scorecard.course != -1 && local_scorecard.course != 993 && local_scorecard.course_country_code == 'NL'"
+                  color="secondary"
+                  label="score"
+                  @click="showHole = 9"
+              />
+              <q-btn
+                  v-show="local_scorecard.ngf_card_id.length == 0 || canDelete"
+                  color="secondary"
+                  icon="save"
+                  @click="handleSave"
+              />
+              <q-btn
+                  color="secondary"
+                  icon="close"
+                  @click="onClose"
+              />
+              <q-btn
+                  v-if="canDelete"
+                  color="negative"
+                  icon="delete"
+                  @click="handleDelete"
+              />
+            </q-btn-group>
 
 
-              </q-item-section>
-            </q-item>
+          </q-item-section>
+        </q-item>
 
-            <q-item v-ripple>
-              <q-item-section>
-                <q-item-label class="font-weight-bold">Datum</q-item-label>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-right"
-                >{{ $dayjs(scorecard.date).format("dddd D MMM") }}
-                  {{ $dayjs(str).format('H:m') }}
-                </q-item-label>
-              </q-item-section>
-            </q-item>
+        <q-item v-ripple>
+          <q-item-section>
+            <q-item-label class="font-weight-bold">Datum</q-item-label>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-right"
+            >{{ $dayjs(local_scorecard.date).format("dddd D MMM") }}
+              {{ $dayjs(str).format('H:m') }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
-            <q-item v-show="scorecard.course == 993" v-ripple>
-              <q-item-section>
-                <q-item-label class="font-weight-bold">Land</q-item-label>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-right"
-                >{{ scorecard.course_country_code }}
-                </q-item-label>
-              </q-item-section>
-            </q-item>
+        <q-item v-show="local_scorecard.course == 993" v-ripple>
+          <q-item-section>
+            <q-item-label class="font-weight-bold">Land</q-item-label>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-right"
+            >{{ local_scorecard.course_country_code }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
-            <q-item v-ripple>
-              <q-item-section>
-                <q-item-label class="font-weight-bold">Baan</q-item-label>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-right">{{
-                    scorecard.course_name
-                  }}
-                </q-item-label>
-              </q-item-section>
-            </q-item>
+        <q-item v-ripple>
+          <q-item-section>
+            <q-item-label class="font-weight-bold">Baan</q-item-label>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-right">{{
+                local_scorecard.course_name
+              }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
-            <q-item v-show="scorecard.course != -1" v-ripple>
-              <q-item-section>
-                <q-item-label class="font-weight-bold">Lus</q-item-label>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-right">{{
-                    scorecard.loop_name
-                  }}
-                </q-item-label>
-              </q-item-section>
-            </q-item>
+        <q-item v-show="local_scorecard.course != -1" v-ripple>
+          <q-item-section>
+            <q-item-label class="font-weight-bold">Lus</q-item-label>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-right">{{
+                local_scorecard.loop_name
+              }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
-            <q-item v-show="scorecard.course != -1" v-ripple>
-              <q-item-section>
-                <q-item-label class="font-weight-bold">Tee</q-item-label>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-right">{{
-                    scorecard.tee_name
-                  }}
-                </q-item-label>
-              </q-item-section>
-            </q-item>
+        <q-item v-show="local_scorecard.course != -1" v-ripple>
+          <q-item-section>
+            <q-item-label class="font-weight-bold">Tee</q-item-label>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-right">{{
+                local_scorecard.tee_name
+              }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
-            <q-item v-ripple>
-              <q-item-section>
-                <q-item-label class="font-weight-bold">Qualifying</q-item-label>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-right">
-                  <i
-                      v-if="scorecard.is_qualifying"
-                      class="el-icon-check el-color"
-                      style="color: #67c23a"
-                  ></i>
-                  <i
-                      v-if="!scorecard.is_qualifying"
-                      class="el-icon-close el-color"
-                      style="color: #f56c6c"
-                  ></i>
-                </q-item-label>
-              </q-item-section>
-            </q-item>
+        <q-item v-ripple>
+          <q-item-section>
+            <q-item-label class="font-weight-bold">Qualifying</q-item-label>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-right">
+              {{ local_scorecard.is_qualifying ? 'ja' : 'nee' }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
-            <q-item v-show="scorecard.course != -1" v-ripple>
-              <q-item-section>
-                <q-item-label class="font-weight-bold">Courserating</q-item-label>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-right">{{
-                    scorecard.courserate
-                  }}
-                </q-item-label>
-              </q-item-section>
-            </q-item>
+        <q-item v-show="local_scorecard.course != -1" v-ripple>
+          <q-item-section>
+            <q-item-label class="font-weight-bold">Courserating</q-item-label>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-right">{{
+                local_scorecard.courserate
+              }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
-            <q-item v-show="scorecard.course != -1" v-ripple>
-              <q-item-section>
-                <q-item-label class="font-weight-bold">Sloperating</q-item-label>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-right">{{
-                    scorecard.sloperate
-                  }}
-                </q-item-label>
-              </q-item-section>
-            </q-item>
+        <q-item v-show="local_scorecard.course != -1" v-ripple>
+          <q-item-section>
+            <q-item-label class="font-weight-bold">Sloperating</q-item-label>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-right">{{
+                local_scorecard.sloperate
+              }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
-            <q-item v-show="scorecard.course != -1" v-ripple>
-              <q-item-section>
-                <q-item-label class="font-weight-bold">Par</q-item-label>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-right">{{
-                    scorecard.total_par
-                  }}
-                </q-item-label>
-              </q-item-section>
-            </q-item>
+        <q-item v-show="local_scorecard.course != -1" v-ripple>
+          <q-item-section>
+            <q-item-label class="font-weight-bold">Par</q-item-label>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-right">{{
+                local_scorecard.total_par
+              }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
-            <q-item v-show="scorecard.course != -1" v-ripple>
-              <q-item-section>
-                <q-item-label class="font-weight-bold">Punten</q-item-label>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-right"
-                >{{ scorecard.total_stableford }}
-                </q-item-label>
-              </q-item-section>
-            </q-item>
+        <q-item v-show="local_scorecard.course != -1" v-ripple>
+          <q-item-section>
+            <q-item-label class="font-weight-bold">Punten</q-item-label>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-right"
+            >{{ local_scorecard.total_stableford }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
-            <q-item v-ripple>
-              <q-item-section>
-                <q-item-label class="font-weight-bold">Dag resultaat</q-item-label>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-right"
-                >{{ scorecard.score_differential }}
-                </q-item-label>
-              </q-item-section>
-            </q-item>
+        <q-item v-ripple>
+          <q-item-section>
+            <q-item-label class="font-weight-bold">Dag resultaat</q-item-label>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-right"
+            >{{ local_scorecard.score_differential }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
 
-          </q-list>
-        </q-card-section>
-      </q-card>
+      </q-list>
 
     </main>
 
     <scorecard-holes
         v-else-if="showHole == 1"
-        :scorecardData="scorecard"
+        :scorecardData="local_scorecard"
         :page="page"
+        :currentUser="currentUser"
+        :courseArray="courseArray"
+        :teeArray="teeArray"
         v-on:handleCloseHoles="handleCloseHoles"
         v-on:handleSwitchHoles="handleSwitchHoles"
     />
 
     <scorecard-holes-table
         v-else-if="showHole == 9"
-        :scorecardData="scorecard"
+        :scorecardData="local_scorecard"
         :page="page"
+        :currentUser="currentUser"
+        :courseArray="courseArray"
+        :teeArray="teeArray"
         v-on:handleCloseHoles="handleCloseHoles"
         v-on:handleSwitchHoles="handleSwitchHoles"
     />
 
-    <q-dialog v-model="confirm" persistent>
-      <q-card>
-        <q-card-section class="row items-center">
-          <span class="q-ml-sm">Uw scorekaart is nog niet opgeslagen</span>
-        </q-card-section>
-
-        <q-card-actions class="row">
-          <q-btn
-              label="Pauzeren"
-              color="secondary"
-              style="margin-left: auto; margin-right: auto"
-              @click="handlePauzeScorecard"
-          />
-        </q-card-actions>
-
-        <q-card-actions class="row items-center">
-          <q-btn
-              label="Verwijderen"
-              color="secondary"
-              style="margin-left: auto; margin-right: auto"
-              @click="handleCloseScorecard"
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
-  </q-page>
+  </q-card>
 
 </template>
 
@@ -229,70 +205,61 @@ import ScorecardHoles from "./holes";
 import ScorecardHolesTable from "./holes_table";
 
 export default {
-  props: ["page", "scorecard"],
+  props: {
+    page: String,
+    scorecard: Object,
+    currentUser: Object,
+    teeArray: Array,
+    courseArray: Array,
+  },
   components: {
     ScorecardHoles,
     ScorecardHolesTable,
   },
   data() {
     return {
-      showHole: 0,
-      confirm: false,
+      local_scorecard: this.scorecard,
+      showHole: 0
     };
   },
-  created: function () {
+  mounted() {
+    console.log(this.local_scorecard);
   },
   computed: {
     title: function () {
-      if (this.scorecard.course == -1) {
+      if (this.local_scorecard.course == -1) {
         return "Aanpassing";
-      } else if (this.scorecard.course == 993) {
+      } else if (this.local_scorecard.course == 993) {
         return "Buitenland kaart";
       } else {
         return "Binnenland kaart";
       }
     },
+    canDelete: function () {
+      return this.local_scorecard.ngf_card_id.length > 0 && this.$dayjs(this.local_scorecard.datetime).isToday();
+    },
   },
   methods: {
-    handleNewScorecard: function (value) {
-      this.$emit("handleNewScorecard", value);
-    },
-
     onClose: function () {
-      if (this.scorecard.ngf_card_id.length == 0) {
-        this.confirm = true;
-      } else {
-        this.confirm = false;
-        this.$emit("handleCloseScorecard", false);
-      }
+      this.$emit("handleClose", true);
     },
-
-    handleCloseScorecard: function () {
-      this.$ls.removeItem('scorecard');
-      this.confirm = false;
-      this.$emit("handleCloseScorecard", false);
-    },
-
     handleCloseHoles: function () {
       this.showHole = 0;
     },
-
-    handlePauzeScorecard: function () {
-      this.$ls.setItem('scorecard', this.scorecard, 1000 * 60 * 60 * 24 * 7);
-      this.confirm = false;
-      this.$emit("handleCloseScorecard", false);
-    },
-
     handleSave: function () {
-      this.$http.post("golfer/scorecard", this.scorecard).then((res) => {
-        this.$ls.removeItem('scorecard');
-        this.$emit("handleCloseScorecard", true);
-      });
+      this.$emit("handleSave", this.local_scorecard);
     },
-
     handleSwitchHoles: function () {
       this.showHole = this.showHole == 9 ? 1 : 9;
     },
+    handleDelete: function () {
+      if (!this.$dayjs(this.local_scorecard.datetime).isToday()) {
+        return;
+      }
+      this.$http.delete("golfer/scorecard", {data: {id: this.local_scorecard.ngf_card_id}}).then((res) => {
+        this.$emit("handleClose", true);
+      });
+    }
   },
 };
 </script>

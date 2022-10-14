@@ -191,13 +191,13 @@ export default {
       } else if (
           player.relNrDoor == this.currentUser.relNr &&
           player.relNr != this.currentUser.relNr &&
-          player.relation.relGrpNr1 > 1
+          !player.relation.is_guest
       ) {
         this.$emit("handleSubscribeMember", player);
       } else if (
           player.relNrDoor == this.currentUser.relNr &&
           player.relNr != this.currentUser.relNr &&
-          player.relation.relGrpNr1 == null
+          player.relation.is_guest
       ) {
         this.$emit("handleSubscribeGuest", player);
       }
