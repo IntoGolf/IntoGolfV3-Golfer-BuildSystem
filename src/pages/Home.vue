@@ -56,7 +56,7 @@
             outline
             color="secondary"
             v-on:click="$router.push('/match?id=' + match.matchId)">
-          Wedstrijd {{match.name}}
+          Wedstrijd {{ match.name }}
         </q-btn>
       </div>
     </div>
@@ -122,7 +122,7 @@
       >
         <span class="title">
           <i class="far fa-list-alt"></i>
-          Berichten {{ unreadCount > 0 ? '(' + unreadCount + ')' : ''}}
+          Berichten {{ unreadCount > 0 ? '(' + unreadCount + ')' : '' }}
         </span>
       </div>
     </div>
@@ -177,13 +177,13 @@
     -->
 
   </q-page-container>
+
 </template>
 
 <script>
-export default {
-  components: {
 
-  },
+export default {
+  components: {},
   data() {
     return {
       system_logo: '',
@@ -192,7 +192,9 @@ export default {
       teetime: null,
       toNGF: this.$ls.getItem('currentUser').value.to_ngf,
       messageList: [],
-      weather: null
+      weather: null,
+      video: {},
+      front: true
     };
   },
   created() {
@@ -204,10 +206,10 @@ export default {
     cardInMemory: function () {
       return this.$ls.getItem('scorecard').value != null;
     },
-    unreadCount: function() {
+    unreadCount: function () {
       return this.messageList.filter(message => message.message_opened == null).length;
     },
-    weatherHours: function() {
+    weatherHours: function () {
       if (this.weather == null) {
         return [];
       }
@@ -215,10 +217,14 @@ export default {
       let hour = parseInt(this.$dayjs().format('H'));
       hour = hour > 20 ? 20 : hour;
 
-      return this.weather.forecast.forecastday[0].hour.slice(hour,hour+4);
+      return this.weather.forecast.forecastday[0].hour.slice(hour, hour + 4);
     }
   },
   methods: {
+    takePicture: function () {
+      this.camera('environment');
+    },
+
     loadSetting() {
       this.$http.get(`golfer/settings`).then((res) => {
         this.system_logo = res.system_logo;
@@ -227,14 +233,16 @@ export default {
         this.teetime = res.teetime;
       });
     },
+
     loadMessageList() {
       this.$http.get(`golfer/messages`).then((res) => {
         this.messageList = res;
       });
     },
+
     loadWeather() {
 
-      if (this.$ls.getItem('weather').value && 1==2) {
+      if (this.$ls.getItem('weather').value && 1 == 2) {
         this.weather = this.$ls.getItem('weather').value;
       } else {
         this.$http.get(`golfer/weather`).then((res) => {
@@ -242,8 +250,9 @@ export default {
           this.$ls.setItem('weather', res);
         });
       }
+    }
 
-    },
-  },
-};
+  }
+}
+;
 </script>

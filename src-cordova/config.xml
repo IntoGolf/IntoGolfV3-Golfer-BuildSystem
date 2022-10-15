@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="nl.igolfer.app" version="0.1.31" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="nl.igolfer.app" version="0.1.34" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>GolferApp</name>
     <description>IntoGolfV3 Golfer app</description>
     <author email="info@intogolf.nl" href="https://www.intogolf.com">
@@ -39,6 +39,21 @@
         <splash density="port-xxxhdpi" src="res/android/splash/splash-port-xxxhdpi.png" />
     </platform>
     <platform name="ios">
+        <config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
+            <string>We use your camera to update the user avatar.</string>
+        </config-file>
+        <config-file parent="NSPhotoLibraryAddUsageDescription" platform="ios" target="*-Info.plist">
+            <string>We use your photo to update the user avatar.</string>
+        </config-file>
+        <config-file parent="NSPhotoLibraryUsageDescription" platform="ios" target="*-Info.plist">
+            <string>We use your photo to update the user avatar.</string>
+        </config-file>
+        <config-file parent="NSLocationWhenInUseUsageDescription" platform="ios" target="*-Info.plist">
+            <string>We use your location for full functionality of certain app features.</string>
+        </config-file>
+        <config-file parent="ITSAppUsesNonExemptEncryption" platform="ios" target="*-Info.plist">
+            <false />
+        </config-file>
         <icon height="20" src="res/ios/icon/icon-20.png" width="20" />
         <icon height="29" src="res/ios/icon/icon-29.png" width="29" />
         <icon height="40" src="res/ios/icon/icon-40.png" width="40" />

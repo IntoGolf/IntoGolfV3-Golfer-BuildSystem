@@ -1,7 +1,5 @@
 <template>
 
-  <q-page class="q-pa-md">
-
     <q-card>
 
       <q-card-section class="text-h6">
@@ -176,8 +174,6 @@
 
     </q-card>
 
-  </q-page>
-
 </template>
 
 <style lang="scss" scoped>
@@ -307,7 +303,7 @@ export default {
       }
       if (this.step == 2) {
         return (
-            this.local_scorecard.foreign_course_details.course.length > 0 &&
+            this.local_scorecard.foreign_course_details.course_name.length > 0 &&
             this.local_scorecard.foreign_course_details.loop_name.length > 0 &&
             this.local_scorecard.foreign_course_details.tee_name.length > 0
         );

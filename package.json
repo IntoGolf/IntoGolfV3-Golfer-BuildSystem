@@ -1,6 +1,6 @@
 {
   "name": "intogolf-app-golfer",
-  "version": "0.1.31",
+  "version": "0.1.34",
   "description": "IntoGolfV3 Golfer app",
   "productName": "IntoGolfV3 Golfer app",
   "author": "IntoGolf <info@intogolf.nl>",
@@ -16,6 +16,8 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@capacitor/camera": "^4.1.2",
+    "@ionic/pwa-elements": "^3.1.1",
     "@quasar/extras": "^1.13.5",
     "axios": "^0.21.1",
     "cordova-plugin-whitelist": "^1.3.5",
