@@ -4,7 +4,7 @@
 
     <q-card-section class="text-h6">
 
-      {{ player.flpName == null ? 'Vrije plaats' : player.flpName + ' ' + player.flpRelNr }}
+      {{ player.flpName == null ? 'Vrije plaats' : player.flpName }}
 
     </q-card-section>
 
@@ -84,7 +84,7 @@
           v-on:click="$emit('handleEditPlayer',player)"
           class="q-mr-md"
           color="primary"
-          label="Wijzigen"/>
+          icon="edit"/>
 
     </q-card-section>
 

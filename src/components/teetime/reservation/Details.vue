@@ -9,9 +9,9 @@
       <q-btn
           v-show="canCancel && !paid"
           v-on:click="handleCancel"
-          color="accent"
+          color="negative"
           class="float-right"
-          label="Annuleer"/>
+          icon="delete"/>
 
     </q-card-section>
 
@@ -115,7 +115,7 @@
               v-on:click="$emit('handleClose')"
               class="q-mr-sm"
               color="primary"
-              label="sluiten"/>
+              icon="arrow_back"/>
           <q-btn
               v-on:click="dialogVisible = true"
               class="q-mr-sm"
@@ -126,7 +126,7 @@
               v-on:click="onPay"
               class="float-right"
               color="primary"
-              label="Betaal"/>
+              icon="payments"/>
         </div>
       </div>
 

@@ -9,10 +9,10 @@
       <q-btn
           v-if="showCancelBtn"
           v-on:click="onCancel"
-          color="accent"
+          color="negative"
           size="md"
           class="float-right"
-          label="Annuleer speler"/>
+          icon="delete"/>
 
     </q-card-section>
 
@@ -103,28 +103,29 @@
           v-on:click="handleSave"
           class="q-mr-sm"
           color="primary"
-          label="Opslaan"/>
+          icon="save"/>
 
       <q-btn
           v-show="!scan"
           v-on:click="$emit('handleCloseEditPlayer')"
           class="q-mr-sm"
           color="primary"
-          label="Sluiten"/>
+          icon="arrow_back"/>
 
       <q-btn
           v-show="scan"
           v-on:click="scan = false"
           class="q-mr-sm"
           color="primary"
-          label="Sluiten"/>
+          icon="arrow_back"/>
 
       <q-btn
-          v-show="!scan"
+          v-show="!scan && player.flpRelNr == null"
           v-on:click="scan = true"
           class="q-mr-sm"
           color="primary"
-          label="Scan NGF"/>
+          icon="qr_code_2"
+      />
 
     </q-card-section>
 

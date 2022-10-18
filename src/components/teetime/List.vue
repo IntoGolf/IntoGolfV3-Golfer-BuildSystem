@@ -33,7 +33,7 @@
               </q-item-label>
 
               <q-item-label caption>
-                {{ item.flight_players.length }} golfers
+<!--                {{ item.flight_players.length }} golfers-->
                 <i class="far fa-golf-club mr-2" />
                 {{ item.loop1.crlName }}
               </q-item-label>
@@ -61,6 +61,9 @@ export default {
     return {
       loading: false
     };
+  },
+  created() {
+    console.log(this.array);
   },
   methods: {
     handleOpenFlight: function (flight) {

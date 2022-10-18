@@ -72,7 +72,6 @@ export default {
       this.$http.get("golfer/bookings").then((res) => {
         this.loading = false;
         this.array = res;
-        console.log(this.array);
         this.page = this.LIST;
       });
     },

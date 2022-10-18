@@ -124,12 +124,14 @@ export default {
         local_flight.flight_players[index].flpGsn = player.flpGsn;
         local_flight.flight_players[index].flpEmail = player.flpEmail;
         local_flight.flight_players[index].flpPhone = player.flpPhone;
+        this.$emit('handleSave', local_flight, false, -1);
       } else if (this.guest) {
         local_flight.flight_players[index].flpName = this.guest;
+        this.$emit('handleSave', local_flight, false, index);
       } else {
         local_flight.flight_players[index].flpRelNr = this.relation;
+        this.$emit('handleSave', local_flight, false, -1);
       }
-      this.$emit('handleSave', local_flight, false, index);
     },
     async filterFn(val, update, abort) {
       if (val == undefined || val.length < 2) {
