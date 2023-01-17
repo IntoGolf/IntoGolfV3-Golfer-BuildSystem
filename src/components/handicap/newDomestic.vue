@@ -35,9 +35,34 @@
             v-model="local_scorecard.marker"
             label="Marker"
             hint="Type hier het GSN (NL00000000) van de marker"
+            placeholder="'NL00000000'"
             mask="AA########"
             :rules="validGsn"
         />
+
+        <q-input
+            v-show="step == 1"
+            type="text"
+            v-model="local_scorecard.remarks"
+            label="Opmerking"
+            hint="Heeft u een opmerking voer deze hier in"
+        />
+
+        <q-select
+            v-show="step == 1"
+            v-model="local_scorecard.is_qualifying"
+            :options="[{value:0,label:'Nee'},{value:1,label:'Ja'}]"
+            emit-value
+            label="Qualifying"
+            hint="Wilt u deze kaart als qualifying registreren"/>
+
+        <q-select
+            v-show="step == 1"
+            v-model="local_scorecard.is_competition"
+            :options="[{value:0,label:'Nee'},{value:1,label:'Ja'}]"
+            emit-value
+            label="Wedstrijdkaart"
+            hint="Wilt u deze kaart als wedstrijdkaart registreren"/>
 
         <q-btn-group class="q-mt-lg" spread>
           <q-btn

@@ -383,6 +383,7 @@
                     label="Opslaan"
                     @click="onSaveScorecard()"
                 />
+
               </q-btn-group>
             </div>
           </q-form>
@@ -433,7 +434,7 @@ export default {
         course_name: "",
         loop_name: "",
         tee_name: "",
-        course_country_code: "NL",
+        course_country_code: "BE",
 
         handicap:
             this.$ls.getItem("currentUser").relHandicap == null
@@ -449,8 +450,8 @@ export default {
         holes: [],
 
         format_of_play: 1,
-        is_competition: false,
-        is_qualifying: true,
+        is_competition: 0,
+        is_qualifying: 1,
       },
       scorecardType: [
         {
@@ -638,6 +639,7 @@ export default {
       return false;
     },
     validCourseRating: function () {
+      console.log(this.scorecard.courserate);
       return [
         (val) =>
             (this.scorecard.courserate > 0 && this.scorecard.courserate < 100) ||
@@ -645,6 +647,7 @@ export default {
       ];
     },
     validSlopeRating: function () {
+      console.log(this.scorecard.sloperate);
       return [
         (val) =>
             (this.scorecard.sloperate > 0 && this.scorecard.sloperate < 200) ||
@@ -796,7 +799,7 @@ export default {
         course_name: "",
         loop_name: "",
         tee_name: "",
-        course_country_code: "NL",
+        course_country_code: "BE",
 
         handicap:
             this.currentUser.relHandicap == null
@@ -812,8 +815,8 @@ export default {
         holes: [],
 
         format_of_play: 1,
-        is_competition: false,
-        is_qualifying: true,
+        is_competition: 0,
+        is_qualifying: 1,
       };
 
       this.$emit("handleCloseScorecard", true);
@@ -862,8 +865,8 @@ export default {
     loadBanen() {
       let that = this;
       this.$http.get("golfer/courses").then((res) => {
-        this.banen = res.banen;
-        this.teeSoorten = res.teeSoorten;
+        this.banen = res.data.data;
+        this.teeSoorten = [];//res.teeSoorten;
 
         this.handleNewScorecard(that.type);
       });

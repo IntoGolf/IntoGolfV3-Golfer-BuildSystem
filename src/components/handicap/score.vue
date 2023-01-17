@@ -14,7 +14,7 @@
 
             <q-btn-group class="q-mt-md q-gutter-sm" size="small" unelevated spread>
               <q-btn
-                  v-show="local_scorecard.course != -1 && local_scorecard.course != 993 && local_scorecard.course_country_code == 'NL'"
+                  v-show="local_scorecard.course != -1 && local_scorecard.course != 993 && local_scorecard.course_country_code == 'BE'"
                   color="secondary"
                   label="score"
                   @click="showHole = 9"

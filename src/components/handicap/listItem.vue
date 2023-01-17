@@ -33,7 +33,7 @@
     <q-item-section avatar>
 
       <q-item-label class="text-truncate">
-        {{ card.handicap_index.toFixed(1) }}
+        {{ card.handicap_index != null ? card.handicap_index.toFixed(1) : '-' }}
       </q-item-label>
 
       <q-item-label caption>

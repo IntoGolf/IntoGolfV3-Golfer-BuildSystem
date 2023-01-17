@@ -82,7 +82,7 @@
       </div>
 
       <div
-          v-if="toNGF"
+          v-if="toNGF || 1==1"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/handicap')"
       >
@@ -138,9 +138,24 @@
       <div
           v-if="toNGF"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-          @click="$router.push('/')"
+          @click="$router.push('/course')"
       >
-        <span class="title"><i class="far fa-golf-ball"></i>Aanmelden</span>
+        <span class="title"><i class="far fa-golf-ball"></i>Baan</span>
+      </div>
+
+    </div>
+
+    <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
+      <div
+          class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/pos')">
+        <span class="title"><i class="far fa-calendar-star"></i>Horeca</span>
+      </div>
+
+      <div
+          class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/shop')">
+        <span class="title"><i class="far fa-golf-ball"></i>Shop</span>
       </div>
 
     </div>

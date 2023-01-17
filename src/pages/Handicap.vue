@@ -85,8 +85,8 @@ export default {
         remarks: '',
         club: 2,
         course: 2,
-        loop: 0,
-        tee: 0,
+        loop: {id: 1,label: "9 Holes"},
+        tee: this.defaultTee,
         marker: '',
         format_of_play: 1,
         is_competition: false,
@@ -121,6 +121,7 @@ export default {
     };
   },
   created: function () {
+    console.log('go');
     this.handleLoadScorecard();
     this.handleLoadCourses();
     this.handleLoadCountries();
@@ -132,6 +133,13 @@ export default {
     // }
   },
   computed: {
+    defaultTee: function() {
+      if (this.currentUser.relGender == 2) {
+        return this.teeList.find(tee => tee.Category == 15)
+      } else {
+        return this.teeList.filter(tee => tee.Category == 9)
+      }
+    },
     artificialDate: function () {
       let result = "1900-01-01T12:00:00Z";
       if (!this.handicapList) {
@@ -145,6 +153,7 @@ export default {
       return result;
     },
     handicap: function () {
+      return 54;
       if (!this.handicapList) {
         return 54;
       }
@@ -197,7 +206,7 @@ export default {
     },
     handleLoadCountries() {
       this.$http.get("golfer/countries").then((res) => {
-        this.countryArray = res.data;
+        this.countryArray = res;
       });
     },
     handleLoadCourses() {

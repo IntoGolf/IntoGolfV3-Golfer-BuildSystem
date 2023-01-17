@@ -25,6 +25,16 @@ const routes = [
     },
   },
   {
+    path: "/course",
+    name: "Course",
+    component: () => import("layouts/PageLayout.vue"),
+    children: [{path: "", component: () => import("pages/Course.vue")}],
+    meta: {
+      requiresAuth: true,
+      title: "Baan",
+    },
+  },
+  {
     path: "/handicap",
     name: "Handicap",
     component: () => import("layouts/PageLayout.vue"),
@@ -61,6 +71,26 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: "Berichten",
+    },
+  },
+  {
+    path: "/pos",
+    name: "Horeca",
+    component: () => import("layouts/PageLayout.vue"),
+    children: [{path: "", component: () => import("pages/Pos.vue")}],
+    meta: {
+      requiresAuth: true,
+      title: "Horeca",
+    },
+  },
+  {
+    path: "/shop",
+    name: "Shop",
+    component: () => import("layouts/PageLayout.vue"),
+    children: [{path: "", component: () => import("pages/Shop.vue")}],
+    meta: {
+      requiresAuth: true,
+      title: "Shop",
     },
   },
   // {
