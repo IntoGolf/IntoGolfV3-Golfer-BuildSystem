@@ -5,7 +5,7 @@
     <div class="row" style="height: 230px">
       <div class="col text-center q-pt-lg">
         <q-img
-            :src="'https://demo.baan.intogolf.nl/image/' + system_logo"
+            :src="blobUrl"
             style="max-width: 400px; max-height: 150px"
             :fit="'scale-down'"
         />
@@ -209,7 +209,8 @@ export default {
       messageList: [],
       weather: null,
       video: {},
-      front: true
+      front: true,
+      blobUrl: ''
     };
   },
   created() {
@@ -241,8 +242,16 @@ export default {
     },
 
     loadSetting() {
+      const baseURL = process.env.VUE_APP_BASE_URL;
+      let that = this;
       this.$http.get(`golfer/settings`).then((res) => {
-        this.system_logo = res.system_logo;
+
+        this.$http.get("golfer/image/" + res.system_logo)
+            .then((res) => {
+              that.blobUrl = "data:image/png;base64," + res;
+            });
+
+        // this.system_logo = baseURL + 'golfer/image/' + res.system_logo;
         this.system_organisation_name = res.system_organisation_name;
         this.match = res.match;
         this.teetime = res.teetime;

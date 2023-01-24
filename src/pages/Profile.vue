@@ -6,8 +6,11 @@
 
       <q-form @submit="saveProfile">
 
-        <div class="ml-auto mr-auto">
-          <UploadPhoto :uploadUrl="uploadUrl"></UploadPhoto>
+        <div class="ml-auto mr-auto text-center">
+          <q-img
+              :src="blobUrl"
+              style="max-width: 240px; max-height: 240px;"/>
+<!--          <UploadPhoto :uploadUrl="uploadUrl"></UploadPhoto>-->
         </div>
 
         <q-tabs v-model="tab" class="text-teal">
@@ -169,13 +172,13 @@
 </template>
 
 <script>
-import UploadPhoto from "../components/UploadPhoto";
+// import UploadPhoto from "../components/UploadPhoto";
 // import TopBar from "../components/TopBar";
 
 export default {
-  components: {
-    UploadPhoto
-  },
+  // components: {
+  //   UploadPhoto
+  // },
   data: function () {
     return {
       back_icon: "fa-home",
@@ -230,7 +233,9 @@ export default {
           label: "Naam, speelsterkte, e-mailadres en telefoonnummer",
         },
       ],
+      blobUrl: '',
       uploadUrl: "/api/golfer/relation/avatar-upload",
+      relImage: this.$ls.getItem("currentUser").value.relImage,
     };
   },
   computed: {
@@ -277,7 +282,17 @@ export default {
       },
     },
   },
+  mounted() {
+    this.loadImage();
+  },
   methods: {
+    loadImage: function () {
+      let that = this;
+      this.$http.get("golfer/image/" + this.relImage)
+          .then((res) => {
+            that.blobUrl = "data:image/png;base64," + res;
+          });
+    },
     saveProfile() {
       this.$ls.setItem('currentUser', this.form, 1000 * 60 * 60 * 24 * 7);
       const payload = Object.assign(this.form, {
