@@ -362,7 +362,7 @@ export default {
       return [
         () =>
             (this.local_scorecard.courserate >= 20 && this.local_scorecard.courserate <= 99) ||
-            "Waarde van de courserating moet tussen 0 en 100 liggen",
+            "Waarde van de courserating moet tussen 20 en 99 liggen",
       ];
     },
     validSlopeRating: function () {
@@ -376,7 +376,7 @@ export default {
       return [
         () =>
             (this.local_scorecard.total_par >= 27 && this.local_scorecard.total_par <= 90) ||
-            "Waarde van de par moet tussen 0 en 100 liggen",
+            "Waarde van de par moet tussen 27 en 90 liggen",
       ];
     },
     validStableford: function () {
@@ -384,7 +384,7 @@ export default {
         () =>
             (this.local_scorecard.total_stableford > 0 &&
                 this.local_scorecard.total_stableford <= 54) ||
-            "Waarde van de stablefordpunten moet tussen 0 en 100 liggen",
+            "Waarde van de stablefordpunten moet tussen 0 en 54 liggen",
       ];
     },
     validGsn: function () {
