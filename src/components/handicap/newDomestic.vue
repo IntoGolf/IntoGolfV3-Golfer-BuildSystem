@@ -80,15 +80,14 @@
       <!--Step 2: course-->
       <div v-if="step == 2">
         <q-select
-            v-model="local_scorecard.course"
-            :options="courseFilteredArray"
+            v-model="location"
+            v-on:input-value="onSetCourseFilterString"
+            :options="locationListFiltered"
+            clearable
             use-input
-            @input-value="setCourseFilterString"
-            behavior="menu"
-            map-options
-            emit-value
-        >
-        </q-select>
+            input-debounce="0"
+            option-label="name"
+            option-value="ngfNumber"/>
 
         <q-btn-group class="q-mt-lg" spread>
           <q-btn
@@ -102,7 +101,7 @@
               color="secondary"
               label="Lus"
               @click="step = 3"
-              :disabled="!course"
+              :disabled="!location"
           />
         </q-btn-group>
       </div>
@@ -114,13 +113,13 @@
               clickable
               class="itg-q-item"
               v-ripple
-              v-for="(loop, index) in course.courses"
+              v-for="(item, index) in courseList"
               v-bind:key="index"
-              @click="onChangeLus(loop)"
+              @click="course = item"
           >
             <q-item-section>
               <q-item-label class="itg-text-overflow">{{
-                  loop.name
+                  item.name
                 }}
               </q-item-label>
             </q-item-section>
@@ -144,16 +143,16 @@
               clickable
               class="itg-q-item"
               v-ripple
-              v-for="(tee, index) in genderTeeList"
+              v-for="(item, index) in teeListFiltered"
               v-bind:key="index"
-              @click="onChangeTee(tee)"
+              @click="tee=item"
           >
             <q-item-section>
               <q-item-label class="itg-text-overflow">
                 <q-icon
                     class="fal fa-golf-ball"
-                    :style="{backgroundColor:tee.backgroundColor}"/>
-                {{ tee.name }}
+                    :style="{backgroundColor:item.backgroundColor}"/>
+                {{ item.name }}
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -170,57 +169,57 @@
       </div>
 
       <!--Step 5: confirmation-->
-      <div id="div-scorecard-details" v-if="step == 5">
+      <div class="q-mb-md" v-if="step == 5">
         <div class="row q-mt-md">
-          <div class="col" style="font-weight: bold">Datum</div>
+          <div class="col text-bold">Datum</div>
           <div class="col text-right itg-text-overflow">
             {{ date }}
           </div>
         </div>
 
-        <div class="row">
-          <div class="col" style="font-weight: bold">Tijd</div>
+        <div class="row q-mt-md">
+          <div class="col text-bold">Tijd</div>
           <div class="col text-right itg-text-overflow">
             {{ time }}
           </div>
         </div>
 
-        <div class="row">
-          <div class="col" style="font-weight: bold">Baan</div>
+        <div class="row q-mt-md">
+          <div class="col text-bold">Baan</div>
+          <div class="col text-right itg-text-overflow">
+            {{ location.name }}
+          </div>
+        </div>
+
+        <div class="row q-mt-md">
+          <div class="col text-bold">Lus</div>
           <div class="col text-right itg-text-overflow">
             {{ course.name }}
           </div>
         </div>
 
-        <div class="row">
-          <div class="col" style="font-weight: bold">Lus</div>
-          <div class="col text-right itg-text-overflow">
-            {{ loop.name }}
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col" style="font-weight: bold">Tee</div>
+        <div class="row q-mt-md">
+          <div class="col text-bold">Tee</div>
           <div class="col text-right itg-text-overflow">
             {{ tee.name }}
           </div>
         </div>
 
-        <div class="row">
-          <div class="col" style="font-weight: bold">Courserating</div>
+        <div class="row q-mt-md">
+          <div class="col text-bold">Courserating</div>
           <div class="col text-right itg-text-overflow">
             {{ tee.courseRating }}
           </div>
         </div>
 
-        <div class="row">
-          <div class="col" style="font-weight: bold">Sloperating</div>
+        <div class="row q-mt-md">
+          <div class="col text-bold">Sloperating</div>
           <div class="col text-right itg-text-overflow">
             {{ tee.slopeRating }}
           </div>
         </div>
 
-        <div class="row">
+        <div class="row q-mt-md">
           <div class="col" style="font-weight: bold">Par</div>
           <div class="col text-right itg-text-overflow">
             {{ tee.totalPar }}
@@ -237,12 +236,12 @@
           <q-btn
               icon="check"
               color="secondary"
-              @click="onSaveScorecard"/>
+              @click="$emit('handleSave', local_scorecard, true)"/>
 
           <q-btn
               icon="close"
               color="secondary"
-              @click="onCancelScorecard"
+              @click="$emit('handleClose', true)"
           />
         </q-btn-group>
       </div>
@@ -253,32 +252,39 @@
 
 </template>
 
-<style lang="scss" scoped>
-#div-scorecard-details {
-  .row {
-    margin-bottom: 10px;
-  }
-}
-</style>
-
 <script>
 export default {
   props: {
     artificialDate: Date,
     currentUser: Object,
     scorecard: Object,
-    teeArray: Array,
-    courseArray: Array,
     handicap: Number
   },
   data() {
     return {
       step: 1,
+
       date: this.$dayjs(this.scorecard.datetime).format('YYYY-MM-DD'),
       time: this.$dayjs(this.scorecard.datetime).format('HH:mm'),
+
       local_scorecard: this.scorecard,
-      courseFilterString: ''
+
+      locationList: [],
+      locationListFilterString: '',
+      location: null,
+
+      courseList: [],
+      course: null,
+
+      teeList: [],
+      tee: null
     };
+  },
+  created() {
+    this.$http.get("golfer/locationList").then((res) => {
+        this.locationList = res;
+        this.location = this.locationList.find(location => location.ngfNumber == 2);
+    });
   },
   watch: {
     date: function (newValue) {
@@ -286,37 +292,56 @@ export default {
     },
     time: function (newValue) {
       this.local_scorecard.datetime = this.date + ' ' + newValue;
+    },
+    location: function(newValue) {
+      if (newValue == null) {
+        return;
+      }
+      this.local_scorecard.course = newValue.ngfNumber;
+      this.$http.get("golfer/courseList?associationId=" + newValue.associationId).then((res) => {
+        this.courseList = res;
+      });
+    },
+    course: function(newValue) {
+      this.local_scorecard.loop = newValue.number;
+      this.$http.get("golfer/teeList?id=" + newValue.id).then((res) => {
+        this.teeList = res;
+        this.step = 4;
+      });
+    },
+    tee: function(newValue) {
+      this.local_scorecard.tee = newValue.color;
+      this.local_scorecard.holes = [];
+
+      for (let i = 1; i <= this.course.courseType; i++) {
+        let hole = {
+          number: i,
+          par: newValue["parHole" + i],
+          strokeIndex: newValue["strokeIndexHole" + i],
+          stableford: 0,
+          is_computed: 0,
+          strokes:0
+        };
+        this.local_scorecard.holes.push(hole);
+      }
+      console.log(this.local_scorecard);
+      this.local_scorecard.foreign_course_details.total_par = newValue.totalPar;
+      this.step = 5;
     }
   },
   computed: {
-    genderTeeList: function () {
-      let that = this;
-      let result = [];
-      this.loop.tees.forEach(function (item) {
-        if ((that.currentUser.relGender == 1 && item.gender) == 'M' ||
-            (that.currentUser.relGender != 1 && item.gender == 'F')) {
-            result.push(item);
-        }
-      });
-      return result;
-    },
-    courseFilteredArray: function () {
-      let array = this.courseArray;
-      if (this.courseFilterString != '') {
-        array = this.courseArray.filter(course => course.name.toLowerCase().indexOf(this.courseFilterString) > -1);
+    locationListFiltered: function () {
+      if (this.locationListFilterString == '') {
+        return this.locationList;
       }
-      return array.map(course => ({label: course.name, value: course.ngfNumber}));
+      return this.locationList.filter(course => course.name.toLowerCase().indexOf(this.locationListFilterString) > -1);
     },
-    course: function () {
-      return this.courseArray.find(course => course.ngfNumber == this.local_scorecard.course);
+    teeListFiltered: function () {
+      return this.teeList.filter(item =>
+          this.currentUser.relGender == 1 && item.gender == 'M' ||
+          this.currentUser.relGender != 1 && item.gender == 'F');
     },
-    loop: function () {
-      return this.course.courses.find(course => course.number == this.local_scorecard.loop);
-    },
-    tee: function () {
-      return this.loop.tees.find(item => item.color == this.local_scorecard.tee);
-    },
-    plHcp() {
+    plHcp: function() {
       let hcp = this.handicap == 55 ? 54 : this.handicap;
       if (this.loop.courseType == 18) {
         return Math.round(hcp * (this.tee.slopeRating / 113) + (this.tee.courseRating - this.tee.totalPar),0);
@@ -351,40 +376,6 @@ export default {
 
       return [(val) => true || ""];
     },
-    isStepValid: function () {
-      if (this.step == 1 && this.date.length > 0) {
-        if (this.$refs.date == undefined) {
-          return true;
-        } else {
-          return !this.$refs.date.hasError;
-        }
-      }
-      if (this.step == 2) {
-        return (
-            this.local_scorecard.course.length > 0 &&
-            this.local_scorecard.loop_name.length > 0 &&
-            this.local_scorecard.tee_name.length > 0
-        );
-      }
-      if (this.step == 3) {
-        return (
-            this.local_scorecard.courserate > 20 &&
-            this.local_scorecard.courserate < 100 &&
-            this.local_scorecard.sloperate > 0 &&
-            this.local_scorecard.sloperate < 200 &&
-            this.local_scorecard.totalPar > 0 &&
-            this.local_scorecard.total_par < 100
-        );
-      }
-      if (this.step == 4) {
-        return (
-            this.local_scorecard.stableford > 20 &&
-            this.local_scorecard.stableford < 100 &&
-            !this.gsnIsInvalid
-        );
-      }
-      return false;
-    },
     validGsn: function () {
       return [
         (val) =>
@@ -412,164 +403,8 @@ export default {
     },
   },
   methods: {
-    teeColor: function (tee) {
-
-      if ([6, 16].indexOf(tee.color) > -1) {
-        return "bg-grey-6";
-      } else if ([8, 12].indexOf(tee.color) > -1) {
-        return "bg-yellow-6";
-      } else if ([9, 13].indexOf(tee.color) > -1) {
-        return "bg-blue-6";
-      } else if ([10, 14].indexOf(tee.color) > -1) {
-        return "bg-red-6";
-      } else if ([11, 15].indexOf(tee.color) > -1) {
-        return "bg-orange-6";
-      } else if (tee.color == 7) {
-        return "bg-white";
-      }
-
-      return "bg-grey-6";
-    },
-    setStep: function (value) {
-      if (this.step == 1 && value == -1) {
-        return;
-      }
-      this.step += value;
-    },
-    getTeeName: function (id) {
-      let result = null;
-      this.teeArray.forEach((item) => {
-        if (item.color == id) {
-          result = item.name;
-        }
-      });
-      return result;
-    },
-    getTeeAdvise: function (id) {
-      let result = "";
-      this.teeArray.forEach((item) => {
-        if (item.color == id) {
-          result =
-              this.currentUser.relHandicap <= item.HcpMin &&
-              this.currentUser.relHandicap >= item.HcpMax
-                  ? "advies "
-                  : "";
-        }
-      });
-      return result;
-    },
-    getTeeColor: function (id) {
-      return this.tee.backgroundColor;
-    },
-    onSaveScorecard: function () {
-      this.$emit("handleSave", this.local_scorecard, true);
-    },
-    onCancelScorecard: function () {
-      this.$emit("handleClose", true);
-    },
-    onChangeLus: function (loop) {
-      this.local_scorecard.loop = loop.number;
-      this.step = 4;
-    },
-    onChangeTee: function (tee) {
-      this.local_scorecard.tee = tee.color;
-      this.local_scorecard.holes = [];
-
-      for (let i = 1; i <= this.loop.courseType; i++) {
-        let hole = {
-          number: i,
-          par: tee["parHole" + i],
-          strokeIndex: tee["strokeIndexHole" + i],
-          stableford: 0,
-          is_computed: 0,
-          strokes:0
-        };
-        //hole.strokes = this.plHcpHole(hole);
-        this.local_scorecard.holes.push(hole);
-      }
-      console.log(this.local_scorecard);
-      this.local_scorecard.foreign_course_details.total_par = this.tee.totalPar;
-      this.step = 5;
-    },
-    setCourseFilterString: function (value) {
-      this.courseFilterString = value;
-    },
-    getIsOdd: function (num) {
-      return num % 2;
-    },
-    plHcpHole: function (hole) {
-      if (hole.personal_par != undefined && hole.personal_par > 0) {
-        return hole.personal_par;
-      }
-
-      let siPos, si, extra;
-
-      let fixed = Math.trunc(this.plHcp / this.loop.courseType);
-      let part = this.plHcp - fixed * this.loop.courseType;
-
-      part = this.plHcp < 0 ? part * -1 : part;
-
-      const array_odd = {
-        1: 1,
-        3: 2,
-        5: 3,
-        7: 4,
-        9: 5,
-        11: 6,
-        13: 7,
-        15: 8,
-        17: 9,
-      };
-
-      const array_eve = {
-        2: 1,
-        4: 2,
-        6: 3,
-        8: 4,
-        10: 5,
-        12: 6,
-        14: 7,
-        16: 8,
-        18: 9,
-      };
-
-      const neg_array_odd = {
-        17: 1,
-        15: 2,
-        13: 3,
-        11: 4,
-        9: 5,
-        7: 6,
-        5: 7,
-        3: 8,
-        1: 9,
-      };
-
-      const neg_array_eve = {
-        18: 1,
-        16: 2,
-        14: 3,
-        12: 4,
-        10: 5,
-        8: 6,
-        6: 7,
-        4: 8,
-        2: 9,
-      };
-
-      let array;
-      if (this.getIsOdd(hole.strokeIndex) && this.loop.courseType == 9) {
-        array = this.plHcp < 0 ? neg_array_odd : array_odd;
-        siPos = array[hole.strokeIndex];
-      } else if (!this.getIsOdd(hole.strokeIndex) && this.loop.courseType == 9) {
-        array = this.plHcp < 0 ? neg_array_eve : array_eve;
-        siPos = array[hole.strokeIndex];
-      } else {
-        siPos = this.plHcp >= 0 ? hole.strokeIndex : 18 - (hole.strokeIndex - 1);
-      }
-
-      extra = this.plHcp < 0 ? -1 : 1;
-      return hole.par + fixed + (part >= siPos ? extra : 0);
+    onSetCourseFilterString: function (value) {
+      this.locationListFilterString = value;
     },
   },
 };

@@ -271,10 +271,11 @@ export default {
     time: function(newValue) {
       this.local_scorecard.datetime = this.date + ' ' + newValue;
     }
-
   },
   mounted() {
     this.local_scorecard.tee = this.defaultTee;
+    this.local_scorecard.course_name = '';
+    this.local_scorecard.course_country_code = 'BE';
   },
   computed: {
     defaultTee: function() {
@@ -331,26 +332,27 @@ export default {
         }
       }
       if (this.step == 2) {
+        console.log(this.local_scorecard);
         return (
             this.local_scorecard.course_name.length > 0 &&
             this.local_scorecard.loop_name.length > 0 &&
-            this.local_scorecard.tee_name.length > 0
+            this.local_scorecard.tee.label.length > 0
         );
       }
       if (this.step == 3) {
         return (
-            this.local_scorecard.courserate > 20 &&
-            this.local_scorecard.courserate < 100 &&
-            this.local_scorecard.sloperate > 0 &&
-            this.local_scorecard.sloperate < 200 &&
-            this.local_scorecard.total_par > 0 &&
-            this.local_scorecard.total_par < 100
+            this.local_scorecard.courserate >= 20 &&
+            this.local_scorecard.courserate < 99 &&
+            this.local_scorecard.sloperate >= 55 &&
+            this.local_scorecard.sloperate <= 155 &&
+            this.local_scorecard.total_par >= 27 &&
+            this.local_scorecard.total_par <= 90
         );
       }
       if (this.step == 4) {
         return (
-            this.local_scorecard.total_stableford > 20 &&
-            this.local_scorecard.total_stableford < 100 &&
+            this.local_scorecard.total_stableford > 0 &&
+            this.local_scorecard.total_stableford <= 54 &&
             !this.gsnIsInvalid
         );
       }
@@ -359,21 +361,21 @@ export default {
     validCourseRating: function () {
       return [
         () =>
-            (this.local_scorecard.courserate > 0 && this.local_scorecard.courserate < 100) ||
+            (this.local_scorecard.courserate >= 20 && this.local_scorecard.courserate <= 99) ||
             "Waarde van de courserating moet tussen 0 en 100 liggen",
       ];
     },
     validSlopeRating: function () {
       return [
         () =>
-            (this.local_scorecard.sloperate > 0 && this.local_scorecard.sloperate < 200) ||
-            "Waarde van de sloperating moet tussen 0 en 200 liggen",
+            (this.local_scorecard.sloperate >= 55 && this.local_scorecard.sloperate <= 155) ||
+            "Waarde van de sloperating moet tussen 55 en 155 liggen",
       ];
     },
     validTotalPar: function () {
       return [
         () =>
-            (this.local_scorecard.total_par > 0 && this.local_scorecard.total_par < 100) ||
+            (this.local_scorecard.total_par >= 27 && this.local_scorecard.total_par <= 90) ||
             "Waarde van de par moet tussen 0 en 100 liggen",
       ];
     },
@@ -381,7 +383,7 @@ export default {
       return [
         () =>
             (this.local_scorecard.total_stableford > 0 &&
-                this.local_scorecard.total_stableford < 100) ||
+                this.local_scorecard.total_stableford <= 54) ||
             "Waarde van de stablefordpunten moet tussen 0 en 100 liggen",
       ];
     },

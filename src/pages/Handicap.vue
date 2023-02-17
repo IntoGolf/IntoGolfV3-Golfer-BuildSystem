@@ -85,7 +85,7 @@ export default {
         remarks: '',
         club: 2,
         course: 2,
-        loop: {id: 1,label: "9 Holes"},
+        loop: {id: 1, label: "9 Holes"},
         tee: this.defaultTee,
         marker: '',
         format_of_play: 1,
@@ -103,15 +103,13 @@ export default {
             is_computed: false,
           }
         ],
-        foreign_course_details: {
-          course: '',
-          loop_name: '',
-          tee_name: '',
-          courserate: 0,
-          sloperate: 0,
-          total_par: 0,
-          stableford: 0,
-        }
+        course_name: '',
+        loop_name: '',
+        tee_name: '',
+        courserate: '',
+        sloperate: '',
+        total_par: '',
+        stableford: '',
       },
       handicapList: [],
       currentUser: Object.assign(this.$ls.getItem("currentUser")),
@@ -133,7 +131,7 @@ export default {
     // }
   },
   computed: {
-    defaultTee: function() {
+    defaultTee: function () {
       if (this.currentUser.relGender == 2) {
         return this.teeList.find(tee => tee.Category == 15)
       } else {
