@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "start": "cross-env quasar dev",
-    "build:web": "quasar build",
+    "build:web": "ENVIRONMENT=staging quasar build",
     "build:android": "cross-env ENVIRONMENT=staging quasar build -m android && npm run sign && open dist/cordova/android/apk/release",
     "build:staging:ios": "cross-env ENVIRONMENT=staging quasar build -m ios",
     "sign": "jarsigner -storepass 123456 -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore dist/cordova/android/apk/release/app-release-unsigned.apk radar",
