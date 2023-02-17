@@ -67,7 +67,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="row q-mt-md">
       <div class="col text-h6">Deelnemers</div>
     </div>
 
@@ -173,10 +173,12 @@ export default {
       return this.match.players.filter(player => player.relation != null && player.relNrDoor == this.currentUser.relNr);
     },
     players: function () {
-      return this.match.players.filter(player => player.relation != null && player.relNrDoor != this.currentUser.relNr && player.Status == 0);
+//      return this.match.players.filter(player => player.relation != null && player.relNrDoor != this.currentUser.relNr && player.Status == 0);
+      return this.match.players.filter(player => player.relation != null && player.relNrDoor != this.currentUser.relNr);
     },
     reservePlayers: function () {
-      return this.match.players.filter(player => player.relation != null && player.relNrDoor != this.currentUser.relNr && player.Status == 1);
+//      return this.match.players.filter(player => player.relation != null && player.relNrDoor != this.currentUser.relNr && player.Status == 1);
+      return this.match.players.filter(player => player.relation != null && player.relNrDoor != this.currentUser.relNr);
     }
   },
   methods: {

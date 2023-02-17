@@ -51,8 +51,9 @@
         <q-select
             v-show="step == 1"
             v-model="local_scorecard.is_qualifying"
-            :options="[{value:0,label:'Nee'},{value:1,label:'Ja'}]"
+            map-options
             emit-value
+            :options="[{value:0,label:'Nee'},{value:1,label:'Ja'}]"
             label="Qualifying"
             hint="Wilt u deze kaart als qualifying registreren"/>
 
@@ -60,6 +61,7 @@
             v-show="step == 1"
             v-model="local_scorecard.is_competition"
             :options="[{value:0,label:'Nee'},{value:1,label:'Ja'}]"
+            map-options
             emit-value
             label="Wedstrijdkaart"
             hint="Wilt u deze kaart als wedstrijdkaart registreren"/>
@@ -112,13 +114,13 @@
               clickable
               class="itg-q-item"
               v-ripple
-              v-for="(loop, index) in course.baan_lussen"
+              v-for="(loop, index) in course.courses"
               v-bind:key="index"
               @click="onChangeLus(loop)"
           >
             <q-item-section>
               <q-item-label class="itg-text-overflow">{{
-                  loop.bnlName
+                  loop.name
                 }}
               </q-item-label>
             </q-item-section>
@@ -150,12 +152,8 @@
               <q-item-label class="itg-text-overflow">
                 <q-icon
                     class="fal fa-golf-ball"
-                    :class="teeColor(tee)"
-                ></q-icon>
-                {{ getTeeName(tee.bltCategory) }}
-                <div class="float-right">
-                  {{ getTeeAdvise(tee.bltCategory) }}
-                </div>
+                    :style="{backgroundColor:tee.backgroundColor}"/>
+                {{ tee.name }}
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -190,42 +188,42 @@
         <div class="row">
           <div class="col" style="font-weight: bold">Baan</div>
           <div class="col text-right itg-text-overflow">
-            {{ courseName }}
+            {{ course.name }}
           </div>
         </div>
 
         <div class="row">
           <div class="col" style="font-weight: bold">Lus</div>
           <div class="col text-right itg-text-overflow">
-            {{ loopName }}
+            {{ loop.name }}
           </div>
         </div>
 
         <div class="row">
           <div class="col" style="font-weight: bold">Tee</div>
           <div class="col text-right itg-text-overflow">
-            {{ teeName }}
+            {{ tee.name }}
           </div>
         </div>
 
         <div class="row">
           <div class="col" style="font-weight: bold">Courserating</div>
           <div class="col text-right itg-text-overflow">
-            {{ tee.bltCourseRating }}
+            {{ tee.courseRating }}
           </div>
         </div>
 
         <div class="row">
           <div class="col" style="font-weight: bold">Sloperating</div>
           <div class="col text-right itg-text-overflow">
-            {{ tee.bltSlopeRating }}
+            {{ tee.slopeRating }}
           </div>
         </div>
 
         <div class="row">
           <div class="col" style="font-weight: bold">Par</div>
           <div class="col text-right itg-text-overflow">
-            {{ par }}
+            {{ tee.totalPar }}
           </div>
         </div>
 
@@ -294,76 +292,36 @@ export default {
     genderTeeList: function () {
       let that = this;
       let result = [];
-      let femaleTees = [13, 14, 15, 16, 17];
-      this.loop.baan_lus_tees.forEach(function (item) {
-        if (that.currentUser.relGender == 1) {
-          if (!femaleTees.includes(item.bltCategory)) {
+      this.loop.tees.forEach(function (item) {
+        if ((that.currentUser.relGender == 1 && item.gender) == 'M' ||
+            (that.currentUser.relGender != 1 && item.gender == 'F')) {
             result.push(item);
-          }
-        } else {
-          if (femaleTees.includes(item.bltCategory)) {
-            result.push(item);
-          }
         }
       });
       return result;
     },
-    teeFont: function () {
-      if (this.tee == null) {
-        return "bg-grey-2";
-      }
-      return "bg-grey-10";
-    },
     courseFilteredArray: function () {
       let array = this.courseArray;
       if (this.courseFilterString != '') {
-        array = this.courseArray.filter(course => course.baaClubName.toLowerCase().indexOf(this.courseFilterString) > -1);
+        array = this.courseArray.filter(course => course.name.toLowerCase().indexOf(this.courseFilterString) > -1);
       }
-      return array.map(course => ({label: course.baaClubName, value: course.baaId}));
+      return array.map(course => ({label: course.name, value: course.ngfNumber}));
     },
     course: function () {
-      return this.courseArray.find(course => course.baaId == this.local_scorecard.course);
-    },
-    courseName: function () {
-      if (this.course == null) {
-        return "";
-      }
-      return this.course.baaName;
+      return this.courseArray.find(course => course.ngfNumber == this.local_scorecard.course);
     },
     loop: function () {
-      return this.course.baan_lussen.find(loop => loop.bnlLusNr == this.local_scorecard.loop);
-    },
-    loopName: function () {
-      if (this.loop == null) {
-        return "";
-      }
-      return this.loop.bnlName;
+      return this.course.courses.find(course => course.number == this.local_scorecard.loop);
     },
     tee: function () {
-      return this.loop.baan_lus_tees.find(item => item.bltCategory == this.local_scorecard.tee);
-    },
-    teeName: function () {
-      if (this.tee == null) {
-        return "";
-      }
-      return this.teeArray.find(tee => tee.Category == this.tee.bltCategory).Omschrijving
-    },
-    par: function () {
-      let result = 0;
-      for (let h = 1; h <= 18; h++) {
-        result += parseInt(this.tee['bltPar' + h]);
-      }
-      return result;
-    },
-    numberOfHoles: function () {
-      return this.loop.bnlLusNr > 100 ? 18 : 9;
+      return this.loop.tees.find(item => item.color == this.local_scorecard.tee);
     },
     plHcp() {
       let hcp = this.handicap == 55 ? 54 : this.handicap;
-      if (this.numberOfHoles == 18) {
-        return Math.round(hcp * (this.tee.bltSlopeRating / 113) + (this.tee.bltCourseRating - this.par),0);
+      if (this.loop.courseType == 18) {
+        return Math.round(hcp * (this.tee.slopeRating / 113) + (this.tee.courseRating - this.tee.totalPar),0);
       }
-      return Math.round((hcp / 2) * (this.tee.bltSlopeRating / 113) + (this.tee.bltCourseRating - this.par),0);
+      return Math.round((hcp / 2) * (this.tee.slopeRating / 113) + (this.tee.courseRating - this.tee.totalPar),0);
     },
     validDate: function () {
       if (this.date == "" || this.date == null) {
@@ -414,7 +372,7 @@ export default {
             this.local_scorecard.courserate < 100 &&
             this.local_scorecard.sloperate > 0 &&
             this.local_scorecard.sloperate < 200 &&
-            this.local_scorecard.total_par > 0 &&
+            this.local_scorecard.totalPar > 0 &&
             this.local_scorecard.total_par < 100
         );
       }
@@ -456,17 +414,17 @@ export default {
   methods: {
     teeColor: function (tee) {
 
-      if ([7, 17].indexOf(tee.bltCategory) > -1) {
+      if ([6, 16].indexOf(tee.color) > -1) {
         return "bg-grey-6";
-      } else if ([9, 13].indexOf(tee.bltCategory) > -1) {
+      } else if ([8, 12].indexOf(tee.color) > -1) {
         return "bg-yellow-6";
-      } else if ([10, 14].indexOf(tee.bltCategory) > -1) {
+      } else if ([9, 13].indexOf(tee.color) > -1) {
         return "bg-blue-6";
-      } else if ([11, 15].indexOf(tee.bltCategory) > -1) {
+      } else if ([10, 14].indexOf(tee.color) > -1) {
         return "bg-red-6";
-      } else if ([12, 16].indexOf(tee.bltCategory) > -1) {
+      } else if ([11, 15].indexOf(tee.color) > -1) {
         return "bg-orange-6";
-      } else if (tee.bltCategory == 8) {
+      } else if (tee.color == 7) {
         return "bg-white";
       }
 
@@ -481,8 +439,8 @@ export default {
     getTeeName: function (id) {
       let result = null;
       this.teeArray.forEach((item) => {
-        if (item.Category == id) {
-          result = item.Omschrijving;
+        if (item.color == id) {
+          result = item.name;
         }
       });
       return result;
@@ -490,7 +448,7 @@ export default {
     getTeeAdvise: function (id) {
       let result = "";
       this.teeArray.forEach((item) => {
-        if (item.Category == id) {
+        if (item.color == id) {
           result =
               this.currentUser.relHandicap <= item.HcpMin &&
               this.currentUser.relHandicap >= item.HcpMax
@@ -501,13 +459,7 @@ export default {
       return result;
     },
     getTeeColor: function (id) {
-      let result = null;
-      this.teeArray.forEach((item) => {
-        if (item.Category == id) {
-          result = item.Achtergrond;
-        }
-      });
-      return result;
+      return this.tee.backgroundColor;
     },
     onSaveScorecard: function () {
       this.$emit("handleSave", this.local_scorecard, true);
@@ -516,25 +468,27 @@ export default {
       this.$emit("handleClose", true);
     },
     onChangeLus: function (loop) {
-      this.local_scorecard.loop = loop.bnlLusNr;
+      this.local_scorecard.loop = loop.number;
       this.step = 4;
     },
     onChangeTee: function (tee) {
-      this.local_scorecard.tee = tee.bltCategory;
+      this.local_scorecard.tee = tee.color;
       this.local_scorecard.holes = [];
-      for (let i = 1; i <= this.numberOfHoles; i++) {
+
+      for (let i = 1; i <= this.loop.courseType; i++) {
         let hole = {
           number: i,
-          par: tee["bltPar" + i],
-          strokeIndex: tee["bltSi" + i],
-          stableford: 2,
+          par: tee["parHole" + i],
+          strokeIndex: tee["strokeIndexHole" + i],
+          stableford: 0,
           is_computed: 0,
+          strokes:0
         };
-        hole.strokes = this.plHcpHole(hole);
+        //hole.strokes = this.plHcpHole(hole);
         this.local_scorecard.holes.push(hole);
       }
-
-      this.local_scorecard.foreign_course_details.total_par = this.par;
+      console.log(this.local_scorecard);
+      this.local_scorecard.foreign_course_details.total_par = this.tee.totalPar;
       this.step = 5;
     },
     setCourseFilterString: function (value) {
@@ -550,8 +504,8 @@ export default {
 
       let siPos, si, extra;
 
-      let fixed = Math.trunc(this.plHcp / this.numberOfHoles);
-      let part = this.plHcp - fixed * this.numberOfHoles;
+      let fixed = Math.trunc(this.plHcp / this.loop.courseType);
+      let part = this.plHcp - fixed * this.loop.courseType;
 
       part = this.plHcp < 0 ? part * -1 : part;
 
@@ -604,10 +558,10 @@ export default {
       };
 
       let array;
-      if (this.getIsOdd(hole.strokeIndex) && this.numberOfHoles == 9) {
+      if (this.getIsOdd(hole.strokeIndex) && this.loop.courseType == 9) {
         array = this.plHcp < 0 ? neg_array_odd : array_odd;
         siPos = array[hole.strokeIndex];
-      } else if (!this.getIsOdd(hole.strokeIndex) && this.numberOfHoles == 9) {
+      } else if (!this.getIsOdd(hole.strokeIndex) && this.loop.courseType == 9) {
         array = this.plHcp < 0 ? neg_array_eve : array_eve;
         siPos = array[hole.strokeIndex];
       } else {

@@ -203,6 +203,8 @@ export default {
     teesArray: function () {
       let that = this;
       let array = [];
+      return [];
+
       this.match.baan_lus.baan_lus_tees.forEach(function (tee) {
         if (
             (that.player.relation.relGender == 1 &&

@@ -34,7 +34,7 @@
       <div class="col text-bold">Lus</div>
 
       <div class="col overflow-hidden text-right">
-        {{ match.baan_lus.bnlName }}
+<!--        {{ // match.baan_lus.bnlName }}-->
       </div>
     </div>
 
@@ -62,7 +62,7 @@
       </div>
     </div>
 
-    <q-btn-group spread v-if="match.UitslagenGereed != 1 && match.StartlijstGereed != 1">
+    <q-btn-group spread v-if="match.UitslagenGereed != 1 && match.StartlijstGereed == 1">
       <q-btn
           v-if="
           openForSubscription &&

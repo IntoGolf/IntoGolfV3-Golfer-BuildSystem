@@ -89,8 +89,8 @@ export default {
         tee: this.defaultTee,
         marker: '',
         format_of_play: 1,
-        is_competition: false,
-        is_qualifying: true,
+        is_competition: 0,
+        is_qualifying: 1,
         course_country_code: "NL",
         player: {
           gsn: '',
@@ -211,8 +211,8 @@ export default {
     },
     handleLoadCourses() {
       this.$http.get("golfer/courses").then((res) => {
-        this.courseArray = res.banen;
-        this.teeArray = res.teeSoorten;
+        this.courseArray = res;
+        this.teeArray = [];
       });
     },
   },
