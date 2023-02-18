@@ -228,7 +228,7 @@ export default {
         fltTime: "",
         fltCrlNr1: "",
         fltCrlNr2: "",
-        fltSize: 3,
+        fltSize: this.$ls.getItem('settings').value.planner_default_reservation_count,
         players: [],
         holes: 9,
         size: 3

@@ -9,7 +9,7 @@
             style="max-width: 400px; max-height: 150px"
             :fit="'scale-down'"
         />
-        <div class="text-h4 q-mb-md">{{ system_organisation_name }}</div>
+        <div class="text-h4 q-mb-md">{{ this.settings.system_organisation_name }}</div>
       </div>
     </div>
 
@@ -39,24 +39,24 @@
       </div>
     </div>
 
-    <div v-if="teetime != null" class="row q-mb-md">
+    <div v-if="this.settings.teetime != null" class="row q-mb-md">
       <div class="col text-center">
         <q-btn
             outline
             color="secondary"
-            v-on:click="$router.push('/checkin?id=' + teetime.flpNr)">
-          Aanmelden starttijd {{ $filters.minuteToTime(teetime.fltTime1) }}
+            v-on:click="$router.push('/checkin?id=' + this.settings.teetime.flpNr)">
+          Aanmelden starttijd {{ $filters.minuteToTime(this.settings.teetime.fltTime1) }}
         </q-btn>
       </div>
     </div>
 
-    <div v-if="match != null" class="row q-mb-md">
+    <div v-if="this.settings.match != null" class="row q-mb-md">
       <div class="col text-center">
         <q-btn
             outline
             color="secondary"
-            v-on:click="$router.push('/match?id=' + match.matchId)">
-          Wedstrijd {{ match.name }}
+            v-on:click="$router.push('/match?id=' + this.settings.match.matchId)">
+          Wedstrijd {{ this.settings.match.name }}
         </q-btn>
       </div>
     </div>
@@ -75,6 +75,7 @@
 
     <div class="row q-pl-md q-pr-md q-gutter-sm">
       <div
+          v-show="settings.app_display_teetime_tile == 1"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/reservations')">
         <span class="title"
@@ -82,7 +83,7 @@
       </div>
 
       <div
-          v-if="toNGF || 1==1"
+          v-if="toNGF"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/handicap')"
       >
@@ -99,7 +100,7 @@
         <span class="title"><i class="far fa-list-alt"></i>Wedstrijden</span>
       </div>
       <div
-          v-if="toNGF || 1==1"
+          v-if="toNGF"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/NGF')"
       >
@@ -109,17 +110,15 @@
 
     <div class="row text-h6 q-pl-md q-pr-md q-pt-sm q-gutter-sm">
       <div
-          v-if="toNGF"
+          v-if="settings.app_display_member_search_tile == 1"
           class="col text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-          @click="$router.push('/members')"
-      >
+          @click="$router.push('/members')">
         <span class="title"><i class="far fa-golf-ball"></i>Ledenlijst</span>
       </div>
 
       <div
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-          @click="$router.push('/messages')"
-      >
+          @click="$router.push('/messages')">
         <span class="title">
           <i class="far fa-list-alt"></i>
           Berichten {{ unreadCount > 0 ? '(' + unreadCount + ')' : '' }}
@@ -136,10 +135,9 @@
       </div>
 
       <div
-          v-if="toNGF"
+          v-if="settings.app_display_course_status_tile == 1"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-          @click="$router.push('/course')"
-      >
+          @click="$router.push('/course')">
         <span class="title"><i class="far fa-golf-ball"></i>Baan</span>
       </div>
 
@@ -147,6 +145,7 @@
 
     <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
       <div
+          v-show="settings.app_display_balance == 1"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/pos')">
         <span class="title"><i class="far fa-calendar-star"></i>Horeca</span>
@@ -179,13 +178,6 @@
 
     <!--
     <div class="btn d-flex flex-column justify-center align-items-center p-2 m-2"
-         @click="$router.push('/Course_status_mobile')">
-      <span class="title"><i class="far fa-comment"></i>Baanstatus</span>
-    </div>
-    -->
-
-    <!--
-    <div class="btn d-flex flex-column justify-center align-items-center p-2 m-2"
          @click="$router.push('/order_list_mobile')">
       <span class="title"><i class="far fa-shopping-cart"></i>Facturen</span>
     </div>
@@ -201,16 +193,21 @@ export default {
   components: {},
   data() {
     return {
-      system_logo: '',
-      system_organisation_name: '',
-      match: null,
-      teetime: null,
       toNGF: this.$ls.getItem('currentUser').value.to_ngf,
       messageList: [],
       weather: null,
-      video: {},
-      front: true,
-      blobUrl: ''
+      blobUrl: '',
+      settings: {
+        app_display_member_search_tile: 0,
+        app_display_balance: 0,
+        app_display_event_tile: 0,
+        app_display_course_status_tile: 0,
+        app_display_teetime_tile: 0,
+        match: null,
+        system_logo: '',
+        system_organisation_name: '',
+        teetime: null
+      }
     };
   },
   created() {
@@ -242,19 +239,15 @@ export default {
     },
 
     loadSetting() {
-      const baseURL = process.env.VUE_APP_BASE_URL;
+
       let that = this;
       this.$http.get(`golfer/settings`).then((res) => {
-
-        this.$http.get("golfer/image/" + res.system_logo)
+        this.settings = res;
+        this.$ls.setItem('settings', res, 1000 * 60 * 60 * 24 * 7);
+        this.$http.get("golfer/image/" + this.settings.system_logo)
             .then((res) => {
               that.blobUrl = "data:image/png;base64," + res;
             });
-
-        // this.system_logo = baseURL + 'golfer/image/' + res.system_logo;
-        this.system_organisation_name = res.system_organisation_name;
-        this.match = res.match;
-        this.teetime = res.teetime;
       });
     },
 

@@ -34,7 +34,7 @@
       <div class="col text-bold">Lus</div>
 
       <div class="col overflow-hidden text-right">
-<!--        {{ // match.baan_lus.bnlName }}-->
+        {{ match.baan_lus.name }}
       </div>
     </div>
 
@@ -62,37 +62,35 @@
       </div>
     </div>
 
-    <q-btn-group spread v-if="match.UitslagenGereed != 1 && match.StartlijstGereed == 1">
+    <q-btn-group
+        spread
+        v-if="match.UitslagenGereed != 1 && match.StartlijstGereed != 1 && match.InschrijvenInternet == 1">
+
       <q-btn
           v-if="
           openForSubscription &&
           mySubscription == null &&
-          specialRules.length == 0
-        "
+          specialRules.length == 0"
           color="secondary"
           label="Inschrijven"
-          @click="handleSubscribe"
-      />
+          @click="handleSubscribe"/>
 
       <q-btn
           v-if="
           openForSubscription &&
           mySubscription != null &&
           specialRules.length == 0  &&
-          match.StartlijstGereed != 1
-        "
+          match.StartlijstGereed != 1"
           color="secondary"
           label="Mijn inschrijving"
-          @click="handleSubscribe"
-      />
+          @click="handleSubscribe"/>
 
       <q-btn
           v-if="mySubscription != null"
           :disable="mySubscription.match_score == null || !$dayjs(match.playingDate).isToday()"
           color="secondary"
           label="Score invoeren"
-          @click="handleEnterScore"
-      />
+          @click="handleEnterScore"/>
     </q-btn-group>
 
     <q-btn-group spread>
@@ -106,14 +104,13 @@
 
     <div
         v-if="
+         match.InschrijvenInternet == 1 &&
         match.LidAddGuest == 1 &&
         match.UitslagenGereed != 1 &&
         openForSubscription &&
         specialRules.length == 0 &&
-        match.StartlijstGereed != 1
-      "
-        class="pt-2 pb-1"
-    >
+        match.StartlijstGereed != 1"
+        class="pt-2 pb-1">
       <div class="row q-mt-sm">
         <div class="col text-h6">Gasten meenemen</div>
       </div>
@@ -142,7 +139,8 @@
       </div>
     </div>
 
-    <div v-if="match.UitslagenGereed != 1 && openForSubscription && match.StartlijstGereed != 1" class="pt-2">
+    <div v-if="match.InschrijvenInternet == 1 && match.UitslagenGereed != 1 && openForSubscription && match.StartlijstGereed != 1"
+         class="pt-2">
       <div class="row q-mt-sm">
         <div class="col text-h6">Lid inschrijven</div>
       </div>
@@ -249,7 +247,6 @@ export default {
     },
 
     handleEnterScore: function () {
-      console.log(this.mySubscription);
       this.$emit("handleEnterScore", this.mySubscription);
     },
 

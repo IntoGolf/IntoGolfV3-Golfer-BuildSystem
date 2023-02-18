@@ -67,12 +67,6 @@
             </div>
           </div>
 
-          <div class="row q-col-gutter-md q-mb-sm">
-            <div class="col-4 text-right">Gras lengte</div>
-            <div class="col-8">{{ loop.clsGrassHeight }} mm</div>
-          </div>
-
-
         </q-card-section>
 
       </q-card>

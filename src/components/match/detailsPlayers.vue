@@ -118,7 +118,7 @@
       </div>
     </div>
 
-    <div v-show="myPlayers.length > 0">
+    <div v-show="reservePlayers.length > 0">
       <div class="row">
         <div class="col text-h6">Reservelijst</div>
       </div>
@@ -170,15 +170,24 @@ export default {
   },
   computed: {
     myPlayers: function () {
-      return this.match.players.filter(player => player.relation != null && player.relNrDoor == this.currentUser.relNr);
+      return this.match.players.filter(player =>
+          this.match.InschrijvenInternet == 1 &&
+          player.relation != null &&
+          player.relNrDoor == this.currentUser.relNr);
+//      return this.match.players.filter(player => player.relation != null && player.relNrDoor == this.currentUser.relNr);
     },
     players: function () {
 //      return this.match.players.filter(player => player.relation != null && player.relNrDoor != this.currentUser.relNr && player.Status == 0);
-      return this.match.players.filter(player => player.relation != null && player.relNrDoor != this.currentUser.relNr);
+      return this.match.players.filter(player =>
+          (this.match.InschrijvenInternet == 0 || (player.relation != null && player.relNrDoor != this.currentUser.relNr))
+          && player.Status == 0);
     },
     reservePlayers: function () {
 //      return this.match.players.filter(player => player.relation != null && player.relNrDoor != this.currentUser.relNr && player.Status == 1);
-      return this.match.players.filter(player => player.relation != null && player.relNrDoor != this.currentUser.relNr);
+      return []
+      // this.match.players.filter(player =>
+      //     (this.match.InschrijvenInternet == 0 || (player.relation != null && player.relNrDoor != this.currentUser.relNr))
+      //     && player.Status == 1);
     }
   },
   methods: {

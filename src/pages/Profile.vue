@@ -225,7 +225,7 @@ export default {
         relVisibilityLevel: 0,
       },
       visibilityArray: [
-        {value: 0, label: "Niet zichtbaan"},
+        {value: 0, label: "Niet zichtbaar"},
         {value: 1, label: "Naam en speelsterkte"},
         {value: 2, label: "Naam, speelsterkte en e-mailadres"},
         {

@@ -12,17 +12,22 @@
       v-if="match.allow_select_tee == 1"
       v-model="tee"
       :options="teesArray"
-      hint="Selecteer uw tee"
-      label="Tee"
-      class="q-mb-md"/>
+      option-value="color"
+      option-label="name"
+      label="Tee"/>
+
+    <q-select
+        v-if="match.timePref == 1"
+        v-model="timePref"
+        :options="timeArray"
+        label="Start moment"/>
 
     <div v-for="(pOption, index) in player.details.options"
-         :key="index" class="q-mb-md">
+         :key="index">
       <q-select
         v-model="pOption.mpoValue"
         :options="optionArray"
-        :label="pOption.label"
-      />
+        :label="pOption.label"/>
     </div>
 
     <q-banner
@@ -100,6 +105,7 @@ export default {
           Description: "",
           startingTeeId: 0,
           Bron: 2,
+          timePref: 0
         },
         relation: {
           relName: "demo",
@@ -112,9 +118,15 @@ export default {
         options: [],
       },
       tee: null,
+      timePref: null,
       optionArray: [
-        { value: 0, label: "Nee" },
-        { value: 1, label: "ja" },
+        { value: '0', label: "Nee" },
+        { value: '1', label: "ja" },
+      ],
+      timeArray: [
+        { value: -1, label: "Vroeg" },
+        { value: 0, label: "-" },
+        { value: 1, label: "Laat" },
       ],
       currentUser: Object.assign(this.$ls.getItem("currentUser")),
       id: "",
@@ -130,50 +142,33 @@ export default {
       this.player.details.relNr = this.currentUser.relNr;
       this.player.details.relNrDoor = this.currentUser.relNr;
       this.player.details.options = { ...this.match.options };
+      this.player.details.exactHandicapAtSubscription = this.currentUser.relHandicap;
+      this.player.details.exactHandicapForMatch = this.currentUser.relHandicap;
     }
-    this.tee = this.defaultTee;
+    this.tee = this.teesArray.find(tee => tee.color == this.player.details.startingTeeId);
+    this.timePref = this.timeArray.find(time => time.value == this.player.details.timePref);
+  },
+  watch: {
+    tee: function (newValue) {
+      this.player.details.startingTeeId = newValue.color;
+    },
+    timePref: function (newValue) {
+      this.player.details.timePref = newValue.value;
+    }
   },
   computed: {
     teesArray: function () {
-      let that = this;
-      let array = [];
-      return [];
-
-      this.match.baan_lus.baan_lus_tees.forEach(function (tee) {
-        if (
-          (that.player.relation.relGender == 1 &&
-            tee.baan_lus_tee_soort.Geslacht == "M") ||
-          (that.player.relation.relGender == 2 &&
-            tee.baan_lus_tee_soort.Geslacht == "V")
-        ) {
-          array.push({
-            id: tee.bltCategory,
-            label: tee.baan_lus_tee_soort.Achtergrond,
-          });
-        }
-      });
-      return array;
-    },
-    defaultTee: function () {
-      let that = this;
-      let result = null;
-
-      if (this.player.details.startingTeeId > 0) {
-        that.teesArray.forEach(function (tee) {
-          if (tee.id == that.player.details.startingTeeId) {
-            result = tee;
-          }
-        });
-      }
-
-      if (result == null) {
-        result = this.teesArray[0];
-      }
-
-      return result;
+      return this.match.baan_lus.tees.filter(
+          tee =>
+              (this.player.relation.relGender == 1 && tee.gender == "M") ||
+              (this.player.relation.relGender == 2 && tee.gender == "F")
+      );
     },
     doIHaveGuests: function () {
-      return this.match.players.filter(player => player.relNrDoor == this.currentUser.relNr && player.relNr != this.currentUser.relNr && player.guest).length > 0;
+      return this.match.players.filter(player =>
+          player.relNrDoor == this.currentUser.relNr &&
+          player.relNr != this.currentUser.relNr &&
+          player.guest).length > 0;
     },
   },
   methods: {
@@ -185,10 +180,6 @@ export default {
       let that = this;
 
       this.player.details.relNr = this.currentUser.relNr;
-
-      if (this.tee) {
-        this.player.details.startingTeeId = this.tee.id;
-      }
       this.player.is_desktop = this.$q.platform.is.desktop === true ? 1 : 0;
       this.player.details.Bron = 2;
 

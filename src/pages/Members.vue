@@ -71,12 +71,12 @@
             </div>
           </div>
 
-          <q-separator spaced v-show="focusedItem.relVisibilityLevel == 2" />
+          <q-separator spaced v-show="focusedItem.relVisibilityLevel > 1" />
 
-          <div class="row" v-show="focusedItem.relVisibilityLevel == 2">
+          <div class="row" v-show="focusedItem.relVisibilityLevel > 1">
             <div class="col-12 text-bold">E-mail</div>
           </div>
-          <div class="row" v-show="focusedItem.relVisibilityLevel == 2">
+          <div class="row" v-show="focusedItem.relVisibilityLevel > 1">
             <div class="col-6">
               <a :href="'mailto:' + focusedItem.relEmail">
                 {{ email }}
@@ -84,12 +84,12 @@
             </div>
           </div>
 
-          <q-separator spaced v-show="focusedItem.relVisibilityLevel == 3" />
+          <q-separator spaced v-show="focusedItem.relVisibilityLevel > 2" />
 
-          <div class="row" v-show="focusedItem.relVisibilityLevel == 3">
+          <div class="row" v-show="focusedItem.relVisibilityLevel > 2">
             <div class="col-12 text-bold">Telefoonnummer</div>
           </div>
-          <div class="row" v-show="focusedItem.relVisibilityLevel == 3">
+          <div class="row" v-show="focusedItem.relVisibilityLevel > 2">
             <div class="col-12">
               <a :href="'tel:' + focusedItem.relPhone">
                 {{ focusedItem.relPhone }}
@@ -97,16 +97,18 @@
             </div>
           </div>
 
-          <q-separator spaced v-show="focusedItem.relVisibilityLevel == 3" />
+          <q-separator spaced v-show="focusedItem.relVisibilityLevel > 2" />
 
-          <div class="row" v-show="focusedItem.relVisibilityLevel == 3">
+          <div class="row" v-show="focusedItem.relVisibilityLevel > 2">
             <div class="col-12 text-bold">Telefoonnummer mobiel</div>
           </div>
-          <div class="row" v-show="focusedItem.relVisibilityLevel == 3">
+          <div class="row" v-show="focusedItem.relVisibilityLevel > 2">
             <div class="col-12">
-              <a :href="'tel:' + focusedItem.relPhoneMobile">
+              <a v-if="focusedItem.relPhoneMobile"
+                  :href="'tel:' + focusedItem.relPhoneMobile">
                 {{ focusedItem.relPhoneMobile }}
               </a>
+              <p v-else>-</p>
             </div>
           </div>
 

@@ -12,7 +12,7 @@
         label="Zoek relatie"
         :options="relations"
         option-value="relNr"
-        option-label="test"
+        option-label="full_name"
         :option-disable="(item) => item === null ? true : item.disabled != ''"
         @filter="filterFn"
     >
@@ -41,8 +41,17 @@
         v-if="match.allow_select_tee == 1"
         v-model="tee"
         :options="teesArray"
-        label="Selecteer de gewenste tee"
-    />
+        option-value="color"
+        option-label="name"
+        hint="Selecteer de gewenste tee"
+        label="Tee"
+        class="q-mb-md"/>
+
+    <q-select
+        v-if="match.timePref == 1"
+        v-model="timePref"
+        :options="timeArray"
+        label="Start moment"/>
 
     <div v-for="(pOption, index) in player.details.options"
          :key="index"
@@ -50,8 +59,7 @@
       <q-select
           v-model="pOption.mpoValue"
           :options="optionArray"
-          :label="pOption.label"
-      />
+          :label="pOption.label"/>
     </div>
 
     <q-banner
@@ -120,6 +128,7 @@ export default {
           Description: "",
           startingTeeId: 0,
           Bron: 2,
+          timePref: 0
         },
         relation: {
           relNr: null,
@@ -137,6 +146,12 @@ export default {
         {value: 1, label: "ja"},
       ],
       tee: null,
+      timePref: null,
+      timeArray: [
+        { value: -1, label: "Vroeg" },
+        { value: 0, label: "-" },
+        { value: 1, label: "Laat" },
+      ],
       relation: null,
       relations: [],
       currentUser: Object.assign(this.$ls.getItem("currentUser")),
@@ -153,47 +168,22 @@ export default {
       this.player.details.relNrDoor = this.currentUser.relNr;
       this.player.details.options = {...this.match.options};
     }
-    this.tee = this.defaultTee;
+    this.tee = this.teesArray.find(tee => tee.color == this.player.details.startingTeeId);
+    this.timePref = this.timeArray.find(time => time.value == this.player.details.timePref);
+  },
+  watch: {
+    timePref: function (newValue) {
+      this.player.details.timePref = newValue.value;
+    }
   },
   computed: {
     teesArray: function () {
-      let that = this;
-      let array = [];
-      return [];
-
-      this.match.baan_lus.baan_lus_tees.forEach(function (tee) {
-        if (
-            (that.player.relation.relGender == 1 &&
-                tee.baan_lus_tee_soort.Geslacht == "M") ||
-            (that.player.relation.relGender == 2 &&
-                tee.baan_lus_tee_soort.Geslacht == "V")
-        ) {
-          array.push({
-            id: tee.bltCategory,
-            label: tee.baan_lus_tee_soort.Achtergrond,
-          });
-        }
-      });
-      return array;
-    },
-    defaultTee: function () {
-      let that = this;
-      let result = null;
-
-      if (this.player.details.startingTeeId > 0) {
-        that.teesArray.forEach(function (tee) {
-          if (tee.id == that.player.details.startingTeeId) {
-            result = tee;
-          }
-        });
-      }
-
-      if (result == null) {
-        result = this.teesArray[0];
-      }
-
-      return result;
-    },
+      return this.match.baan_lus.tees.filter(
+          tee =>
+              (this.player.relation.relGender == 1 && tee.gender == "M") ||
+              (this.player.relation.relGender == 2 && tee.gender == "F")
+      );
+    }
   },
   methods: {
     handleCloseSubscribe: function () {

@@ -61,16 +61,25 @@
         style="height: 76px"
         v-model="tee"
         :options="teesArray"
-        label="Selecteer uw tee"
-    />
+        option-value="color"
+        option-label="name"
+        hint="Selecteer de gewenste tee"
+        label="Tee"
+        class="q-mb-md"/>
 
-    <div v-for="(pOption, index) in player.details.options" :key="index">
+    <q-select
+        v-if="match.timePref == 1"
+        v-model="timePref"
+        :options="timeArray"
+        label="Start moment"/>
+
+    <div v-for="(pOption, index) in player.details.options"
+         :key="index">
       <q-select
           style="height: 76px"
           v-model="pOption.mpoValue"
           :options="optionArray"
-          :label="pOption.label"
-      />
+          :label="pOption.label"/>
     </div>
 
     <q-banner
@@ -161,6 +170,7 @@ export default {
           Description: "",
           startingTeeId: 0,
           Bron: 2,
+          timePref: 0
         },
         relation: {
           relNr: 0,
@@ -180,6 +190,12 @@ export default {
         {value: 0, label: "Nee"},
         {value: 1, label: "ja"},
       ],
+      timePref: null,
+      timeArray: [
+        { value: -1, label: "Vroeg" },
+        { value: 0, label: "-" },
+        { value: 1, label: "Laat" },
+      ],
       tee: null,
       currentUser: Object.assign(this.$ls.getItem("currentUser")),
       reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
@@ -197,46 +213,21 @@ export default {
       this.player.details.relNrDoor = this.currentUser.relNr;
       this.player.details.options = {...this.match.options};
     }
-    this.tee = this.defaultTee;
+    this.tee = this.teesArray.find(tee => tee.color == this.player.details.startingTeeId);
+    this.timePref = this.timeArray.find(time => time.value == this.player.details.timePref);
+  },
+  watch: {
+    timePref: function (newValue) {
+      this.player.details.timePref = newValue.value;
+    }
   },
   computed: {
     teesArray: function () {
-      let that = this;
-      let array = [];
-      return [];
-
-      this.match.baan_lus.baan_lus_tees.forEach(function (tee) {
-        if (
-            (that.player.relation.relGender == 1 &&
-                tee.baan_lus_tee_soort.Geslacht == "M") ||
-            (that.player.relation.relGender == 2 &&
-                tee.baan_lus_tee_soort.Geslacht == "V")
-        ) {
-          array.push({
-            id: tee.bltCategory,
-            label: tee.baan_lus_tee_soort.Achtergrond,
-          });
-        }
-      });
-      return array;
-    },
-    defaultTee: function () {
-      let that = this;
-      let result = null;
-
-      if (this.player.details.startingTeeId > 0) {
-        that.teesArray.forEach(function (tee) {
-          if (tee.id == that.player.details.startingTeeId) {
-            result = tee;
-          }
-        });
-      }
-
-      if (result == null) {
-        result = this.teesArray[0];
-      }
-
-      return result;
+      return this.match.baan_lus.tees.filter(
+          tee =>
+              (this.player.relation.relGender == 1 && tee.gender == "M") ||
+              (this.player.relation.relGender == 2 && tee.gender == "F")
+      );
     },
     inValid: function () {
       return (
