@@ -325,7 +325,7 @@ export default {
         this.local_scorecard.holes.push(hole);
       }
       console.log(this.local_scorecard);
-      this.local_scorecard.foreign_course_details.total_par = newValue.totalPar;
+      this.local_scorecard.total_par = newValue.totalPar;
       this.step = 5;
     }
   },
