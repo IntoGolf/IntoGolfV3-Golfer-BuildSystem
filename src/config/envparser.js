@@ -1,5 +1,5 @@
 const DotEnv = require("dotenv");
-let parsedEnvCommon = DotEnv.config({ path: ".env.common" }).parsed;
+let parsedEnvCommon = DotEnv.config({ path: ".env" }).parsed;
 
 argsEnv = {};
 if (process.env.ENVIRONMENT && process.env.ENVIRONMENT != "live") {
