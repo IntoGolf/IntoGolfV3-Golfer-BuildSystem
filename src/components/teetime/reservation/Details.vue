@@ -7,7 +7,7 @@
       Uw starttijd
 
       <q-btn
-          v-show="canCancel && !paid"
+          v-show="canCancel && !paid && isMyBooking"
           v-on:click="handleCancel"
           color="negative"
           class="float-right"
@@ -105,11 +105,12 @@
 
     </q-card-section>
 
-    <q-separator v-if="isMyBooking"/>
+    <q-separator/>
 
     <q-card-section>
 
-      <div v-if="isMyBooking" class="row q-gutter-md">
+      <div
+          class="row q-gutter-md">
         <div v-if="canCancel" class="col">
           <q-btn
               v-on:click="$emit('handleClose')"
@@ -117,11 +118,13 @@
               color="primary"
               icon="arrow_back"/>
           <q-btn
+              v-if="isMyBooking && !paid"
               v-on:click="dialogVisible = true"
               class="q-mr-sm"
               color="primary"
               label="Wijzig 18"/>
           <q-btn
+              v-if="isMyBooking && !paid"
               v-show="!paid"
               v-on:click="onPay"
               class="float-right"
@@ -187,7 +190,7 @@ export default {
       }, 0);
     },
     paid: function () {
-      return this.local_flight.flight_players.filter(player => player.flpBilNr > 0).length > 0;
+      return this.local_flight.flight_players.filter(player => player.flpBilNr > 0 || player.flpScorecard > 0).length > 0;
     }
   },
   methods: {

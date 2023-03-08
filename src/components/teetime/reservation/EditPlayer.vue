@@ -253,8 +253,8 @@ export default {
             );
 
             //save the flight without closing it
-            this.$emit('handleSave', this.local_flight);
-            this.$emit('handleCloseEditPlayer');
+            this.$emit('handleSave', this.local_flight, true);
+            //this.$emit('handleCloseEditPlayer');
           });
     },
     handleSave: function () {

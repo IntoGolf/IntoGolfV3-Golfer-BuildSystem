@@ -75,12 +75,13 @@
 
     </q-card-section>
 
-    <q-separator/>
+    <q-separator
+        v-show="canCancel && !paid"/>
 
     <q-card-section>
 
       <q-btn
-          v-show="!paid"
+          v-show="canCancel && !paid"
           v-on:click="$emit('handleEditPlayer',player)"
           class="q-mr-md"
           color="primary"
@@ -104,20 +105,22 @@ export default {
   },
   computed: {
     canCancel: function () {
-      return true;
       if (this.$dayjs(this.$filters.unixToDate(this.flight.fltDate)).isBefore(this.$dayjs())) {
+        console.log('a');
         return false;
       }
       if (this.$dayjs(this.$filters.unixToDate(this.flight.fltDate)).isAfter(this.$dayjs())) {
+        console.log('b');
         return true;
       }
-      return this.flight.fltTime1 + 20 < this.$filters.timeToMinute(this.$dayjs().format('HH:mm'))
+      console.log('c');
+      return this.flight.fltTime1 + 20 > this.$filters.timeToMinute(this.$dayjs().format('HH:mm'))
     },
     isMyBooking: function () {
       return this.flight.flight_players[0].flpRelNr == this.currentUser.relNr;
     },
     paid: function () {
-      return this.flight.flight_players.filter(player => player.flpBilNr > 0).length > 0;
+      return this.player && (this.player.flpBilNr > 0 || this.player.flpScorecard > 0);
     }
   },
   methods: {

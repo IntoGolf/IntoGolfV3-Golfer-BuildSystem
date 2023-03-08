@@ -1,62 +1,70 @@
 <template>
   <q-page>
+    <div class="row q-mt-md justify-end">
+      <q-btn
+          flat
+          v-on:click="handleCloseMatch"
+          class="q-mr-sm"
+          color="secondary"
+          icon="arrow_back">Wedstrijden</q-btn>
+    </div>
     <div class="row">
       <div class="col q-pa-md">
         <details-list
-          v-if="page == 1"
-          :match="match"
-          :currentUser="currentUser"
-          :mySubscription="mySubscription"
-          v-on:handleSubscribe="handleSubscribe"
-          v-on:handleSubscribeMember="handleSubscribeMember"
-          v-on:handleSubscribeGuest="handleSubscribeGuest"
-          v-on:handleCloseSubscribe="handleCloseSubscribe"
-          v-on:handleEnterScore="handleEnterScore"
+            v-if="page == 1"
+            :match="match"
+            :currentUser="currentUser"
+            :mySubscription="mySubscription"
+            v-on:handleSubscribe="handleSubscribe"
+            v-on:handleSubscribeMember="handleSubscribeMember"
+            v-on:handleSubscribeGuest="handleSubscribeGuest"
+            v-on:handleCloseSubscribe="handleCloseSubscribe"
+            v-on:handleEnterScore="handleEnterScore"
         />
 
         <details-players
-          v-if="page == 1 && match.UitslagenGereed != 1"
-          :match="match"
-          :currentUser="currentUser"
-          v-on:handleSubscribe="handleSubscribe"
-          v-on:handleSubscribeMember="handleSubscribeMember"
-          v-on:handleSubscribeGuest="handleSubscribeGuest"
+            v-if="page == 1 && match.UitslagenGereed != 1"
+            :match="match"
+            :currentUser="currentUser"
+            v-on:handleSubscribe="handleSubscribe"
+            v-on:handleSubscribeMember="handleSubscribeMember"
+            v-on:handleSubscribeGuest="handleSubscribeGuest"
         />
 
         <details-result
-          v-if="page == 1 && match.UitslagenGereed == 1"
-          :match="match"
-          :currentUser="currentUser"
+            v-if="page == 1 && match.UitslagenGereed == 1"
+            :match="match"
+            :currentUser="currentUser"
         />
 
         <subscribe-member-self
-          v-if="page == 2"
-          :match="match"
-          :mySubscription="mySubscription"
-          :currentUser="currentUser"
-          v-on:handleCloseSubscribe="handleCloseSubscribe"
+            v-if="page == 2"
+            :match="match"
+            :mySubscription="mySubscription"
+            :currentUser="currentUser"
+            v-on:handleCloseSubscribe="handleCloseSubscribe"
         />
 
         <subscribe-member
-          v-if="page == 4"
-          :match="match"
-          :aSubscription="aSubscription"
-          :currentUser="currentUser"
-          v-on:handleCloseSubscribe="handleCloseSubscribe"
+            v-if="page == 4"
+            :match="match"
+            :aSubscription="aSubscription"
+            :currentUser="currentUser"
+            v-on:handleCloseSubscribe="handleCloseSubscribe"
         />
 
         <subscribe-guest
-          v-if="page == 3"
-          :match="match"
-          :aSubscription="aSubscription"
-          :currentUser="currentUser"
-          v-on:handleCloseSubscribe="handleCloseSubscribe"
+            v-if="page == 3"
+            :match="match"
+            :aSubscription="aSubscription"
+            :currentUser="currentUser"
+            v-on:handleCloseSubscribe="handleCloseSubscribe"
         />
 
         <score
-          v-if="page == 5"
-          v-bind:player="player"
-          v-on:handleClose="handleClose"
+            v-if="page == 5"
+            v-bind:player="player"
+            v-on:handleClose="handleClose"
         />
       </div>
     </div>
@@ -82,7 +90,11 @@ export default {
     detailsResult,
     score,
   },
-  props: ["prop_match", "prop_page", "currentUser"],
+  props: {
+    prop_match:Object,
+    prop_page:Number,
+    currentUser:Object
+  },
   data() {
     return {
       list: [],
@@ -108,7 +120,7 @@ export default {
     let that = this;
     if (this.prop_page == 5) {
       this.match.players.forEach(function (player) {
-        if (player.relNr == that.$ls.getItem("currentUser").relNr) {
+        if (player.relNr == that.currentUser.relNr) {
           return that.handleEnterScore(player);
         }
       });
@@ -146,6 +158,9 @@ export default {
     handleClose: function () {
       this.page = 1;
     },
+    handleCloseMatch: function () {
+      this.$emit('handleCloseMatch');
+    }
   },
 };
 </script>

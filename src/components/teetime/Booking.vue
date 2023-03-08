@@ -291,7 +291,7 @@ export default {
       for (let i = 0; i < this.form.fltSize; i++) {
         flight_players.push({
           flpNr: null,
-          flpSide: i + 1,
+          flpSide: i,
           flpRelNr: null,
           flpName: "",
           flpEmail: "",

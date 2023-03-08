@@ -54,6 +54,14 @@
       </div>
     </div>
 
+    <div v-if="match.additionalSubscriptionInfo != null" class="row q-pb-sm">
+      <div class="col text-bold">Extra informatie</div>
+
+      <div class="col overflow-hidden text-right">
+        {{ match.additionalSubscriptionInfo }}
+      </div>
+    </div>
+
     <div v-if="specialRules.length > 0" class="row q-pb-sm">
       <div class="col">
         <q-banner inline-actions rounded class="bg-orange text-white">

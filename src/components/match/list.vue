@@ -47,9 +47,11 @@
                   {{ getMatchDate(match) + " " + getMatchTime(match) }}
                 </div>
                 <div style="float: right">
-                  <div v-show="!getUserOnMatch(match) && getOpenForMe(match)" style="float: right">Inschrijven</div>
-                  <div v-show="!getOpenForMe(match) && getOpenForSubscription(match)" style="float: right">Open voor anderen</div>
-                  <div v-show="getUserOnMatch(match)" style="float: right">Ingeschreven</div>
+                  <div v-if="match.StartlijstGereed == 1" style="float: right">Startlijst gereed</div>
+                  <div v-else-if="match.UitslagenGereed == 1" style="float: right">Uitslagen beschikbaar</div>
+                  <div v-else-if="!getUserOnMatch(match) && getOpenForMe(match)" style="float: right">Inschrijven</div>
+                  <div v-else-if="!getOpenForMe(match) && getOpenForSubscription(match)" style="float: right">Open voor anderen</div>
+                  <div v-else-if="getUserOnMatch(match)" style="float: right">Ingeschreven</div>
                 </div>
               </q-item-label>
             </q-item-section>

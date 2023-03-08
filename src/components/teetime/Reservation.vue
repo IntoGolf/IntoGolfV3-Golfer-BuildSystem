@@ -54,14 +54,21 @@ export default {
       local_flight: {...this.flight}
     };
   },
+  mounted() {
+    console.log('ok');
+    console.log(this.firstNr);
+  },
   computed: {
     playerArray: function () {
       return this.local_flight.flight_players.filter(
-          (item) => item.flpSide != 1 && item.flpCarNr == null && (this.isMyBooking || item.flpName != null)
+          (item) => item.flpSide != this.firstNr && item.flpCarNr == null && (this.isMyBooking || item.flpName != null)
       );
     },
     isMyBooking: function () {
       return this.local_flight.flight_players[0].flpRelNr == this.currentUser.relNr;
+    },
+    firstNr: function () {
+      return this.local_flight.flight_players[0].flpSide;
     }
   },
   methods: {
@@ -83,20 +90,7 @@ export default {
               });
 
         } else {
-
           this.local_flight = res.flight;
-
-          // that.$q
-          //     .dialog({
-          //       title: "Bevestiging",
-          //       message:
-          //           "Uw wijzigingen zijn opgeslagen, wilt u de flight sluiten?",
-          //       cancel: true,
-          //       persistent: true,
-          //     })
-          //     .onOk(() => {
-          //       this.$emit("handleClose");
-          //     });
         }
 
         if (index > -1) {

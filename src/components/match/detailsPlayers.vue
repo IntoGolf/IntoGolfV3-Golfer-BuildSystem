@@ -193,7 +193,19 @@ export default {
   methods: {
     handleSubscribeGuest: function (player) {
 
+      if (this.match.InschrijvenInternet == 0) {
+        return;
+      }
+
       if (this.match.StartlijstGereed == 1) {
+        return;
+      }
+
+      if (this.match.UitslagenGereed == 1) {
+        return;
+      }
+
+      if (this.$dayjs(this.match.subscriptionDeadline).isBefore(this.$dayjs())) {
         return;
       }
 

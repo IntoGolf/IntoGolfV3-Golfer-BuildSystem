@@ -83,7 +83,7 @@
       </div>
 
       <div
-          v-if="toNGF"
+          v-if="settings.app_display_handicap_tile == 1 && toNGF"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/handicap')"
       >
@@ -94,13 +94,14 @@
 
     <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
       <div
+          v-if="settings.app_display_event_tile == 1"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/match')"
       >
         <span class="title"><i class="far fa-list-alt"></i>Wedstrijden</span>
       </div>
       <div
-          v-if="toNGF"
+          v-if="settings.app_display_handicap_tile == 1 && toNGF"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/NGF')"
       >
@@ -117,6 +118,7 @@
       </div>
 
       <div
+          v-if="settings.app_display_message_tile == 1"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/messages')">
         <span class="title">
@@ -128,6 +130,7 @@
 
     <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
       <div
+          v-if="settings.app_display_profile_tile == 1"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/profile')"
       >
@@ -152,6 +155,7 @@
       </div>
 
       <div
+          v-if="settings.app_display_shop_tile == 1"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/shop')">
         <span class="title"><i class="far fa-golf-ball"></i>Shop</span>

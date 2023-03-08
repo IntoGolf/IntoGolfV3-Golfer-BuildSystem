@@ -29,6 +29,7 @@ export default {
   },
   data() {
     return {
+      page: 1,
       match: null,
       currentUser: Object.assign(this.$ls.getItem("currentUser")),
     };
@@ -38,7 +39,7 @@ export default {
       let that = this;
       this.$http.get(`golfer/event/` + this.$route.query.id)
         .then((res) => {
-          that.match = res.data;
+          that.match = res;
           that.page = 5;
         });
     }
