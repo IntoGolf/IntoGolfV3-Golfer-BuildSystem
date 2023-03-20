@@ -6,7 +6,7 @@
         v-if="list.length == 0">
 
       <q-card-section
-          class="text-center text-h6">
+          class="text-center text-h6 mt-2">
         {{ no_messages }}
       </q-card-section>
 

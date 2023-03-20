@@ -47,7 +47,7 @@
         <div class="text-center">
           <q-btn label="Inloggen" v-on:click="onlogin" color="primary"/>
           <q-btn label="Wachtwoord vergeten" v-on:click="onResetPassword" color="primary" flat class="q-mt-md"/>
-          <q-btn label="Inschrijven" v-on:click="onSignup" color="primary" flat/>
+          <q-btn v-if="canSignIn" label="Inschrijven" v-on:click="onSignup" color="primary" flat/>
         </div>
 
       </q-card-section>
@@ -69,7 +69,19 @@ export default {
         repPassword: "",
       },
       isPwd: true,
+      settings: []
     };
+  },
+  mounted() {
+    let that = this;
+    this.$http.get(`golfer/psettings`).then((res) => {
+      that.settings = res;
+    });
+  },
+  computed: {
+    canSignIn: function() {
+      return parseInt(this.settings.website_display_register_button) === 1;
+    }
   },
   methods: {
     onResetPassword: function () {

@@ -24,30 +24,35 @@
           <q-tab-panel class="p-0" name="Name">
             <q-input
                 v-model="form.relFirstName"
+                :disable="!canChange"
                 :label="$t('Initialen')"
                 lazy-rules
             />
 
             <q-input
                 v-model="form.relCallName"
+                :disable="!canChange"
                 :label="$t('Voornaam')"
                 lazy-rules
             />
 
             <q-input
                 v-model="form.relPrefix"
+                :disable="!canChange"
                 :label="$t('Tussenvoegsel')"
                 lazy-rules
             />
 
             <q-input
                 v-model="form.relName"
+                :disable="!canChange"
                 :label="$t('Achternaam')"
                 lazy-rules
             />
 
             <q-input
                 v-model="form.relAddress1"
+                :disable="!canChange"
                 :label="$t('Straat')"
                 lazy-rules
             />
@@ -55,12 +60,14 @@
             <div class="row q-col-gutter-md">
               <q-input
                   v-model="form.relAddressStreetNumber"
+                  :disable="!canChange"
                   :label="$t('Huisnummer')"
                   lazy-rules
               />
 
               <q-input
                   v-model="form.relAddressStreetAddition"
+                  :disable="!canChange"
                   :label="$t('Toevoeging')"
                   lazy-rules
               />
@@ -68,12 +75,14 @@
 
             <q-input
                 v-model="form.relPostalCode"
+                :disable="!canChange"
                 :label="$t('Postcode')"
                 lazy-rules
             />
 
             <q-input
                 v-model="form.relCity"
+                :disable="!canChange"
                 :label="$t('Woonplaats')"
                 lazy-rules
             />
@@ -82,18 +91,21 @@
           <q-tab-panel class="p-0" name="Contact">
             <q-input
                 v-model="form.relPhone"
+                :disable="!canChange"
                 :label="$t('Phone number')"
                 lazy-rules
             />
 
             <q-input
                 v-model="form.relPhoneMobile"
+                :disable="!canChange"
                 :label="$t('Mobiel telefoonnummer')"
                 lazy-rules
             />
 
             <q-input
                 v-model="form.relEmail"
+                :disable="!canChange"
                 :label="$t('Emailadres')"
                 lazy-rules
             />
@@ -128,6 +140,7 @@
 
             <q-toggle
                 v-model="relMagazineGolfNL"
+                :disable="!canChange"
                 label="Golfers magazine ontvangen"
             />
 
@@ -136,12 +149,14 @@
             <q-toggle
                 v-model="relEmailnewsletterNGF"
                 label="E-mail nieuwsbrief NGF ontvangen"
+                :disable="!canChange"
             />
 
             <br/>
 
             <q-toggle
                 v-model="relInvoiceByEmail"
+                :disable="!canChange"
                 label="Factuur per e-mail ontvangen"
             />
           </q-tab-panel>
@@ -186,7 +201,7 @@ export default {
       title: "Profiel",
       callBack: undefined,
 
-      currentUser: {},
+      currentUser: this.$ls.getItem("currentUser").value,
       flagList: [
         {
           img: "../assets/images/nl.png",
@@ -239,6 +254,9 @@ export default {
     };
   },
   computed: {
+    canChange: function() {
+      return parseInt(this.$ls.getItem('settings').value.app_allow_member_change_contact) === 1;
+    },
     relMagazineGolfNL: {
       get: function () {
         return (
@@ -251,6 +269,7 @@ export default {
     },
     relInvoiceByEmail: {
       get: function () {
+        console.log(this.form);
         return (
             this.form.relInvoiceByEmail != null && this.form.relInvoiceByEmail > 0
         );
@@ -294,6 +313,7 @@ export default {
           });
     },
     saveProfile() {
+      this.form.relNr = this.currentUser.relNr;
       this.$ls.setItem('currentUser', this.form, 1000 * 60 * 60 * 24 * 7);
       const payload = Object.assign(this.form, {
         relNr: this.currentUser.relNr,
@@ -302,6 +322,10 @@ export default {
     },
     logout() {
       this.$ls.removeItem("currentUser");
+      this.$ls.removeItem("authorization");
+      this.$ls.removeItem("weather");
+      this.$ls.removeItem("settings");
+      this.$ls.removeItem("currentUserPref");
       this.$router.push("/login");
     },
     onLogout() {
