@@ -105,15 +105,13 @@ export default {
   },
   computed: {
     canCancel: function () {
-      if (this.$dayjs(this.$filters.unixToDate(this.flight.fltDate)).isBefore(this.$dayjs())) {
-        console.log('a');
+
+      if (this.$dayjs(this.$filters.unixToDate(this.flight.fltDate),'DD-MM-YYYY').isBefore(this.$dayjs())) {
         return false;
       }
-      if (this.$dayjs(this.$filters.unixToDate(this.flight.fltDate)).isAfter(this.$dayjs())) {
-        console.log('b');
+      if (this.$dayjs(this.$filters.unixToDate(this.flight.fltDate),'DD-MM-YYYY').isAfter(this.$dayjs())) {
         return true;
       }
-      console.log('c');
       return this.flight.fltTime1 + 20 > this.$filters.timeToMinute(this.$dayjs().format('HH:mm'))
     },
     isMyBooking: function () {

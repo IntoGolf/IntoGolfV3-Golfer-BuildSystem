@@ -121,7 +121,7 @@ export default {
   data: function () {
     return {
       form: {
-        email: "laurens@intogolf.nl",
+        email: "",
         verifyCode: "",
       },
       verifyCodeDialogVisible: false,

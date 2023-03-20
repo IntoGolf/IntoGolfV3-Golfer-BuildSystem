@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <div class="row q-mb-md" style="height: 135px">
+    <div class="row q-mb-md" >
 
       <div
           class="col"
@@ -30,7 +30,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col text-center">
+          <div class="col text-center q-pa-sm">
             {{ hour.condition.text }}
           </div>
         </div>
