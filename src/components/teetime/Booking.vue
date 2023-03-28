@@ -119,8 +119,8 @@
 
           <div class="col  q-pa-sm" :class="time.sttRefNr>0?'bg-blue-3':'bg-green-3'">
 
-            {{ $filters.minuteToTime(time.sttTimeFrom) }} <br>
-            <i v-show="time.sttRefNr>0">merged</i>
+            {{ $filters.minuteToTime(time.sttTimeFrom) }}
+            <q-icon v-show="time.sttRefNr>0" name="group" class="q-ml-sm q-mb-xs q-mr-xs" size="18px"/>{{time.sttMPlayers}}
 
           </div>
 

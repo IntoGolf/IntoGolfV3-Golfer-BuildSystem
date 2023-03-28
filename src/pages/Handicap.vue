@@ -119,7 +119,6 @@ export default {
     };
   },
   created: function () {
-    console.log('go');
     this.handleLoadScorecard();
     this.handleLoadCourses();
     this.handleLoadCountries();

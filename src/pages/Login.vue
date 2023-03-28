@@ -67,6 +67,7 @@ export default {
       form: {
         relEmail: "",
         repPassword: "",
+        repKey: ""
       },
       isPwd: true,
       settings: []
@@ -77,6 +78,11 @@ export default {
     this.$http.get(`golfer/psettings`).then((res) => {
       that.settings = res;
     });
+
+    if (this.$route.query.key) {
+      this.form.repKey = this.$route.query.key;
+      this.onlogin();
+    }
   },
   computed: {
     canSignIn: function() {
