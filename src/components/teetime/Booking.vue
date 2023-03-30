@@ -120,7 +120,7 @@
           <div class="col  q-pa-sm" :class="time.sttRefNr>0?'bg-blue-3':'bg-green-3'">
 
             {{ $filters.minuteToTime(time.sttTimeFrom) }}
-            <q-icon v-show="time.sttRefNr>0" name="group" class="q-ml-sm q-mb-xs q-mr-xs" size="18px"/>{{time.sttMPlayers}}
+            <q-icon v-show="time.sttRefNr>0" name="group" class="q-ml-sm q-mb-xs q-mr-xs" size="18px">{{time.sttMPlayers}}</q-icon>
 
           </div>
 
@@ -288,7 +288,7 @@ export default {
     handleReservation: function () {
       let flight_players = [];
 
-      for (let i = 0; i < this.form.fltSize; i++) {
+      for (let i = 1; i <= this.form.fltSize; i++) {
         flight_players.push({
           flpNr: null,
           flpSide: i,
