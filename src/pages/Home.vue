@@ -39,24 +39,24 @@
       </div>
     </div>
 
-    <div v-if="this.settings.teetime != null" class="row q-mb-md">
+    <div v-if="hasCourse && settings.teetime != null" class="row q-mb-md">
       <div class="col text-center">
         <q-btn
             outline
             color="secondary"
-            v-on:click="$router.push('/checkin?id=' + this.settings.teetime.flpNr)">
-          Aanmelden starttijd {{ $filters.minuteToTime(this.settings.teetime.fltTime1) }}
+            v-on:click="$router.push('/checkin?id=' + settings.teetime.flpNr)">
+          Aanmelden starttijd {{ $filters.minuteToTime(settings.teetime.fltTime1) }}
         </q-btn>
       </div>
     </div>
 
-    <div v-if="this.settings.match != null" class="row q-mb-md">
+    <div v-if="hasMatch && settings.match != null" class="row q-mb-md">
       <div class="col text-center">
         <q-btn
             outline
             color="secondary"
-            v-on:click="$router.push('/match?id=' + this.settings.match.matchId)">
-          Wedstrijd {{ this.settings.match.name }}
+            v-on:click="$router.push('/match?id=' + settings.match.matchId)">
+          Wedstrijd {{ settings.match.name }}
         </q-btn>
       </div>
     </div>
@@ -75,7 +75,7 @@
 
     <div class="row q-pl-md q-pr-md q-gutter-sm">
       <div
-          v-show="settings.app_display_teetime_tile == 1"
+          v-show="hasCourse && settings.app_display_teetime_tile == 1"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/reservations')">
         <span class="title"
@@ -94,7 +94,7 @@
 
     <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
       <div
-          v-if="settings.app_display_event_tile == 1"
+          v-if="hasMatch && settings.app_display_event_tile == 1"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/match')"
       >
@@ -138,7 +138,7 @@
       </div>
 
       <div
-          v-if="settings.app_display_course_status_tile == 1"
+          v-if="hasCourse && settings.app_display_course_status_tile == 1"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/course')">
         <span class="title"><i class="far fa-golf-ball"></i>Baan</span>
@@ -146,16 +146,16 @@
 
     </div>
 
-    <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
+    <div v-show="hasExpirimental" class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
       <div
-          v-show="settings.app_display_balance == 1"
+          v-show="hasExpirimental && settings.app_display_balance == 1"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/pos')">
         <span class="title"><i class="far fa-calendar-star"></i>Horeca</span>
       </div>
 
       <div
-          v-if="settings.app_display_shop_tile == 1"
+          v-if="hasExpirimental && settings.app_display_shop_tile == 1"
           class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
           @click="$router.push('/shop')">
         <span class="title"><i class="far fa-golf-ball"></i>Shop</span>
@@ -220,6 +220,15 @@ export default {
     this.loadWeather();
   },
   computed: {
+    hasMatch: function() {
+      return this.settings.system_license.includes('M');
+    },
+    hasCourse: function() {
+      return this.settings.system_license.includes('C');
+    },
+    hasExpirimental: function() {
+      return this.settings.system_license.includes('X');
+    },
     cardInMemory: function () {
       return this.$ls.getItem('scorecard').value != null;
     },

@@ -12,6 +12,9 @@ dayjs.locale("NL");
 let isBetween = require('dayjs/plugin/isBetween');
 dayjs.extend(isBetween);
 
+let isSameOrBefore = require('dayjs/plugin/isSameOrBefore')
+dayjs.extend(isSameOrBefore)
+
 let isToday = require('dayjs/plugin/isToday')
 dayjs.extend(isToday)
 

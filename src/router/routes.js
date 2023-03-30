@@ -15,6 +15,12 @@ const routes = [
     meta: { requiresAuth: false },
   },
   {
+    path: "/teetimes",
+    name: "teetimes",
+    component: () => import("../pages/Teetimes.vue"),
+    meta: { requiresAuth: false },
+  },
+  {
     path: "/match",
     name: "Match",
     component: () => import("layouts/PageLayout.vue"),

@@ -111,20 +111,20 @@
 
       <div
           class="row q-gutter-md">
-        <div v-if="canCancel" class="col">
+        <div class="col">
           <q-btn
               v-on:click="$emit('handleClose')"
               class="q-mr-sm"
               color="primary"
               icon="arrow_back"/>
           <q-btn
-              v-if="isMyBooking && !paid"
+              v-if="showSecondNine && canCancel && isMyBooking && !paid"
               v-on:click="dialogVisible = true"
               class="q-mr-sm"
               color="primary"
               label="Wijzig 18"/>
           <q-btn
-              v-if="isMyBooking && !paid"
+              v-if="showPay && canCancel && isMyBooking && !paid"
               v-show="!paid"
               v-on:click="onPay"
               class="float-right"
@@ -154,23 +154,27 @@ export default {
   props: {
     flight: Object,
   },
+  mounted() {
+    console.log(this.flight);
+  },
   data: function () {
     return {
       local_flight: this.flight,
       dialogVisible: false,
       currentUser: this.$ls.getItem("currentUser").value,
+      showPay: this.$ls.getItem('settings').value.app_display_greenfee_pay,
+      showSecondNine: this.$ls.getItem('settings').value.app_display_second_nine_select,
     }
   },
   computed: {
     canCancel: function () {
-      return true;
-      if (this.$dayjs(this.$filters.unixToDate(this.local_flight.fltDate)).isBefore(this.$dayjs())) {
+      if (this.$dayjs(this.$filters.unixToDate(this.local_flight.fltDate,'YYYY-MM-DD')).isSameOrBefore(this.$dayjs())) {
         return false;
       }
-      if (this.$dayjs(this.$filters.unixToDate(this.local_flight.fltDate)).isAfter(this.$dayjs())) {
+      if (this.$dayjs(this.$filters.unixToDate(this.local_flight.fltDate,'YYYY-MM-DD')).isAfter(this.$dayjs())) {
         return true;
       }
-      return this.local_flight.fltTime1 + 20 < this.$filters.timeToMinute(this.$dayjs().format('HH:mm'))
+      return this.local_flight.fltTime1 + 20 > this.$filters.timeToMinute(this.$dayjs().format('HH:mm'))
     },
     slot: function () {
       return this.$dayjs(this.$filters.unixToDate(this.local_flight.fltDate) + ' ' + this.$filters.minuteToTime(this.local_flight.fltTime1), 'DD-MM-YYYY H:mm').format('dddd D MMM HH:mm')

@@ -74,7 +74,7 @@
       </div>
 
       <q-toggle
-          v-show="player.flpRelNr == 0"
+          v-show="player.flpRelNr === 0 || player.flpRelNr === null"
           v-model="flpIntro"
           :disable="disableIntoToggle"
           :true-value="1"
@@ -196,6 +196,9 @@ export default {
     disableIntoToggle: function() {
       return this.flpGsn == null || this.flpGsn.length < 10 || this.flight.IntroMax <= this.flight.IntroCount || this.IntroMax <= this.Intros;
     }
+  },
+  mounted() {
+    console.log(this.player);
   },
   watch: {
     flpHandicap: function (newValue) {
