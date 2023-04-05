@@ -96,15 +96,20 @@ export default {
     onSignup: function () {
       this.$router.push("sign-up");
     },
-    onlogin: function () {
+    async onlogin() {
       this.$q.loading.show();
-      this.$http.post("golfer/login", this.form)
+
+        await this.$recaptchaLoaded();
+
+        const token = await this.$recaptcha('login');
+
+        this.form.captcha = token
+
+        this.$http.post("golfer/login", this.form)
           .then((res) => {
             if (res) {
               this.$ls.setItem('authorization', res.relation_password.apiToken, 1000 * 60 * 60 * 24 * 7);
               this.$ls.setItem('currentUser', res, 1000 * 60 * 60 * 24 * 7);
-
-              console.log(this.$ls.getItem('authorization').value)
 
               if (this.$ls.getItem('currentUserPref').value == null) {
 

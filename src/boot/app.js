@@ -1,7 +1,10 @@
 import { boot } from "quasar/wrappers";
 import { createWatcher } from "next-vue-storage-watcher";
+import {VueReCaptcha} from 'vue-recaptcha-v3'
 
 import dayjs from "dayjs";
+
+const captcha = '6Ld9tF4lAAAAAOsTO9S3a80WqVXnin1I_ajPSMn8';
 
 let customParseFormat = require('dayjs/plugin/customParseFormat')
 dayjs.extend(customParseFormat)
@@ -27,6 +30,7 @@ export const lsWatcher = createWatcher({
 export default boot(({ app }) => {
   app.use(lsWatcher);
   app.use(dayjs);
+  app.use(VueReCaptcha, { siteKey: captcha });
   app.config.globalProperties.$ls = lsWatcher;
   app.config.globalProperties.$dayjs = dayjs;
 });
