@@ -161,9 +161,10 @@ export default {
   created() {
     let that = this;
 
-    if (this.scorecard.ngf_card_id.length == 0) {
+    if (this.scorecard.ngf_card_id.length > 0) {
       this.scorecard.holes.forEach(function (hole) {
         if (hole.strokes == 0) {
+            console.log('ok');
           hole.strokes = that.plHcpHole(hole);
           that.onScoreChangeHandler(hole, 0);
         }
