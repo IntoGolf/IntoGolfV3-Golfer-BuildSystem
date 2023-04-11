@@ -230,7 +230,7 @@ export default {
         fltCrlNr2: "",
         fltSize: this.$ls.getItem('settings').value.planner_default_reservation_count,
         players: [],
-        holes: 9,
+        holes: this.$ls.getItem('settings').value.planner_default_holes,
         size: 3
       },
       date: this.$dayjs().format("YYYY-MM-DD"),

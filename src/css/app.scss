@@ -87,3 +87,13 @@ body {
 .q-table th, .q-table td {
   font-size: 14px;
 }
+
+.bg-primary {
+  background-color: $primary;
+  color: $primary_font;
+}
+
+.bg-secondary {
+  background-color: $secondary;
+  color: $secondary_font;
+}

@@ -10,7 +10,8 @@
           :key="index">
 
         <q-card-section class="text-h6">
-          {{ loop.course_loop.crlName }}
+            <div class="text-h6">{{ loop.course_loop.crlName }}</div>
+            <div class="text-subtitle2 text-italic">laatst bijgewerkt {{ $dayjs(loop.clsLastUpdated).format('ddd DD MMM HH:mm ') }}</div>
         </q-card-section>
 
         <q-separator/>
@@ -66,6 +67,13 @@
                   :name="loop.clsWinterTeesYN == 1 ? 'done' : 'close'"/>
             </div>
           </div>
+
+            <div class="row q-col-gutter-md q-mb-sm">
+                <div class="col-4 text-right">Opmerking</div>
+                <div class="col-8">
+                    {{ loop.clsNote }}
+                </div>
+            </div>
 
         </q-card-section>
 

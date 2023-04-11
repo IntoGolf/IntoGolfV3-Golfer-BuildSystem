@@ -234,6 +234,8 @@
 
 //import Reservation from "../components/teetime/Reservation";
 
+import {setCssVar} from "quasar";
+
 export default {
     components: {},
     data() {
@@ -281,7 +283,14 @@ export default {
         };
     },
     mounted() {
-        this.date = this.$dayjs().format('YYYY-MM-DD');
+        this.date = this.$dayjs().format('YYYY/MM/DD');
+
+        this.$http.get(`golfer/psettings`).then((settings) => {
+            setCssVar('primary', settings.app_primary_color);
+            setCssVar('primary_font', settings.app_primary_font_color);
+            setCssVar('secondary', settings.app_secondary_color);
+            setCssVar('secondary_font', settings.app_secondary_font_color);
+        });
     },
     watch: {
         date: function () {

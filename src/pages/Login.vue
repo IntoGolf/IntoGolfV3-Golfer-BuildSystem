@@ -4,7 +4,8 @@
 
         <div class="row cordova-hide fixed-bottom">
             <q-btn v-if="canSignIn" label="Inschrijven" v-on:click="$router.push('sign-up')" color="secondary" flat/>
-            <q-btn v-if="canSignIn" label="Starttijd boeken" v-on:click="$router.push('teetimes')" color="primary" flat/>
+            <q-btn v-if="canBookPublic" label="Starttijd boeken" v-on:click="$router.push('teetimes')" color="primary"
+                   flat/>
         </div>
 
         <q-card class="my-card q-ml-auto q-mr-auto q-mt-xl">
@@ -65,6 +66,8 @@
 
 <script>
 
+import {setCssVar} from "quasar";
+
 export default {
     name: "Login",
     data: function () {
@@ -80,8 +83,12 @@ export default {
     },
     mounted() {
         let that = this;
-        this.$http.get(`golfer/psettings`).then((res) => {
-            that.settings = res;
+        this.$http.get(`golfer/psettings`).then((settings) => {
+            that.settings = settings;
+            setCssVar('primary', settings.app_primary_color);
+            setCssVar('primary_font', settings.app_primary_font_color);
+            setCssVar('secondary', settings.app_secondary_color);
+            setCssVar('secondary_font', settings.app_secondary_font_color);
         });
 
         if (this.$route.query.key) {
@@ -92,7 +99,11 @@ export default {
     computed: {
         canSignIn: function () {
             return parseInt(this.settings.website_display_register_button) === 1;
+        },
+        canBookPublic: function () {
+            return parseInt(this.settings.website_display_teetime_public) === 1;
         }
+
     },
     methods: {
         onResetPassword: function () {
@@ -126,8 +137,20 @@ export default {
                             this.$ls.setItem('currentUserPref', currentUserPref, 1000 * 60 * 60 * 24 * 7);
                         }
 
-                        this.$q.loading.hide();
-                        this.$router.push("/");
+                        let that = this;
+                        this.$http.get(`golfer/settings`).then((settings) => {
+                            that.$ls.setItem('settings', settings, 1000 * 60 * 60 * 24 * 7);
+                            console.log(settings);
+                            setCssVar('primary', settings.app_primary_color);
+                            setCssVar('primary_font', settings.app_primary_font_color);
+                            setCssVar('secondary', settings.app_secondary_color);
+                            setCssVar('secondary_font', settings.app_secondary_font_color);
+
+                            this.$q.loading.hide();
+                            this.$router.push("/");
+
+                        });
+
                     }
                 })
                 .catch((e) => {
