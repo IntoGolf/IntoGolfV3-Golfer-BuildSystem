@@ -140,7 +140,7 @@ export default {
                         let that = this;
                         this.$http.get(`golfer/settings`).then((settings) => {
                             that.$ls.setItem('settings', settings, 1000 * 60 * 60 * 24 * 7);
-                            console.log(settings);
+
                             setCssVar('primary', settings.app_primary_color);
                             setCssVar('primary_font', settings.app_primary_font_color);
                             setCssVar('secondary', settings.app_secondary_color);

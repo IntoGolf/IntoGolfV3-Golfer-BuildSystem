@@ -257,7 +257,11 @@ export default {
         loadSetting() {
 
             this.settings = this.$ls.getItem('settings').value;
-            console.log(this.settings);
+
+            this.$http.get(`golfer/settings`).then((settings) => {
+                this.$ls.setItem('settings', settings, 1000 * 60 * 60 * 24 * 7);
+                this.settings = settings;
+            });
 
             this.$http.get("golfer/image/" + this.settings.system_logo)
                 .then((res) => {

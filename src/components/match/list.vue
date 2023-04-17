@@ -39,7 +39,7 @@
               <q-item-label class="overflow-hidden">
                 <i class="far fa-trophy-alt mr-2"/>
 
-                {{ match.name }}
+                {{ $filters.capitalizeFirstLetter(match.name)  + ' '+ match.match_type.name  + ' '+ match.match_scoring_type.name }}
               </q-item-label>
 
               <q-item-label caption>

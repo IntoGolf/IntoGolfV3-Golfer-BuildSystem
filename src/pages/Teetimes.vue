@@ -11,12 +11,13 @@
             <div class="col-6">
 
                 <div class="row text-center">
-                    <h5 class="q-ml-auto q-mr-auto">Boek een starttijd</h5>
+                    <div class="text-h5 q-ml-auto q-mr-auto q-mb-md">Boek een starttijd</div>
+                    <div class="text-subtitle1 text-center q-mb-md">Kies de datum waarop je wilt spelen en het aantal personen waarmee je speelt. Vervolgens worden de beschikbare tijden getoond. Kies een geschikte tijd en vul vervolgens je gegevens in om de starttijd te reserveren.</div>
                 </div>
 
                 <div class="row q-gutter-sm">
 
-                    <div class="col-7">
+                    <div class="col-7" v-if="hasTimes">
 
                         <div
                                 class="row q-gutter-xs">
@@ -38,6 +39,7 @@
                                 <div
                                         v-for="(time, tKey) of course.times"
                                         :key="tKey"
+                                        v-show="holes === 9 || (holes === 18 && time.sttCrlNrNext > 0)"
                                         v-on:click="timeObject = time"
                                         class="row text-center q-pt-xs">
                                     <div
@@ -50,30 +52,24 @@
 
                     </div>
 
-                    <div class="col-4">
-                        <q-input class="q-mb-sm" v-model="date" mask="date">
-                            <template v-slot:append>
-                                <q-icon name="event" class="cursor-pointer">
-                                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                                        <q-date v-model="date">
-                                            <div class="row items-center justify-end">
-                                                <q-btn v-close-popup label="Close" color="primary" flat/>
-                                            </div>
-                                        </q-date>
-                                    </q-popup-proxy>
-                                </q-icon>
-                            </template>
-                        </q-input>
-                        <q-select
-                                class="q-mb-sm"
+                    <div class="col-7" v-else>
+                        <div class="text-h5 text-center" style="width: 100%; height: 641px; padding-top: 50px; border: 1px solid darkgray">
+                            Helaas we geen starttijden kunnen vinden voor de door u gekozen datum en holes.</div>
+                    </div>
+
+                    <div class="col-3">
+                        <div class="text-weight-bold q-mb-sm">Selecteerd de gewenste datum</div>
+                        <q-date
+                                v-model="date"
+                                minimal
+                                style="width: 100%"/>
+
+                        <div class="text-weight-bold q-mt-md q-mb-sm">Hoeveel holes wenst u te spelen</div>
+                        <q-btn-toggle
                                 v-model="holes"
-                                :options="holesArray"
-                                label="Aantal holes"
-                                emit-value/>
-                        <q-btn
-                                label="Annuleer"
-                                v-on:click="$router.push('login')"
-                                color="primary"/>
+                                toggle-color="primary"
+                                :options="holesArray"/>
+
                     </div>
 
                 </div>
@@ -91,8 +87,8 @@
             <div class="col-4"/>
 
             <div class="col-4">
-                <div class="row text-center">
-                    <h5 class="q-ml-auto q-mr-auto">Uw reservering</h5>
+                <div class="row text-center q-mb-lg">
+                    <div class="text-h5 q-ml-auto q-mr-auto">Uw reservering: {{ $filters.unixToDate(flight.fltDate, "dddd DD MMMM") }} {{ $filters.minuteToTime(flight.fltTime1) }}</div>
                 </div>
                 <div class="row">
                     <div class="col-8">
@@ -190,8 +186,8 @@
                                 stack-label/>
                     </div>
                 </div>
-                <q-btn class="q-mr-sm" color="secondary" label="Terug" v-on:click="step=1"/>
-                <q-btn color="secondary" label="Reserveren" v-on:click="handleSave"/>
+                <q-btn class="q-mr-sm" color="primary" label="Terug" v-on:click="step=1"/>
+                <q-btn color="primary" label="Reserveren" v-on:click="handleSave"/>
             </div>
 
             <div class="col-4"/>
@@ -206,9 +202,9 @@
 
             <div class="col-4">
                 <div class="row">
-                    <h3>uw reservering</h3>
+                    <div class="text-h5 q-mt-md q-mb-md">Uw reservering</div>
                 </div>
-                <div class="row">
+                <div class="row q-mb-md">
                     Uw starttijd is gereserveerd. U ontvangt binnen een aantal minuten een e-mail met uw
                     reserveringsdetails. In deze e-mail vindt u een bevestigingslink. Door op deze link te klikken
                     bevestigd u uw reservering. Ontvangen wij niet binnen 30 minuten uw reserveringsbevesting dan wordt
@@ -310,6 +306,11 @@ export default {
         }
     },
     computed: {
+        hasTimes: function() {
+            return this.courses.filter(course => {
+                return Object.keys(course.times).length > 0
+            }).length > 0
+        },
         emailRule() {
             return (val) => {
                 const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
