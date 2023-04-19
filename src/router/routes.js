@@ -90,6 +90,16 @@ const routes = [
     },
   },
   {
+    path: "/lessons",
+    name: "Lessen",
+    component: () => import("layouts/PageLayout.vue"),
+    children: [{path: "", component: () => import("pages/Lessons.vue")}],
+    meta: {
+      requiresAuth: true,
+      title: "Lessen",
+    },
+  },
+  {
     path: "/shop",
     name: "Shop",
     component: () => import("layouts/PageLayout.vue"),

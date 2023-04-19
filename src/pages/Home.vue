@@ -166,6 +166,15 @@
 
         </div>
 
+        <div v-show="hasExpirimental" class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
+            <div
+                class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
+                @click="$router.push('/lessons')">
+                <span class="title"><i class="far fa-calendar-star"></i>Lessen</span>
+            </div>
+
+        </div>
+
         <!--
         <div class="btn d-flex flex-column justify-center align-items-center p-2 m-2"
              @click="$router.push('/event_list_mobile')">
