@@ -4,37 +4,41 @@
 
     <q-input
       v-model="player.details.Description"
-      type="text"
+      class="q-mb-md"
       label="Opmerking"
-      class="q-mb-md"/>
+      maxlength="40"
+      type="text"
+    />
 
     <q-select
       v-if="match.allow_select_tee == 1"
       v-model="tee"
       :options="teesArray"
-      option-value="color"
+      label="Tee"
       option-label="name"
-      label="Tee"/>
+      option-value="color"
+    />
 
     <q-select
-        v-if="match.timePref == 1"
-        v-model="timePref"
-        :options="timeArray"
-        label="Start moment"/>
+      v-if="match.timePref == 1"
+      v-model="timePref"
+      :options="timeArray"
+      label="Start moment"
+    />
 
-    <div v-for="(pOption, index) in player.details.options"
-         :key="index">
+    <div v-for="(pOption, index) in player.details.options" :key="index">
       <q-select
         v-model="pOption.mpoValue"
+        :label="pOption.label"
         :options="optionArray"
-        :label="pOption.label"/>
+      />
     </div>
 
     <q-banner
       v-if="doIHaveGuests"
+      class="bg-orange text-white q-mb-md"
       inline-actions
       rounded
-      class="bg-orange text-white q-mb-md"
     >
       U kunt niet uitschrijven voor deze wedstrijd zolang u gasten heeft
       ingeschreven.
@@ -42,16 +46,16 @@
 
     <q-banner
       v-if="match.ideal && match.fee > 0 && mySubscription == null"
+      class="bg-orange text-white q-mb-md"
       inline-actions
       rounded
-      class="bg-orange text-white q-mb-md"
     >
       Voor deze wedstrijd is betaling via iDeal vereist. Na inschrijving word u
       doorgestuurd naar de betaling. Wanneer de betaling niet wordt afgerond
       wordt u uitgeschreven.
     </q-banner>
 
-    <q-btn-group spread class="mt-4">
+    <q-btn-group class="mt-4" spread>
       <q-btn
         v-if="!(match.ideal && match.fee > 0) || mySubscription != null"
         color="secondary"
@@ -105,7 +109,7 @@ export default {
           Description: "",
           startingTeeId: 0,
           Bron: 2,
-          timePref: 0
+          timePref: 0,
         },
         relation: {
           relName: "demo",
@@ -120,8 +124,8 @@ export default {
       tee: null,
       timePref: null,
       optionArray: [
-        { value: '0', label: "Nee" },
-        { value: '1', label: "ja" },
+        { value: "0", label: "Nee" },
+        { value: "1", label: "ja" },
       ],
       timeArray: [
         { value: -1, label: "Vroeg" },
@@ -142,11 +146,16 @@ export default {
       this.player.details.relNr = this.currentUser.relNr;
       this.player.details.relNrDoor = this.currentUser.relNr;
       this.player.details.options = { ...this.match.options };
-      this.player.details.exactHandicapAtSubscription = this.currentUser.relHandicap;
+      this.player.details.exactHandicapAtSubscription =
+        this.currentUser.relHandicap;
       this.player.details.exactHandicapForMatch = this.currentUser.relHandicap;
     }
-    this.tee = this.teesArray.find(tee => tee.color == this.player.details.startingTeeId);
-    this.timePref = this.timeArray.find(time => time.value == this.player.details.timePref);
+    this.tee = this.teesArray.find(
+      (tee) => tee.color == this.player.details.startingTeeId
+    );
+    this.timePref = this.timeArray.find(
+      (time) => time.value == this.player.details.timePref
+    );
   },
   watch: {
     tee: function (newValue) {
@@ -154,21 +163,25 @@ export default {
     },
     timePref: function (newValue) {
       this.player.details.timePref = newValue.value;
-    }
+    },
   },
   computed: {
     teesArray: function () {
       return this.match.baan_lus.tees.filter(
-          tee =>
-              (this.player.relation.relGender == 1 && tee.gender == "M") ||
-              (this.player.relation.relGender == 2 && tee.gender == "F")
+        (tee) =>
+          (this.player.relation.relGender == 1 && tee.gender == "M") ||
+          (this.player.relation.relGender == 2 && tee.gender == "F")
       );
     },
     doIHaveGuests: function () {
-      return this.match.players.filter(player =>
-          player.relNrDoor == this.currentUser.relNr &&
-          player.relNr != this.currentUser.relNr &&
-          player.guest).length > 0;
+      return (
+        this.match.players.filter(
+          (player) =>
+            player.relNrDoor == this.currentUser.relNr &&
+            player.relNr != this.currentUser.relNr &&
+            player.guest
+        ).length > 0
+      );
     },
   },
   methods: {
@@ -183,21 +196,19 @@ export default {
       this.player.is_desktop = this.$q.platform.is.desktop === true ? 1 : 0;
       this.player.details.Bron = 2;
 
-      this.$http.post(`golfer/event/player`, this.player)
-        .then(function (res) {
-          if (res.data.url.length > 0) {
-            that.id = res.data.id;
-            that.url = res.data.url;
-          } else {
+      this.$http.post(`golfer/event/player`, this.player).then(function (res) {
+        if (res.data.url.length > 0) {
+          that.id = res.data.id;
+          that.url = res.data.url;
+        } else {
+          that.$q.notify({
+            type: "positive",
+            message: "Inschrijving is verwerkt",
+          });
 
-            that.$q.notify ({
-              type: 'positive',
-              message: 'Inschrijving is verwerkt'
-            });
-
-            that.handleCloseSubscribe();
-          }
-        });
+          that.handleCloseSubscribe();
+        }
+      });
     },
 
     handleUnSubscribe: function () {
@@ -210,12 +221,12 @@ export default {
           persistent: true,
         })
         .onOk(() => {
-          this.$http.delete(`golfer/event/player`, {data:this.player})
+          this.$http
+            .delete(`golfer/event/player`, { data: this.player })
             .then(function () {
-
-              that.$q.notify ({
-                type: 'positive',
-                message: 'Uitschrijving is verwerkt'
+              that.$q.notify({
+                type: "positive",
+                message: "Uitschrijving is verwerkt",
               });
 
               that.handleCloseSubscribe();
