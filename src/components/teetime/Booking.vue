@@ -1,131 +1,134 @@
 <template>
-
   <q-page class="q-pa-md">
-
     <div class="row">
       <div class="col">
         Datum:
-        <q-btn-group unelevated class="full-width">
-          <q-btn color="secondary" icon="chevron_left" style="width: 50px" v-on:click="navDay(-1)"/>
-          <q-btn color="secondary" class="full-width" style="width: calc(100% - 100px)">
+        <q-btn-group class="full-width" unelevated>
+          <q-btn
+            color="secondary"
+            icon="chevron_left"
+            style="width: 50px"
+            v-on:click="navDay(-1)"
+          />
+          <q-btn
+            class="full-width"
+            color="secondary"
+            style="width: calc(100% - 100px)"
+          >
             {{ $dayjs(form.fltDate).format("dddd DD MMMM") }}
 
             <q-popup-proxy
-                ref="qDateTeeTime"
-                transition-show="scale"
-                transition-hide="scale">
-
+              ref="qDateTeeTime"
+              transition-hide="scale"
+              transition-show="scale"
+            >
               <q-date
-                  v-model="date"
-                  mask="YYYY-MM-DD"
-                  :options="optionsFn"
-                  @change="loadTeetimes"
-                  today-btn>
-
-                <div
-                    class="row items-center justify-end"
-                    flat>
-
-                  <q-btn
-                      v-close-popup
-                      label="Closee"
-                      color="primary"
-                      flat/>
-
+                v-model="date"
+                :options="optionsFn"
+                mask="YYYY-MM-DD"
+                today-btn
+                @change="loadTeetimes"
+              >
+                <div class="row items-center justify-end" flat>
+                  <q-btn v-close-popup color="primary" flat label="Sluiten" />
                 </div>
-
               </q-date>
-
             </q-popup-proxy>
-
           </q-btn>
-          <q-btn color="secondary" icon="chevron_right" style="width: 50px" v-on:click="navDay(1)"/>
+          <q-btn
+            color="secondary"
+            icon="chevron_right"
+            style="width: 50px"
+            v-on:click="navDay(1)"
+          />
         </q-btn-group>
       </div>
     </div>
 
     <div class="row q-mt-md">
-
       <div class="col-5 q-pr-sm">
         Holes:
-        <q-btn-group unelevated spread class="full-width">
+        <q-btn-group class="full-width" spread unelevated>
           <q-btn
-              v-for="(item, index) of filterForm.holes"
-              :key="index"
-              :label="item"
-              :color="form.holes === item ? 'secondary' : 'white'"
-              :text-color="form.holes === item ? '' : 'black'"
-              @click="handleFilterHole(item)"
+            v-for="(item, index) of filterForm.holes"
+            :key="index"
+            :color="form.holes === item ? 'secondary' : 'white'"
+            :label="item"
+            :text-color="form.holes === item ? '' : 'black'"
+            @click="handleFilterHole(item)"
           />
         </q-btn-group>
-
       </div>
 
       <div class="col-7">
         Spelers:
-        <q-btn-group unelevated spread class="full-width">
+        <q-btn-group class="full-width" spread unelevated>
           <q-btn
-              v-for="(item, index) of filterForm.players"
-              :key="index"
-              :label="item"
-              :color="form.fltSize === item ? 'secondary' : 'white'"
-              :text-color="form.fltSize === item ? '' : 'black'"
-              @click="handleFilterPlayers(item)"
+            v-for="(item, index) of filterForm.players"
+            :key="index"
+            :color="form.fltSize === item ? 'secondary' : 'white'"
+            :label="item"
+            :text-color="form.fltSize === item ? '' : 'black'"
+            @click="handleFilterPlayers(item)"
           />
         </q-btn-group>
       </div>
-
     </div>
 
     <div v-if="teetimes.length > 0" class="row">
-
       <div
-          v-for="(course, cKey) of teetimes"
-          :key="cKey"
-          class="q-mt-md col items-start">
-
+        v-for="(course, cKey) of teetimes"
+        :key="cKey"
+        class="q-mt-md col items-start"
+      >
         <div
-            class="row text-center text-white bg-secondary"
-            style="height: 40px; border-bottom: black">
-
+          class="row text-center text-white bg-secondary"
+          style="height: 40px; border-bottom: black"
+        >
           <div
-              style="font-size: 18px; margin-top: 5px; font-weight: bold; border-bottom: black"
-              class="col">
-
+            class="col"
+            style="
+              font-size: 18px;
+              margin-top: 5px;
+              font-weight: bold;
+              border-bottom: black;
+            "
+          >
             {{ course.crlName }}
-
           </div>
-
         </div>
-
       </div>
-
     </div>
 
-    <q-separator/>
+    <q-separator />
 
     <div class="row q-gutter-xs" style="max-height: 600px; overflow: scroll">
-
       <div
-          v-for="(course, cKey) of teetimes"
-          :key="cKey"
-          class="col text-grey-8 text-bold">
-
+        v-for="(course, cKey) of teetimes"
+        :key="cKey"
+        class="col text-grey-8 text-bold"
+      >
         <div
-            v-for="(time, tKey) of timeFilter(course.times)"
-            :key="tKey"
-            class="row text-center q-pt-xs"
-            @click="handleOpenDialog(time, course)">
-
-          <div class="col  q-pa-sm" :class="time.sttRefNr>0?'bg-blue-3':'bg-green-3'">
-
+          v-for="(time, tKey) of timeFilter(course.times)"
+          :key="tKey"
+          class="row text-center q-pt-xs"
+          @click="handleOpenDialog(time, course)"
+        >
+          <div
+            :class="time.sttRefNr > 0 ? 'bg-blue-3' : 'bg-green-3'"
+            class="col q-pa-sm"
+          >
             {{ $filters.minuteToTime(time.sttTimeFrom) }}
-            <q-icon v-show="time.sttRefNr>0" name="group" class="q-ml-sm q-mb-xs q-mr-xs" size="18px">{{time.sttMPlayers}}</q-icon>
-
+            <q-icon
+              v-show="time.sttRefNr > 0"
+              class="q-ml-sm q-mb-xs q-mr-xs"
+              name="group"
+              size="18px"
+            >
+              {{ time.sttMPlayers }}
+            </q-icon>
           </div>
-
         </div>
-
       </div>
     </div>
 
@@ -137,7 +140,6 @@
 
     <q-dialog v-if="dialogVisible" v-model="dialogVisible">
       <q-card style="max-width: 320px; width: 95%">
-
         <q-card-section class="text-h6">
           <div v-if="dialogErrors.length == 0">Uw reservering</div>
           <div v-if="dialogErrors.length > 0">Probleem gevonden!</div>
@@ -146,7 +148,6 @@
         <q-separator inset />
 
         <q-card-section v-if="dialogErrors.length == 0">
-
           <div class="row">
             <div class="col text-left text-bold">Datum</div>
             <div class="col text-right">
@@ -166,10 +167,10 @@
             <div class="col text-right">{{ form.fltSize }}</div>
           </div>
 
-<!--          <div class="row q-mt-xs">-->
-<!--            <div class="col text-left text-bold">Holes</div>-->
-<!--            <div class="col text-right">{{ form.holes }}</div>-->
-<!--          </div>-->
+          <!--          <div class="row q-mt-xs">-->
+          <!--            <div class="col text-left text-bold">Holes</div>-->
+          <!--            <div class="col text-right">{{ form.holes }}</div>-->
+          <!--          </div>-->
 
           <div class="row q-mt-xs">
             <div class="col text-left text-bold">Baan</div>
@@ -187,24 +188,25 @@
 
         <q-card-actions align="right">
           <q-btn
-              flat
-              v-on:click="handleDialogClose"
-              color="secondary"
-              size="mds">
+            color="secondary"
+            flat
+            size="mds"
+            v-on:click="handleDialogClose"
+          >
             Annuleer
           </q-btn>
 
           <q-btn
-              v-if="dialogErrors.length == 0"
-              v-on:click="handleReservation"
-              color="secondary"
-              size="md">
+            v-if="dialogErrors.length == 0"
+            color="secondary"
+            size="md"
+            v-on:click="handleReservation"
+          >
             Reserveer
           </q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
-
   </q-page>
 </template>
 
@@ -221,17 +223,18 @@ export default {
       selectedTimeItem: null,
       filterForm: {
         holes: [9, 18],
-        players: [1, 2, 3, 4]
+        players: [1, 2, 3, 4],
       },
       form: {
         fltDate: this.$dayjs().format("YYYY-MM-DD"),
         fltTime: "",
         fltCrlNr1: "",
         fltCrlNr2: "",
-        fltSize: this.$ls.getItem('settings').value.planner_default_reservation_count,
+        fltSize:
+          this.$ls.getItem("settings").value.planner_default_reservation_count,
         players: [],
-        holes: this.$ls.getItem('settings').value.planner_default_holes,
-        size: 3
+        holes: this.$ls.getItem("settings").value.planner_default_holes,
+        size: 3,
       },
       date: this.$dayjs().format("YYYY-MM-DD"),
     };
@@ -244,38 +247,45 @@ export default {
       this.form.fltDate = newValue;
       this.loadTeetimes();
       this.$refs.qDateTeeTime.hide();
-    }
+    },
   },
   methods: {
-
-    timeFilter: function(array) {
-      return array.filter((time) =>
-          (time.sttPlayers >= this.form.fltSize) &&
-          (this.form.holes == 9 || (time.sttAvailable18 && this.form.holes == 18)) &&
-          ((this.form.holes == 9) || (time.sttCrlNrNext > 0 && this.form.holes == 18)))
+    timeFilter: function (array) {
+      return array.filter(
+        (time) =>
+          time.sttPlayers >= this.form.fltSize &&
+          (this.form.holes == 9 ||
+            (time.sttAvailable18 && this.form.holes == 18)) &&
+          (this.form.holes == 9 ||
+            (time.sttCrlNrNext > 0 && this.form.holes == 18))
+      );
     },
 
     optionsFn(date) {
-      return this.$dayjs(date) >= this.$dayjs().add(-1, 'day') && this.$dayjs(date) <= this.$dayjs().add(21, 'day')
+      return (
+        this.$dayjs(date) >= this.$dayjs().add(-1, "day") &&
+        this.$dayjs(date) <= this.$dayjs().add(21, "day")
+      );
     },
 
     navDay: function (value) {
-      this.date = this.$dayjs(this.date).add(value, 'day').format('YYYY-MM-DD')
+      this.date = this.$dayjs(this.date).add(value, "day").format("YYYY-MM-DD");
     },
 
     loadTeetimes: function () {
       let currentUser = this.$ls.getItem("currentUser").value;
       this.loading = true;
-      this.$http.get("golfer/teetimes", {
-            params: {
-              date: this.$dayjs(this.form.fltDate).format("YYYY-MM-DD"),
-              relNr: currentUser.relNr
-            },
-          })
-          .then((res) => {
-            this.teetimes = res.payload;
-            this.loading = false;
-          });
+      this.$http
+        .get("golfer/teetimes", {
+          params: {
+            date: this.$dayjs(this.form.fltDate).format("YYYY-MM-DD"),
+            relNr: currentUser.relNr,
+          },
+        })
+        .then((res) => {
+          this.teetimes = res.payload;
+          this.loading = false;
+        });
     },
 
     handleOpenDialog: function (timeItem, courseItem) {
@@ -307,23 +317,25 @@ export default {
       const info = {
         fltNr: this.selectedTimeItem.sttRefNr,
         fltTime1: this.selectedTimeItem.sttTimeFrom,
-        fltDate: this.$filters.dateToUnix(this.form.fltDate,'YYYY-MM-DD'),
+        fltDate: this.$filters.dateToUnix(this.form.fltDate, "YYYY-MM-DD"),
         fltSize: this.form.fltSize,
         fltCrlNr1: this.selectedCourseItem.crlNr,
-        fltCrlNr2: this.form.holes == 18 ? this.selectedTimeItem.sttCrlNrNext : null,
+        fltCrlNr2:
+          this.form.holes == 18 ? this.selectedTimeItem.sttCrlNrNext : null,
         fltOrigin: 2,
         flight_players: flight_players,
       };
 
       let that = this;
-      this.$http.post(`golfer/booking`, info)
-          .then((res) => {
-            that.flight = res.flight;
-            this.$emit("handleOpenFlight", that.flight);
-          })
-          .catch((error) => {
-            that.dialogErrors = error;
-          });
+      this.$http
+        .post(`golfer/booking`, info)
+        .then((res) => {
+          that.flight = res.flight;
+          this.$emit("handleOpenFlight", that.flight);
+        })
+        .catch((error) => {
+          that.dialogErrors = error;
+        });
     },
 
     handleDialogClose: function () {
