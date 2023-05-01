@@ -24,6 +24,16 @@
               @submit="login($event)"
             >
               <q-input
+                v-model="form.email"
+                :rules="[
+                  (val) =>
+                    (val && val.length > 0) || 'Voer aub uw e-mailadres in',
+                ]"
+                label="Uw E-mailadres"
+                lazy-rules
+              />
+
+              <q-input
                 v-model="form.password"
                 :rules="[
                   (val) =>
@@ -97,14 +107,14 @@ export default {
         this.$http.post("golfer/reset-password", this.form).then(() => {
           this.$router.push("/");
           this.$message({
-            message: "Password reset successfully.",
+            message: "Uw wachtwoord is aangepast.",
             type: "success",
           });
         });
       } else {
         this.$message({
           type: "warning",
-          message: "Inconsistent password entry!",
+          message: "Wachtwoorden zijn ongelijk!",
         });
       }
     },
