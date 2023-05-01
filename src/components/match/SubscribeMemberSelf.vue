@@ -14,6 +14,7 @@
       v-if="match.allow_select_tee == 1"
       v-model="tee"
       :options="teesArray"
+      class="q-mb-sm"
       label="Tee"
       option-label="name"
       option-value="color"
@@ -23,6 +24,7 @@
       v-if="match.timePref == 1"
       v-model="timePref"
       :options="timeArray"
+      class="q-mb-sm"
       label="Start moment"
     />
 
@@ -31,6 +33,7 @@
         v-model="pOption.mpoValue"
         :label="pOption.label"
         :options="optionArray"
+        class="q-mb-sm"
       />
     </div>
 
@@ -149,12 +152,14 @@ export default {
       this.player.details.exactHandicapAtSubscription =
         this.currentUser.relHandicap;
       this.player.details.exactHandicapForMatch = this.currentUser.relHandicap;
+      this.player.details.startingTeeId =
+        this.currentUser.relGender === 1 ? 8 : 14;
     }
     this.tee = this.teesArray.find(
-      (tee) => tee.color == this.player.details.startingTeeId
+      (tee) => tee.color === this.player.details.startingTeeId
     );
     this.timePref = this.timeArray.find(
-      (time) => time.value == this.player.details.timePref
+      (time) => time.value === this.player.details.timePref
     );
   },
   watch: {

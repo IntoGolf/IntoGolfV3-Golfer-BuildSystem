@@ -2,17 +2,22 @@
   <div class="p-0 m-0">
     <q-list bordered separator>
       <q-item class="itg-q-item">
-        <q-item-section class="col-2 text-left text-bold"> Hole </q-item-section>
-        <q-item-section class="col-2 text-left text-bold"> Par </q-item-section>
-        <q-item-section class="col-6 text-center text-bold"> Slagen </q-item-section>
-        <q-item-section class="col-2 text-center text-bold"> Punten </q-item-section>
+        <q-item-section class="col-2 text-left text-bold"> Hole</q-item-section>
+        <q-item-section class="col-2 text-left text-bold"> Par</q-item-section>
+        <q-item-section class="col-6 text-center text-bold">
+          Slagen
+        </q-item-section>
+        <q-item-section class="col-2 text-center text-bold">
+          Pnt
+        </q-item-section>
       </q-item>
 
       <q-item
-        class="itg-q-item"
         v-for="(hole, index) in holesArray"
+        v-show="hole.par > 0"
         :key="index"
-        v-show="hole.par > 0">
+        class="itg-q-item"
+      >
         <q-item-section class="col-2 text-left text-bold">
           {{ hole.nr }}
         </q-item-section>
@@ -23,10 +28,10 @@
           <div class="row">
             <div class="col-4" style="padding: 0px; text-align: left">
               <q-btn
-                round
-                outline
                 color="secondary"
                 label="-"
+                outline
+                round
                 @click="onScoreChangeHandler(hole, -1)"
               />
             </div>
@@ -48,10 +53,10 @@
               "
             >
               <q-btn
-                round
-                outline
                 color="secondary"
                 label="+"
+                outline
+                round
                 @click="onScoreChangeHandler(hole, 1)"
               />
             </div>
@@ -67,7 +72,9 @@
           <q-item-label class="itg-text-overflow">Totaal punten</q-item-label>
         </q-item-section>
         <q-item-section class="col-2">
-          <q-item-label class="itg-text-overflow text-center" style="font-size: 1.2em"
+          <q-item-label
+            class="itg-text-overflow text-center"
+            style="font-size: 1.2em"
             >{{ total_stableford }}
           </q-item-label>
         </q-item-section>
@@ -96,7 +103,7 @@ export default {
     };
   },
   computed: {
-    total_stableford: function() {
+    total_stableford: function () {
       let total_stableford = 0;
       this.holesArray.forEach(function (hole) {
         total_stableford += hole.stab;
@@ -120,7 +127,8 @@ export default {
         that.local_player.match_score["hcsH" + hole.nr + "_sl"] = hole.sl;
       });
 
-      this.$http.post(`golfer/event/result`, this.local_player.match_score)
+      this.$http
+        .post(`golfer/event/result`, this.local_player.match_score)
         .then(() => {
           that.$emit("handleClose");
         });
@@ -128,7 +136,9 @@ export default {
 
     handleInitiateScore: function () {
       let that = this;
-      for (let i = 1; i <= 18; i++) {
+      let holes =
+        parseInt(this.local_player.match_score["hcsH10_par"]) > 0 ? 18 : 9;
+      for (let i = 1; i <= holes; i++) {
         let sl = this.local_player.match_score["hcsH" + i + "_sl"];
         sl =
           sl == null
@@ -151,6 +161,7 @@ export default {
             sl
           ),
         });
+        console.log(that.holesArray);
       }
     },
 

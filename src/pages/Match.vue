@@ -1,24 +1,22 @@
 <template>
-
   <q-page-container>
-
     <match-list
       v-if="match == null"
       :currentUser="currentUser"
-      v-on:handleOpenMatch="handleOpenMatch"/>
+      v-on:handleOpenMatch="handleOpenMatch"
+    />
 
     <match-details
       v-if="match != null"
+      :currentUser="currentUser"
       :prop_match="match"
       :prop_page="page"
-      :currentUser="currentUser"
-      v-on:handleCloseMatch="handleCloseMatch"/>
-
+      v-on:handleCloseMatch="handleCloseMatch"
+    />
   </q-page-container>
 </template>
 
 <script>
-
 import matchList from "../components/match/list";
 import matchDetails from "../components/match/details";
 
@@ -37,16 +35,19 @@ export default {
   beforeMount: function () {
     if (this.$route.query.id != undefined) {
       let that = this;
-      this.$http.get(`golfer/event/` + this.$route.query.id)
-        .then((res) => {
-          that.match = res;
-          that.page = 5;
-        });
+      this.$http.get(`golfer/event/` + this.$route.query.id).then((res) => {
+        that.match = res;
+        that.page = 5;
+      });
     }
   },
   methods: {
     handleOpenMatch: function (match) {
-      this.match = match;
+      let that = this;
+      console.log(match.id);
+      this.$http.get(`golfer/event/` + match.id).then((res) => {
+        that.match = res;
+      });
     },
     handleCloseMatch: function () {
       this.match = null;

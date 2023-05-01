@@ -177,15 +177,21 @@ export default {
       this.player.details.options = { ...this.match.options };
     }
     this.tee = this.teesArray.find(
-      (tee) => tee.color == this.player.details.startingTeeId
+      (tee) => tee.color === this.player.details.startingTeeId
     );
     this.timePref = this.timeArray.find(
-      (time) => time.value == this.player.details.timePref
+      (time) => time.value === this.player.details.timePref
     );
   },
   watch: {
     timePref: function (newValue) {
       this.player.details.timePref = newValue.value;
+    },
+    relation: function (newValue) {
+      this.player.details.startingTeeId = newValue.relGender === 1 ? 8 : 14;
+      this.tee = this.teesArray.find(
+        (tee) => tee.color === this.player.details.startingTeeId
+      );
     },
   },
   computed: {

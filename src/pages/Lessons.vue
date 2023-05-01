@@ -2,6 +2,13 @@
   <q-page-container class="q-mt-md q-pa-md">
     <div v-show="!newLesson">
       <q-btn color="primary" label="Nieuwe les" v-on:click="newLesson = true" />
+
+      <q-separator class="q-mt-md" />
+
+      <div v-show="clientLessonArray.length === 0" class="text-center">
+        <h5>Geen toekomstige lessen gevonden</h5>
+      </div>
+
       <div
         v-for="(lesson, key) in clientLessonArray"
         :key="key"
@@ -10,21 +17,27 @@
       >
         <div class="col-12">
           <div class="row">
-            <div class="col-9">
+            <div class="col-6">
               <b>{{ lesson.pro_lesson.pro_lesson_type.pltName }}</b>
             </div>
-            <div class="col-3 text-right">
+            <div class="col-6 text-right">
               <b>{{
                 $filters.unixToDate(lesson.pro_lesson.lesDate, "ddd DD MMM")
               }}</b>
+              {{ $filters.minuteToTime(lesson.pro_lesson.lesTimeFrom) }}
             </div>
           </div>
           <div class="row">
-            <div class="col-9">
+            <div class="col-6">
               <i>{{ lesson.pro_lesson.relation.full_name2 }}</i>
             </div>
-            <div class="col-3 text-right">
-              {{ $filters.minuteToTime(lesson.pro_lesson.lesTimeFrom) }}
+            <div class="col-6 text-right">
+              <q-btn
+                color="primary"
+                size="xs"
+                v-on:click="handleCancel(lesson.pro_lesson)"
+                >Annuleer
+              </q-btn>
             </div>
           </div>
         </div>
@@ -32,6 +45,17 @@
     </div>
 
     <div v-show="newLesson">
+      <div class="row q-mr-none q-pr-none justify-end">
+        <q-btn
+          class="q-pr-none"
+          color="secondary"
+          flat
+          icon="arrow_back"
+          v-on:click="newLesson = false"
+          >Lessen
+        </q-btn>
+      </div>
+
       <div class="row q-mt-md">
         <q-input
           ref="date"
@@ -79,16 +103,21 @@
         class="full-width q-mt-md bg-orange q-pa-sm"
         v-on:click="handleBook(lesson)"
       >
-        <div style="width: 100%">
-          <div class="float-left" style="width: 80%">
+        <div class="row">
+          <div class="col-6">
             {{ proLessonType.pltName }}
           </div>
-          <div class="float-right text-right" style="width: 20%">
+          <div class="col-6 text-right">
             <b>{{ $filters.minuteToTime(lesson.pagTimeFrom) }}</b>
           </div>
         </div>
-        <div style="width: 100%">
-          <i>{{ pro.full_name2 }}</i>
+        <div class="row">
+          <div class="col-6">
+            <i>pro: {{ pro.full_name2 }}</i>
+          </div>
+          <div class="col-6 text-right">
+            <i>max. {{ proLessonType.pltMaxPers }} pers.</i>
+          </div>
         </div>
       </div>
     </div>
@@ -119,6 +148,8 @@ export default {
     newLesson: function (value) {
       if (!value) {
         this.handleLoadClientLessons();
+      } else {
+        this.handleLoad();
       }
     },
   },
@@ -175,6 +206,26 @@ export default {
         this.pltNr = this.lessonTypeArray[0].pltNr;
         this.date = this.$dayjs().format("YYYY-MM-DD");
       });
+    },
+    handleCancel: function (lesson) {
+      this.$q
+        .dialog({
+          title: "Annuleer les",
+          message: "Deze les wordt geannuleerd, wilt u doorgaan?",
+          cancel: true,
+          persistent: true,
+        })
+        .onOk(() => {
+          lesson.lesCarNr = 1;
+          this.$http.post("golfer/lesson", lesson).then(() => {
+            this.$q.notify({
+              type: "positive",
+              message: "uw les is geannuleerd",
+            });
+            this.newLesson = false;
+            this.handleLoadClientLessons();
+          });
+        });
     },
     handleBook: function (lesson) {
       this.$q

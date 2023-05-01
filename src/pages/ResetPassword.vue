@@ -1,79 +1,69 @@
 <template>
-
   <q-page-container>
-
     <q-card class="my-card q-ml-auto q-mr-auto q-mt-xl">
-
       <q-card-section>
-
         <div class="row justify-center q-mt-sm">
           <div class="col-4 text-center">
             <img
-                src="../assets/images/logo-black.svg"
-                class="logo"
-                alt="logo"/>
+              alt="logo"
+              class="logo"
+              src="../assets/images/logo-black.svg"
+            />
           </div>
         </div>
 
         <div class="row justify-center q-mt-md">
-          <div class="col text-center text-h5">
-            Reset wachtwoord
-          </div>
+          <div class="col text-center text-h5">Reset wachtwoord</div>
         </div>
 
         <div class="row q-mt-md">
-
           <div class="col">
-
             <q-form
-                @submit="login($event)"
-                @reset="onResetPassword"
-                class="q-gutter-sm">
+              class="q-gutter-sm"
+              @reset="onResetPassword"
+              @submit="login($event)"
+            >
+              <q-input
+                v-model="form.password"
+                :rules="[
+                  (val) =>
+                    (val && val.length > 0) ||
+                    'Voer aub uw gewenste wachtwoord in',
+                ]"
+                label="Nieuw wachtwoord"
+                lazy-rules
+              />
 
               <q-input
-                  v-model="form.email"
-                  label="Nieuw e-mailadres"
-                  lazy-rules
-                  :rules="[ val => val && val.length > 0 || 'Voer aub uw e-mailadres in']"/>
-
-              <q-input
-                  v-model="form.password"
-                  label="Nieuw wachtwoord"
-                  lazy-rules
-                  :rules="[ val => val && val.length > 0 || 'Voer aub uw gewenste wachtwoord in']"/>
-
-              <q-input
-                  v-model="form.passwordAgain"
-                  label="Bevestig wachtwoord"
-                  lazy-rules
-                  :rules="[ val => val && val.length > 0 || 'Voer aub uw e-wachtwoord in']"/>
+                v-model="form.passwordAgain"
+                :rules="[
+                  (val) =>
+                    (val && val.length > 0) || 'Voer aub uw e-wachtwoord in',
+                ]"
+                label="Bevestig wachtwoord"
+                lazy-rules
+              />
 
               <div class="text-center">
+                <q-btn
+                  color="primary"
+                  label="Opslaan"
+                  v-on:click="onResetPassword"
+                />
 
                 <q-btn
-                    label="Opslaan"
-                    v-on:click="onResetPassword"
-                    color="primary"/>
-
-                <q-btn
-                    flat
-                    label="Terug naar inloggen"
-                    v-on:click="$router.push('/');"
-                    color="primary"/>
-
+                  color="primary"
+                  flat
+                  label="Terug naar inloggen"
+                  v-on:click="$router.push('/')"
+                />
               </div>
-
             </q-form>
-
           </div>
         </div>
-
       </q-card-section>
-
     </q-card>
-
   </q-page-container>
-
 </template>
 
 <style lang="sass" scoped>
@@ -81,7 +71,6 @@
 .my-card
   width: 100%
   max-width: 320px
-
 </style>
 
 <script>
@@ -105,14 +94,13 @@ export default {
     },
     onResetPassword() {
       if (this.form.password === this.form.passwordAgain) {
-        this.$http.post("golfer/reset-password", this.form)
-            .then(() => {
-              this.$router.push("/");
-              this.$message({
-                message: "Password reset successfully.",
-                type: "success",
-              });
-            });
+        this.$http.post("golfer/reset-password", this.form).then(() => {
+          this.$router.push("/");
+          this.$message({
+            message: "Password reset successfully.",
+            type: "success",
+          });
+        });
       } else {
         this.$message({
           type: "warning",

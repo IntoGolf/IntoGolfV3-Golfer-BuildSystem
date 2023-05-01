@@ -2,69 +2,71 @@
   <q-page>
     <div class="row q-mt-md justify-end">
       <q-btn
-          flat
-          v-on:click="handleCloseMatch"
-          class="q-mr-sm"
-          color="secondary"
-          icon="arrow_back">Wedstrijden</q-btn>
+        class="q-mr-sm"
+        color="secondary"
+        flat
+        icon="arrow_back"
+        v-on:click="handleCloseMatch"
+        >Wedstrijden
+      </q-btn>
     </div>
     <div class="row">
-      <div class="col q-pa-md">
+      <div class="col q-pl-md q-pr-md q-pb-md">
         <details-list
-            v-if="page == 1"
-            :match="match"
-            :currentUser="currentUser"
-            :mySubscription="mySubscription"
-            v-on:handleSubscribe="handleSubscribe"
-            v-on:handleSubscribeMember="handleSubscribeMember"
-            v-on:handleSubscribeGuest="handleSubscribeGuest"
-            v-on:handleCloseSubscribe="handleCloseSubscribe"
-            v-on:handleEnterScore="handleEnterScore"
+          v-if="page == 1"
+          :currentUser="currentUser"
+          :match="match"
+          :mySubscription="mySubscription"
+          v-on:handleCloseSubscribe="handleCloseSubscribe"
+          v-on:handleEnterScore="handleEnterScore"
+          v-on:handleSubscribe="handleSubscribe"
+          v-on:handleSubscribeGuest="handleSubscribeGuest"
+          v-on:handleSubscribeMember="handleSubscribeMember"
         />
 
         <details-players
-            v-if="page == 1 && match.UitslagenGereed != 1"
-            :match="match"
-            :currentUser="currentUser"
-            v-on:handleSubscribe="handleSubscribe"
-            v-on:handleSubscribeMember="handleSubscribeMember"
-            v-on:handleSubscribeGuest="handleSubscribeGuest"
+          v-if="page == 1 && match.UitslagenGereed != 1"
+          :currentUser="currentUser"
+          :match="match"
+          v-on:handleSubscribe="handleSubscribe"
+          v-on:handleSubscribeGuest="handleSubscribeGuest"
+          v-on:handleSubscribeMember="handleSubscribeMember"
         />
 
         <details-result
-            v-if="page == 1 && match.UitslagenGereed == 1"
-            :match="match"
-            :currentUser="currentUser"
+          v-if="page == 1 && match.UitslagenGereed == 1"
+          :currentUser="currentUser"
+          :match="match"
         />
 
         <subscribe-member-self
-            v-if="page == 2"
-            :match="match"
-            :mySubscription="mySubscription"
-            :currentUser="currentUser"
-            v-on:handleCloseSubscribe="handleCloseSubscribe"
+          v-if="page == 2"
+          :currentUser="currentUser"
+          :match="match"
+          :mySubscription="mySubscription"
+          v-on:handleCloseSubscribe="handleCloseSubscribe"
         />
 
         <subscribe-member
-            v-if="page == 4"
-            :match="match"
-            :aSubscription="aSubscription"
-            :currentUser="currentUser"
-            v-on:handleCloseSubscribe="handleCloseSubscribe"
+          v-if="page == 4"
+          :aSubscription="aSubscription"
+          :currentUser="currentUser"
+          :match="match"
+          v-on:handleCloseSubscribe="handleCloseSubscribe"
         />
 
         <subscribe-guest
-            v-if="page == 3"
-            :match="match"
-            :aSubscription="aSubscription"
-            :currentUser="currentUser"
-            v-on:handleCloseSubscribe="handleCloseSubscribe"
+          v-if="page == 3"
+          :aSubscription="aSubscription"
+          :currentUser="currentUser"
+          :match="match"
+          v-on:handleCloseSubscribe="handleCloseSubscribe"
         />
 
         <score
-            v-if="page == 5"
-            v-bind:player="player"
-            v-on:handleClose="handleClose"
+          v-if="page == 5"
+          v-bind:player="player"
+          v-on:handleClose="handleClose"
         />
       </div>
     </div>
@@ -91,9 +93,9 @@ export default {
     score,
   },
   props: {
-    prop_match:Object,
-    prop_page:Number,
-    currentUser:Object
+    prop_match: Object,
+    prop_page: Number,
+    currentUser: Object,
   },
   data() {
     return {
@@ -109,7 +111,7 @@ export default {
       let that = this;
       let result = null;
       this.match.players.forEach(function (item) {
-        if (item.relNr == that.currentUser.relNr) {
+        if (item.relNr === that.currentUser.relNr) {
           result = item;
         }
       });
@@ -117,13 +119,8 @@ export default {
     },
   },
   created: function () {
-    let that = this;
-    if (this.prop_page == 5) {
-      this.match.players.forEach(function (player) {
-        if (player.relNr == that.currentUser.relNr) {
-          return that.handleEnterScore(player);
-        }
-      });
+    if (this.prop_page === 5) {
+      this.handleEnterScore();
     } else {
       this.handleRefreshMatch();
     }
@@ -144,9 +141,14 @@ export default {
       this.page = 1;
       this.handleRefreshMatch();
     },
-    handleEnterScore: function (player) {
-      this.page = 5;
-      this.player = player;
+    handleEnterScore: function () {
+      let that = this;
+      this.match.players.forEach(function (player) {
+        if (player.relNr === that.currentUser.relNr) {
+          that.page = 5;
+          that.player = player;
+        }
+      });
     },
     handleRefreshMatch: function () {
       let that = this;
@@ -159,8 +161,8 @@ export default {
       this.page = 1;
     },
     handleCloseMatch: function () {
-      this.$emit('handleCloseMatch');
-    }
+      this.$emit("handleCloseMatch");
+    },
   },
 };
 </script>

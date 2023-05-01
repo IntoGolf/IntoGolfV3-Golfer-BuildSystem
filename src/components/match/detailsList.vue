@@ -46,51 +46,55 @@
       </div>
     </div>
 
-    <div class="row q-pb-sm">
-      <div class="col text-bold">Inschrijfgeld</div>
+    <div v-if="match.UitslagenGereed != 1 && match.StartlijstGereed != 1">
+      <div class="row q-pb-sm">
+        <div class="col text-bold">Inschrijfgeld</div>
 
-      <div class="col overflow-hidden text-right">
-        {{ $filters.money(match.fee) }}
+        <div class="col overflow-hidden text-right">
+          {{ $filters.money(match.fee) }}
+        </div>
       </div>
-    </div>
 
-    <div v-if="match.LidAddGuest == 1" class="row q-pb-sm">
-      <div class="col text-bold">Inschrijfgeld gast</div>
+      <div v-if="match.LidAddGuest == 1" class="row q-pb-sm">
+        <div class="col text-bold">Inschrijfgeld gast</div>
 
-      <div class="col overflow-hidden text-right">
-        {{ $filters.money(match.feeGuest) }}
+        <div class="col overflow-hidden text-right">
+          {{ $filters.money(match.feeGuest) }}
+        </div>
       </div>
-    </div>
 
-    <div v-if="match.additionalSubscriptionInfo != null" class="row q-pb-sm">
-      <div class="col text-bold">Extra informatie</div>
+      <div v-if="match.additionalSubscriptionInfo != null" class="row q-pb-sm">
+        <div class="col text-bold">Extra informatie</div>
 
-      <div class="col overflow-hidden text-right">
-        {{ match.additionalSubscriptionInfo }}
+        <div class="col overflow-hidden text-right">
+          {{ match.additionalSubscriptionInfo }}
+        </div>
       </div>
-    </div>
 
-    <div class="row q-pb-sm">
-      <div class="col text-bold">Start inschrijf</div>
+      <div class="row q-pb-sm">
+        <div class="col text-bold">Start inschrijf</div>
 
-      <div class="col overflow-hidden text-right">
-        {{ $dayjs(match.StartDatumTGInschrijven).format("ddd DD MMMM hh:mm") }}
+        <div class="col overflow-hidden text-right">
+          {{
+            $dayjs(match.StartDatumTGInschrijven).format("ddd DD MMMM hh:mm")
+          }}
+        </div>
       </div>
-    </div>
 
-    <div class="row q-pb-sm">
-      <div class="col text-bold">Eind inschrijf</div>
+      <div class="row q-pb-sm">
+        <div class="col text-bold">Eind inschrijf</div>
 
-      <div class="col overflow-hidden text-right">
-        {{ $dayjs(match.subscriptionDeadline).format("ddd DD MMMM hh:mm") }}
+        <div class="col overflow-hidden text-right">
+          {{ $dayjs(match.subscriptionDeadline).format("ddd DD MMMM hh:mm") }}
+        </div>
       </div>
-    </div>
 
-    <div v-if="specialRules.length > 0" class="row q-pb-sm">
-      <div class="col">
-        <q-banner class="bg-orange text-white" inline-actions rounded>
-          {{ specialRules }}
-        </q-banner>
+      <div v-if="specialRules.length > 0" class="row q-pb-sm">
+        <div class="col">
+          <q-banner class="bg-orange text-white" inline-actions rounded>
+            {{ specialRules }}
+          </q-banner>
+        </div>
       </div>
     </div>
 
