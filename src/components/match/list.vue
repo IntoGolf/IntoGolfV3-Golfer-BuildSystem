@@ -53,7 +53,9 @@
                   " " +
                   match.match_type.name +
                   " " +
-                  match.match_scoring_type.name
+                  (match.match_scoring_type.id !== 24
+                    ? match.match_scoring_type.name
+                    : "")
                 }}
               </q-item-label>
 
