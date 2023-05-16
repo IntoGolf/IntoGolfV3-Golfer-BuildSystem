@@ -1,33 +1,30 @@
 <template>
-
   <q-page-container class="q-pa-md">
-
-<!--    <top-bar-->
-<!--      v-bind:title="title"-->
-<!--      v-bind:back_icon="back_icon"-->
-<!--      v-bind:back_link="back_link"-->
-<!--      v-bind:callBack="callBack"-->
-<!--    />-->
+    <!--    <top-bar-->
+    <!--      v-bind:title="title"-->
+    <!--      v-bind:back_icon="back_icon"-->
+    <!--      v-bind:back_link="back_link"-->
+    <!--      v-bind:callBack="callBack"-->
+    <!--    />-->
 
     <div class="row q-pa-md q-mt-md bg-white">
       <div class="col">
-
         <main v-show="focusedItem === null">
           <div class="row q-mb-md">
             <div class="col">
-              <q-input outlined v-model="searchValue" label="Zoeken" />
+              <q-input v-model="searchValue" label="Zoeken" outlined />
             </div>
           </div>
 
           <q-list class="full-width" separator>
             <q-item
-              clickable
-              class="full-width bg-white shadow-1 q-mb-sm"
-              v-ripple
               v-for="item in list"
-              v-on:click="focusedItem = item"
-              :key="item.relNr"
               v-show="item.disabled === 0"
+              :key="item.relNr"
+              v-ripple
+              class="full-width bg-white shadow-1 q-mb-sm"
+              clickable
+              v-on:click="focusedItem = item"
             >
               <q-item-section>
                 <q-item-label class="overflow-hidden">
@@ -37,7 +34,7 @@
                 </q-item-label>
               </q-item-section>
 
-              <q-item-section avatar> > </q-item-section>
+              <q-item-section avatar> ></q-item-section>
             </q-item>
           </q-list>
         </main>
@@ -71,12 +68,12 @@
             </div>
           </div>
 
-          <q-separator spaced v-show="focusedItem.relVisibilityLevel > 1" />
+          <q-separator v-show="focusedItem.relVisibilityLevel > 1" spaced />
 
-          <div class="row" v-show="focusedItem.relVisibilityLevel > 1">
+          <div v-show="focusedItem.relVisibilityLevel > 1" class="row">
             <div class="col-12 text-bold">E-mail</div>
           </div>
-          <div class="row" v-show="focusedItem.relVisibilityLevel > 1">
+          <div v-show="focusedItem.relVisibilityLevel > 1" class="row">
             <div class="col-6">
               <a :href="'mailto:' + focusedItem.relEmail">
                 {{ email }}
@@ -84,12 +81,12 @@
             </div>
           </div>
 
-          <q-separator spaced v-show="focusedItem.relVisibilityLevel > 2" />
+          <q-separator v-show="focusedItem.relVisibilityLevel > 2" spaced />
 
-          <div class="row" v-show="focusedItem.relVisibilityLevel > 2">
+          <div v-show="focusedItem.relVisibilityLevel > 2" class="row">
             <div class="col-12 text-bold">Telefoonnummer</div>
           </div>
-          <div class="row" v-show="focusedItem.relVisibilityLevel > 2">
+          <div v-show="focusedItem.relVisibilityLevel > 2" class="row">
             <div class="col-12">
               <a :href="'tel:' + focusedItem.relPhone">
                 {{ focusedItem.relPhone }}
@@ -97,15 +94,17 @@
             </div>
           </div>
 
-          <q-separator spaced v-show="focusedItem.relVisibilityLevel > 2" />
+          <q-separator v-show="focusedItem.relVisibilityLevel > 2" spaced />
 
-          <div class="row" v-show="focusedItem.relVisibilityLevel > 2">
+          <div v-show="focusedItem.relVisibilityLevel > 2" class="row">
             <div class="col-12 text-bold">Telefoonnummer mobiel</div>
           </div>
-          <div class="row" v-show="focusedItem.relVisibilityLevel > 2">
+          <div v-show="focusedItem.relVisibilityLevel > 2" class="row">
             <div class="col-12">
-              <a v-if="focusedItem.relPhoneMobile"
-                  :href="'tel:' + focusedItem.relPhoneMobile">
+              <a
+                v-if="focusedItem.relPhoneMobile"
+                :href="'tel:' + focusedItem.relPhoneMobile"
+              >
                 {{ focusedItem.relPhoneMobile }}
               </a>
               <p v-else>-</p>
@@ -117,25 +116,22 @@
           <div class="text-center p-2">
             <q-btn
               class="w-100"
+              color="primary"
+              icon="close"
+              label="Sluiten"
               @click="
                 focusedItem = null;
                 searchValue = '';
               "
-              label="Sluiten"
-              icon="close"
-              color="primary"
             />
           </div>
         </main>
-
       </div>
     </div>
   </q-page-container>
 </template>
 
 <script>
-// import TopBar from "../components/TopBar";
-
 export default {
   data: function () {
     return {
@@ -171,7 +167,8 @@ export default {
   methods: {
     loadList() {
       let that = this;
-      this.$http.get("golfer/relation/0/search/" + this.searchValue)
+      this.$http
+        .get("golfer/relation/0/search/" + this.searchValue)
         .then((res) => {
           that.list = res;
           that.loading = false;

@@ -179,7 +179,10 @@
 </template>
 
 <script>
+import authMixin from "../mixins/auth";
+
 export default {
+  mixins: [authMixin],
   components: {},
   props: {
     flight: Object,
@@ -194,7 +197,6 @@ export default {
       NR4: "",
       nr: 1,
       checkCode: "",
-      settings: this.$ls.getItem("settings").value,
       done: false,
     };
   },
@@ -209,7 +211,7 @@ export default {
       );
     },
     correct: function () {
-      let result = this.code.length == 4 && this.code == this.checkCode;
+      let result = this.code.length === 4 && this.code === this.checkCode;
 
       if (result) {
         this.onCheckIn();
@@ -244,20 +246,20 @@ export default {
       intTime = intTime * 5767871726;
       this.checkCode = intTime.toString().substr(0, 4);
 
-      if (this.nr == 1) {
+      if (this.nr === 1) {
         this.NR1 = key;
       }
-      if (this.nr == 2) {
+      if (this.nr === 2) {
         this.NR2 = key;
       }
-      if (this.nr == 3) {
+      if (this.nr === 3) {
         this.NR3 = key;
       }
-      if (this.nr == 4) {
+      if (this.nr === 4) {
         this.NR4 = key;
       }
 
-      this.nr = this.nr == 4 ? 1 : this.nr + 1;
+      this.nr = this.nr === 4 ? 1 : this.nr + 1;
     },
 
     handleCloseScorecard: function (reload) {

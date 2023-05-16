@@ -13,8 +13,7 @@
     <div class="row">
       <div class="col q-pl-md q-pr-md q-pb-md">
         <details-list
-          v-if="page == 1"
-          :currentUser="currentUser"
+          v-if="page === 1"
           :match="match"
           :mySubscription="mySubscription"
           v-on:handleCloseSubscribe="handleCloseSubscribe"
@@ -25,8 +24,7 @@
         />
 
         <details-players
-          v-if="page == 1 && match.UitslagenGereed != 1"
-          :currentUser="currentUser"
+          v-if="page === 1 && match.UitslagenGereed !== 1"
           :match="match"
           v-on:handleSubscribe="handleSubscribe"
           v-on:handleSubscribeGuest="handleSubscribeGuest"
@@ -34,37 +32,33 @@
         />
 
         <details-result
-          v-if="page == 1 && match.UitslagenGereed == 1"
-          :currentUser="currentUser"
+          v-if="page === 1 && match.UitslagenGereed === 1"
           :match="match"
         />
 
         <subscribe-member-self
-          v-if="page == 2"
-          :currentUser="currentUser"
+          v-if="page === 2"
           :match="match"
           :mySubscription="mySubscription"
           v-on:handleCloseSubscribe="handleCloseSubscribe"
         />
 
         <subscribe-member
-          v-if="page == 4"
+          v-if="page === 4"
           :aSubscription="aSubscription"
-          :currentUser="currentUser"
           :match="match"
           v-on:handleCloseSubscribe="handleCloseSubscribe"
         />
 
         <subscribe-guest
-          v-if="page == 3"
+          v-if="page === 3"
           :aSubscription="aSubscription"
-          :currentUser="currentUser"
           :match="match"
           v-on:handleCloseSubscribe="handleCloseSubscribe"
         />
 
         <score
-          v-if="page == 5"
+          v-if="page === 5"
           v-bind:player="player"
           v-on:handleClose="handleClose"
         />
@@ -81,8 +75,10 @@ import detailsList from "components/match/detailsList";
 import detailsPlayers from "components/match/detailsPlayers";
 import detailsResult from "components/match/detailsResult";
 import score from "components/match/score";
+import authMixin from "../../mixins/auth";
 
 export default {
+  mixins: [authMixin],
   components: {
     subscribeMemberSelf,
     subscribeMember,
@@ -95,7 +91,6 @@ export default {
   props: {
     prop_match: Object,
     prop_page: Number,
-    currentUser: Object,
   },
   data() {
     return {

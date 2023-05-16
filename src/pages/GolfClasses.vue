@@ -1,0 +1,218 @@
+<template>
+  <div>
+    <q-card v-if="!ProCourse" class="pro-course-card">
+      <q-card-section>
+        <div class="row justify-center q-mt-md q-mb-md">
+          <div class="col text-center text-h5">Ons cursus aanbod</div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div
+              v-for="(item, key) in ProCourseArray"
+              :key="key"
+              class="flex-container div-pro-course"
+            >
+              <div class="row text-bold">
+                <div class="col-6">Cursus: {{ item.pcsName }}</div>
+                <div class="col-6 text-right">
+                  Start:
+                  {{ $filters.unixToDate(item.pcsDateFrom, "dddd D MMMM") }}
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-4">Tijd</div>
+                <div class="col-8">
+                  :
+                  {{
+                    $filters.minuteToTime(item.pro_lessons[0].lesBlockedFrom)
+                  }}
+                  tot
+                  {{ $filters.minuteToTime(item.pro_lessons[0].lesBlockedTo) }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">Aantal lessen</div>
+                <div class="col-8">: {{ item.pro_lessons.length }}</div>
+              </div>
+              <div class="row">
+                <div class="col-4">Beschikbare plaatsen</div>
+                <div class="col-8">
+                  :
+                  {{
+                    item.pro_lesson_type.pltMaxPers -
+                    item.pro_lesson_clients.length
+                  }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">Kosten</div>
+                <div class="col-8">: € 295,-</div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  {{ item.pro_lesson_type.pltNotes }}
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col text-right">
+                  <q-btn
+                    color="primary"
+                    label="Details"
+                    size="sm"
+                    v-on:click="ProCourse = item"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </q-card-section>
+    </q-card>
+
+    <q-card v-else-if="ProCourse && !subscribe" class="pro-course-card">
+      <q-card-section>
+        <div class="row justify-center q-mt-md q-mb-md">
+          <div class="col text-center text-h5">
+            Cursus {{ ProCourse.pcsName }}
+          </div>
+        </div>
+        <q-separator class="q-mb-md" />
+        <div class="row">
+          <div class="col">
+            <div class="row">
+              <div class="col-4">Eerste les</div>
+              <div class="col-8">
+                :
+                {{ $filters.unixToDate(ProCourse.pcsDateFrom, "dddd D MMMM") }}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4">Tijd</div>
+              <div class="col-8">
+                :
+                {{
+                  $filters.minuteToTime(ProCourse.pro_lessons[0].lesBlockedFrom)
+                }}
+                tot
+                {{
+                  $filters.minuteToTime(ProCourse.pro_lessons[0].lesBlockedTo)
+                }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">Aantal lessen</div>
+              <div class="col-8">: {{ ProCourse.pro_lessons.length }}</div>
+            </div>
+            <div class="row">
+              <div class="col-4">Beschikbare plaatsen</div>
+              <div class="col-8">
+                :
+                {{
+                  ProCourse.pro_lesson_type.pltMaxPers -
+                  ProCourse.pro_lesson_clients.length
+                }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">Kosten</div>
+              <div class="col-8">: € 295,-</div>
+            </div>
+            <div class="row">
+              <div id="course-text" class="col" v-html="ProCourse.pcsText" />
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col text-right">
+                <q-btn
+                  color="primary"
+                  flat
+                  label="Terug naar cursussen"
+                  size="sm"
+                  v-on:click="ProCourse = null"
+                />
+                <q-btn
+                  v-if="
+                    ProCourse.pro_lesson_type.pltMaxPers -
+                      ProCourse.pro_lesson_clients.length >
+                    0
+                  "
+                  color="primary"
+                  label="Inschrijven"
+                  size="sm"
+                  v-on:click="onSubscribe"
+                />
+                <div v-else class="q-mr-md text-bold">Vol</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </q-card-section>
+    </q-card>
+
+    <sign-up
+      v-else-if="subscribe"
+      :ProCourse="ProCourse"
+      v-on:onCloseSignUp="onCloseSignUp"
+    />
+  </div>
+</template>
+
+<style>
+#course-text {
+  margin-top: 20px;
+}
+
+#course-text p {
+  margin-bottom: 0 !important;
+}
+
+.pro-course-card {
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40px;
+}
+
+.div-pro-course {
+  margin: 5px;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 4px;
+}
+</style>
+
+<script>
+import publicMixin from "../mixins/public";
+import signUp from "./SignUp.vue";
+
+export default {
+  mixins: [publicMixin],
+  components: { signUp },
+  data() {
+    return {
+      ProCourseArray: [],
+      ProCourse: null,
+      subscribe: false,
+    };
+  },
+  created() {
+    this.$http.get("golfer/classes").then((res) => {
+      this.ProCourseArray = res;
+    });
+  },
+  watch: {},
+  computed: {},
+  methods: {
+    onSubscribe: function () {
+      this.subscribe = true;
+    },
+    onCloseSignUp: function () {
+      this.subscribe = false;
+      this.ProCourse = null;
+    },
+  },
+};
+</script>

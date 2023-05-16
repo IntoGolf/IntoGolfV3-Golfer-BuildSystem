@@ -1,40 +1,30 @@
 <template>
   <q-page-container>
-
-<!--    <top-bar-->
-<!--      v-bind:title="title"-->
-<!--      v-bind:back_icon="back_icon"-->
-<!--      v-bind:back_link="back_link"-->
-<!--      v-bind:callBack="callBack"-->
-<!--      v-on:handleClose="handleClose"-->
-<!--    />-->
-
     <List
-      v-if="page == LIST"
+      v-if="page === LIST"
       :array="array"
       v-on:handleClose="handleClose"
-      v-on:loadReservationList="loadReservationList"
-      v-on:handleOpenFlight="handleOpenFlight"
       v-on:handleOpenBooking="handleOpenBooking"
+      v-on:handleOpenFlight="handleOpenFlight"
+      v-on:loadReservationList="loadReservationList"
     />
 
     <Reservation
-      v-if="page == RESERVATION"
+      v-if="page === RESERVATION"
       :flight="flight"
       v-on:handleClose="handleClose"
     />
 
     <Booking
-      v-if="page == BOOKING"
-      v-on:loadReservationList="loadReservationList"
+      v-if="page === BOOKING"
       v-on:handleClose="handleClose"
       v-on:handleOpenFlight="handleOpenFlight"
+      v-on:loadReservationList="loadReservationList"
     />
   </q-page-container>
 </template>
 
 <script>
-// import TopBar from "../components/TopBar";
 import Reservation from "../components/teetime/Reservation";
 import Booking from "../components/teetime/Booking";
 import List from "../components/teetime/List";
@@ -87,7 +77,7 @@ export default {
         player.flpType = null;
         if (player.flpRelNr) {
           player.flpType = 2;
-        } else if (player.flpName != null) {
+        } else if (player.flpName !== null) {
           player.flpType = 1;
         }
       });

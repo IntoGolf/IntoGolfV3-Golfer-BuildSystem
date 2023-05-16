@@ -2,8 +2,8 @@
   <div>
     <div
       v-for="hole in scorecard.holes"
+      v-show="hole.number === showHole"
       :key="'Hole_' + hole.number"
-      v-show="hole.number == showHole"
     >
       <q-list bordered separator>
         <q-item>
@@ -17,7 +17,7 @@
             <q-item-label class="font-weight-bold">Lengte</q-item-label>
           </q-item-section>
           <q-item-section>
-            <q-item-label class="text-right">{{ hole.distance }} </q-item-label>
+            <q-item-label class="text-right">{{ hole.distance }}</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -26,15 +26,15 @@
             <q-item-label class="font-weight-bold">Par</q-item-label>
           </q-item-section>
           <q-item-section>
-            <q-item-label class="text-right">{{ hole.par }} </q-item-label>
+            <q-item-label class="text-right">{{ hole.par }}</q-item-label>
           </q-item-section>
         </q-item>
 
         <q-item>
           <q-item-section>
             <q-item-label class="overflow-hidden"
-              >Persoonlijke par</q-item-label
-            >
+              >Persoonlijke par
+            </q-item-label>
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-right"
@@ -61,14 +61,14 @@
           <q-item-section>
             <div class="row">
               <div
+                v-show="scorecard.ngf_card_id.length === 0"
                 class="col"
                 style="padding: 0px; text-align: left"
-                v-show="scorecard.ngf_card_id.length == 0"
               >
                 <q-btn
-                  round
                   color="secondary"
                   label="-"
+                  round
                   @click="onScoreChangeHandler(hole, -1)"
                 />
               </div>
@@ -81,6 +81,7 @@
               </div>
 
               <div
+                v-show="scorecard.ngf_card_id.length === 0"
                 class="col"
                 style="
                   padding: 0px;
@@ -88,12 +89,11 @@
                   font-size: 18px;
                   font-weight: bold;
                 "
-                v-show="scorecard.ngf_card_id.length == 0"
               >
                 <q-btn
-                  round
                   color="secondary"
                   label="+"
+                  round
                   @click="onScoreChangeHandler(hole, 1)"
                 />
               </div>
@@ -140,20 +140,22 @@
 </template>
 
 <script>
+import authMixin from "../../mixins/auth";
+
 export default {
+  mixins: [authMixin],
   props: ["scorecard"],
   data() {
     return {
-      currentUser: Object.assign(this.$ls.getItem("currentUser")),
       showHole: 1,
     };
   },
   created() {
     let that = this;
 
-    if (this.scorecard.ngf_card_id.length == 0) {
+    if (this.scorecard.ngf_card_id.length === 0) {
       this.scorecard.holes.forEach(function (hole) {
-        if (hole.strokes == 0) {
+        if (hole.strokes === 0) {
           hole.strokes = that.plHcpHole(hole);
           that.onScoreChangeHandler(hole, 0);
         }
@@ -163,9 +165,9 @@ export default {
   computed: {
     plHcp() {
       let result = 0;
-      let hcp = this.scorecard.handicap == 55 ? 54 : this.scorecard.handicap;
+      let hcp = this.scorecard.handicap === 55 ? 54 : this.scorecard.handicap;
 
-      if (this.numberOfHoles == 18) {
+      if (this.numberOfHoles === 18) {
         result = Math.round(
           hcp * (this.scorecard.sloperate / 113) +
             (this.scorecard.courserate - this.scorecard.total_par),
@@ -182,7 +184,7 @@ export default {
     },
 
     numberOfHoles() {
-      return this.scorecard.holes[9] != undefined &&
+      return this.scorecard.holes[9] !== undefined &&
         this.scorecard.holes[9].bltSi10 > 0
         ? 18
         : 9;
@@ -191,18 +193,18 @@ export default {
   methods: {
     nextHole: function () {
       let maxHoles =
-        this.scorecard.holes[9] != undefined && this.scorecard.holes[9].par > 0
+        this.scorecard.holes[9] !== undefined && this.scorecard.holes[9].par > 0
           ? 18
           : 9;
-      this.showHole = this.showHole == maxHoles ? 1 : this.showHole + 1;
+      this.showHole = this.showHole === maxHoles ? 1 : this.showHole + 1;
     },
 
     prevHole: function () {
       let maxHoles =
-        this.scorecard.holes[9] != undefined && this.scorecard.holes[9].par > 0
+        this.scorecard.holes[9] !== undefined && this.scorecard.holes[9].par > 0
           ? 18
           : 9;
-      this.showHole = this.showHole == 1 ? maxHoles : this.showHole - 1;
+      this.showHole = this.showHole === 1 ? maxHoles : this.showHole - 1;
     },
 
     getIsOdd: function (num) {
@@ -210,7 +212,7 @@ export default {
     },
 
     plHcpHole: function (hole) {
-      if (hole.personal_par != undefined && hole.personal_par > 0) {
+      if (hole.personal_par !== undefined && hole.personal_par > 0) {
         return hole.personal_par;
       }
 
@@ -275,10 +277,10 @@ export default {
 
       let array;
 
-      if (this.getIsOdd(si) && this.numberOfHoles == 9) {
+      if (this.getIsOdd(si) && this.numberOfHoles === 9) {
         array = this.plHcp < 0 ? neg_array_odd : array_odd;
         siPos = array[si];
-      } else if (!this.getIsOdd(si) && this.numberOfHoles == 9) {
+      } else if (!this.getIsOdd(si) && this.numberOfHoles === 9) {
         array = this.plHcp < 0 ? neg_array_eve : array_eve;
         siPos = array[si];
       } else {
@@ -293,7 +295,7 @@ export default {
 
     onScoreChangeHandler: function (hole, value) {
       hole.strokes += value;
-      hole.strokes = hole.strokes == 0 ? 1 : hole.strokes;
+      hole.strokes = hole.strokes === 0 ? 1 : hole.strokes;
 
       hole.stableford = hole.personal_par + 2 - hole.strokes;
       hole.stableford = hole.stableford < 0 ? 0 : hole.stableford;

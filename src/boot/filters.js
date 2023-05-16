@@ -1,30 +1,8 @@
-import { boot } from "quasar/wrappers";
 import dayjs from "dayjs";
 
 /**
  *  global filters
  */
-
-// Vue.filter('money', function (number, decimal = 1) {
-//   return '€' + (number * decimal)
-//     .toFixed(2)
-//     .replace(/\d(?=(\d{3})+\.)/g, '$&,')
-//     .replace('.', ',');
-// });
-//
-// Vue.filter('date', function (str, format = 'dddd D MMMM YYYY') {
-//   return dayjs(str)
-//     .format(format);
-// });
-//
-// Vue.filter('time', function (str) {
-//   return str.substr(0, 5);
-// });
-//
-// Vue.filter('toText', function (str) {
-//   return str.replace('^', ' ');
-// });
-//
 
 require("dayjs/locale/nl");
 
@@ -34,8 +12,8 @@ const unixToDate = function (timestamp, formatString = "DD-MM-YYYY") {
   return dayjs.unix(unixTimestamp).format(formatString);
 };
 
-const dateToUnix = function (value, formatString = 'DD-MM-YYYY') {
-  return  Math.round((dayjs(value, formatString).unix() / 86400) + 719528);
+const dateToUnix = function (value, formatString = "DD-MM-YYYY") {
+  return Math.round(dayjs(value, formatString).unix() / 86400 + 719528);
 };
 
 const diffTime = function (datetime) {
@@ -55,8 +33,8 @@ const minuteToTime = function (minute) {
 };
 
 const timeToMinute = function (time) {
-  let array = time.split(':');
-  return (parseInt(array[0]) * 60) + parseInt(array[1]);
+  let array = time.split(":");
+  return parseInt(array[0]) * 60 + parseInt(array[1]);
 };
 
 const money = function (number, decimal = 1) {

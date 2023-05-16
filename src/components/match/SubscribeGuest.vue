@@ -66,7 +66,7 @@
     />
 
     <q-select
-      v-if="match.allow_select_tee == 1"
+      v-if="match.allow_select_tee === 1"
       v-model="tee"
       :options="teesArray"
       class="q-mb-md"
@@ -78,7 +78,7 @@
     />
 
     <q-select
-      v-if="match.timePref == 1"
+      v-if="match.timePref === 1"
       v-model="timePref"
       :options="timeArray"
       label="Start moment"
@@ -94,7 +94,7 @@
     </div>
 
     <q-banner
-      v-if="match.ideal && aSubscription == null"
+      v-if="match.ideal && aSubscription === null"
       class="bg-orange text-white q-mt-sm"
       inline-actions
       rounded
@@ -106,21 +106,21 @@
 
     <q-btn-group class="q-mt-md" spread>
       <q-btn
-        v-if="!match.ideal || aSubscription != null"
+        v-if="!match.ideal || aSubscription !== null"
         :disabled="inValid"
         color="secondary"
         label="Opslaan"
         @click="handleSubscribe"
       />
       <q-btn
-        v-if="match.ideal && aSubscription == null"
+        v-if="match.ideal && aSubscription === null"
         :disabled="inValid"
         color="secondary"
         label="Betaal"
         @click="handleSubscribe"
       />
       <q-btn
-        v-if="aSubscription != null"
+        v-if="aSubscription !== null"
         color="secondary"
         label="Uitschrijven"
         @click="handleUnSubscribe"
@@ -158,8 +158,10 @@
 
 <script>
 import payment from "./payment";
+import authMixin from "../../mixins/auth";
 
 export default {
+  mixins: [authMixin],
   components: {
     payment,
   },
@@ -182,16 +184,17 @@ export default {
         },
         relation: {
           relNr: 0,
-          relName: "demo",
-          relCallName: "test",
+          relName: "",
+          relCallName: "",
           relGender:
-            this.match.restrictionBySex == 0 || this.match.restrictionBySex == 1
+            this.match.restrictionBySex === 0 ||
+            this.match.restrictionBySex === 1
               ? 1
               : 2,
           relHandicap: 54,
           relGsn: "",
-          relEmail: "demo3414234234@intogolf.nl",
-          relPhone: "0612345678",
+          relEmail: "",
+          relPhone: "",
         },
         options: [],
       },
@@ -206,7 +209,6 @@ export default {
         { value: 1, label: "Laat" },
       ],
       tee: null,
-      currentUser: Object.assign(this.$ls.getItem("currentUser")),
       reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
       id: "",
       url: "",
@@ -214,7 +216,7 @@ export default {
     };
   },
   created() {
-    if (this.aSubscription != null) {
+    if (this.aSubscription !== null) {
       this.player.details = this.aSubscription;
       this.player.relation = this.aSubscription.relation;
     } else {
@@ -223,10 +225,10 @@ export default {
       this.player.details.options = { ...this.match.options };
     }
     this.tee = this.teesArray.find(
-      (tee) => tee.color == this.player.details.startingTeeId
+      (tee) => tee.color === this.player.details.startingTeeId
     );
     this.timePref = this.timeArray.find(
-      (time) => time.value == this.player.details.timePref
+      (time) => time.value === this.player.details.timePref
     );
   },
   watch: {
@@ -238,25 +240,25 @@ export default {
     teesArray: function () {
       return this.match.baan_lus.tees.filter(
         (tee) =>
-          (this.player.relation.relGender == 1 && tee.gender == "M") ||
-          (this.player.relation.relGender == 2 && tee.gender == "F")
+          (this.player.relation.relGender === 1 && tee.gender === "M") ||
+          (this.player.relation.relGender === 2 && tee.gender === "F")
       );
     },
     inValid: function () {
       return (
-        this.player.relation.relName.length == 0 ||
-        this.player.relation.relCallName.length == 0 ||
-        this.player.relation.relHandicap.length == 0 ||
+        this.player.relation.relName.length === 0 ||
+        this.player.relation.relCallName.length === 0 ||
+        this.player.relation.relHandicap.length === 0 ||
         !this.reg.test(this.player.relation.relEmail)
       );
     },
     hcpRules: function () {
       let hcpMin =
-        this.player.relation.relGender == 1
+        this.player.relation.relGender === 1
           ? this.match.handicapMaleMin
           : this.match.handicapFemaleMin;
       let hcpMax =
-        this.player.relation.relGender == 1
+        this.player.relation.relGender === 1
           ? this.match.handicapMaleMax
           : this.match.handicapFemaleMax;
       return [
@@ -294,15 +296,15 @@ export default {
       let result = [];
 
       if (
-        this.match.restrictionBySex == 0 ||
-        this.match.restrictionBySex == 1
+        this.match.restrictionBySex === 0 ||
+        this.match.restrictionBySex === 1
       ) {
         result.push({ value: 1, label: "Man" });
       }
 
       if (
-        this.match.restrictionBySex == 0 ||
-        this.match.restrictionBySex == 2
+        this.match.restrictionBySex === 0 ||
+        this.match.restrictionBySex === 2
       ) {
         result.push({ value: 2, label: "Vrouw" });
       }

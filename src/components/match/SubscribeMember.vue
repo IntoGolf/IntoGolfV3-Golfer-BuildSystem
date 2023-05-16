@@ -3,9 +3,9 @@
     <h5 class="q-mb-sm q-mt-sm">Inschrijven {{ match.name }}</h5>
 
     <q-select
-      v-if="player.details.id == 0"
+      v-if="player.details.id === 0"
       v-model="relation"
-      :option-disable="(item) => (item === null ? true : item.disabled != '')"
+      :option-disable="(item) => (item === null ? true : item.disabled !== '')"
       :options="relations"
       class="q-mb-md"
       fill-input
@@ -27,9 +27,10 @@
 
     <q-input
       v-if="player.details.relNr > 0 && player.details.relation"
-      v-model="player.details.relation.full_name"
+      v-model="player.details.relation.full_name2"
       :disable="true"
-      label="Standard"
+      class="q-mb-md"
+      label="Naam"
     />
 
     <q-input
@@ -41,7 +42,7 @@
     />
 
     <q-select
-      v-if="match.allow_select_tee == 1"
+      v-if="match.allow_select_tee === 1"
       v-model="tee"
       :options="teesArray"
       class="q-mb-md"
@@ -52,7 +53,7 @@
     />
 
     <q-select
-      v-if="match.timePref == 1"
+      v-if="match.timePref === 1"
       v-model="timePref"
       :options="timeArray"
       label="Start moment"
@@ -71,7 +72,7 @@
     </div>
 
     <q-banner
-      v-if="match.ideal && aSubscription == null"
+      v-if="match.ideal && aSubscription === null"
       class="bg-orange text-white"
       inline-actions
       rounded
@@ -83,21 +84,21 @@
 
     <q-btn-group class="q-mt-md" spread>
       <q-btn
-        v-if="!(match.ideal && match.fee > 0) || mySubscription != null"
-        :disabled="player.details.id == 0 && relation == null"
+        v-if="!(match.ideal && match.fee > 0) || mySubscription !== null"
+        :disabled="player.details.id === 0 && relation === null"
         color="secondary"
         label="Opslaan"
         @click="handleSubscribe"
       />
       <q-btn
-        v-if="match.ideal && match.fee > 0 && mySubscription == null"
-        :disabled="player.details.id == 0 && relation == null"
+        v-if="match.ideal && match.fee > 0 && mySubscription === null"
+        :disabled="player.details.id === 0 && relation === null"
         color="secondary"
         label="Betaal"
         @click="handleSubscribe"
       />
       <q-btn
-        v-if="aSubscription != null"
+        v-if="aSubscription !== null"
         color="secondary"
         label="Uitschrijven"
         @click="handleUnSubscribe"
@@ -116,8 +117,10 @@
 
 <script>
 import payment from "./payment";
+import authMixin from "../../mixins/auth";
 
 export default {
+  mixins: [authMixin],
   components: {
     payment,
   },
@@ -140,12 +143,12 @@ export default {
         },
         relation: {
           relNr: null,
-          relName: "demo",
-          relCallName: "test",
+          relName: "",
+          relCallName: "",
           relGender: 1,
           relHandicap: 54,
-          relEmail: "demo@intogolf.nl",
-          relPhone: "0612345678",
+          relEmail: "",
+          relPhone: "",
         },
         options: [],
       },
@@ -162,14 +165,13 @@ export default {
       ],
       relation: null,
       relations: [],
-      currentUser: Object.assign(this.$ls.getItem("currentUser")),
       id: "",
       url: "",
       payment: false,
     };
   },
   created() {
-    if (this.aSubscription != null) {
+    if (this.aSubscription !== null) {
       this.player.details = this.aSubscription;
     } else {
       this.player.details.matchId = this.match.id;
@@ -198,8 +200,8 @@ export default {
     teesArray: function () {
       return this.match.baan_lus.tees.filter(
         (tee) =>
-          (this.player.relation.relGender == 1 && tee.gender == "M") ||
-          (this.player.relation.relGender == 2 && tee.gender == "F")
+          (this.player.relation.relGender === 1 && tee.gender === "M") ||
+          (this.player.relation.relGender === 2 && tee.gender === "F")
       );
     },
   },
@@ -211,7 +213,7 @@ export default {
     handleSubscribe: function () {
       let that = this;
 
-      if (this.player.details.id == 0) {
+      if (this.player.details.id === 0) {
         this.player.details.relNr = this.relation.relNr;
         this.player.relation.relNr = this.relation.relNr;
       }
@@ -261,7 +263,7 @@ export default {
     },
 
     async filterFn(val, update, abort) {
-      if (val == undefined || val.length < 2) {
+      if (val === undefined || val.length < 2) {
         return;
       }
 

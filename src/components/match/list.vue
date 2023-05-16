@@ -15,17 +15,17 @@
       <div class="col">
         <q-btn-group spread>
           <q-btn
-            :color="subFilter == 1 ? 'warning' : 'secondary'"
+            :color="subFilter === 1 ? 'warning' : 'secondary'"
             label="Ingeschreven"
             v-on:click="subFilter = 1"
           />
           <q-btn
-            :color="subFilter == 2 ? 'warning' : 'secondary'"
+            :color="subFilter === 2 ? 'warning' : 'secondary'"
             label="Inschrijven"
             v-on:click="subFilter = 2"
           />
           <q-btn
-            :color="subFilter == 0 ? 'warning' : 'secondary'"
+            :color="subFilter === 0 ? 'warning' : 'secondary'"
             label="Alles"
             v-on:click="subFilter = 0"
           />
@@ -99,18 +99,18 @@
 </template>
 
 <script>
+import authMixin from "../../mixins/auth";
+
 export default {
+  mixins: [authMixin],
   data() {
     return {
       list: [],
       filter: "",
       subFilter: 0,
-      currentUserPref: Object,
-      currentUser: Object.assign(this.$ls.getItem("currentUser")),
     };
   },
   created() {
-    this.currentUserPref = { ...this.$ls.getItem("currentUserPref").value };
     this.subFilter = this.currentUserPref.matchList.subFilter;
     this.loadList();
   },
@@ -132,9 +132,9 @@ export default {
           (!that.filter ||
             (that.filter &&
               item.name.toLowerCase().includes(that.filter.toLowerCase()))) &&
-          (that.subFilter == 0 ||
-            (that.subFilter == 1 && that.getUserOnMatch(item)) ||
-            (that.subFilter == 2 && that.getOpenForSubscription(item)))
+          (that.subFilter === 0 ||
+            (that.subFilter === 1 && that.getUserOnMatch(item)) ||
+            (that.subFilter === 2 && that.getOpenForSubscription(item)))
       );
     },
   },
@@ -164,8 +164,8 @@ export default {
       }
 
       if (
-        match.restrictionBySex != 0 &&
-        match.restrictionBySex != this.currentUser.relGender
+        match.restrictionBySex !== 0 &&
+        match.restrictionBySex !== this.currentUser.relGender
       ) {
         return false;
       }
@@ -191,7 +191,7 @@ export default {
       let relNr = this.currentUser.relNr;
       let result = false;
       match.players.forEach(function (item) {
-        if (item.relNr == relNr) {
+        if (item.relNr === relNr) {
           result = true;
         }
       });
@@ -204,7 +204,7 @@ export default {
       return (
         compareDate > startDate &&
         compareDate < startDate.add(6, "hours") &&
-        match.UitslagenGereed != 1
+        match.UitslagenGereed !== 1
       );
     },
 

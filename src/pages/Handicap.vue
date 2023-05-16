@@ -1,72 +1,60 @@
 <template>
-
   <q-page-container>
-
     <q-page class="q-pa-md">
-
-      <div
-          v-if="page == 1">
-
-        <handicap-menu
-            v-on:handleNew="handleNew"
-        />
+      <div v-if="page === 1">
+        <handicap-menu v-on:handleNew="handleNew" />
 
         <handicap-list
-            :handicapList="handicapList"
-            v-on:handleOpen="handleOpen"
+          :handicapList="handicapList"
+          v-on:handleOpen="handleOpen"
         />
-
       </div>
 
       <handicap-score
-          v-else-if="page == 2"
-          :scorecard="scorecard"
-          :currentUser="currentUser"
-          :courseArray="courseArray"
-          :teeArray="teeArray"
-          v-on:handleSave="handleSave"
-          v-on:handleClose="handleClose"
+        v-else-if="page === 2"
+        :courseArray="courseArray"
+        :scorecard="scorecard"
+        :teeArray="teeArray"
+        v-on:handleClose="handleClose"
+        v-on:handleSave="handleSave"
       />
 
       <handicap-new-domestic
-          v-else-if="page == 3 && type==1"
-          :type="type"
-          :artificialDate="artificialDate"
-          :scorecard="scorecard"
-          :currentUser="currentUser"
-          :courseArray="courseArray"
-          :teeArray="teeArray"
-          :handicap="handicap"
-          v-on:handleSave="handleSave"
-          v-on:handleClose="handleClose"
+        v-else-if="page === 3 && type === 1"
+        :artificialDate="artificialDate"
+        :courseArray="courseArray"
+        :handicap="handicap"
+        :scorecard="scorecard"
+        :teeArray="teeArray"
+        :type="type"
+        v-on:handleClose="handleClose"
+        v-on:handleSave="handleSave"
       />
 
       <handicap-new-foreign
-          v-else-if="page == 3 && type==2"
-          :type="type"
-          :artificialDate="artificialDate"
-          :scorecard="scorecard"
-          :currentUser="currentUser"
-          :countryArray="countryArray"
-          v-on:handleSave="handleSave"
-          v-on:handleClose="handleClose"
+        v-else-if="page === 3 && type === 2"
+        :artificialDate="artificialDate"
+        :countryArray="countryArray"
+        :scorecard="scorecard"
+        :type="type"
+        v-on:handleClose="handleClose"
+        v-on:handleSave="handleSave"
       />
-
     </q-page>
-
   </q-page-container>
-
 </template>
 
 <script>
-
 import HandicapMenu from "../components/handicap/menu";
 import HandicapList from "../components/handicap/list";
 import HandicapNewDomestic from "../components/handicap/newDomestic";
 import HandicapNewForeign from "../components/handicap/newForeign";
 import HandicapScore from "../components/handicap/score";
 
+import authMixin from "../mixins/auth";
+
 export default {
+  mixins: [authMixin],
   components: {
     HandicapMenu,
     HandicapList,
@@ -80,39 +68,38 @@ export default {
       type: 1,
       scorecard: Object,
       scorecard_template: {
-        ngf_card_id: '',
-        datetime: '',
-        remarks: '',
+        ngf_card_id: "",
+        datetime: "",
+        remarks: "",
         club: 2,
         course: 2,
-        loop: {id: 1, label: "9 Holes"},
+        loop: { id: 1, label: "9 Holes" },
         tee: this.defaultTee,
-        marker: '',
+        marker: "",
         format_of_play: 1,
         is_competition: 0,
         is_qualifying: 1,
         course_country_code: "NL",
         player: {
-          gsn: '',
-          club: 0
+          gsn: "",
+          club: 0,
         },
         holes: [
           {
             number: 1,
             strokes: 0,
             is_computed: false,
-          }
+          },
         ],
-        course_name: '',
-        loop_name: '',
-        tee_name: '',
-        courserate: '',
-        sloperate: '',
-        total_par: '',
-        stableford: '',
+        course_name: "",
+        loop_name: "",
+        tee_name: "",
+        courserate: "",
+        sloperate: "",
+        total_par: "",
+        stableford: "",
       },
       handicapList: [],
-      currentUser: Object.assign(this.$ls.getItem("currentUser")),
       courseArray: [],
       teeArray: [],
       countryArray: [],
@@ -122,19 +109,13 @@ export default {
     this.handleLoadScorecard();
     this.handleLoadCourses();
     this.handleLoadCountries();
-    // if (this.$route.query.action != undefined) {
-    //   let scorecard = this.$ls.getItem("scorecard").value;
-    //   this.scorecard = {...scorecard};
-    //   this.scorecard.type = 1;
-    //   this.page = 2;
-    // }
   },
   computed: {
     defaultTee: function () {
-      if (this.currentUser.relGender == 2) {
-        return this.teeList.find(tee => tee.Category == 15)
+      if (this.currentUser.relGender === 2) {
+        return this.teeList.find((tee) => tee.Category === 15);
       } else {
-        return this.teeList.filter(tee => tee.Category == 9)
+        return this.teeList.filter((tee) => tee.Category === 9);
       }
     },
     artificialDate: function () {
@@ -143,7 +124,7 @@ export default {
         return result;
       }
       this.handicapList.forEach(function (card) {
-        if (card.details.course_name == "artificiële kaart") {
+        if (card.details.course_name === "artificiële kaart") {
           result = card.datetime;
         }
       });
@@ -155,7 +136,7 @@ export default {
         return 54;
       }
       return this.handicapList[0].handicap_index;
-    }
+    },
   },
   methods: {
     handleOpen: function (scorecard) {
@@ -172,14 +153,14 @@ export default {
         if (open) {
           this.handleLoadScorecard(res.response.scorecard.ngf_card_id);
         } else {
-          this.handleLoadScorecard()
+          this.handleLoadScorecard();
         }
       });
     },
     handleNew: function (type) {
-      this.scorecard = {...this.scorecard_template};
+      this.scorecard = { ...this.scorecard_template };
       this.scorecard.type = type;
-      this.scorecard.datetime = this.$dayjs().format('YYYY-MM-DD hh:mm');
+      this.scorecard.datetime = this.$dayjs().format("YYYY-MM-DD hh:mm");
       this.scorecard.player.gsn = this.currentUser.relGsn;
       this.scorecard.player.club = this.currentUser.relHomeCourse;
       this.type = type;
@@ -194,7 +175,7 @@ export default {
     handleLoadScorecard: function (ngf_card_id) {
       this.$http.get("golfer/scorecards").then((res) => {
         if (ngf_card_id) {
-          let scorecard = res.find(card => card.ngf_card_id == ngf_card_id);
+          let scorecard = res.find((card) => card.ngf_card_id === ngf_card_id);
           this.handleOpen(scorecard);
         } else {
           this.handicapList = res;

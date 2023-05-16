@@ -1,14 +1,9 @@
 <template>
   <q-page-container>
-    <match-list
-      v-if="match == null"
-      :currentUser="currentUser"
-      v-on:handleOpenMatch="handleOpenMatch"
-    />
+    <match-list v-if="match === null" v-on:handleOpenMatch="handleOpenMatch" />
 
     <match-details
-      v-if="match != null"
-      :currentUser="currentUser"
+      v-if="match !== null"
       :prop_match="match"
       :prop_page="page"
       v-on:handleCloseMatch="handleCloseMatch"
@@ -19,8 +14,10 @@
 <script>
 import matchList from "../components/match/list";
 import matchDetails from "../components/match/details";
+import authMixin from "../mixins/auth";
 
 export default {
+  mixins: [authMixin],
   components: {
     matchList,
     matchDetails,
@@ -29,11 +26,10 @@ export default {
     return {
       page: 1,
       match: null,
-      currentUser: Object.assign(this.$ls.getItem("currentUser")),
     };
   },
   beforeMount: function () {
-    if (this.$route.query.id != undefined) {
+    if (this.$route.query.id !== undefined) {
       let that = this;
       this.$http.get(`golfer/event/` + this.$route.query.id).then((res) => {
         that.match = res;
@@ -44,7 +40,6 @@ export default {
   methods: {
     handleOpenMatch: function (match) {
       let that = this;
-      console.log(match.id);
       this.$http.get(`golfer/event/` + match.id).then((res) => {
         that.match = res;
       });

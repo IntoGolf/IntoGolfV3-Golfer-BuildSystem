@@ -22,7 +22,7 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
-    boot: ["app", "axios", "i18n", "filters","capacitor"],
+    boot: ["app", "axios", "i18n", "filters", "capacitor"],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ["app.scss"],
@@ -76,7 +76,7 @@ module.exports = configure(function (ctx) {
       proxy: {
         // proxy all requests starting with /api to jsonplaceholder
         "/api": {
-          target: "http://lara6-golf.test",
+          target: "http://intogolf.test",
           changeOrigin: true,
           pathRewrite: {
             "^/api": "",
@@ -155,9 +155,9 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: `GolferApp`,
-        short_name: `GolferApp`,
-        description: `GolferApp`,
+        name: `IntoGolfApp`,
+        short_name: `ITG`,
+        description: `ITG`,
         display: "standalone",
         orientation: "portrait",
         background_color: "#ffffff",

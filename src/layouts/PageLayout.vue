@@ -1,13 +1,12 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-
-    <q-header flat class="bg-secondary">
+    <q-header class="bg-secondary" flat>
       <q-toolbar>
         <q-btn
-          flat
           dense
-          round
+          flat
           icon="home"
+          round
           v-on:click="this.$router.push('/')"
         />
 
@@ -16,22 +15,21 @@
         </q-toolbar-title>
 
         <q-btn
-          flat
           dense
-          round
+          flat
           icon="account_circle"
+          round
           v-on:click="$router.push('/profile')"
         />
       </q-toolbar>
     </q-header>
 
-      <router-view class="web-width" />
-
+    <router-view class="web-width" />
   </q-layout>
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "PageLayout",

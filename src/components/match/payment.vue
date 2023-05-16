@@ -23,7 +23,7 @@ export default {
   methods: {
     handleStatusLoop: function () {
       let that = this;
-      if (this.counter < this.maxCount && this.status == "open") {
+      if (this.counter < this.maxCount && this.status === "open") {
         this.counter++;
         that.handleStatusCheck();
         window.setTimeout(function () {
@@ -37,15 +37,15 @@ export default {
     handlePaymentDone: function () {
       let that = this;
 
-      if (this.status == "expired") {
+      if (this.status === "expired") {
         this.emotion = "text-warning";
         this.text =
           "Het betaalverzoek is verlopen, inschrijving is geannuleerd!";
-      } else if (this.status == "failed") {
+      } else if (this.status === "failed") {
         this.emotion = "text-warning";
         this.text =
           "Het betaalverzoek is mislukt, inschrijving is geannuleerd!";
-      } else if (this.status == "paid") {
+      } else if (this.status === "paid") {
         this.text = "Het betaalverzoek is gelukt, inschrijving is voltooid";
       } else {
         this.emotion = "text-warning";
@@ -60,11 +60,10 @@ export default {
 
     handleStatusCheck: function () {
       let that = this;
-      this.$http.get(`golfer/payment/status/${this.id}`)
-        .then((res) => {
-          that.status = res.opmStatus;
-          that.isDesktop = res.opmIsDesktop;
-        });
+      this.$http.get(`golfer/payment/status/${this.id}`).then((res) => {
+        that.status = res.opmStatus;
+        that.isDesktop = res.opmIsDesktop;
+      });
     },
   },
 };

@@ -141,13 +141,13 @@
     <q-dialog v-if="dialogVisible" v-model="dialogVisible">
       <q-card style="max-width: 320px; width: 95%">
         <q-card-section class="text-h6">
-          <div v-if="dialogErrors.length == 0">Uw reservering</div>
+          <div v-if="dialogErrors.length === 0">Uw reservering</div>
           <div v-if="dialogErrors.length > 0">Probleem gevonden!</div>
         </q-card-section>
 
         <q-separator inset />
 
-        <q-card-section v-if="dialogErrors.length == 0">
+        <q-card-section v-if="dialogErrors.length === 0">
           <div class="row">
             <div class="col text-left text-bold">Datum</div>
             <div class="col text-right">
@@ -197,7 +197,7 @@
           </q-btn>
 
           <q-btn
-            v-if="dialogErrors.length == 0"
+            v-if="dialogErrors.length === 0"
             color="secondary"
             size="md"
             v-on:click="handleReservation"
@@ -211,11 +211,13 @@
 </template>
 
 <script>
+import authMixin from "../../mixins/auth";
+
 export default {
+  mixins: [authMixin],
   data: function () {
     return {
       loading: false,
-
       flight: null,
       teetimes: [],
       dialogVisible: false,
@@ -230,10 +232,9 @@ export default {
         fltTime: "",
         fltCrlNr1: "",
         fltCrlNr2: "",
-        fltSize:
-          this.$ls.getItem("settings").value.planner_default_reservation_count,
+        fltSize: 0,
         players: [],
-        holes: this.$ls.getItem("settings").value.planner_default_holes,
+        holes: 9,
         size: 3,
       },
       date: this.$dayjs().format("YYYY-MM-DD"),
@@ -241,6 +242,10 @@ export default {
   },
   created: function () {
     this.loadTeetimes();
+  },
+  mounted() {
+    this.form.fltSize = this.settings.planner_default_reservation_count;
+    this.form.holes = this.settings.planner_default_holes;
   },
   watch: {
     date: function (newValue, oldValue) {
@@ -254,10 +259,10 @@ export default {
       return array.filter(
         (time) =>
           time.sttPlayers >= this.form.fltSize &&
-          (this.form.holes == 9 ||
-            (time.sttAvailable18 && this.form.holes == 18)) &&
-          (this.form.holes == 9 ||
-            (time.sttCrlNrNext > 0 && this.form.holes == 18))
+          (this.form.holes === 9 ||
+            (time.sttAvailable18 && this.form.holes === 18)) &&
+          (this.form.holes === 9 ||
+            (time.sttCrlNrNext > 0 && this.form.holes === 18))
       );
     },
 
@@ -273,13 +278,12 @@ export default {
     },
 
     loadTeetimes: function () {
-      let currentUser = this.$ls.getItem("currentUser").value;
       this.loading = true;
       this.$http
         .get("golfer/teetimes", {
           params: {
             date: this.$dayjs(this.form.fltDate).format("YYYY-MM-DD"),
-            relNr: currentUser.relNr,
+            relNr: this.currentUser.relNr,
           },
         })
         .then((res) => {
@@ -310,9 +314,8 @@ export default {
         });
       }
 
-      let currentUser = this.$ls.getItem("currentUser").value;
-      flight_players[0].flpRelNr = currentUser.relNr;
-      flight_players[0].flpName = currentUser.full_name2;
+      flight_players[0].flpRelNr = this.currentUser.relNr;
+      flight_players[0].flpName = this.currentUser.full_name2;
 
       const info = {
         fltNr: this.selectedTimeItem.sttRefNr,
@@ -321,7 +324,7 @@ export default {
         fltSize: this.form.fltSize,
         fltCrlNr1: this.selectedCourseItem.crlNr,
         fltCrlNr2:
-          this.form.holes == 18 ? this.selectedTimeItem.sttCrlNrNext : null,
+          this.form.holes === 18 ? this.selectedTimeItem.sttCrlNrNext : null,
         fltOrigin: 2,
         flight_players: flight_players,
       };

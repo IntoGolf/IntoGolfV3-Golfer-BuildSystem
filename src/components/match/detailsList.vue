@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <div v-if="match.UitslagenGereed != 1 && match.StartlijstGereed != 1">
+    <div v-if="match.UitslagenGereed !== 1 && match.StartlijstGereed !== 1">
       <div class="row q-pb-sm">
         <div class="col text-bold">Inschrijfgeld</div>
 
@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <div v-if="match.LidAddGuest == 1" class="row q-pb-sm">
+      <div v-if="match.LidAddGuest === 1" class="row q-pb-sm">
         <div class="col text-bold">Inschrijfgeld gast</div>
 
         <div class="col overflow-hidden text-right">
@@ -63,7 +63,7 @@
         </div>
       </div>
 
-      <div v-if="match.additionalSubscriptionInfo != null" class="row q-pb-sm">
+      <div v-if="match.additionalSubscriptionInfo !== null" class="row q-pb-sm">
         <div class="col text-bold">Extra informatie</div>
 
         <div class="col overflow-hidden text-right">
@@ -100,17 +100,17 @@
 
     <q-btn-group
       v-if="
-        match.UitslagenGereed != 1 &&
-        match.StartlijstGereed != 1 &&
-        match.InschrijvenInternet == 1
+        match.UitslagenGereed !== 1 &&
+        match.StartlijstGereed !== 1 &&
+        match.InschrijvenInternet === 1
       "
       spread
     >
       <q-btn
         v-if="
           openForSubscription &&
-          mySubscription == null &&
-          specialRules.length == 0
+          mySubscription === null &&
+          specialRules.length === 0
         "
         color="secondary"
         label="Inschrijven"
@@ -120,30 +120,19 @@
       <q-btn
         v-if="
           openForSubscription &&
-          mySubscription != null &&
-          specialRules.length == 0 &&
-          match.StartlijstGereed != 1
+          mySubscription !== null &&
+          specialRules.length === 0 &&
+          match.StartlijstGereed !== 1
         "
         color="secondary"
         label="Mijn inschrijving"
         @click="handleSubscribe"
       />
-
-      <q-btn
-        v-if="mySubscription != null"
-        :disable="
-          mySubscription.match_score == null ||
-          !$dayjs(match.playingDate).isToday()
-        "
-        color="secondary"
-        label="Score invoeren"
-        @click="handleEnterScore"
-      />
     </q-btn-group>
 
     <q-btn-group spread>
       <q-btn
-        v-if="inScorecardWindow && mySubscription != null"
+        v-if="inScorecardWindow && mySubscription !== null"
         color="secondary"
         label="Score invoeren"
         @click="handleEnterScore"
@@ -152,12 +141,12 @@
 
     <div
       v-if="
-        match.InschrijvenInternet == 1 &&
-        match.LidAddGuest == 1 &&
-        match.UitslagenGereed != 1 &&
+        match.InschrijvenInternet === 1 &&
+        match.LidAddGuest === 1 &&
+        match.UitslagenGereed !== 1 &&
         openForSubscription &&
-        specialRules.length == 0 &&
-        match.StartlijstGereed != 1
+        specialRules.length === 0 &&
+        match.StartlijstGereed !== 1
       "
       class="pt-2 pb-1"
     >
@@ -179,7 +168,7 @@
       <div class="row mt-2">
         <div class="col">
           <q-btn
-            :disabled="mySubscription == null"
+            :disabled="mySubscription === null"
             class="full-width"
             color="secondary"
             label="Gast inschrijven"
@@ -191,10 +180,10 @@
 
     <div
       v-if="
-        match.InschrijvenInternet == 1 &&
-        match.UitslagenGereed != 1 &&
+        match.InschrijvenInternet === 1 &&
+        match.UitslagenGereed !== 1 &&
         openForSubscription &&
-        match.StartlijstGereed != 1
+        match.StartlijstGereed !== 1
       "
       class="pt-2"
     >
@@ -227,18 +216,16 @@
 </template>
 
 <script>
+import authMixin from "../../mixins/auth";
+
 export default {
+  mixins: [authMixin],
   props: {
     match: Object,
     mySubscription: Object,
-    currentUser: Object,
   },
   data() {
     return {};
-  },
-  created() {
-    console.log("ok");
-    console.log(this.match.baan_lus);
   },
   computed: {
     openForSubscription: function () {
@@ -255,18 +242,18 @@ export default {
         this.mySubscription !== null &&
         this.$dayjs() > startDate &&
         this.$dayjs() < startDate.add(6, "hours") &&
-        this.match.UitslagenGereed != 1
+        this.match.UitslagenGereed !== 1
       );
     },
 
     specialRules: function () {
       if (
-        this.match.restrictionBySex != 0 &&
-        this.match.restrictionBySex != this.currentUser.relGender
+        this.match.restrictionBySex !== 0 &&
+        this.match.restrictionBySex !== this.currentUser.relGender
       ) {
         return (
           "Dit is een wedstrijd voor " +
-          (this.match.restrictionBySex == 1 ? "heren" : "dames") +
+          (this.match.restrictionBySex === 1 ? "heren" : "dames") +
           " u kunt niet inschrijven,"
         );
       }

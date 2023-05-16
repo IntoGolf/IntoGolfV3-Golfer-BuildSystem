@@ -1,26 +1,25 @@
 import { boot } from "quasar/wrappers";
 import { createWatcher } from "next-vue-storage-watcher";
-import {VueReCaptcha} from 'vue-recaptcha-v3'
+import { VueReCaptcha } from "vue-recaptcha-v3";
 
 import dayjs from "dayjs";
 
-const captcha = '6Ld9tF4lAAAAAOsTO9S3a80WqVXnin1I_ajPSMn8';
+const captcha = process.env.VUE_APP_GOOGLE_RECAPTCHA;
 
-let customParseFormat = require('dayjs/plugin/customParseFormat')
-dayjs.extend(customParseFormat)
+let customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
 
 require("dayjs/locale/nl");
 dayjs.locale("NL");
 
-let isBetween = require('dayjs/plugin/isBetween');
+let isBetween = require("dayjs/plugin/isBetween");
 dayjs.extend(isBetween);
 
-let isSameOrBefore = require('dayjs/plugin/isSameOrBefore')
-dayjs.extend(isSameOrBefore)
+let isSameOrBefore = require("dayjs/plugin/isSameOrBefore");
+dayjs.extend(isSameOrBefore);
 
-let isToday = require('dayjs/plugin/isToday')
-dayjs.extend(isToday)
-
+let isToday = require("dayjs/plugin/isToday");
+dayjs.extend(isToday);
 
 export const lsWatcher = createWatcher({
   prefix: "gofler__",

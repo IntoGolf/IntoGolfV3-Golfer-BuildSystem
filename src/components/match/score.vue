@@ -135,13 +135,14 @@ export default {
     },
 
     handleInitiateScore: function () {
+      console.log(this.local_player);
       let that = this;
       let holes =
         parseInt(this.local_player.match_score["hcsH10_par"]) > 0 ? 18 : 9;
       for (let i = 1; i <= holes; i++) {
         let sl = this.local_player.match_score["hcsH" + i + "_sl"];
         sl =
-          sl == null
+          sl === null
             ? this.local_player.match_score["hcsH" + i + "_par"] +
               this.player.match_score["hcsH" + i + "_HcpSl"]
             : sl;
@@ -161,7 +162,6 @@ export default {
             sl
           ),
         });
-        console.log(that.holesArray);
       }
     },
 
@@ -172,7 +172,7 @@ export default {
 
     onScoreChangeHandler: function (hole, value) {
       hole.sl += value;
-      hole.sl = hole.sl == 0 ? 1 : hole.sl;
+      hole.sl = hole.sl === 0 ? 1 : hole.sl;
       hole.stab = this.calcStab(hole.par, hole.hsl, hole.sl);
     },
   },

@@ -1,103 +1,101 @@
 <template>
   <q-page class="q-pa-md">
     <q-card>
-
       <q-card-section class="text-h6">
         Nieuwe scorekaart {{ scorecard.name }}
       </q-card-section>
 
-      <q-separator inset/>
+      <q-separator inset />
 
       <q-card-section class="q-pt-none">
-
         <!--National scorecard-->
-        <div v-if="scorecard.type == 1">
-
+        <div v-if="scorecard.type === 1">
           <!--Step 1: date and time-->
-          <div v-if="scorecard.step == 1">
+          <div v-if="scorecard.step === 1">
             <q-input
-                ref="date"
-                label="Datum"
-                v-model="scorecard.date"
-                v-show="scorecard.step == 1"
-                type="date"
-                lazy-rules
-                :rules="validDate"/>
+              v-show="scorecard.step === 1"
+              ref="date"
+              v-model="scorecard.date"
+              :rules="validDate"
+              label="Datum"
+              lazy-rules
+              type="date"
+            />
 
             <q-input
-                type="time"
-                v-model="scorecard.time"
-                mask="time"
-                lazy-rules
-                v-show="scorecard.step == 1"/>
+              v-show="scorecard.step === 1"
+              v-model="scorecard.time"
+              lazy-rules
+              mask="time"
+              type="time"
+            />
 
             <q-input
-                v-show="scorecard.step == 1"
-                ref="gsn"
-                type="text"
-                v-model="scorecard.marker"
-                label="Marker"
-                hint="Type hier het GSN (NL00000000) van de marker"
-                mask="AA########"
-                :rules="validGsn"
+              v-show="scorecard.step === 1"
+              ref="gsn"
+              v-model="scorecard.marker"
+              :rules="validGsn"
+              hint="Type hier het GSN (NL00000000) van de marker"
+              label="Marker"
+              mask="AA########"
+              type="text"
             />
 
             <q-btn-group class="q-mt-lg" spread>
               <q-btn
-                  icon-right="navigate_next"
-                  color="secondary"
-                  label="Baan"
-                  @click="scorecard.step = 2"
-                  :disabled="gsnIsInvalid || !scorecard.date || !scorecard.time"
+                :disabled="gsnIsInvalid || !scorecard.date || !scorecard.time"
+                color="secondary"
+                icon-right="navigate_next"
+                label="Baan"
+                @click="scorecard.step = 2"
               />
             </q-btn-group>
           </div>
 
           <!--Step 2: course-->
-          <div v-if="scorecard.step == 2">
+          <div v-if="scorecard.step === 2">
             <q-select
-                v-model="scorecard.course"
-                :options="banenArry"
-                use-input
-                @input-value="filterBanen"
-                behavior="menu"
-                map-options
-                emit-value
+              v-model="scorecard.course"
+              :options="banenArry"
+              behavior="menu"
+              emit-value
+              map-options
+              use-input
+              @input-value="filterBanen"
             >
             </q-select>
 
             <q-btn-group class="q-mt-lg" spread>
               <q-btn
-                  icon="navigate_before"
-                  color="secondary"
-                  label="datum"
-                  @click="scorecard.step = 1"
+                color="secondary"
+                icon="navigate_before"
+                label="datum"
+                @click="scorecard.step = 1"
               />
               <q-btn
-                  icon-right="navigate_next"
-                  color="secondary"
-                  label="Lus"
-                  @click="scorecard.step = 3"
-                  :disabled="!scorecard.course"
+                :disabled="!scorecard.course"
+                color="secondary"
+                icon-right="navigate_next"
+                label="Lus"
+                @click="scorecard.step = 3"
               />
             </q-btn-group>
           </div>
 
           <!--Step 3: lus-->
-          <div v-if="scorecard.step == 3">
+          <div v-if="scorecard.step === 3">
             <q-list bordered separator>
               <q-item
-                  clickable
-                  class="itg-q-item"
-                  v-ripple
-                  v-for="(lus, index) in baan.baan_lussen"
-                  v-bind:key="index"
-                  @click="onChangeLus(lus)"
+                v-for="(lus, index) in baan.baan_lussen"
+                v-bind:key="index"
+                v-ripple
+                class="itg-q-item"
+                clickable
+                @click="onChangeLus(lus)"
               >
                 <q-item-section>
-                  <q-item-label class="itg-text-overflow">{{
-                      lus.bnlName
-                    }}
+                  <q-item-label class="itg-text-overflow"
+                    >{{ lus.bnlName }}
                   </q-item-label>
                 </q-item-section>
               </q-item>
@@ -105,30 +103,30 @@
 
             <q-btn-group class="q-mt-lg" spread>
               <q-btn
-                  icon="navigate_before"
-                  color="secondary"
-                  label="Baan"
-                  @click="scorecard.step = 2"
+                color="secondary"
+                icon="navigate_before"
+                label="Baan"
+                @click="scorecard.step = 2"
               />
             </q-btn-group>
           </div>
 
           <!--Step 4: tee -->
-          <div v-if="scorecard.step == 4">
+          <div v-if="scorecard.step === 4">
             <q-list bordered separator>
               <q-item
-                  clickable
-                  class="itg-q-item"
-                  v-ripple
-                  v-for="(tee, index) in genderTeeList"
-                  v-bind:key="index"
-                  @click="onChangeTee(tee)"
+                v-for="(tee, index) in genderTeeList"
+                v-bind:key="index"
+                v-ripple
+                class="itg-q-item"
+                clickable
+                @click="onChangeTee(tee)"
               >
                 <q-item-section>
                   <q-item-label class="itg-text-overflow">
                     <q-icon
-                        class="fal fa-golf-ball"
-                        :class="teeColor(tee)"
+                      :class="teeColor(tee)"
+                      class="fal fa-golf-ball"
                     ></q-icon>
                     {{ getTeeName(tee.bltCategory) }}
                     <div class="float-right">
@@ -141,16 +139,16 @@
 
             <q-btn-group class="q-mt-lg" spread>
               <q-btn
-                  icon="navigate_before"
-                  color="secondary"
-                  label="Lus"
-                  @click="scorecard.step = 3"
+                color="secondary"
+                icon="navigate_before"
+                label="Lus"
+                @click="scorecard.step = 3"
               />
             </q-btn-group>
           </div>
 
           <!--Step 5: confirmation-->
-          <div id="div-scorecard-details" v-if="scorecard.step == 5">
+          <div v-if="scorecard.step === 5" id="div-scorecard-details">
             <div class="row q-mt-md">
               <div class="col" style="font-weight: bold">Datum</div>
               <div class="col text-right itg-text-overflow">
@@ -209,187 +207,185 @@
 
             <q-btn-group class="q-mt-lg" spread>
               <q-btn
-                  icon="navigate_before"
-                  color="secondary"
-                  @click="scorecard.step = 4"
+                color="secondary"
+                icon="navigate_before"
+                @click="scorecard.step = 4"
               />
 
-              <q-btn icon="check" color="secondary" @click="onSaveScorecard"/>
+              <q-btn color="secondary" icon="check" @click="onSaveScorecard" />
 
               <q-btn
-                  icon="close"
-                  color="secondary"
-                  @click="onCancelScorecard"
+                color="secondary"
+                icon="close"
+                @click="onCancelScorecard"
               />
             </q-btn-group>
           </div>
         </div>
 
         <!--Foreign scorecard-->
-        <div v-else-if="scorecard.type == 2">
-
+        <div v-else-if="scorecard.type === 2">
           <q-form class="q-gutter-sm">
-
             <q-input
-                ref="date"
-                type="date"
-                label="Datum"
-                v-model="scorecard.date"
-                v-show="scorecard.step == 1"
-                lazy-rules
-                :rules="validDate"/>
-
-            <q-input
-                type="time"
-                label="Tijd"
-                v-model="scorecard.time"
-                v-show="scorecard.step == 1"
-                mask="time"
-                lazy-rules/>
-
-            <q-select
-                v-show="scorecard.step == 1"
-                v-model="scorecard.course_country_code"
-                :options="countries"
-                option-label="couName"
-                option-value="couIsoCode"
-                emit-value
-                map-options
-                label="Land"
+              v-show="scorecard.step === 1"
+              ref="date"
+              v-model="scorecard.date"
+              :rules="validDate"
+              label="Datum"
+              lazy-rules
+              type="date"
             />
 
             <q-input
-                v-show="scorecard.step == 2"
-                v-model="scorecard.course_name"
-                label="Baan"
-                hint="Type hier de naam van de speelde baan"
-                lazy-rules
-                :rules="[
+              v-show="scorecard.step === 1"
+              v-model="scorecard.time"
+              label="Tijd"
+              lazy-rules
+              mask="time"
+              type="time"
+            />
+
+            <q-select
+              v-show="scorecard.step === 1"
+              v-model="scorecard.course_country_code"
+              :options="countries"
+              emit-value
+              label="Land"
+              map-options
+              option-label="couName"
+              option-value="couIsoCode"
+            />
+
+            <q-input
+              v-show="scorecard.step === 2"
+              v-model="scorecard.course_name"
+              :rules="[
                 (val) => (val && val.length > 0) || 'Ongeldige baan naam',
               ]"
+              hint="Type hier de naam van de speelde baan"
+              label="Baan"
+              lazy-rules
             />
 
             <q-select
-                v-show="scorecard.step == 2"
-                v-model="scorecard.loop"
-                :options="holes_array"
-                hint="Selecteer de gespeelde lus"
-                label="Holes"
-                behavior="menu"
+              v-show="scorecard.step === 2"
+              v-model="scorecard.loop"
+              :options="holes_array"
+              behavior="menu"
+              hint="Selecteer de gespeelde lus"
+              label="Holes"
             />
 
             <q-input
-                v-show="scorecard.step == 2"
-                type="text"
-                v-model="scorecard.loop_name"
-                label="Naam lus"
-                hint="Type hier de naam van de speelde lus"
-                lazy-rules
-                :rules="[
+              v-show="scorecard.step === 2"
+              v-model="scorecard.loop_name"
+              :rules="[
                 (val) => (val && val.length > 0) || 'Ongeldige lus naam',
               ]"
+              hint="Type hier de naam van de speelde lus"
+              label="Naam lus"
+              lazy-rules
+              type="text"
             />
 
             <q-input
-                v-show="scorecard.step == 2"
-                type="text"
-                v-model="scorecard.tee_name"
-                label="Naam tee"
-                hint="Type hier de naam van de speelde tee"
-                lazy-rules
-                :rules="[
+              v-show="scorecard.step === 2"
+              v-model="scorecard.tee_name"
+              :rules="[
                 (val) => (val && val.length > 0) || 'Ongeldige tee naam',
               ]"
+              hint="Type hier de naam van de speelde tee"
+              label="Naam tee"
+              lazy-rules
+              type="text"
             />
 
             <q-input
-                v-show="scorecard.step == 3"
-                v-model="scorecard.courserate"
-                type="number"
-                label="Courserating"
-                hint="Voer hier de courserating in van de gespeelde baan"
-                lazy-rules
-                :rules="validCourseRating"
+              v-show="scorecard.step === 3"
+              v-model="scorecard.courserate"
+              :rules="validCourseRating"
+              hint="Voer hier de courserating in van de gespeelde baan"
+              label="Courserating"
+              lazy-rules
+              type="number"
             />
 
             <q-input
-                v-show="scorecard.step == 3"
-                type="number"
-                v-model="scorecard.sloperate"
-                label="Sloperating"
-                hint="Voer hier de sloperating in van de gespeelde baan"
-                lazy-rules
-                :rules="validSlopeRating"
+              v-show="scorecard.step === 3"
+              v-model="scorecard.sloperate"
+              :rules="validSlopeRating"
+              hint="Voer hier de sloperating in van de gespeelde baan"
+              label="Sloperating"
+              lazy-rules
+              type="number"
             />
 
             <q-input
-                v-show="scorecard.step == 3"
-                type="number"
-                v-model="scorecard.total_par"
-                label="Par"
-                hint="Voer hier de par in van de gespeelde baan"
-                lazy-rules
-                :rules="validTotalPar"
+              v-show="scorecard.step === 3"
+              v-model="scorecard.total_par"
+              :rules="validTotalPar"
+              hint="Voer hier de par in van de gespeelde baan"
+              label="Par"
+              lazy-rules
+              type="number"
             />
 
             <q-input
-                v-show="scorecard.step == 4"
-                type="number"
-                v-model="scorecard.total_stableford"
-                label="Punten"
-                hint="Voer hier aantal stableford punten in"
-                lazy-rules
-                :rules="validStableford"
+              v-show="scorecard.step === 4"
+              v-model="scorecard.total_stableford"
+              :rules="validStableford"
+              hint="Voer hier aantal stableford punten in"
+              label="Punten"
+              lazy-rules
+              type="number"
             />
 
             <q-input
-                v-show="scorecard.step == 4"
-                ref="gsn"
-                type="text"
-                v-model="scorecard.marker"
-                label="Marker"
-                hint="Type hier het GSN (NL00000000) van de marker"
-                mask="AA########"
-                :rules="validGsn"
+              v-show="scorecard.step === 4"
+              ref="gsn"
+              v-model="scorecard.marker"
+              :rules="validGsn"
+              hint="Type hier het GSN (NL00000000) van de marker"
+              label="Marker"
+              mask="AA########"
+              type="text"
             />
 
             <q-input
-                v-show="scorecard.step == 4"
-                type="text"
-                v-model="scorecard.remarks"
-                label="Opmerking"
-                hint="Heeft u een opmerking voer deze hier in"
+              v-show="scorecard.step === 4"
+              v-model="scorecard.remarks"
+              hint="Heeft u een opmerking voer deze hier in"
+              label="Opmerking"
+              type="text"
             />
 
             <div class="q-pa-md">
               <q-btn-group spread>
                 <q-btn
-                    v-show="scorecard.step > 1"
-                    color="secondary"
-                    label="Vorig"
-                    @click="setStep(-1)"
+                  v-show="scorecard.step > 1"
+                  color="secondary"
+                  label="Vorig"
+                  @click="setStep(-1)"
                 />
                 <q-btn
-                    v-show="scorecard.step < 4"
-                    :disable="!isStepValid"
-                    color="secondary"
-                    label="Volgende"
-                    @click="setStep(1)"
+                  v-show="scorecard.step < 4"
+                  :disable="!isStepValid"
+                  color="secondary"
+                  label="Volgende"
+                  @click="setStep(1)"
                 />
                 <q-btn
-                    v-show="scorecard.step == 4"
-                    :disable="!isStepValid"
-                    color="secondary"
-                    label="Opslaan"
-                    @click="onSaveScorecard()"
+                  v-show="scorecard.step === 4"
+                  :disable="!isStepValid"
+                  color="secondary"
+                  label="Opslaan"
+                  @click="onSaveScorecard()"
                 />
-
               </q-btn-group>
             </div>
           </q-form>
         </div>
       </q-card-section>
-
     </q-card>
   </q-page>
 </template>
@@ -408,10 +404,13 @@
 </style>
 
 <script>
+import authMixin from "../../mixins/auth";
+
 export default {
+  mixins: [authMixin],
   props: {
-    type:Number,
-    artificialDate:Date
+    type: Number,
+    artificialDate: Date,
   },
   data() {
     return {
@@ -437,9 +436,9 @@ export default {
         course_country_code: "BE",
 
         handicap:
-            this.$ls.getItem("currentUser").relHandicap == null
-                ? 54
-                : this.$ls.getItem("currentUser").relHandicap,
+          this.currentUser.relHandicap === null
+            ? 54
+            : this.currentUser.relHandicap,
         courserate: "",
         sloperate: "",
         total_par: "",
@@ -514,9 +513,8 @@ export default {
       teeSoorten: [],
       banen: [],
       countries: [],
-      currentUser: Object.assign(this.$ls.getItem("currentUser")),
       banenSelectOptions: [],
-      baanFilter: '',
+      baanFilter: "",
       lus: [],
     };
   },
@@ -530,7 +528,7 @@ export default {
       let result = [];
       let femaleTees = [13, 14, 15, 16, 17];
       this.lus.baan_lus_tees.forEach(function (item) {
-        if (that.currentUser.relGender == 1) {
+        if (that.currentUser.relGender === 1) {
           if (!femaleTees.includes(item.bltCategory)) {
             result.push(item);
           }
@@ -543,17 +541,19 @@ export default {
       return result;
     },
     tee: function () {
-      return this.teeSoorten.find(item => item.Category == this.scorecard.category);
+      return this.teeSoorten.find(
+        (item) => item.Category === this.scorecard.category
+      );
     },
     teeName: function () {
-      if (this.tee == null) {
+      if (this.tee === null) {
         return "";
       }
 
       return this.tee.Omschrijving;
     },
     teeFont: function () {
-      if (this.tee == null) {
+      if (this.tee === null) {
         return "bg-grey-2";
       }
 
@@ -568,16 +568,21 @@ export default {
     },
     banenArry: function () {
       let array = this.banen;
-      if (this.baanFilter != '') {
-        array = this.banen.filter(baan => baan.baaClubName.toLowerCase().indexOf(this.baanFilter) > -1);
+      if (this.baanFilter !== "") {
+        array = this.banen.filter(
+          (baan) => baan.baaClubName.toLowerCase().indexOf(this.baanFilter) > -1
+        );
       }
-      return array.map(baan => ({label: baan.baaClubName, value: baan.baaId}));
+      return array.map((baan) => ({
+        label: baan.baaClubName,
+        value: baan.baaId,
+      }));
     },
     baan: function () {
-      return this.banen.find(baan => baan.baaId == this.scorecard.course);
+      return this.banen.find((baan) => baan.baaId === this.scorecard.course);
     },
     validDate: function () {
-      if (this.scorecard.date == "" || this.scorecard.date == null) {
+      if (this.scorecard.date === "" || this.scorecard.date === null) {
         return false;
       }
 
@@ -594,7 +599,7 @@ export default {
       if (varDate < today.setDate(today.getDate() - 5)) {
         return [
           (val) =>
-              false || "Datum mag niet meer dan 5 dagen in het verleden liggen",
+            false || "Datum mag niet meer dan 5 dagen in het verleden liggen",
         ];
       }
 
@@ -605,75 +610,74 @@ export default {
       return [(val) => true || ""];
     },
     isStepValid: function () {
-      if (this.scorecard.step == 1 && this.scorecard.date.length > 0) {
-        if (this.$refs.date == undefined) {
+      if (this.scorecard.step === 1 && this.scorecard.date.length > 0) {
+        if (this.$refs.date === undefined) {
           return true;
         } else {
           return !this.$refs.date.hasError;
         }
       }
-      if (this.scorecard.step == 2) {
+      if (this.scorecard.step === 2) {
         return (
-            this.scorecard.course_name.length > 0 &&
-            this.scorecard.loop_name.length > 0 &&
-            this.scorecard.tee_name.length > 0
+          this.scorecard.course_name.length > 0 &&
+          this.scorecard.loop_name.length > 0 &&
+          this.scorecard.tee_name.length > 0
         );
       }
-      if (this.scorecard.step == 3) {
+      if (this.scorecard.step === 3) {
         return (
-            this.scorecard.courserate > 20 &&
-            this.scorecard.courserate < 100 &&
-            this.scorecard.sloperate > 0 &&
-            this.scorecard.sloperate < 200 &&
-            this.scorecard.total_par > 0 &&
-            this.scorecard.total_par < 100
+          this.scorecard.courserate > 20 &&
+          this.scorecard.courserate < 100 &&
+          this.scorecard.sloperate > 0 &&
+          this.scorecard.sloperate < 200 &&
+          this.scorecard.total_par > 0 &&
+          this.scorecard.total_par < 100
         );
       }
-      if (this.scorecard.step == 4) {
+      if (this.scorecard.step === 4) {
         return (
-            this.scorecard.total_stableford > 20 &&
-            this.scorecard.total_stableford < 100 &&
-            !this.gsnIsInvalid
+          this.scorecard.total_stableford > 20 &&
+          this.scorecard.total_stableford < 100 &&
+          !this.gsnIsInvalid
         );
       }
       return false;
     },
     validCourseRating: function () {
-      console.log(this.scorecard.courserate);
       return [
         (val) =>
-            (this.scorecard.courserate > 0 && this.scorecard.courserate < 100) ||
-            "Waarde van de courserating moet tussen 0 en 100 liggen",
+          (this.scorecard.courserate > 0 && this.scorecard.courserate < 100) ||
+          "Waarde van de courserating moet tussen 0 en 100 liggen",
       ];
     },
     validSlopeRating: function () {
       console.log(this.scorecard.sloperate);
       return [
         (val) =>
-            (this.scorecard.sloperate > 0 && this.scorecard.sloperate < 200) ||
-            "Waarde van de sloperating moet tussen 0 en 200 liggen",
+          (this.scorecard.sloperate > 0 && this.scorecard.sloperate < 200) ||
+          "Waarde van de sloperating moet tussen 0 en 200 liggen",
       ];
     },
     validTotalPar: function () {
       return [
         (val) =>
-            (this.scorecard.total_par > 0 && this.scorecard.total_par < 100) ||
-            "Waarde van de par moet tussen 0 en 100 liggen",
+          (this.scorecard.total_par > 0 && this.scorecard.total_par < 100) ||
+          "Waarde van de par moet tussen 0 en 100 liggen",
       ];
     },
     validStableford: function () {
       return [
         (val) =>
-            (this.scorecard.total_stableford > 0 &&
-                this.scorecard.total_stableford < 100) ||
-            "Waarde van de stablefordpunten moet tussen 0 en 100 liggen",
+          (this.scorecard.total_stableford > 0 &&
+            this.scorecard.total_stableford < 100) ||
+          "Waarde van de stablefordpunten moet tussen 0 en 100 liggen",
       ];
     },
     validGsn: function () {
       return [
         (val) =>
-            !this.gsnIsInvalid ||
-            "Voer een geldig GSN nummer in of laat het veld leeg",
+          !this.gsnIsInvalid ||
+          "Voer een geldig GSN nummer in of laat het veld leeg",
       ];
     },
     gsnIsInvalid: function () {
@@ -688,7 +692,7 @@ export default {
           return true;
         } else if (!/[A-Z]/.test(this.scorecard.marker.substr(1, 2))) {
           return true;
-        } else if (this.scorecard.marker == "NL00000000") {
+        } else if (this.scorecard.marker === "NL00000000") {
           return true;
         }
       }
@@ -696,9 +700,7 @@ export default {
     },
   },
   methods: {
-
     teeColor: function (tee) {
-
       if ([7, 17].indexOf(tee.bltCategory) > -1) {
         return "bg-grey-6";
       } else if ([9, 13].indexOf(tee.bltCategory) > -1) {
@@ -709,7 +711,7 @@ export default {
         return "bg-red-6";
       } else if ([12, 16].indexOf(tee.bltCategory) > -1) {
         return "bg-orange-6";
-      } else if (tee.bltCategory == 8) {
+      } else if (tee.bltCategory === 8) {
         return "bg-white";
       }
 
@@ -717,7 +719,7 @@ export default {
     },
 
     setStep: function (value) {
-      if (this.scorecard.step == 1 && value == -1) {
+      if (this.scorecard.step === 1 && value === -1) {
         return;
       }
       this.scorecard.step += value;
@@ -726,7 +728,7 @@ export default {
     getTeeName: function (id) {
       let result = null;
       this.teeSoorten.forEach((item) => {
-        if (item.Category == id) {
+        if (item.Category === id) {
           result = item.Omschrijving;
         }
       });
@@ -736,12 +738,12 @@ export default {
     getTeeAdvise: function (id) {
       let result = "";
       this.teeSoorten.forEach((item) => {
-        if (item.Category == id) {
+        if (item.Category === id) {
           result =
-              this.currentUser.relHandicap <= item.HcpMin &&
-              this.currentUser.relHandicap >= item.HcpMax
-                  ? "advies "
-                  : "";
+            this.currentUser.relHandicap <= item.HcpMin &&
+            this.currentUser.relHandicap >= item.HcpMax
+              ? "advies "
+              : "";
         }
       });
       return result;
@@ -750,7 +752,7 @@ export default {
     getTeeColor: function (id) {
       let result = null;
       this.teeSoorten.forEach((item) => {
-        if (item.Category == id) {
+        if (item.Category === id) {
           result = item.Achtergrond;
         }
       });
@@ -762,14 +764,14 @@ export default {
       this.scorecard.step = 1;
 
       if (type > 0) {
-        this.scorecard.name = type == 1 ? "Binnenland" : "Buitenland";
+        this.scorecard.name = type === 1 ? "Binnenland" : "Buitenland";
       }
 
-      if (type == 1) {
+      if (type === 1) {
         this.scorecard.course = this.currentUser.relHomeClub;
       }
 
-      if (type == 2) {
+      if (type === 2) {
         this.scorecard.course = 993;
         this.scorecard.course_country_code = "DE";
       }
@@ -802,9 +804,9 @@ export default {
         course_country_code: "BE",
 
         handicap:
-            this.currentUser.relHandicap == null
-                ? 54
-                : this.currentUser.relHandicap,
+          this.currentUser.relHandicap === null
+            ? 54
+            : this.currentUser.relHandicap,
         courserate: "",
         sloperate: "",
         total_par: "",
@@ -827,7 +829,6 @@ export default {
     },
 
     onChangeLus: function (lus) {
-      console.log(lus);
       this.lus = lus;
       this.scorecard.loop = lus.bnlLusNr;
       this.scorecard.loop_name = lus.bnlName;
@@ -866,7 +867,7 @@ export default {
       let that = this;
       this.$http.get("golfer/courses").then((res) => {
         this.banen = res.data.data;
-        this.teeSoorten = [];//res.teeSoorten;
+        this.teeSoorten = []; //res.teeSoorten;
 
         this.handleNewScorecard(that.type);
       });

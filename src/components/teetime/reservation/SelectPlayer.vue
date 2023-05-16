@@ -1,45 +1,50 @@
 <template>
+  <q-card class="q-mb-md">
+    <q-card-section class="text-h6"> Vrije plaats</q-card-section>
 
-  <q-card
-      class="q-mb-md">
-
-    <q-card-section class="text-h6">
-
-      Vrije plaats
-
-    </q-card-section>
-
-    <q-separator/>
+    <q-separator />
 
     <q-card-section>
-
-      <p>Deze plaats is nog vrij in uw flight. U kunt een speler toevoegen met wie u de afgelopen 6 maanden heeft gespeeld.</p>
+      <p>
+        Deze plaats is nog vrij in uw flight. U kunt een speler toevoegen met
+        wie u de afgelopen 6 maanden heeft gespeeld.
+      </p>
 
       <q-select
-          class="q-mb-sm"
-          label="Selecteer een bekende"
-          v-model="knownPlayer"
-          @update:model-value="knownPlayerList"
-          :options="knownPlayerList"
-          option-label="flpName"
-          option-value="flpName"
-          outlined emit-value map-options clearable
-          :disable="guest != '' || relation != ''"/>
+        v-model="knownPlayer"
+        :disable="guest !== '' || relation !== ''"
+        :options="knownPlayerList"
+        class="q-mb-sm"
+        clearable
+        emit-value
+        label="Selecteer een bekende"
+        map-options
+        option-label="flpName"
+        option-value="flpName"
+        outlined
+        @update:model-value="knownPlayerList"
+      />
 
       <p>U kunt ook zoeken in het ledenbestand van uw club.</p>
 
       <q-select
-          class="q-mb-sm"
-          label="Zoek in clubleden"
-          v-model="relation"
-          outlined use-input hide-selected fill-input clearable
-          input-debounce="0"
-          :options="relations"
-          option-value="relNr"
-          option-label="full_name"
-          @filter="filterFn"
-          emit-value map-options
-          :disable="guest != '' || knownPlayer != ''">
+        v-model="relation"
+        :disable="guest !== '' || knownPlayer !== ''"
+        :options="relations"
+        class="q-mb-sm"
+        clearable
+        emit-value
+        fill-input
+        hide-selected
+        input-debounce="0"
+        label="Zoek in clubleden"
+        map-options
+        option-label="full_name"
+        option-value="relNr"
+        outlined
+        use-input
+        @filter="filterFn"
+      >
         <template v-slot:no-option>
           <q-item>
             <q-item-section class="text-grey">No results</q-item-section>
@@ -49,56 +54,53 @@
 
       <p>Of u voert de naam in van de gast die u wenst uit te nodigen.</p>
       <q-input
-          label="Voer de naam van uw gast in"
-          v-model="guest"
-          outlined clearable
-          :disable="knownPlayer != '' || relation != ''"/>
-
+        v-model="guest"
+        :disable="knownPlayer !== '' || relation !== ''"
+        clearable
+        label="Voer de naam van uw gast in"
+        outlined
+      />
     </q-card-section>
 
-    <q-separator/>
+    <q-separator />
 
     <q-card-section>
-
       <q-btn
-          :disable="knownPlayer == '' && relation == '' && guest == ''"
-          class="q-mr-md"
-          color="primary"
-          label="Opslaan"
-          v-on:click="handleSave"/>
-
+        :disable="knownPlayer === '' && relation === '' && guest === ''"
+        class="q-mr-md"
+        color="primary"
+        label="Opslaan"
+        v-on:click="handleSave"
+      />
     </q-card-section>
-
   </q-card>
-
 </template>
 
 <script>
-
 export default {
   props: {
     flight: Object,
-    player: Object
+    player: Object,
   },
   data: function () {
     return {
-      knownPlayerList:[],
+      knownPlayerList: [],
       relations: [],
-      knownPlayer: '',
-      relation: '',
-      guest: ''
+      knownPlayer: "",
+      relation: "",
+      guest: "",
     };
   },
   watch: {
-    knownPlayer: function(newValue) {
-      this.knownPlayer = newValue == null ? '' : newValue;
+    knownPlayer: function (newValue) {
+      this.knownPlayer = newValue === null ? "" : newValue;
     },
-    relation: function(newValue) {
-      this.relation = newValue == null ? '' : newValue;
+    relation: function (newValue) {
+      this.relation = newValue === null ? "" : newValue;
     },
-    guest: function(newValue) {
-      this.guest = newValue == null ? '' : newValue;
-    }
+    guest: function (newValue) {
+      this.guest = newValue === null ? "" : newValue;
+    },
   },
   computed: {},
   created() {
@@ -107,47 +109,50 @@ export default {
   methods: {
     handleLoad: function () {
       let that = this;
-      this.$http.get("golfer/knownPlayers")
-          .then((res) => {
-            that.knownPlayerList = res;
-          })
+      this.$http.get("golfer/knownPlayers").then((res) => {
+        that.knownPlayerList = res;
+      });
     },
 
     handleSave: function () {
-      let local_flight = {...this.flight};
-      let index = local_flight.flight_players.findIndex(player => player.flpNr == this.player.flpNr);
+      let local_flight = { ...this.flight };
+      let index = local_flight.flight_players.findIndex(
+        (player) => player.flpNr === this.player.flpNr
+      );
 
       if (this.knownPlayer) {
-        let player = this.knownPlayerList.find(player => player.flpName == this.knownPlayer);
+        let player = this.knownPlayerList.find(
+          (player) => player.flpName === this.knownPlayer
+        );
         local_flight.flight_players[index].flpName = player.flpName;
         local_flight.flight_players[index].flpHandicap = player.flpHandicap;
         local_flight.flight_players[index].flpGsn = player.flpGsn;
         local_flight.flight_players[index].flpEmail = player.flpEmail;
         local_flight.flight_players[index].flpPhone = player.flpPhone;
         local_flight.flight_players[index].flpRelNr = player.flpRelNr;
-        this.$emit('handleSave', local_flight, false, -1);
+        this.$emit("handleSave", local_flight, false, -1);
       } else if (this.guest) {
         local_flight.flight_players[index].flpName = this.guest;
-        this.$emit('handleSave', local_flight, false, index);
+        this.$emit("handleSave", local_flight, false, index);
       } else {
-        console.log(this.relation);
         local_flight.flight_players[index].flpRelNr = this.relation;
-        this.$emit('handleSave', local_flight, false, -1);
+        this.$emit("handleSave", local_flight, false, -1);
       }
     },
     async filterFn(val, update, abort) {
-      if (val == undefined || val.length < 2) {
+      if (val === undefined || val.length < 2) {
         return;
       }
 
       let that = this;
-      await this.$http.get(`golfer/relation/0/search/${val}`)
-          .then((response) => {
-            update(() => {
-              that.relations = response;
-            });
+      await this.$http
+        .get(`golfer/relation/0/search/${val}`)
+        .then((response) => {
+          update(() => {
+            that.relations = response;
           });
+        });
     },
-  }
+  },
 };
 </script>

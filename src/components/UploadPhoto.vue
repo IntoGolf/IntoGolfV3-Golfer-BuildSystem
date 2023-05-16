@@ -2,27 +2,27 @@
   <div class="page-upload">
     <div class="text-center mb-2" style="position: relative">
       <el-upload
-        class="avatar-uploader mt-4 mb-2 rounded-circle"
         :action="getUploadUrl()"
-        :show-file-list="false"
+        :before-upload="beforeAvatarUpload"
         :headers="{
           relNr: relNr || 0,
-          authorization: 'Bearer ' + this.$ls.getItem('Authorization'),
+          authorization: 'Bearer ' + Authorization,
         }"
         :on-progress="handleAvatarUploading"
         :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload"
+        :show-file-list="false"
+        class="avatar-uploader mt-4 mb-2 rounded-circle"
       >
         <img
           v-if="relImage"
+          ref="uploadElementIMG"
           :src="relImage"
           class="avatar mt-3"
-          ref="uploadElementIMG"
         />
         <i
           v-else
-          class="el-icon-plus avatar-uploader-icon"
           ref="uploadElement"
+          class="el-icon-plus avatar-uploader-icon"
         ></i>
       </el-upload>
       <el-button circle @click="onTriggerUpload"
@@ -36,12 +36,15 @@
 </template>
 
 <script>
+import authMixin from "../mixins/auth";
+
 export default {
+  mixins: [authMixin],
   props: ["uploadUrl"],
   data() {
     return {
-      relNr: this.$ls.getItem("currentUser").value.relNr,
-      relImage: this.$ls.getItem("currentUser").value.relImage,
+      relNr: this.currentUser.relNr,
+      relImage: this.currentUser.relImage,
       uploading: "",
     };
   },

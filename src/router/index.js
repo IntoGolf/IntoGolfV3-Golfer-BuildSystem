@@ -1,9 +1,9 @@
 import { route } from "quasar/wrappers";
 import {
-  createRouter,
   createMemoryHistory,
-  createWebHistory,
+  createRouter,
   createWebHashHistory,
+  createWebHistory,
 } from "vue-router";
 import routes from "./routes";
 import { lsWatcher as ls } from "../boot/app";
@@ -36,10 +36,9 @@ export default route(function (/* { store, ssrContext } */) {
   });
 
   Router.beforeEach((to, from, next) => {
-    const user = ls.getItem("currentUser", null);
-    const auth = ls.getItem("authorization", null);
+    const user = ls.getItem("currentUser", null).value;
     if (to.matched.some((r) => r.meta.requiresAuth)) {
-      if (user.value && auth.value) {
+      if (user && user.relation_password && user.relation_password.apiToken) {
         if (to.path === "/login") {
           next({ path: "/" });
         }
@@ -47,7 +46,7 @@ export default route(function (/* { store, ssrContext } */) {
         next(to.path !== "/login" ? { path: "/login" } : true);
       }
     } else {
-      if (user.value && auth.value) {
+      if (user && user.relation_password && user.relation_password.apiToken) {
         if (to.path === "/login") {
           next({ path: "/" });
         }

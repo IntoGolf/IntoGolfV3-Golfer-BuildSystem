@@ -11,7 +11,7 @@
     />
 
     <q-select
-      v-if="match.allow_select_tee == 1"
+      v-if="match.allow_select_tee === 1"
       v-model="tee"
       :options="teesArray"
       class="q-mb-sm"
@@ -21,7 +21,7 @@
     />
 
     <q-select
-      v-if="match.timePref == 1"
+      v-if="match.timePref === 1"
       v-model="timePref"
       :options="timeArray"
       class="q-mb-sm"
@@ -48,7 +48,7 @@
     </q-banner>
 
     <q-banner
-      v-if="match.ideal && match.fee > 0 && mySubscription == null"
+      v-if="match.ideal && match.fee > 0 && mySubscription === null"
       class="bg-orange text-white q-mb-md"
       inline-actions
       rounded
@@ -60,19 +60,19 @@
 
     <q-btn-group class="mt-4" spread>
       <q-btn
-        v-if="!(match.ideal && match.fee > 0) || mySubscription != null"
+        v-if="!(match.ideal && match.fee > 0) || mySubscription !== null"
         color="secondary"
         label="Opslaan"
         @click="handleSubscribe"
       />
       <q-btn
-        v-if="match.ideal && match.fee > 0 && mySubscription == null"
+        v-if="match.ideal && match.fee > 0 && mySubscription === null"
         color="secondary"
         label="Betaal"
         @click="handleSubscribe"
       />
       <q-btn
-        v-if="mySubscription != null"
+        v-if="mySubscription !== null"
         :disabled="doIHaveGuests"
         color="secondary"
         label="Uitschrijven"
@@ -92,8 +92,10 @@
 
 <script>
 import payment from "./payment";
+import authMixin from "../../mixins/auth";
 
 export default {
+  mixins: [authMixin],
   components: {
     payment,
   },
@@ -115,12 +117,12 @@ export default {
           timePref: 0,
         },
         relation: {
-          relName: "demo",
-          relCallName: "test",
+          relName: "",
+          relCallName: "",
           relGender: 1,
           relHandicap: 54,
-          relEmail: "demo@intogolf.nl",
-          relPhone: "0612345678",
+          relEmail: "",
+          relPhone: "",
         },
         options: [],
       },
@@ -135,14 +137,13 @@ export default {
         { value: 0, label: "-" },
         { value: 1, label: "Laat" },
       ],
-      currentUser: Object.assign(this.$ls.getItem("currentUser")),
       id: "",
       url: "",
       payment: false,
     };
   },
   created() {
-    if (this.mySubscription != null) {
+    if (this.mySubscription !== null) {
       this.player.details = this.mySubscription;
     } else {
       this.player.details.matchId = this.match.id;
@@ -174,17 +175,17 @@ export default {
     teesArray: function () {
       return this.match.baan_lus.tees.filter(
         (tee) =>
-          (this.player.relation.relGender == 1 && tee.gender == "M") ||
-          (this.player.relation.relGender == 2 && tee.gender == "F")
+          (this.player.relation.relGender === 1 && tee.gender === "M") ||
+          (this.player.relation.relGender === 2 && tee.gender === "F")
       );
     },
     doIHaveGuests: function () {
       return (
         this.match.players.filter(
           (player) =>
-            player.relNrDoor == this.currentUser.relNr &&
-            player.relNr != this.currentUser.relNr &&
-            player.guest
+            player.relNrDoor === this.currentUser.relNr &&
+            player.relNr !== this.currentUser.relNr &&
+            player.is_guest
         ).length > 0
       );
     },
