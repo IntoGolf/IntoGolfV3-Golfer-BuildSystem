@@ -26,7 +26,7 @@
       <div class="col text-bold">Wedstrijdleider 1</div>
 
       <div class="col overflow-hidden text-right">
-        {{ match.commissioner1Name + " (" + match.commissioner1Phone + ")" }}
+        {{ commissionner1 }}
       </div>
     </div>
 
@@ -34,15 +34,7 @@
       <div class="col text-bold">Wedstrijdleider 2</div>
 
       <div class="col overflow-hidden text-right">
-        {{ match.commissioner2Name + " (" + match.commissioner2Phone + ")" }}
-      </div>
-    </div>
-
-    <div class="row q-pb-sm">
-      <div class="col text-bold">Soort score</div>
-
-      <div class="col overflow-hidden text-right">
-        {{ match.match_scoring_type.name }}
+        {{ commissionner2 }}
       </div>
     </div>
 
@@ -252,6 +244,28 @@ export default {
     return {};
   },
   computed: {
+    commissionner1: function () {
+      if (!this.match.commissioner1Name) {
+        return "";
+      }
+      return (
+        this.match.commissioner1Name +
+        " (" +
+        this.match.commissioner1Phone +
+        ")"
+      );
+    },
+    commissionner2: function () {
+      if (!this.match.commissioner2Name) {
+        return "";
+      }
+      return (
+        this.match.commissioner2Name +
+        " (" +
+        this.match.commissioner2Phone +
+        ")"
+      );
+    },
     openForSubscription: function () {
       let startDate = this.$dayjs(this.match.StartDatumTGInschrijven);
       let endDate = this.$dayjs(this.match.subscriptionDeadline);
