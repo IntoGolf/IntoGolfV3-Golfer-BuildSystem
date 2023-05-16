@@ -16,6 +16,7 @@
         v-on:click="$router.push('teetimes')"
       />
       <q-btn
+        v-if="canBookPublic"
         color="primary"
         flat
         label="Cursussen"
