@@ -26,11 +26,11 @@
             </div>
             <div class="row q-mt-md">
               <div class="col-2 text-bold">Longest</div>
-              <div class="col-10">: Hole {{ longest }}</div>
+              <div class="col-10">: {{ longest }}</div>
             </div>
             <div class="row q-mt-md">
               <div class="col-2 text-bold">Neary</div>
-              <div class="col-10">: Hole {{ neary }}</div>
+              <div class="col-10">: {{ neary }}</div>
             </div>
           </div>
         </div>
@@ -144,13 +144,15 @@ export default {
       if (this.list.length === 0) {
         return "";
       }
-      return this.list[0].Longest;
+      return this.list[0].Longest === 0
+        ? "nvt"
+        : "Hole " + this.list[0].Longest;
     },
     neary: function () {
       if (this.list.length === 0) {
         return "";
       }
-      return this.list[0].Neary;
+      return this.list[0].Neary === 0 ? "nvt" : "Hole " + this.list[0].Neary;
     },
   },
   created() {
