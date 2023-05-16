@@ -23,6 +23,30 @@
     </div>
 
     <div class="row q-pb-sm">
+      <div class="col text-bold">Wedstrijdleider 1</div>
+
+      <div class="col overflow-hidden text-right">
+        {{ match.commissioner1Name + " (" + match.commissioner1Phone + ")" }}
+      </div>
+    </div>
+
+    <div class="row q-pb-sm">
+      <div class="col text-bold">Wedstrijdleider 2</div>
+
+      <div class="col overflow-hidden text-right">
+        {{ match.commissioner2Name + " (" + match.commissioner2Phone + ")" }}
+      </div>
+    </div>
+
+    <div class="row q-pb-sm">
+      <div class="col text-bold">Soort score</div>
+
+      <div class="col overflow-hidden text-right">
+        {{ match.match_scoring_type.name }}
+      </div>
+    </div>
+
+    <div class="row q-pb-sm">
       <div class="col text-bold">Soort score</div>
 
       <div class="col overflow-hidden text-right">
