@@ -2,96 +2,104 @@
   <div>
     <h5 class="q-mb-sm q-mt-sm">Inschrijven {{ match.name }}</h5>
 
-    <q-input
-      v-model="player.details.Description"
-      class="q-mb-md"
-      label="Opmerking"
-      maxlength="40"
-      type="text"
-    />
+    <div v-if="id.length === 0">
+      <q-input
+        v-model="player.details.Description"
+        class="q-mb-md"
+        label="Opmerking"
+        maxlength="40"
+        type="text"
+      />
 
-    <q-select
-      v-if="match.allow_select_tee === 1"
-      v-model="tee"
-      :options="teesArray"
-      class="q-mb-sm"
-      label="Tee"
-      option-label="name"
-      option-value="color"
-    />
-
-    <q-select
-      v-if="match.timePref === 1"
-      v-model="timePref"
-      :options="timeArray"
-      class="q-mb-sm"
-      label="Start moment"
-    />
-
-    <div v-for="(pOption, index) in player.details.options" :key="index">
       <q-select
-        v-model="pOption.mpoValue"
-        :label="pOption.label"
-        :options="optionArray"
+        v-if="match.allow_select_tee === 1"
+        v-model="tee"
+        :options="teesArray"
         class="q-mb-sm"
+        label="Tee"
+        option-label="name"
+        option-value="color"
       />
-    </div>
 
-    <q-banner
-      v-if="doIHaveGuests"
-      class="bg-orange text-white q-mb-md"
-      inline-actions
-      rounded
-    >
-      U kunt niet uitschrijven voor deze wedstrijd zolang u gasten heeft
-      ingeschreven.
-    </q-banner>
-
-    <q-banner
-      v-if="match.ideal && match.fee > 0 && mySubscription === null"
-      class="bg-orange text-white q-mb-md"
-      inline-actions
-      rounded
-    >
-      Voor deze wedstrijd is betaling via iDeal vereist. Na inschrijving word u
-      doorgestuurd naar de betaling. Wanneer de betaling niet wordt afgerond
-      wordt u uitgeschreven.
-    </q-banner>
-
-    <q-select
-      v-if="match.ideal === 1 && match.fee > 0 && mySubscription === null"
-      v-model="player.bank"
-      :options="match.iDealIssuers"
-      class="q-mb-md"
-      hint="Selecteer uw bank"
-      label="Uw bank"
-      option-label="name"
-      option-value="id"
-    />
-
-    <q-btn-group class="mt-4" spread>
-      <q-btn
-        v-if="!(match.ideal === 1 && match.fee > 0) || mySubscription !== null"
-        color="secondary"
-        label="Opslaan"
-        @click="handleSubscribe"
+      <q-select
+        v-if="match.timePref === 1"
+        v-model="timePref"
+        :options="timeArray"
+        class="q-mb-sm"
+        label="Start moment"
       />
-      <q-btn
+
+      <div v-for="(pOption, index) in player.details.options" :key="index">
+        <q-select
+          v-model="pOption.mpoValue"
+          :label="pOption.label"
+          :options="optionArray"
+          class="q-mb-sm"
+        />
+      </div>
+
+      <q-banner
+        v-if="doIHaveGuests"
+        class="bg-orange text-white q-mb-md"
+        inline-actions
+        rounded
+      >
+        U kunt niet uitschrijven voor deze wedstrijd zolang u gasten heeft
+        ingeschreven.
+      </q-banner>
+
+      <q-banner
+        v-if="match.ideal && match.fee > 0 && mySubscription === null"
+        class="bg-orange text-white q-mb-md"
+        inline-actions
+        rounded
+      >
+        Voor deze wedstrijd is betaling via iDeal vereist. Na inschrijving word
+        u doorgestuurd naar de betaling. Wanneer de betaling niet wordt afgerond
+        wordt u uitgeschreven.
+      </q-banner>
+
+      <q-select
         v-if="match.ideal === 1 && match.fee > 0 && mySubscription === null"
-        :disable="player.bank === ''"
-        color="secondary"
-        label="Betaal"
-        @click="handleSubscribe"
+        v-model="player.bank"
+        :options="match.iDealIssuers"
+        class="q-mb-md"
+        hint="Selecteer uw bank"
+        label="Uw bank"
+        option-label="name"
+        option-value="id"
       />
-      <q-btn
-        v-if="mySubscription !== null"
-        :disabled="doIHaveGuests"
-        color="secondary"
-        label="Uitschrijven"
-        @click="handleUnSubscribe"
-      />
-      <q-btn color="secondary" label="Sluiten" @click="handleCloseSubscribe" />
-    </q-btn-group>
+
+      <q-btn-group class="mt-4" spread>
+        <q-btn
+          v-if="
+            !(match.ideal === 1 && match.fee > 0) || mySubscription !== null
+          "
+          color="secondary"
+          label="Opslaan"
+          @click="handleSubscribe"
+        />
+        <q-btn
+          v-if="match.ideal === 1 && match.fee > 0 && mySubscription === null"
+          :disable="player.bank === ''"
+          color="secondary"
+          label="Betaal"
+          @click="handleSubscribe"
+        />
+        <q-btn
+          v-if="mySubscription !== null"
+          :disabled="doIHaveGuests"
+          color="secondary"
+          label="Uitschrijven"
+          @click="handleUnSubscribe"
+        />
+        <q-btn
+          color="secondary"
+          label="Sluiten"
+          @click="handleCloseSubscribe"
+        />
+      </q-btn-group>
+    </div>
 
     <payment
       v-if="id.length > 0"
