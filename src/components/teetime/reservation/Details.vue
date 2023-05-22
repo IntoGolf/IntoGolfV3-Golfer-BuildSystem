@@ -254,7 +254,9 @@ export default {
           },
         })
         .then((res) => {
-          window.location.href = res.url;
+          if (res.status === 200) {
+            window.location.href = res.url;
+          }
         });
     },
     handleClose18: function (flight) {

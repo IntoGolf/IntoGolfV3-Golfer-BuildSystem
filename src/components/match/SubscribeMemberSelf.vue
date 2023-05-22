@@ -58,15 +58,27 @@
       wordt u uitgeschreven.
     </q-banner>
 
+    <q-select
+      v-if="match.ideal === 1 && match.fee > 0 && mySubscription === null"
+      v-model="player.bank"
+      :options="match.iDealIssuers"
+      class="q-mb-md"
+      hint="Selecteer uw bank"
+      label="Uw bank"
+      option-label="name"
+      option-value="id"
+    />
+
     <q-btn-group class="mt-4" spread>
       <q-btn
-        v-if="!(match.ideal && match.fee > 0) || mySubscription !== null"
+        v-if="!(match.ideal === 1 && match.fee > 0) || mySubscription !== null"
         color="secondary"
         label="Opslaan"
         @click="handleSubscribe"
       />
       <q-btn
-        v-if="match.ideal && match.fee > 0 && mySubscription === null"
+        v-if="match.ideal === 1 && match.fee > 0 && mySubscription === null"
+        :disable="player.bank === ''"
         color="secondary"
         label="Betaal"
         @click="handleSubscribe"
@@ -104,6 +116,7 @@ export default {
     return {
       player: {
         type: 1, //1: me, 2:member, 3:guest
+        bank: "",
         details: {
           id: 0,
           matchId: 0,
@@ -143,6 +156,7 @@ export default {
     };
   },
   created() {
+    console.log(this.match.iDealIssuers);
     if (this.mySubscription !== null) {
       this.player.details = this.mySubscription;
     } else {
