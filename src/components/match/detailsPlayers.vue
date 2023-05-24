@@ -179,17 +179,41 @@ export default {
           player.relation !== null &&
           player.relNrDoor === this.currentUser.relNr
       );
-      //      return this.match.players.filter(player => player.relation !== null && player.relNrDoor === this.currentUser.relNr);
     },
     players: function () {
-      //      return this.match.players.filter(player => player.relation !== null && player.relNrDoor !== this.currentUser.relNr && player.Status === 0);
-      return this.match.players.filter(
+      let result = this.match.players.filter(
         (player) =>
           (this.match.InschrijvenInternet === 0 ||
             (player.relation !== null &&
               player.relNrDoor !== this.currentUser.relNr)) &&
           player.Status === 0
       );
+
+      if (this.match.StartlijstGereed === 1) {
+        result = this.match.players.filter((player) => player.partyId > 0);
+
+        result.sort(function (a, b) {
+          const timeA = new Date(
+            "1970/01/01 " + a.match_party.match_flight.startingTime
+          );
+          const timeB = new Date(
+            "1970/01/01 " + b.match_party.match_flight.startingTime
+          );
+
+          if (timeA < timeB) {
+            return -1;
+          } else if (timeA > timeB) {
+            return 1;
+          } else {
+            return (
+              a.match_party.match_flight.startingHoleNumber -
+              b.match_party.match_flight.startingHoleNumber
+            );
+          }
+        });
+      }
+
+      return result;
     },
     reservePlayers: function () {
       //      return this.match.players.filter(player => player.relation !== null && player.relNrDoor !== this.currentUser.relNr && player.Status === 1);

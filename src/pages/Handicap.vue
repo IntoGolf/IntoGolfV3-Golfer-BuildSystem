@@ -160,7 +160,7 @@ export default {
     handleNew: function (type) {
       this.scorecard = { ...this.scorecard_template };
       this.scorecard.type = type;
-      this.scorecard.datetime = this.$dayjs().format("YYYY-MM-DD hh:mm");
+      this.scorecard.datetime = this.$dayjs().format("YYYY-MM-DD HH:mm");
       this.scorecard.player.gsn = this.currentUser.relGsn;
       this.scorecard.player.club = this.currentUser.relHomeCourse;
       this.type = type;

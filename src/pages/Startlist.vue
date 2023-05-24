@@ -13,11 +13,11 @@
               <div class="col-10">: {{ startDatum }}</div>
             </div>
             <div class="row q-mt-md">
-              <div class="col-2 text-bold">Wedstrijdkleiding</div>
+              <div class="col-2 text-bold">Wedstrijdleiding</div>
               <div class="col-10">: {{ wedstrijdleiding1 }}</div>
             </div>
             <div class="row q-mt-md">
-              <div class="col-2 text-bold">Wedstrijdkleiding</div>
+              <div class="col-2 text-bold">Wedstrijdleiding</div>
               <div class="col-10">: {{ wedstrijdleiding2 }}</div>
             </div>
             <div class="row q-mt-md">
@@ -119,7 +119,7 @@ export default {
       return (
         this.$dayjs(this.list[0].playingDate).format("dddd DD MMMM") +
         " " +
-        this.$dayjs(this.list[0].matchStartingTime, "hh:mm:ss").format("hh:mm")
+        this.$dayjs(this.list[0].matchStartingTime, "HH:mm:ss").format("HH:mm")
       );
     },
     wedstrijdleiding1: function () {

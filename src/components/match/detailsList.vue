@@ -92,7 +92,7 @@
 
         <div class="col overflow-hidden text-right">
           {{
-            $dayjs(match.StartDatumTGInschrijven).format("ddd DD MMMM hh:mm")
+            $dayjs(match.StartDatumTGInschrijven).format("ddd DD MMMM HH:mm")
           }}
         </div>
       </div>
@@ -101,7 +101,7 @@
         <div class="col text-bold">Eind inschrijf</div>
 
         <div class="col overflow-hidden text-right">
-          {{ $dayjs(match.subscriptionDeadline).format("ddd DD MMMM hh:mm") }}
+          {{ $dayjs(match.subscriptionDeadline).format("ddd DD MMMM HH:mm") }}
         </div>
       </div>
 
@@ -245,26 +245,36 @@ export default {
   },
   computed: {
     commissionner1: function () {
-      if (!this.match.commissioner1Name) {
-        return "";
+      let result = "";
+      if (
+        this.match.commissioner1Name !== null &&
+        this.match.commissioner1Name.length > 0
+      ) {
+        result = this.match.commissioner1Name;
+        if (
+          this.match.commissioner1Phone !== null &&
+          this.match.commissioner1Phone.length > 0
+        ) {
+          result += " (" + this.match.commissioner1Phone + ")";
+        }
       }
-      return (
-        this.match.commissioner1Name +
-        " (" +
-        this.match.commissioner1Phone +
-        ")"
-      );
+      return result;
     },
     commissionner2: function () {
-      if (!this.match.commissioner2Name) {
-        return "";
+      let result = "";
+      if (
+        this.match.commissioner2Name !== null &&
+        this.match.commissioner2Name.length > 0
+      ) {
+        result = this.match.commissioner2Name;
+        if (
+          this.match.commissioner2Phone !== null &&
+          this.match.commissioner2Phone.length > 0
+        ) {
+          result += " (" + this.match.commissioner2Phone + ")";
+        }
       }
-      return (
-        this.match.commissioner2Name +
-        " (" +
-        this.match.commissioner2Phone +
-        ")"
-      );
+      return result;
     },
     openForSubscription: function () {
       let startDate = this.$dayjs(this.match.StartDatumTGInschrijven);
