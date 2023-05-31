@@ -176,7 +176,9 @@ export default {
         this.currentUser.relHandicap;
       this.player.details.exactHandicapForMatch = this.currentUser.relHandicap;
       this.player.details.startingTeeId =
-        this.currentUser.relGender === 1 ? 8 : 14;
+        this.currentUser.relGender === "1"
+          ? this.match.startingTeeId
+          : this.match.startingTeeForWomenId;
     }
     this.tee = this.teesArray.find(
       (tee) => tee.color === this.player.details.startingTeeId
