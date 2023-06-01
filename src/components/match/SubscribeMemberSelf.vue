@@ -199,8 +199,8 @@ export default {
     teesArray: function () {
       return this.match.baan_lus.tees.filter(
         (tee) =>
-          (this.player.relation.relGender === 1 && tee.gender === "M") ||
-          (this.player.relation.relGender === 2 && tee.gender === "F")
+          (this.currentUser.relGender === "1" && tee.gender === "M") ||
+          (this.currentUser.relGender === "2" && tee.gender === "F")
       );
     },
     doIHaveGuests: function () {

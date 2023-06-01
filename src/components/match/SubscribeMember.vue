@@ -130,27 +130,29 @@ export default {
       player: {
         type: 2, //1: me, 2:member, 3:guest
         details: {
-          id: 0,
-          matchId: 0,
-          relNr: 0,
-          relNrDoor: 0,
+          id: null,
+          matchId: null,
+          partyId: null,
+          relNr: null,
+          relNrDoor: null,
           exactHandicapAtSubscription: 54,
           exactHandicapForMatch: 54,
           Description: "",
-          startingTeeId: 0,
+          startingTeeId: null,
           Bron: 2,
           timePref: 0,
+          Status: 1,
+          relation: {
+            relNr: null,
+            relName: "",
+            relCallName: "",
+            relGender: 1,
+            relHandicap: 54,
+            relEmail: "",
+            relPhone: "",
+          },
+          options: [],
         },
-        relation: {
-          relNr: null,
-          relName: "",
-          relCallName: "",
-          relGender: 1,
-          relHandicap: 54,
-          relEmail: "",
-          relPhone: "",
-        },
-        options: [],
       },
       optionArray: [
         { value: 0, label: "Nee" },
@@ -186,11 +188,20 @@ export default {
     );
   },
   watch: {
+    tee: function (newValue) {
+      console.log(newValue);
+      this.player.details.startingTeeId = newValue.color;
+    },
     timePref: function (newValue) {
       this.player.details.timePref = newValue.value;
     },
     relation: function (newValue) {
-      this.player.details.startingTeeId = newValue.relGender === 1 ? 8 : 14;
+      this.player.details.relation = newValue;
+      this.player.details.startingTeeId =
+        newValue.relGender === 1
+          ? this.match.startingTeeId
+          : this.match.startingTeeForWomenId;
+
       this.tee = this.teesArray.find(
         (tee) => tee.color === this.player.details.startingTeeId
       );
@@ -200,8 +211,9 @@ export default {
     teesArray: function () {
       return this.match.baan_lus.tees.filter(
         (tee) =>
-          (this.player.relation.relGender === 1 && tee.gender === "M") ||
-          (this.player.relation.relGender === 2 && tee.gender === "F")
+          (this.player.details.relation.relGender === 1 &&
+            tee.gender === "M") ||
+          (this.player.details.relation.relGender === 2 && tee.gender === "F")
       );
     },
   },
@@ -213,15 +225,6 @@ export default {
     handleSubscribe: function () {
       let that = this;
 
-      if (this.player.details.id === 0) {
-        this.player.details.relNr = this.relation.relNr;
-        this.player.relation.relNr = this.relation.relNr;
-      }
-
-      if (this.tee) {
-        this.player.details.startingTeeId = this.tee.id;
-      }
-      this.player.details.Bron = 2;
       this.player.is_desktop = this.$q.platform.is.desktop === true ? 1 : 0;
 
       this.$http.post(`golfer/event/player`, this.player).then(function (res) {
