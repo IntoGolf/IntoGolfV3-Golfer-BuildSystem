@@ -196,6 +196,7 @@ export default {
       this.player.details.timePref = newValue.value;
     },
     relation: function (newValue) {
+      this.player.details.relNr = newValue.relNr;
       this.player.details.relation = newValue;
       this.player.details.startingTeeId =
         newValue.relGender === 1
