@@ -336,31 +336,34 @@ export default {
             {
               name: "relCallName",
               type: String,
+              required: true,
             },
             {
               name: "relPrefix",
               type: String,
+              required: false,
             },
             {
               name: "relName",
               type: String,
+              required: true,
             },
           ],
         },
         {
           name: "address",
           fields: [
-            { name: "relPostalCode", type: String },
-            { name: "relCity", type: String },
-            { name: "relAddressStreetNumber", type: String },
-            { name: "relCity", type: String },
+            { name: "relPostalCode", type: String, required: true },
+            { name: "relCity", type: String, required: true },
+            { name: "relAddressStreetNumber", type: String, required: true },
+            { name: "relCity", type: String, required: true },
           ],
         },
         {
           name: "contact",
           fields: [
-            { name: "relEmail", type: "email" },
-            { name: "relPhoneMobile", type: "phone" },
+            { name: "relEmail", type: "email", required: true },
+            { name: "relPhoneMobile", type: "phone", required: true },
           ],
         },
         {
@@ -373,8 +376,9 @@ export default {
             {
               name: "repPassword",
               type: "password",
+              required: true,
             },
-            { name: "repPassword", type: "password" },
+            { name: "repPassword", type: "password", required: true },
           ],
         },
       ],
@@ -511,7 +515,8 @@ export default {
       let inValid = false;
 
       tab.fields.forEach((item) => {
-        if (item.type === String) {
+        if (!item.required) {
+        } else if (item.type === String) {
           inValid = inValid || this.account_form[item.name].length === 0;
         } else if (item.type === "email") {
           const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
