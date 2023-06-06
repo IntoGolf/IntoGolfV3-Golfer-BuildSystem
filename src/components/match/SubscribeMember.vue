@@ -3,7 +3,7 @@
     <h5 class="q-mb-sm q-mt-sm">Inschrijven {{ match.name }}</h5>
 
     <q-select
-      v-if="player.details.id === 0"
+      v-if="player.details.id === null"
       v-model="relation"
       :option-disable="(item) => (item === null ? true : item.disabled !== '')"
       :options="relations"
