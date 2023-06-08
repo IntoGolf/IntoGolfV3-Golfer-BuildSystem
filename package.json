@@ -8,6 +8,7 @@
   "scripts": {
     "start": "cross-env quasar dev",
     "start:dev": "cross-env ENVIRONMENT=dev quasar dev",
+    "start:demo": "cross-env ENVIRONMENT=demo quasar dev",
     "start:maasduinen": "cross-env ENVIRONMENT=maasduinen quasar dev",
     "build:web": "ENVIRONMENT=staging quasar build",
     "build:web_live": "quasar build",
