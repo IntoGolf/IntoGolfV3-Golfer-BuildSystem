@@ -1,0 +1,1 @@
+"use strict";(globalThis["webpackChunkintogolf_app_golfer"]=globalThis["webpackChunkintogolf_app_golfer"]||[]).push([[97],{5097:(o,a,n)=>{n.r(a),n.d(a,{default:()=>p});var e=n(3673);function r(o,a,n,r,t,l){const u=(0,e.up)("router-view");return(0,e.wg)(),(0,e.j4)(u)}const t=(0,e.aZ)({name:"BlankLayout"});var l=n(4260);const u=(0,l.Z)(t,[["render",r]]),p=u}}]);

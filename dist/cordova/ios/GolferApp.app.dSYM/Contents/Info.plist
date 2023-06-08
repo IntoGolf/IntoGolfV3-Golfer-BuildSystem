@@ -5,7 +5,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>English</string>
 		<key>CFBundleIdentifier</key>
-		<string>com.apple.xcode.dsym.nl.igolfer.app</string>
+		<string>com.apple.xcode.dsym.nl.intogolf.maasduinen</string>
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundlePackageType</key>
@@ -13,8 +13,8 @@
 		<key>CFBundleSignature</key>
 		<string>????</string>
 		<key>CFBundleShortVersionString</key>
-		<string>0.1.37</string>
+		<string>0.1.38</string>
 		<key>CFBundleVersion</key>
-		<string>0.1.37</string>
+		<string>0.1.38</string>
 	</dict>
 </plist>

@@ -318,7 +318,7 @@ export default {
       });
     },
     tee: function (newValue) {
-      this.local_scorecard.tee = newValue.color + 1; //correct for NGF mistake
+      this.local_scorecard.tee = newValue.color;
       this.local_scorecard.holes = [];
 
       for (let i = 1; i <= this.course.courseType; i++) {

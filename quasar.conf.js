@@ -224,7 +224,7 @@ module.exports = configure(function (ctx) {
 
         appId: "nl.igolfer.app",
       },
-
+      // ...
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
       chainWebpackMain(chain) {
         chain
