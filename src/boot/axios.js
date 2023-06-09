@@ -1,13 +1,16 @@
 import { boot } from "quasar/wrappers";
 import axios from "axios";
 import router from "../router";
-import { Loading, Notify } from "quasar";
+import { Loading, Notify, Platform } from "quasar";
 import { lsWatcher as ls } from "./app";
 
 const baseURL = process.env.VUE_APP_BASE_URL;
 
 axios.interceptors.request.use(
   (config) => {
+    if (Platform.is.mobile) {
+      axios.defaults.headers.common["X-App-Identifier"] = process.env.APP_ID;
+    }
     Loading.show();
     config.url = `${baseURL}api/${config.url}`;
     if (ls.getItem("currentUser").value) {
