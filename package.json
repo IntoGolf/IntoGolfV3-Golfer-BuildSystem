@@ -17,6 +17,7 @@
     "build:maasduinen:android": "cross-env ENVIRONMENT=maasduinen quasar build -m android && npm run sign && open dist/cordova/android/apk/release",
     "build:maasduinen:ios": "ENVIRONMENT=maasduinen quasar build -m ios",
     "build:web": "ENVIRONMENT=demo quasar build",
+    "build:web_live": "quasar build",
     "sign": "jarsigner -storepass 123456 -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore dist/cordova/android/apk/release/app-release-unsigned.apk radar",
     "lint": "eslint --ext .js,.vue ./",
     "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
