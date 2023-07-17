@@ -12,7 +12,7 @@
       />
 
       <q-select
-        v-if="match.allow_select_tee === 1"
+        v-if="match.allow_select_tee == 1"
         v-model="tee"
         :options="teesArray"
         class="q-mb-sm"
@@ -22,7 +22,7 @@
       />
 
       <q-select
-        v-if="match.timePref === 1"
+        v-if="match.timePref == 1"
         v-model="timePref"
         :options="timeArray"
         class="q-mb-sm"
@@ -37,6 +37,16 @@
           class="q-mb-sm"
         />
       </div>
+
+      <q-banner
+        v-if="teamCaptainWithTeam"
+        class="bg-orange text-white q-mb-md"
+        inline-actions
+        rounded
+      >
+        U kunt niet uitschrijven voor deze wedstrijd zolang u team deelnemers
+        heeft.
+      </q-banner>
 
       <q-banner
         v-if="doIHaveGuests"
@@ -60,7 +70,7 @@
       </q-banner>
 
       <q-select
-        v-if="match.ideal === 1 && match.fee > 0 && mySubscription === null"
+        v-if="match.ideal == 1 && match.fee > 0 && mySubscription === null"
         v-model="player.bank"
         :options="match.iDealIssuers"
         class="q-mb-md"
@@ -88,7 +98,7 @@
         />
         <q-btn
           v-if="mySubscription !== null"
-          :disabled="doIHaveGuests"
+          :disabled="doIHaveGuests || teamCaptainWithTeam"
           color="secondary"
           label="Uitschrijven"
           @click="handleUnSubscribe"
@@ -210,6 +220,18 @@ export default {
             player.relNrDoor === this.currentUser.relNr &&
             player.relNr !== this.currentUser.relNr &&
             player.is_guest
+        ).length > 0
+      );
+    },
+    teamCaptainWithTeam: function () {
+      if (this.match.teamSize === 1) {
+        return false;
+      }
+      return (
+        this.match.players.filter(
+          (player) =>
+            player.relNrDoor === this.currentUser.relNr &&
+            player.relNr !== this.currentUser.relNr
         ).length > 0
       );
     },

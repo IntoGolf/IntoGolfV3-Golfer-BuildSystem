@@ -1,6 +1,6 @@
 <template>
   <q-page-container class="q-ma-sm">
-    <div v-show="step === 1" class="row q-mt-md">
+    <div v-show="step == 1" class="row q-mt-md">
       <div class="col-md-4 offset-md-4 col-xs-12">
         <div class="row">
           <div class="col-8 text-h5">Boek een starttijd</div>
@@ -79,6 +79,7 @@
               <course-comp
                 :course="course"
                 :holes="holes"
+                :per="per"
                 :size="flight.fltSize"
                 v-on:setTimeObject="setTimeObject"
               />
@@ -102,7 +103,7 @@
       </div>
     </div>
 
-    <div v-show="step === 2" class="row q-mt-md">
+    <div v-show="step == 2" class="row q-mt-md">
       <div class="col-md-4 offset-md-4 col-xs-12">
         <div class="row text-center q-mb-lg">
           <div class="col text-h5 q-ml-auto q-mr-auto">
@@ -231,11 +232,16 @@
           label="Terug"
           v-on:click="step = 1"
         />
-        <q-btn color="primary" label="Reserveren" v-on:click="handleSave" />
+        <q-btn
+          :disable="!valid"
+          color="primary"
+          label="Reserveren"
+          v-on:click="handleSave"
+        />
       </div>
     </div>
 
-    <div v-show="step === 3" class="row q-mt-md">
+    <div v-show="step == 3" class="row q-mt-md">
       <div class="col-md-4 offset-md-4 col-xs-12">
         <div class="row">
           <div class="text-h5 q-mt-md q-mb-md">
@@ -333,7 +339,7 @@ export default {
     this.date = this.$dayjs().format("YYYY-MM-DD");
   },
   watch: {
-    date: function (newValue) {
+    date: function () {
       this.$http.get("igg?date=" + this.date).then((res) => {
         this.loading = false;
         this.courses = res.payload;
@@ -350,6 +356,18 @@ export default {
     },
   },
   computed: {
+    valid: function () {
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      return (
+        this.flight.flpName1.length > 3 &&
+        emailPattern.test(this.flight.flpEmail1) &&
+        (this.size === 1 ||
+          (this.size > 1 && this.flight.flpName2.length > 3)) &&
+        (this.size === 2 ||
+          (this.size > 2 && this.flight.flpName3.length > 3)) &&
+        (this.size === 3 || (this.size > 3 && this.flight.flpName4.length > 3))
+      );
+    },
     hasTimes: function () {
       return (
         this.courses.filter((course) => {

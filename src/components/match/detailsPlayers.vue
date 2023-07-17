@@ -2,7 +2,9 @@
   <div v-if="match.players.length > 0">
     <div v-show="myPlayers.length > 0">
       <div class="row">
-        <div class="col text-h6">Mijn deelnemers</div>
+        <div class="col text-h6">
+          {{ match.teamSize > 1 ? "Mijn team" : "Mijn deelnemers" }}
+        </div>
       </div>
 
       <q-separator />
@@ -21,8 +23,8 @@
               v-for="(player, index) in myPlayers"
               v-bind:key="index"
               v-ripple
+              :clickable="!hasTeamMembers(player.relNr)"
               class="full-width shadow-1 q-mb-sm bg-green-1"
-              clickable
               v-on:click="handleSubscribeGuest(player)"
             >
               <q-item-section>
@@ -224,6 +226,15 @@ export default {
     },
   },
   methods: {
+    hasTeamMembers: function (relNr) {
+      if (this.match.teamSize === 1) {
+        return false;
+      }
+      let team = this.match.players.filter(
+        (player) => player.relNrDoor === this.currentUser.relNr
+      );
+      return relNr === this.currentUser.relNr && team.length > 1;
+    },
     handleSubscribeGuest: function (player) {
       if (this.match.InschrijvenInternet === 0) {
         return;

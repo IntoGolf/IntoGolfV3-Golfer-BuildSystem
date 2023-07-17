@@ -19,7 +19,7 @@
           <q-list class="full-width" separator>
             <q-item
               v-for="item in list"
-              v-show="item.disabled === 0"
+              v-show="item.disabled == 0"
               :key="item.relNr"
               v-ripple
               class="full-width bg-white shadow-1 q-mb-sm"

@@ -138,7 +138,7 @@ export default {
           return;
         }
         result += item.payAmount * -1;
-        done = item.payNr === this.payment.payNr;
+        done = item.payNr == this.payment.payNr;
       });
       return result;
     },

@@ -13,7 +13,7 @@
     <div class="row">
       <div class="col q-pl-md q-pr-md q-pb-md">
         <details-list
-          v-if="page === 1"
+          v-if="page == 1"
           :match="match"
           :mySubscription="mySubscription"
           v-on:handleCloseSubscribe="handleCloseSubscribe"

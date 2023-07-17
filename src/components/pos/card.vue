@@ -39,7 +39,7 @@ export default {
   computed: {
     payments: function () {
       return this.paymentArray.filter(
-        (item) => item.payPmtNr === this.card.pmtNr
+        (item) => item.payPmtNr == this.card.pmtNr
       );
     },
     balance: function () {

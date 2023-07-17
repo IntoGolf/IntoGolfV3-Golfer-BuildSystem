@@ -94,7 +94,7 @@ export default {
   computed: {
     payments: function () {
       return this.paymentArray.filter(
-        (item) => item.payPmtNr === this.selectedCard.pmtNr
+        (item) => item.payPmtNr == this.selectedCard.pmtNr
       );
     },
   },

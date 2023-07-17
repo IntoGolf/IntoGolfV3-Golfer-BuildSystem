@@ -1,7 +1,7 @@
 <template>
   <q-page-container>
     <q-page class="q-pa-md">
-      <div v-if="page === 1">
+      <div v-if="page == 1">
         <handicap-menu v-on:handleNew="handleNew" />
 
         <handicap-list
@@ -11,7 +11,7 @@
       </div>
 
       <handicap-score
-        v-else-if="page === 2"
+        v-else-if="page == 2"
         :courseArray="courseArray"
         :scorecard="scorecard"
         :teeArray="teeArray"
@@ -20,7 +20,7 @@
       />
 
       <handicap-new-domestic
-        v-else-if="page === 3 && type === 1"
+        v-else-if="page == 3 && type == 1"
         :artificialDate="artificialDate"
         :courseArray="courseArray"
         :handicap="handicap"
@@ -32,7 +32,7 @@
       />
 
       <handicap-new-foreign
-        v-else-if="page === 3 && type === 2"
+        v-else-if="page == 3 && type == 2"
         :artificialDate="artificialDate"
         :countryArray="countryArray"
         :scorecard="scorecard"
@@ -112,10 +112,10 @@ export default {
   },
   computed: {
     defaultTee: function () {
-      if (this.currentUser.relGender === 2) {
-        return this.teeList.find((tee) => tee.Category === 15);
+      if (this.currentUser.relGender == 2) {
+        return this.teeList.find((tee) => tee.Category == 15);
       } else {
-        return this.teeList.filter((tee) => tee.Category === 9);
+        return this.teeList.filter((tee) => tee.Category == 9);
       }
     },
     artificialDate: function () {

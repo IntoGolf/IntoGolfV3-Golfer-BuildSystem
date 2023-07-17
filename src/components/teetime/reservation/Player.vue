@@ -1,7 +1,7 @@
 <template>
   <div>
     <select-player
-      v-if="player.flpName === null"
+      v-if="!player.flpName"
       :flight="flight"
       :player="player"
       v-on:handleSave="handleSave"

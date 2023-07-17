@@ -49,7 +49,7 @@ export default {
         }
 
         let payMethod = array.find(
-          (item) => item.pmtNr === payment.payPmtNr && item.pmtPtpNr === 4
+          (item) => item.pmtNr === payment.payPmtNr && item.pmtPtpNr == 4
         );
 
         if (payMethod === undefined) {

@@ -53,8 +53,8 @@ export default {
       return this.courseArray.filter(
         (course) =>
           this.clientCourseArray.findIndex(
-            (clientCourse) => clientCourse.plcPcsNr === course.pcsNr
-          ) === -1
+            (clientCourse) => clientCourse.plcPcsNr == course.pcsNr
+          ) == -1
       );
     },
   },

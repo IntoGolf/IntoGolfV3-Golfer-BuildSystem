@@ -19,14 +19,35 @@ export default {
     course: Object,
     holes: Number,
     size: Number,
+    per: Object,
   },
   computed: {
+    from: function () {
+      let result = 240;
+      if (this.per.value === 3) {
+        result = 720;
+      } else if (this.per.value === 4) {
+        result = 1080;
+      }
+      return result;
+    },
+    to: function () {
+      let result = 1439;
+      if (this.per.value === 2) {
+        result = 720;
+      } else if (this.per.value === 3) {
+        result = 1080;
+      }
+      return result;
+    },
     times: function () {
       return Object.values(this.course.times).filter((t) => {
         return (
           (this.holes.value === 9 ||
             (this.holes.value === 18 && t.sttCrlNrNext > 0)) &&
-          t.sttMaxPlayers >= this.size
+          t.sttTimeFrom >= this.size &&
+          t.sttTimeFrom >= this.from &&
+          t.sttTimeFrom < this.to
         );
       });
     },

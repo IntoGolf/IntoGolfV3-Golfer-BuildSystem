@@ -146,7 +146,7 @@
       />
     </q-btn-group>
 
-    <q-btn-group spread>
+    <q-btn-group class="q-mt-md" spread>
       <q-btn
         v-if="inScorecardWindow && mySubscription !== null"
         color="secondary"
@@ -220,9 +220,13 @@
       <div class="row q-mb-md">
         <div class="col">
           <q-btn
+            :disable="fullTeam"
+            :label="
+              (match.teamSize > 1 ? 'Team inschrijven' : 'Lid inschrijven') +
+              (fullTeam ? ' (uw team is compleet)' : '')
+            "
             class="full-width"
             color="secondary"
-            label="Lid inschrijven"
             @click="handleSubscribeMember"
           />
         </div>
@@ -244,6 +248,23 @@ export default {
     return {};
   },
   computed: {
+    fullTeam: function () {
+      if (this.match.teamSize === 1) {
+        return false;
+      }
+      return this.myPlayers.length === this.match.teamSize;
+    },
+    hasTeamMembers: function () {
+      if (this.match.teamSize === 1) {
+        return false;
+      }
+      return this.myPlayers.length > 1;
+    },
+    myPlayers: function () {
+      return this.match.players.filter(
+        (player) => player.relNrDoor === this.currentUser.relNr
+      );
+    },
     commissionner1: function () {
       let result = "";
       if (

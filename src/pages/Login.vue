@@ -16,7 +16,7 @@
         v-on:click="$router.push('teetimes')"
       />
       <q-btn
-        v-if="canBookPublic"
+        v-if="canBookCourse"
         color="primary"
         flat
         label="Cursussen"
@@ -117,10 +117,13 @@ export default {
   },
   computed: {
     canSignIn: function () {
-      return parseInt(this.settings.website_display_register_button) === 1;
+      return parseInt(this.settings.website_display_register_button) == 1;
     },
     canBookPublic: function () {
-      return parseInt(this.settings.website_display_teetime_public) === 1;
+      return parseInt(this.settings.website_display_teetime_public) == 1;
+    },
+    canBookCourse: function () {
+      return parseInt(this.settings.website_display_lessons_public) == 1;
     },
   },
   methods: {

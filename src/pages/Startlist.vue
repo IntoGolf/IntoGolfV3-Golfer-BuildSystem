@@ -144,15 +144,13 @@ export default {
       if (this.list.length === 0) {
         return "";
       }
-      return this.list[0].Longest === 0
-        ? "nvt"
-        : "Hole " + this.list[0].Longest;
+      return this.list[0].Longest == 0 ? "nvt" : "Hole " + this.list[0].Longest;
     },
     neary: function () {
       if (this.list.length === 0) {
         return "";
       }
-      return this.list[0].Neary === 0 ? "nvt" : "Hole " + this.list[0].Neary;
+      return this.list[0].Neary == 0 ? "nvt" : "Hole " + this.list[0].Neary;
     },
   },
   created() {

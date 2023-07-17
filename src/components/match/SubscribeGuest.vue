@@ -66,7 +66,7 @@
     />
 
     <q-select
-      v-if="match.allow_select_tee === 1"
+      v-if="match.allow_select_tee == 1"
       v-model="tee"
       :options="teesArray"
       class="q-mb-md"
@@ -78,7 +78,7 @@
     />
 
     <q-select
-      v-if="match.timePref === 1"
+      v-if="match.timePref == 1"
       v-model="timePref"
       :options="timeArray"
       label="Start moment"

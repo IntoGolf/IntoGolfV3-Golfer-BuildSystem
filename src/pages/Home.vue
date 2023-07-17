@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <div v-if="settings.app_display_weather === 1" class="row q-mb-md">
+    <div v-if="settings.app_display_weather == 1" class="row q-mb-md">
       <div v-for="(hour, key) in weatherHours" :key="key" class="col">
         <div class="row">
           <div class="col text-center">
@@ -98,7 +98,7 @@
 
     <div class="row text-h6 q-pl-md q-pr-md q-pt-sm q-gutter-sm">
       <div
-        v-if="settings.app_display_message_tile === 1"
+        v-if="settings.app_display_message_tile == 1"
         class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
         @click="$router.push('/messages')"
       >
@@ -111,7 +111,7 @@
       <div
         v-if="
           currentUser.tile_teetimes_y_n &&
-          settings.app_display_course_status_tile === 1
+          settings.app_display_course_status_tile == 1
         "
         class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
         @click="$router.push('/course')"
@@ -147,7 +147,7 @@
       </div>
 
       <div
-        v-if="settings.app_display_profile_tile === 1"
+        v-if="settings.app_display_profile_tile == 1"
         class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
         @click="$router.push('/profile')"
       >

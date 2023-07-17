@@ -97,7 +97,7 @@ export default {
   },
   computed: {
     lessonType1Array: function () {
-      return this.lessonTypeArray.filter((item) => item.pltLtcNr === 1);
+      return this.lessonTypeArray.filter((item) => item.pltLtcNr == 1);
     },
     pro: function () {
       return this.proArray.find((pro) => pro.relNr === this.relNr);
