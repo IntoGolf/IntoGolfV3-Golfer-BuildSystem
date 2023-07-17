@@ -17,7 +17,7 @@
           <div class="col-12 text-center text-subtitle1">{{ subtitle }}</div>
         </div>
 
-        <q-form @submit.prevent="onSubmit">
+        <q-form v-if="status === 1" @submit.prevent="onSubmit">
           <q-tabs
             v-model="tab"
             active-color="primary"
@@ -281,6 +281,20 @@
             </div>
           </div>
         </q-form>
+
+        <div v-else-if="status === 2" class="row q-mt-md q-mb-md">
+          <div class="col-12">
+            Uw aanvraag is ontvangen. Wij nemen uw aanvraag z.s.m. in
+            behandeling en nemen via de e-mail contact met u op.
+          </div>
+        </div>
+
+        <div v-else class="row q-mt-md q-mb-md">
+          <div class="col-12">
+            Uw aanvraag is mislukt, probeer het nogmaals of neem contact met ons
+            op.
+          </div>
+        </div>
       </q-card-section>
     </q-card>
   </q-page-container>
@@ -326,6 +340,7 @@ export default {
       }
     };
     return {
+      status: 1,
       tab: "name",
       relPostalCode: "",
       relAddressStreetNumber: "",
@@ -620,9 +635,12 @@ export default {
 
       that.account_form.captcha = await this.$recaptcha("login");
       that.loading = true;
-      that.$http.post(`golfer/sign-up`, that.account_form).then(() => {
-        // that.loading = false;
-        // that.$router.push("/");
+      that.$http.post(`golfer/sign-up`, that.account_form).then((res) => {
+        if (res.data.success === 1) {
+          this.status = 2;
+        } else {
+          this.status = 3;
+        }
       });
     },
     onCaptchaVerified(response) {
