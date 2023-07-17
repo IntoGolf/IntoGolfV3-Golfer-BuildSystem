@@ -4,6 +4,7 @@ let parsedEnvCommon = DotEnv.config({ path: ".env" }).parsed;
 argsEnv = {};
 //if (process.env.ENVIRONMENT && process.env.ENVIRONMENT !== "live") {
 console.log("go johnny go");
+console.log(parsedEnvCommon);
 if (process.env.ENVIRONMENT) {
   console.log("use env file: .env." + process.env.ENVIRONMENT);
   argsEnv = DotEnv.config({ path: ".env." + process.env.ENVIRONMENT }).parsed;
@@ -14,6 +15,8 @@ if (process.env.ENVIRONMENT) {
 // }
 
 let parsedEnv = DotEnv.config().parsed;
+console.log("next");
+console.log(parsedEnv);
 
 module.exports = function () {
   return Object.assign(parsedEnvCommon, argsEnv, parsedEnv);
