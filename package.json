@@ -13,6 +13,7 @@
     "build:android": "cross-env ENVIRONMENT=staging quasar build -m android && npm run sign && open dist/cordova/android/apk/release",
     "build:demo:android": "cross-env ENVIRONMENT=demo quasar build -m android && npm run sign && open dist/cordova/android/apk/release",
     "build:demo:ios": "cross-env ENVIRONMENT=demo quasar build -m ios",
+    "build:development:web": "ENVIRONMENT=development quasar build",
     "build:maasduinen:web": "ENVIRONMENT=maasduinen quasar build",
     "build:maasduinen:android": "cross-env ENVIRONMENT=maasduinen quasar build -m android && npm run sign && open dist/cordova/android/apk/release",
     "build:maasduinen:ios": "ENVIRONMENT=maasduinen quasar build -m ios",
