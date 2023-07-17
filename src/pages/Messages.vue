@@ -1,6 +1,6 @@
 <template>
   <q-page-container class="q-pa-md">
-    <q-card v-if="list.length === 0">
+    <q-card v-if="list.length === 0" class="q-mt-md">
       <q-card-section class="text-center text-h6 mt-2">
         {{ no_messages }}
       </q-card-section>
