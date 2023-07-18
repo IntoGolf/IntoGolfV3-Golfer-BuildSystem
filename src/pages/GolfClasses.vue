@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-card v-if="!ProCourse" class="pro-course-card">
+    <q-card v-if="!ProCourse" class="pro-course-card q-mt-lg">
       <q-card-section>
         <div class="row justify-center q-mt-md q-mb-md">
           <div class="col text-center text-h5">Ons cursus aanbod</div>
@@ -36,13 +36,14 @@
                 <div class="col-8">: {{ item.pro_lessons.length }}</div>
               </div>
               <div class="row">
+                <div class="col-4">Lessen datums</div>
+                <div class="col-8">: {{ lessonsText(item) }}</div>
+              </div>
+              <div class="row">
                 <div class="col-4">Beschikbare plaatsen</div>
                 <div class="col-8">
                   :
-                  {{
-                    item.pro_lesson_type.pltMaxPers -
-                    item.pro_lesson_clients.length
-                  }}
+                  {{ item.available_spots }}
                 </div>
               </div>
               <div class="row">
@@ -107,19 +108,24 @@
               <div class="col-8">: {{ ProCourse.pro_lessons.length }}</div>
             </div>
             <div class="row">
+              <div class="col-4">Lessen datums</div>
+              <div class="col-8">: {{ lessonsText(ProCourse) }}</div>
+            </div>
+            <div class="row">
               <div class="col-4">Beschikbare plaatsen</div>
               <div class="col-8">
                 :
-                {{
-                  ProCourse.pro_lesson_type.pltMaxPers -
-                  ProCourse.pro_lesson_clients.length
-                }}
+                {{ ProCourse.available_spots }}
               </div>
             </div>
             <div class="row">
               <div class="col-4">Kosten</div>
               <div class="col-8">: € 295,-</div>
             </div>
+            <q-separator
+              v-show="ProCourse.pcsText != null && ProCourse.pcsText.length > 0"
+              class="q-mt-md"
+            />
             <div class="row">
               <div id="course-text" class="col" v-html="ProCourse.pcsText" />
             </div>
@@ -134,11 +140,7 @@
                   v-on:click="ProCourse = null"
                 />
                 <q-btn
-                  v-if="
-                    ProCourse.pro_lesson_type.pltMaxPers -
-                      ProCourse.pro_lesson_clients.length >
-                    0
-                  "
+                  v-if="!ProCourse.full"
                   color="primary"
                   label="Inschrijven"
                   size="sm"
@@ -212,6 +214,15 @@ export default {
     onCloseSignUp: function () {
       this.subscribe = false;
       this.ProCourse = null;
+    },
+    lessonsText: function (item) {
+      let result = "";
+      for (let i = 0; i < item.pro_lessons.length; i++) {
+        result +=
+          (i > 0 ? ", " : "") +
+          this.$filters.unixToDate(item.pro_lessons[i].lesDate, "D/M");
+      }
+      return result;
     },
   },
 };

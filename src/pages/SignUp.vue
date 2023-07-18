@@ -27,11 +27,16 @@
             indicator-color="primary"
             narrow-indicator
           >
-            <q-tab label="Naam" name="name" />
-            <q-tab label="Adres" name="address" />
-            <q-tab label="Contact" name="contact" />
-            <q-tab label="Golf" name="golf" />
-            <q-tab v-if="needsPassword" label="Wachtwoord" name="password" />
+            <q-tab disable label="Naam" name="name" />
+            <q-tab disable label="Adres" name="address" />
+            <q-tab disable label="Contact" name="contact" />
+            <q-tab disable label="Golf" name="golf" />
+            <q-tab
+              v-if="needsPassword"
+              disable
+              label="Wachtwoord"
+              name="password"
+            />
           </q-tabs>
 
           <q-separator />
@@ -153,12 +158,12 @@
                 <div class="col">
                   <q-input
                     v-model="account_form.relEmail"
-                    :rules="[(val) => !!val || 'Email is een verplicht']"
+                    :rules="[validateEmail]"
                     bottom-slots
                     counter
                     dense
-                    hint="E-mailadres mag niet eerder gebruikt zijn"
                     label="E-mailadres*"
+                    lazy-rules
                     maxlength="60"
                     stack-label
                   />
@@ -216,10 +221,10 @@
                 <div class="col">
                   <q-input
                     v-model="account_form.repPassword"
-                    :rules="[(val) => !!val || 'Voornaam is een verplicht']"
                     bottom-slots
                     counter
                     dense
+                    error-message="Please use maximum 3 characters"
                     hint="Min. 6 karaters bestaande uit cijfers en letters"
                     label="Wachtwoord*"
                     maxlength="60"
@@ -316,29 +321,6 @@ export default {
   },
   mixins: [publicMixin],
   data() {
-    let validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("Please enter your password"));
-      } else if (value.length < 6) {
-        callback(new Error("Password length must be at least 6"));
-      } else if (!/^(?![^a-zA-Z]+$)(?!\D+$)/.test(value)) {
-        callback(new Error("Must contain letters and numbers"));
-      } else {
-        if (this.account_form.repPassword !== "") {
-          // this.$refs.ruleForm.validateField('password');
-        }
-        callback();
-      }
-    };
-    let validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("Please enter your password again"));
-      } else if (value !== this.account_form.repPassword) {
-        callback(new Error("The password is inconsistent!"));
-      } else {
-        callback();
-      }
-    };
     return {
       status: 1,
       tab: "name",
@@ -423,48 +405,6 @@ export default {
         relAddress1: "",
         ProCourse: this.ProCourse,
       },
-      rules: {
-        relEmail: [
-          {
-            required: true,
-            message: "Please enter your email address",
-            trigger: "blur",
-          },
-        ],
-        relFirstName: [
-          {
-            required: true,
-            message: "Please enter your initials",
-            trigger: "blur",
-          },
-        ],
-        relCallName: [
-          {
-            required: true,
-            message: "Please enter your first name",
-            trigger: "blur",
-          },
-        ],
-        relName: [
-          {
-            required: true,
-            message: "Please enter your last name",
-            trigger: "blur",
-          },
-        ],
-        repPassword: [
-          {
-            validator: validatePass,
-            trigger: "blur",
-          },
-        ],
-        confirmRepPassword: [
-          {
-            validator: validatePass2,
-            trigger: "blur",
-          },
-        ],
-      },
       captchaResponse: null,
       errors: [],
     };
@@ -477,9 +417,6 @@ export default {
           "&number=" +
           this.relAddressStreetNumber
       );
-      if (result) {
-        console.log(result);
-      }
       this.account_form.relPostalCode = newValue;
     },
     relAddressStreetNumber: async function (newValue) {
@@ -575,7 +512,6 @@ export default {
   created: function () {
     if (!this.needsPassword) {
       this.tabs.pop();
-      console.log(this.tabs);
     }
 
     let that = this;
@@ -593,14 +529,17 @@ export default {
     this.onCaptchaVerified();
   },
   methods: {
+    validateEmail(val) {
+      return new Promise((resolve, reject) => {
+        this.$http.get("check-email/" + val).then((res) => {
+          resolve(res.data !== 1 || "E-mailadres is reeds in gebruik");
+        });
+      });
+    },
     isValid: function (name) {
-      console.log("test");
-      console.log(name);
       return name;
     },
     onNextTab: function () {
-      console.log("onNextTab");
-      console.log(this.tabs[this.nextTab]);
       this.tab = this.tabs[this.nextTab].name;
     },
     onPrevTab: function () {
@@ -611,18 +550,6 @@ export default {
         this.$emit("onCloseSignUp");
       } else {
         this.$router.push("/");
-      }
-    },
-    onBlur(e) {
-      if (e.target.value) {
-        this.$http.get("check-email/" + e.target.value).then((res) => {
-          if (res.data === 1) {
-            this.$message({
-              message: "This email address has been registered!",
-              type: "warning",
-            });
-          }
-        });
       }
     },
     onHome() {
@@ -636,7 +563,8 @@ export default {
       that.account_form.captcha = await this.$recaptcha("login");
       that.loading = true;
       that.$http.post(`golfer/sign-up`, that.account_form).then((res) => {
-        if (res.data.success === 1) {
+        console.log(res);
+        if (res.success === 1) {
           this.status = 2;
         } else {
           this.status = 3;
