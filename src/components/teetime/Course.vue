@@ -3,11 +3,26 @@
     <div
       v-for="(time, key) of times"
       :key="key"
-      class="row text-center q-pt-xs"
-      v-on:click="this.$emit('setTimeObject', time)"
+      class="row q-pt-xs"
+      v-on:click="
+        this.$emit('setTimeObject', { time: time, price: price(time) })
+      "
     >
-      <div class="col q-pa-sm bg-green-3 cursor-pointer">
+      <div :class="backgroundColor(time)" class="col-5 q-pa-sm cursor-pointer">
         {{ $filters.minuteToTime(time.sttTimeFrom) }}
+        <q-icon
+          v-for="(p, k) in time.playerCount"
+          v-show="time.playerCount > 0"
+          :key="k"
+          name="person"
+          style="margin-bottom: 4px"
+        />
+      </div>
+      <div
+        :class="backgroundColor(time)"
+        class="col-7 text-right q-pa-sm cursor-pointer"
+      >
+        {{ $filters.money(price(time)) }}
       </div>
     </div>
   </div>
@@ -45,11 +60,25 @@ export default {
         return (
           (this.holes.value === 9 ||
             (this.holes.value === 18 && t.sttCrlNrNext > 0)) &&
-          t.sttTimeFrom >= this.size &&
+          t.sttMaxPlayers >= this.size &&
           t.sttTimeFrom >= this.from &&
           t.sttTimeFrom < this.to
         );
       });
+    },
+  },
+  methods: {
+    price: function (time) {
+      if (this.holes.value === 18) {
+        return (
+          Math.round(time.greenFeePrice18[0].price * this.size * 100) / 100
+        );
+      } else {
+        return Math.round(time.greenFeePrice9[0].price * this.size * 100) / 100;
+      }
+    },
+    backgroundColor: function (time) {
+      return time.playerCount > 0 ? "bg-orange-3" : "bg-green-3";
     },
   },
 };

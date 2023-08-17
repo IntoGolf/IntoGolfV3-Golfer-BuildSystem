@@ -113,99 +113,130 @@
     <div v-show="step == 2" class="row q-mt-md">
       <div class="col-md-4 offset-md-4 col-xs-12">
         <div class="row text-center q-mb-lg">
-          <div class="col text-h5 q-ml-auto q-mr-auto">Jouw reservering</div>
-        </div>
-
-        <div class="row">
-          <div class="col-4 text-bold">Datum:</div>
-          <div class="col-8">
-            {{ dayjs(date).format("dddd DD MMMM") }}
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-4 text-bold">Tijd:</div>
-          <div class="col-8">
+          <div class="col text-h5 q-ml-auto q-mr-auto">
+            Jouw reservering:
+            {{ date }}
             {{ $filters.minuteToTime(flight.fltTime1) }}
           </div>
         </div>
-
-        <div class="row">
-          <div class="col-4 text-bold">Personen:</div>
-          <div class="col-8">
-            {{ size }}
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-4 text-bold">Holes:</div>
-          <div class="col-8">
-            {{ holes.value }}
-          </div>
-        </div>
-
-        <div class="row q-mb-lg">
-          <div class="col-4 text-bold">Te betalen bedrag:</div>
-          <div class="col-8">
-            {{ $filters.money(timePrice) }}
-          </div>
-        </div>
-
         <div class="row">
           Nadat je de flight hebt betaald ontvang je een e-mail ter bevestiging
           van je reservering. In deze e-mail vindt je een link waarmee je je
           resevering kan aanvullen met de details van je medespelers.
         </div>
-        <q-input
-          v-model="flight.flpName1"
-          :rules="[(val) => !!val || '* Required']"
-          class="q-mb-sm"
-          label="Naam"
-          stack-label
-        />
+        <div class="row">
+          <div class="col-8">
+            <q-input
+              v-model="flight.flpName1"
+              :rules="[(val) => !!val || '* Required']"
+              class="q-mb-sm"
+              label="Uw naam"
+              stack-label
+            />
+          </div>
+          <div class="col-4">
+            <q-input
+              v-model="flight.flpHandicap1"
+              :rules="[
+                (val) => (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
+              ]"
+              class="q-mb-sm"
+              fill-mask="0"
+              label="Uw handicap"
+              mask="##.#"
+              reverse-fill-mask
+              stack-label
+            />
+          </div>
+        </div>
         <q-input
           v-model="flight.flpEmail1"
           :rules="[emailRule]"
           class="q-mb-sm"
-          label="E-mailadres"
+          label="Uw e-mailadres"
           stack-label
         />
         <q-input
           v-model="flight.flpPhone1"
           :rules="[(val) => !!val || '* Required']"
           class="q-mb-sm"
-          label="Telefoonummer"
+          label="Uw telefoonummer"
           stack-label
         />
-        <div class="row">Leveringsvoorwaarden:</div>
-        <div
-          class="row q-pa-sm"
-          style="
-            border: 1px solid lightgrey;
-            height: 150px;
-            font-size: 10px;
-            overflow-y: scroll;
-          "
-        >
-          {{ conditions }}
+        <div v-if="flight.fltSize >= 2" class="row">
+          <div class="col-8">
+            <q-input
+              v-model="flight.flpName2"
+              :rules="[(val) => !!val || '* Required']"
+              class="q-mb-sm"
+              label="Speler 2"
+              stack-label
+            />
+          </div>
+          <div class="col-4">
+            <q-input
+              v-model="flight.flpHandicap2"
+              :rules="[
+                (val) => (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
+              ]"
+              class="q-mb-sm"
+              fill-mask="0"
+              label="Handicap"
+              mask="##.#"
+              reverse-fill-mask
+              stack-label
+            />
+          </div>
         </div>
-        <div class="row q-mt-md">
-          <q-checkbox
-            v-model="flight.agreeConditions"
-            :rules="[(val) => !!val || '* Required']"
-            class="q-mb-sm"
-            label="Ik ga akkoord met de leveringsvoorvaarden"
-            stack-label
-          />
+        <div v-if="flight.fltSize >= 3" class="row">
+          <div class="col-8">
+            <q-input
+              v-model="flight.flpName3"
+              :rules="[(val) => !!val || '* Required']"
+              class="q-mb-sm"
+              label="Speler 3"
+              stack-label
+            />
+          </div>
+          <div class="col-4">
+            <q-input
+              v-model="flight.flpHandicap3"
+              :rules="[
+                (val) => (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
+              ]"
+              class="q-mb-sm"
+              fill-mask="0"
+              label="Handicap"
+              mask="##.#"
+              reverse-fill-mask
+              stack-label
+            />
+          </div>
         </div>
-        <div class="row">
-          <q-checkbox
-            v-model="flight.agreeCommerce"
-            :rules="[(val) => !!val || '* Required']"
-            class="q-mb-sm"
-            label="Stuur mij aanbiedingen"
-            stack-label
-          />
+        <div v-if="flight.fltSize >= 4" class="row">
+          <div class="col-8">
+            <q-input
+              v-model="flight.flpName4"
+              :rules="[(val) => !!val || '* Required']"
+              class="q-mb-sm"
+              label="Speler 4"
+              stack-label
+            />
+          </div>
+          <div class="col-4">
+            <q-input
+              v-model="flight.flpHandicap4"
+              :rules="[
+                (val) => (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
+              ]"
+              class="q-mb-sm"
+              fill-mask="0"
+              label="Handicap"
+              mask="##.#"
+              reverse-fill-mask
+              stack-label
+            />
+          </div>
         </div>
         <q-btn
           class="q-mr-sm"
@@ -214,7 +245,6 @@
           v-on:click="step = 1"
         />
         <q-btn
-          v-show="1 == 2"
           :disable="!valid"
           class="q-mr-sm"
           color="primary"
@@ -230,35 +260,29 @@
       </div>
     </div>
 
-    <div v-show="step === 3" class="row q-mt-md">
+    <div v-show="step == 3" class="row q-mt-md">
       <div class="col-md-4 offset-md-4 col-xs-12">
-        <div class="row text-center q-mb-lg">
-          <payment
-            v-if="mollie !== null"
-            :id="mollie.id"
-            :url="mollie.url"
-            v-on:handleClosePayment="handleClosePayment"
+        <div class="row">
+          <div class="text-h5 q-mt-md q-mb-md">
+            Wij kijken uit naar jouw komst
+          </div>
+        </div>
+        <div class="row q-mb-md">
+          Uw starttijd is gereserveerd. Wij sturen u binnen een enkele minuten
+          een e-mail met uw reserveringsdetails. In deze mail staat een
+          bevestigingslink om de reservering definitief te maken. Door op deze
+          link te klikken bevestigd u uw reservering. Ontvangen wij niet binnen
+          30 minuten uw reserveringsbevestiging dan wordt uw reservering
+          geannuleerd.
+        </div>
+        <div class="row">
+          <q-btn
+            color="primary"
+            label="Sluiten"
+            v-on:click="$router.push('login')"
           />
         </div>
       </div>
-
-      <!--      <div class="col-md-4 offset-md-4 col-xs-12">-->
-      <!--        <div class="row">-->
-      <!--          <div class="text-h5 q-mt-md q-mb-md">-->
-      <!--            Wij kijken uit naar jouw komst-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--        <div class="row q-mb-md">-->
-      <!--          {{ mergeText }}-->
-      <!--        </div>-->
-      <!--        <div class="row">-->
-      <!--          <q-btn-->
-      <!--            color="primary"-->
-      <!--            label="Sluiten"-->
-      <!--            v-on:click="$router.push('login')"-->
-      <!--          />-->
-      <!--        </div>-->
-      <!--      </div>-->
     </div>
   </q-page-container>
 </template>
@@ -267,13 +291,10 @@
 import CourseComp from "../components/teetime/Course.vue";
 
 import publicMixin from "../mixins/public";
-import dayjs from "dayjs";
-import Payment from "components/payment/initiate.vue";
 
 export default {
   mixins: [publicMixin],
   components: {
-    Payment,
     CourseComp,
   },
   data() {
@@ -299,7 +320,6 @@ export default {
 
       date: this.$dayjs().format("DD-MM-YYYY"),
       timeObject: null,
-      timePrice: 0,
       size: 3,
       holes: { label: "9 Holes", value: 9 },
       per: { label: "Dag", value: 1 },
@@ -331,10 +351,7 @@ export default {
         flpEmail4: "",
         flpPhone4: "",
         flpHandicap4: null,
-        agreeConditions: false,
-        agreeCommerce: false,
       },
-      mollie: null,
     };
   },
   mounted() {
@@ -342,7 +359,10 @@ export default {
   },
   watch: {
     date: function () {
-      this.handleLoadDate();
+      this.$http.get("igg?date=" + this.date).then((res) => {
+        this.loading = false;
+        this.courses = res.payload;
+      });
     },
     timeObject: function (newValue) {
       this.flight.fltDate = newValue.sttDate;
@@ -355,27 +375,16 @@ export default {
     },
   },
   computed: {
-    dayjs() {
-      return dayjs;
-    },
-    conditions: function () {
-      if (this.settings === null) {
-        return "";
-      }
-      return this.settings.website_payment_conditions;
-    },
-    mergeText: function () {
-      if (this.settings === null) {
-        return "";
-      }
-      return this.settings.website_flight_merge_text;
-    },
     valid: function () {
       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       return (
         this.flight.flpName1.length > 3 &&
-        this.flight.agreeConditions &&
-        emailPattern.test(this.flight.flpEmail1)
+        emailPattern.test(this.flight.flpEmail1) &&
+        (this.size === 1 ||
+          (this.size > 1 && this.flight.flpName2.length > 3)) &&
+        (this.size === 2 ||
+          (this.size > 2 && this.flight.flpName3.length > 3)) &&
+        (this.size === 3 || (this.size > 3 && this.flight.flpName4.length > 3))
       );
     },
     hasTimes: function () {
@@ -393,12 +402,6 @@ export default {
     },
   },
   methods: {
-    handleLoadDate: function () {
-      this.$http.get("igg?date=" + this.date).then((res) => {
-        this.loading = false;
-        this.courses = res.payload;
-      });
-    },
     setDay: function (value) {
       this.date = this.$dayjs(this.date)
         .add(value, "days")
@@ -406,22 +409,11 @@ export default {
     },
     handleSave: function () {
       this.$http.post("igg/guest", this.flight).then((res) => {
-        this.mollie = res.data;
         this.step = 3;
       });
     },
     setTimeObject: function (obj) {
-      this.timeObject = obj.time;
-      this.timePrice = obj.price;
-    },
-    handleClosePayment: function (status) {
-      if (status === "paid") {
-        this.handleLoadDate();
-        this.step = 1;
-      } else {
-        this.step = 2;
-      }
-      this.mollie = null;
+      this.timeObject = obj;
     },
   },
 };
