@@ -168,6 +168,7 @@
           :rules="[emailRule]"
           class="q-mb-sm"
           label="E-mailadres"
+          lazy-rules
           stack-label
         />
         <q-input
@@ -175,6 +176,7 @@
           :rules="[(val) => !!val || '* Required']"
           class="q-mb-sm"
           label="Telefoonummer"
+          lazy-rules
           stack-label
         />
         <div class="row">Leveringsvoorwaarden:</div>
