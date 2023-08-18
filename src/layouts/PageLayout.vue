@@ -43,6 +43,9 @@
           clickable
           @click="onMenu(item.name)"
         >
+          <q-item-section side>
+            <q-icon :name="item.icon" style="color: #edfcff" />
+          </q-item-section>
           <q-item-section>
             <q-item-label>{{ $t(item.name) }}</q-item-label>
           </q-item-section>
@@ -74,61 +77,82 @@ export default defineComponent({
     this.drawer = false;
     this.menuArray = [
       {
+        name: "Home",
+        icon: "home",
+        visible: true,
+      },
+      {
         name: "reservations",
+        icon: "schedule",
         visible: this.currentUser.tile_teetimes_y_n == 1,
       },
       {
         name: "match",
+        icon: "sports_golf",
         visible: this.currentUser.tile_match_y_n == 1,
       },
       {
         name: "messages",
+        icon: "notes",
         visible: this.currentUser.app_display_message_tile == 1,
       },
       {
         name: "course",
+        icon: "grass",
         visible:
           this.currentUser.tile_teetimes_y_n == 1 &&
           this.settings.app_display_course_status_tile == 1,
       },
       {
         name: "handicap",
+        icon: "grade",
         visible: this.currentUser.tile_handicap_y_n == 1,
       },
       {
         name: "NGF",
+        icon: "credit_card",
         visible: this.currentUser.tile_handicap_y_n == 1,
       },
       {
         name: "members",
+        icon: "groups",
         visible: this.currentUser.tile_members_y_n == 1,
       },
       {
-        name: "profile",
-        visible: this.currentUser.app_display_profile_tile == 1,
-      },
-      {
         name: "pos",
+        icon: "restaurant_enu",
         visible:
           this.currentUser.tile_horeca_y_n &&
           this.settings.app_display_balance == 1,
       },
       {
         name: "shop",
+        icon: "shopping_bag",
         visible: this.currentUser.tile_shop_y_n == 1,
       },
       {
         name: "proCourse",
+        icon: "shop",
         visible: this.currentUser.tile_lessons_y_n == 1,
       },
       {
         name: "lessons",
+        icon: "school",
         visible: this.currentUser.tile_lessons_y_n == 1,
+      },
+      {
+        name: "profile",
+        icon: "account_circle",
+        visible: true,
       },
     ];
   },
   methods: {
     onMenu: function (name) {
+      if (name === "Home") {
+        name = "";
+      }
+      console.log(name);
       this.$router.push("/" + name);
       this.drawer = false;
     },

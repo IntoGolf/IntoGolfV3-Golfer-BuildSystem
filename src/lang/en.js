@@ -7,6 +7,8 @@
 
 export const message = {
   profile: "Profile",
+  test: "demooooo",
+  reservations: "Starttijden",
   employee: "Employee",
   upload_photo: "Upload photo",
   times: "times",

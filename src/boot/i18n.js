@@ -1,6 +1,13 @@
 import { createI18n } from "vue-i18n";
-import messages from "src/i18n";
 
+const messages = {
+  en: {
+    ...require("../lang/en").message,
+  },
+  nl: {
+    ...require("../lang/nl").message,
+  },
+};
 export default ({ app }) => {
   // Create I18n instance
   const i18n = createI18n({
