@@ -174,7 +174,6 @@ export default {
     };
   },
   created() {
-    console.log(this.match.iDealIssuers);
     if (this.mySubscription !== null) {
       this.player.details = this.mySubscription;
     } else {

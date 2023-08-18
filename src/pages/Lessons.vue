@@ -1,5 +1,5 @@
 <template>
-  <q-page-container class="q-mt-md q-pa-md">
+  <q-page-container>
     <div v-show="!newLesson">
       <q-btn color="primary" label="Nieuwe les" v-on:click="newLesson = true" />
 

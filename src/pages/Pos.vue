@@ -1,5 +1,5 @@
 <template>
-  <q-page-container class="q-mt-md">
+  <q-page-container>
     <div class="q-ma-md">
       <div v-if="!selectedCard">
         <div class="text-h5 q-mb-md">Betaalkaarten</div>

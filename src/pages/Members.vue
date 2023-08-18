@@ -1,12 +1,5 @@
 <template>
-  <q-page-container class="q-pa-md">
-    <!--    <top-bar-->
-    <!--      v-bind:title="title"-->
-    <!--      v-bind:back_icon="back_icon"-->
-    <!--      v-bind:back_link="back_link"-->
-    <!--      v-bind:callBack="callBack"-->
-    <!--    />-->
-
+  <q-page-container>
     <div class="row q-pa-md q-mt-md bg-white">
       <div class="col">
         <main v-show="focusedItem === null">

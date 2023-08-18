@@ -526,7 +526,9 @@ export default {
       this.account_form.relGrpNr1 = that.relationGroupArray[0];
     });
 
-    this.onCaptchaVerified();
+    if (this.$q.platform.is.desktop) {
+      this.onCaptchaVerified();
+    }
   },
   methods: {
     validateEmail(val) {
@@ -558,9 +560,11 @@ export default {
     async onSubmit() {
       let that = this;
 
-      await this.$recaptchaLoaded();
+      if (this.$q.platform.is.desktop) {
+        await this.$recaptchaLoaded();
+        that.account_form.captcha = await this.$recaptcha("login");
+      }
 
-      that.account_form.captcha = await this.$recaptcha("login");
       that.loading = true;
       that.$http.post(`golfer/sign-up`, that.account_form).then((res) => {
         console.log(res);

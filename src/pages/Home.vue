@@ -1,201 +1,213 @@
 <template>
-  <q-page-container v-if="!loading" class="web-width">
-    <div class="row" style="height: 230px">
-      <div class="col text-center q-pt-lg">
-        <q-img
-          :fit="'scale-down'"
-          :src="blobUrl"
-          style="max-width: 400px; max-height: 150px"
-        />
-        <div class="text-h4 q-mb-md">
-          {{ settings.system_organisation_name }}
-        </div>
-      </div>
-    </div>
+  <div>
+    <q-layout view="hHh lpR fFf">
+      <q-page-container v-if="!loading">
+        <q-toolbar class="text-primary" style="background-color: #2b2d2e">
+          <q-btn
+            class="text-white"
+            dense
+            flat
+            icon="menu"
+            round
+            @click="drawer = !drawer"
+          />
+          <q-toolbar-title class="text-center text-white">
+            {{ settings.system_organisation_name }}
+          </q-toolbar-title>
+        </q-toolbar>
 
-    <div v-if="settings.app_display_weather == 1" class="row q-mb-md">
-      <div v-for="(hour, key) in weatherHours" :key="key" class="col">
-        <div class="row">
+        <div
+          v-if="currentUser.tile_teetimes_y_n && settings.teetime !== null"
+          class="row q-mb-md"
+        >
           <div class="col text-center">
-            {{ $dayjs(hour.time).format("HH:mm") }}
+            <q-btn
+              color="secondary"
+              outline
+              v-on:click="$router.push('/checkin?id=' + settings.teetime.flpNr)"
+            >
+              Aanmelden starttijd
+              {{ $filters.minuteToTime(settings.teetime.fltTime1) }}
+            </q-btn>
           </div>
         </div>
-        <div class="row">
+
+        <div
+          v-if="currentUser.tile_match_y_n && settings.match !== null"
+          class="row q-mb-md"
+        >
           <div class="col text-center">
-            <img :src="'https://' + hour.condition.icon" />
+            <q-btn
+              color="secondary"
+              outline
+              v-on:click="$router.push('/match?id=' + settings.match.matchId)"
+            >
+              Wedstrijd {{ settings.name }}
+            </q-btn>
           </div>
         </div>
-        <div class="row">
-          <div class="col text-center q-pa-sm">
-            {{ hour.condition.text }}
+
+        <div v-if="cardInMemory" class="row q-mb-md">
+          <div class="col text-center">
+            <q-btn
+              color="secondary"
+              outline
+              @click="$router.push('/handicap?action=pauzed')"
+            >
+              Gepauzeerde scorekaart
+            </q-btn>
           </div>
         </div>
-      </div>
-    </div>
+      </q-page-container>
+    </q-layout>
 
-    <div
-      v-if="currentUser.tile_teetimes_y_n && settings.teetime !== null"
-      class="row q-mb-md"
+    <q-drawer
+      v-model="drawer"
+      show-if-above
+      style="background-color: #00a4e8; color: #2e4651"
     >
-      <div class="col text-center">
-        <q-btn
-          color="secondary"
-          outline
-          v-on:click="$router.push('/checkin?id=' + settings.teetime.flpNr)"
+      <q-list style="min-width: 250px">
+        <q-item
+          v-if="currentUser.tile_teetimes_y_n == 1"
+          v-ripple
+          clickable
+          @click="$router.push('/reservations')"
         >
-          Aanmelden starttijd
-          {{ $filters.minuteToTime(settings.teetime.fltTime1) }}
-        </q-btn>
-      </div>
-    </div>
+          <q-item-section>
+            <q-item-label>Starttijden</q-item-label>
+          </q-item-section>
+        </q-item>
 
-    <div
-      v-if="currentUser.tile_match_y_n && settings.match !== null"
-      class="row q-mb-md"
-    >
-      <div class="col text-center">
-        <q-btn
-          color="secondary"
-          outline
-          v-on:click="$router.push('/match?id=' + settings.match.matchId)"
+        <q-item
+          v-if="currentUser.tile_match_y_n == 1"
+          v-ripple
+          clickable
+          @click="$router.push('/match')"
         >
-          Wedstrijd {{ settings.name }}
-        </q-btn>
-      </div>
-    </div>
+          <q-item-section>
+            <q-item-label>Wedstrijden</q-item-label>
+          </q-item-section>
+        </q-item>
 
-    <div v-if="cardInMemory" class="row q-mb-md">
-      <div class="col text-center">
-        <q-btn
-          color="secondary"
-          outline
-          @click="$router.push('/handicap?action=pauzed')"
+        <q-item
+          v-if="currentUser.app_display_message_tile === 1"
+          v-ripple
+          clickable
+          @click="$router.push('/messages')"
         >
-          Gepauzeerde scorekaart
-        </q-btn>
-      </div>
-    </div>
+          <q-item-section>
+            <q-item-label>Berichten</q-item-label>
+          </q-item-section>
+        </q-item>
 
-    <div class="row q-pl-md q-pr-md q-gutter-sm">
-      <div
-        v-show="currentUser.tile_teetimes_y_n"
-        class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/reservations')"
-      >
-        <span class="title"
-          ><i class="far fa-calendar-star"></i>Starttijden</span
+        <q-item
+          v-if="currentUser.app_display_message_tile === 1"
+          v-ripple
+          clickable
+          @click="$router.push('/messages')"
         >
-      </div>
+          <q-item-section>
+            <q-item-label>Berichten</q-item-label>
+          </q-item-section>
+        </q-item>
 
-      <div
-        v-if="currentUser.tile_match_y_n"
-        class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/match')"
-      >
-        <span class="title"><i class="far fa-list-alt"></i>Wedstrijden</span>
-      </div>
-    </div>
+        <q-item
+          v-if="
+            currentUser.tile_teetimes_y_n &&
+            settings.app_display_course_status_tile == 1
+          "
+          v-ripple
+          clickable
+          @click="$router.push('/course')"
+        >
+          <q-item-section>
+            <q-item-label>Baan</q-item-label>
+          </q-item-section>
+        </q-item>
 
-    <div class="row text-h6 q-pl-md q-pr-md q-pt-sm q-gutter-sm">
-      <div
-        v-if="settings.app_display_message_tile == 1"
-        class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/messages')"
-      >
-        <span class="title">
-          <i class="far fa-list-alt"></i>
-          Berichten {{ unreadCount > 0 ? "(" + unreadCount + ")" : "" }}
-        </span>
-      </div>
+        <q-item
+          v-if="currentUser.tile_handicap_y_n === 1"
+          v-ripple
+          clickable
+          @click="$router.push('/handicap')"
+        >
+          <q-item-section>
+            <q-item-label>Handicap</q-item-label>
+          </q-item-section>
+        </q-item>
 
-      <div
-        v-if="
-          currentUser.tile_teetimes_y_n &&
-          settings.app_display_course_status_tile == 1
-        "
-        class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/course')"
-      >
-        <span class="title"><i class="far fa-golf-ball"></i>Baan</span>
-      </div>
-    </div>
+        <q-item
+          v-if="currentUser.tile_handicap_y_n === 1"
+          v-ripple
+          clickable
+          @click="$router.push('/NGF')"
+        >
+          <q-item-section>
+            <q-item-label>NGF-Pas</q-item-label>
+          </q-item-section>
+        </q-item>
 
-    <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
-      <div
-        v-if="currentUser.tile_handicap_y_n"
-        class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/handicap')"
-      >
-        <span class="title"><i class="far fa-golf-ball"></i>Handicap</span>
-      </div>
-      <div
-        v-if="currentUser.tile_handicap_y_n"
-        class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/NGF')"
-      >
-        <span class="title"><i class="far fa-calendar-star"></i>NGF-Pas</span>
-      </div>
-    </div>
+        <q-item
+          v-if="currentUser.tile_members_y_n === 1"
+          v-ripple
+          clickable
+          @click="$router.push('/members')"
+        >
+          <q-item-section>
+            <q-item-label>Ledenlijst</q-item-label>
+          </q-item-section>
+        </q-item>
 
-    <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
-      <div
-        v-if="currentUser.tile_members_y_n"
-        class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/members')"
-      >
-        <span class="title"><i class="far fa-golf-ball"></i>Ledenlijst</span>
-      </div>
+        <q-item
+          v-if="settings.app_display_profile_tile === 1"
+          v-ripple
+          clickable
+          @click="$router.push('/profile')"
+        >
+          <q-item-section>
+            <q-item-label>Profiel</q-item-label>
+          </q-item-section>
+        </q-item>
 
-      <div
-        v-if="settings.app_display_profile_tile == 1"
-        class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/profile')"
-      >
-        <span class="title"><i class="far fa-calendar-star"></i>Profiel</span>
-      </div>
-    </div>
+        <q-item
+          v-if="
+            currentUser.tile_horeca_y_n && settings.app_display_balance === 1
+          "
+          v-ripple
+          clickable
+          @click="$router.push('/pos')"
+        >
+          <q-item-section>
+            <q-item-label>Horeca</q-item-label>
+          </q-item-section>
+        </q-item>
 
-    <div
-      v-show="currentUser.tile_horeca_y_n"
-      class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
-    >
-      <div
-        v-show="
-          currentUser.tile_horeca_y_n && settings.app_display_balance === 1
-        "
-        class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/pos')"
-      >
-        <span class="title"><i class="far fa-calendar-star"></i>Horeca</span>
-      </div>
+        <q-item
+          v-if="currentUser.tile_shop_y_n"
+          v-ripple
+          clickable
+          @click="$router.push('/shop')"
+        >
+          <q-item-section>
+            <q-item-label>Item 2</q-item-label>
+          </q-item-section>
+        </q-item>
 
-      <div
-        v-if="currentUser.tile_shop_y_n"
-        class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/shop')"
-      >
-        <span class="title"><i class="far fa-golf-ball"></i>Shop</span>
-      </div>
-    </div>
-
-    <div
-      v-show="currentUser.tile_lessons_y_n"
-      class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
-    >
-      <div
-        class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/proCourse')"
-      >
-        <span class="title"><i class="far fa-calendar-star"></i>Cursussen</span>
-      </div>
-      <div
-        class="col text-h6 text-center text-white bg-secondary shadow-3 text-bold q-pa-md"
-        @click="$router.push('/lessons')"
-      >
-        <span class="title"><i class="far fa-calendar-star"></i>Lessen</span>
-      </div>
-    </div>
-  </q-page-container>
+        <template v-if="currentUser.tile_lessons_y_n">
+          <q-item v-ripple clickable @click="$router.push('/proCourse')">
+            <q-item-section>
+              <q-item-label>Cursussen</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item v-ripple clickable @click="$router.push('/lessons')">
+            <q-item-section>
+              <q-item-label>Lessen</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-list>
+    </q-drawer>
+  </div>
 </template>
 
 <script>
@@ -208,7 +220,11 @@ export default {
       messageList: [],
       weather: null,
       blobUrl: "",
+      drawer: false,
     };
+  },
+  mounted() {
+    this.drawer = false;
   },
   created() {
     this.$http.get("golfer/image/" + this.settings.system_logo).then((res) => {
@@ -242,6 +258,9 @@ export default {
 
       return this.weather.forecast.forecastday[0].hour.slice(hour, hour + 4);
     },
+  },
+  methods: {
+    doSomething: function (menu) {},
   },
 };
 </script>

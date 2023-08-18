@@ -1,5 +1,5 @@
 <template>
-  <q-page-container class="q-mt-md">
+  <q-page-container>
     <div class="pb-3 bg-white">
       <q-form @submit="saveProfile">
         <div class="ml-auto mr-auto text-center">

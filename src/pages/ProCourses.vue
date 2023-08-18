@@ -1,6 +1,6 @@
 \
 <template>
-  <q-page-container class="q-mt-md q-pa-md">
+  <q-page-container>
     <div class="text-h6">Uw cursussen:</div>
     <q-separator />
     <div v-show="clientCourseArray.length === 0" class="q-mt-md text-subtitle1">

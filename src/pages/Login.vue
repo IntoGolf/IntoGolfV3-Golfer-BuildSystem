@@ -130,9 +130,10 @@ export default {
     async onlogin() {
       this.$q.loading.show();
 
-      await this.$recaptchaLoaded();
-
-      this.form.captcha = await this.$recaptcha("login");
+      if (this.$q.platform.is.desktop) {
+        await this.$recaptchaLoaded();
+        this.form.captcha = await this.$recaptcha("login");
+      }
 
       this.$http
         .post("golfer/login", this.form)
