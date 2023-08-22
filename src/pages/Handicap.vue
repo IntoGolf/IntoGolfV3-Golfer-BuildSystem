@@ -1,6 +1,6 @@
 <template>
   <q-page-container>
-    <q-page class="q-pa-md">
+    <q-page>
       <div v-if="page == 1">
         <handicap-menu v-on:handleNew="handleNew" />
 

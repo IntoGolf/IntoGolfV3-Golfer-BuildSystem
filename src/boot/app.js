@@ -2,6 +2,29 @@ import { boot } from "quasar/wrappers";
 import { createWatcher } from "next-vue-storage-watcher";
 import dayjs from "dayjs";
 
+// document.addEventListener(
+//   "deviceready",
+//   function () {
+//     cordova.plugins.firebase.messaging
+//       .requestPermission({ forceShow: true })
+//       .then(function () {
+//         alert("a");
+//       })
+//       .catch(function (error) {
+//         alert("b");
+//       });
+//     // Ensure Cordova plugins are ready
+//     cordova.plugins.firebase.messaging.onMessage(function (payload) {
+//       alert("c");
+//     });
+//
+//     cordova.plugins.firebase.messaging.onNotificationClick(function (payload) {
+//       alert("d");
+//     });
+//   },
+//   false
+// );
+
 let customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 

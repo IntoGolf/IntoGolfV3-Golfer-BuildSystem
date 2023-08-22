@@ -1,6 +1,22 @@
 <template>
-  <div class="q-mt-xl text-h5 text-center" v-bind:class="emotion">
-    {{ text }}
+  <div class="row">
+    <div class="col">
+      <div class="row">
+        <div class="col text-center text-h4">Status betaling</div>
+      </div>
+
+      <q-separator class="q-mb-md" />
+
+      <div :class="emotion" class="row">
+        <div class="col text-h5 text-center">
+          {{ text }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col text-center">Dit scherm wordt automatisch gesloten</div>
+      </div>
+    </div>
   </div>
 </template>
 

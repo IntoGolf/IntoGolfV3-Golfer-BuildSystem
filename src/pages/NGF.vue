@@ -1,6 +1,8 @@
 <template>
   <q-page-container>
-    <q-img :src="blobUrl" />
+    <q-page>
+      <q-img :src="blobUrl" />
+    </q-page>
   </q-page-container>
 </template>
 

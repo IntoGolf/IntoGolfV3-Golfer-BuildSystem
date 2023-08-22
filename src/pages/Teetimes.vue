@@ -1,6 +1,6 @@
 <template>
   <q-page-container>
-    <div v-show="step == 1" class="row q-mt-md">
+    <div v-show="step == 1" class="row">
       <div class="col-md-4 offset-md-4 col-xs-12">
         <div class="row">
           <div class="col-8 text-h5">Boek een starttijd</div>

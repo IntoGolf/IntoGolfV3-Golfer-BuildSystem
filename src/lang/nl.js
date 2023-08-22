@@ -46,6 +46,8 @@ export const message = {
   shop: "Winkel",
   proCourse: "Cursussen",
   lessons: "Lessen",
+  messages: "Berichten",
+  message: "Bericht",
   profile: "Account",
   Sunrise: "Zondag",
   Sunset: "ZondZon onderag",

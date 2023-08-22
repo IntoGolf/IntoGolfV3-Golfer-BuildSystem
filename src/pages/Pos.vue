@@ -1,26 +1,24 @@
 <template>
   <q-page-container>
-    <div class="q-ma-md">
-      <div v-if="!selectedCard">
-        <div class="text-h5 q-mb-md">Betaalkaarten</div>
+    <div v-if="!selectedCard">
+      <div class="text-h5 q-mb-md">Betaalkaarten</div>
 
-        <Card
-          v-for="(card, key) in cardArray"
-          :key="key"
-          :card="card"
-          :paymentArray="paymentArray"
-          v-on:click="selectedCard = card"
-        />
-      </div>
+      <Card
+        v-for="(card, key) in cardArray"
+        :key="key"
+        :card="card"
+        :paymentArray="paymentArray"
+        v-on:click="selectedCard = card"
+      />
+    </div>
 
-      <div v-else>
-        <CardTransactions
-          v-if="selectedCard"
-          :paymentArray="paymentArray"
-          :selectedCard="selectedCard"
-          v-on:handleCloseCard="selectedCard = null"
-        />
-      </div>
+    <div v-else>
+      <CardTransactions
+        v-if="selectedCard"
+        :paymentArray="paymentArray"
+        :selectedCard="selectedCard"
+        v-on:handleCloseCard="selectedCard = null"
+      />
     </div>
   </q-page-container>
 </template>

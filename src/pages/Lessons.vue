@@ -1,25 +1,31 @@
 <template>
   <q-page-container>
-    <div v-show="!newLesson">
-      <q-btn color="primary" label="Nieuwe les" v-on:click="newLesson = true" />
+    <q-page>
+      <div v-show="!newLesson">
+        <q-btn
+          color="primary"
+          label="Nieuwe les"
+          v-on:click="newLesson = true"
+        />
 
-      <q-separator class="q-mt-md" />
+        <q-separator class="q-mt-md" />
 
-      <div v-show="clientLessonArray.length === 0" class="text-center">
-        <h5>Geen toekomstige lessen gevonden</h5>
+        <div v-show="clientLessonArray.length === 0" class="text-center">
+          <h5>Geen toekomstige lessen gevonden</h5>
+        </div>
+
+        <comp-lesson
+          v-for="(lesson, key) in clientLessonArray"
+          :key="key"
+          :lesson="lesson"
+          v-on:handleLoadClientLessons="handleLoadClientLessons"
+        />
       </div>
 
-      <comp-lesson
-        v-for="(lesson, key) in clientLessonArray"
-        :key="key"
-        :lesson="lesson"
-        v-on:handleLoadClientLessons="handleLoadClientLessons"
-      />
-    </div>
-
-    <div v-show="newLesson">
-      <comp-new v-on:handleCloseNew="handleCloseNew" />
-    </div>
+      <div v-show="newLesson">
+        <comp-new v-on:handleCloseNew="handleCloseNew" />
+      </div>
+    </q-page>
   </q-page-container>
 </template>
 

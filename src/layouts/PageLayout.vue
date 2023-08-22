@@ -4,12 +4,23 @@
       <q-header class="bg-secondary" flat>
         <q-toolbar class="text-primary" style="background-color: #2b2d2e">
           <q-btn
+            v-if="!$q.platform.is.desktop"
             class="text-white"
             dense
             flat
             icon="menu"
             round
             @click="drawer = !drawer"
+          />
+
+          <q-btn
+            v-if="$q.platform.is.desktop"
+            class="text-white"
+            dense
+            flat
+            icon="menu"
+            round
+            @click="$router.push('/')"
           />
 
           <q-toolbar-title class="text-center" style="color: #edfcff">
@@ -25,12 +36,12 @@
           />
         </q-toolbar>
       </q-header>
-      <router-view class="web-width" />
+      <router-view class="web-width q-pl-md q-pr-md q-mt-sm" />
     </q-layout>
 
     <q-drawer
       v-model="drawer"
-      :style="{ marginTop: isCordova ? '0' : '50px' }"
+      :style="{ marginTop: isCordova ? '0' : '42px' }"
       show-if-above
       style="background-color: #2e4651; color: #edfcff"
     >
@@ -77,7 +88,7 @@ export default defineComponent({
     this.drawer = false;
     this.menuArray = [
       {
-        name: "Home",
+        name: "Dashboard",
         icon: "home",
         visible: true,
       },
@@ -94,7 +105,7 @@ export default defineComponent({
       {
         name: "messages",
         icon: "notes",
-        visible: this.currentUser.app_display_message_tile == 1,
+        visible: this.settings.app_display_message_tile == 1,
       },
       {
         name: "course",
@@ -149,10 +160,9 @@ export default defineComponent({
   },
   methods: {
     onMenu: function (name) {
-      if (name === "Home") {
+      if (name === "Dashboard") {
         name = "";
       }
-      console.log(name);
       this.$router.push("/" + name);
       this.drawer = false;
     },

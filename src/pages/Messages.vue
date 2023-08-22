@@ -1,7 +1,7 @@
 <template>
   <q-page-container>
-    <q-card v-if="list.length === 0" class="q-mt-md">
-      <q-card-section class="text-center text-h6 mt-2">
+    <q-card v-if="list.length === 0" class="">
+      <q-card-section class="text-center text-h6">
         {{ no_messages }}
       </q-card-section>
     </q-card>
@@ -10,7 +10,7 @@
       <q-card
         v-for="(item, index) in unreadMessages"
         :key="index"
-        class="q-mb-md q-mt-md"
+        class="q-mb-md"
       >
         <q-card-section>
           <div class="row">

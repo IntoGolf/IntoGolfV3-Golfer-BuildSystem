@@ -1,6 +1,6 @@
 <template>
   <q-page-container>
-    <div class="row justify-between q-mt-md">
+    <div class="row justify-between">
       <div class="text-h5">
         {{ showOrder ? "Uw winkel wagen" : "Artikelen" }}
       </div>

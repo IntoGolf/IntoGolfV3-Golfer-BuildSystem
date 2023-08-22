@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page>
     <q-card>
       <q-card-section class="text-h6">
         Nieuwe scorekaart {{ scorecard.name }}

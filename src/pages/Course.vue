@@ -1,6 +1,6 @@
 <template>
   <q-page-container>
-    <q-page class="q-pa-md">
+    <q-page>
       <q-card v-for="(loop, index) in list" :key="index" class="q-mb-sm">
         <q-card-section class="text-h6">
           <div class="text-h6">{{ loop.course_loop.crlName }}</div>

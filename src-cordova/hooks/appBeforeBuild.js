@@ -21,36 +21,35 @@ const sourcePathSplash = path.join(
   "../../res/" + vue_app_name + "/splash.png"
 );
 const destinationPathSplash = path.join(__dirname, "../resources/splash.png");
-fs.copyFile(sourcePathSplash, destinationPathSplash, (error) => {
-  if (error) {
-    console.error("An error occurred:", error);
-  } else {
-    console.log("File was successfully copied");
-  }
-});
+try {
+  fs.copyFileSync(sourcePathSplash, destinationPathSplash);
+  console.log("File was successfully copied");
+} catch (error) {
+  console.error("An error occurred:", error);
+}
 
 const sourcePathIcon = path.join(
   __dirname,
   "../../res/" + vue_app_name + "/icon.png"
 );
-const { exec } = require("child_process");
 const destinationPathIcon = path.join(__dirname, "../resources/icon.png");
-fs.copyFile(sourcePathIcon, destinationPathIcon, (error) => {
-  if (error) {
-    console.error("An error occurred:", error);
-  } else {
-    console.log("File was successfully copied");
-  }
-});
+try {
+  fs.copyFileSync(sourcePathIcon, destinationPathIcon);
+  console.log("File was successfully copied");
+} catch (error) {
+  console.error("An error occurred:", error);
+}
 
-exec("cordova-res ios", (error, stdout, stderr) => {
-  console.log(`stdout: ${stdout}`);
-  console.error(`stderr: ${stderr}`);
-});
+try {
+  const iosOutput = execSync("cordova-res ios", { encoding: "utf8" });
+  console.log(`stdout: ${iosOutput}`);
+} catch (error) {
+  console.error(`stderr: ${error}`);
+}
 
-exec("cordova-res android", (error, stdout, stderr) => {
-  console.log(`stdout: ${stdout}`);
-  console.error(`stderr: ${stderr}`);
-});
-
-console.log("ok");
+try {
+  const androidOutput = execSync("cordova-res android", { encoding: "utf8" });
+  console.log(`stdout: ${androidOutput}`);
+} catch (error) {
+  console.error(`stderr: ${error}`);
+}

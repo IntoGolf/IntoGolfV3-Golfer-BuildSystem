@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="nl.intogolf.maasduinen" version="0.1.40" xmlns="http://www.w3.org/ns/widgets">
+<widget id="nl.intogolf.development" version="0.1.44" xmlns="http://www.w3.org/ns/widgets">
     <hook src="hooks/appBeforeBuild.js" type="before_build" />
-    <name>GolferApp</name>
-    <description>IntoGolfV3 Golfer app</description>
+    <name>Golfer</name>
+    <description>IntoGolf Golfer app</description>
     <author email="info@intogolf.nl" href="https://www.intogolf.com">
         IntoGolf Team
     </author>
@@ -14,32 +14,38 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
-    <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="AllowNewWindows" value="true" />
+    <preference name="MediaPlaybackAllowsAirPlay" value="true" />
+    <preference name="AllowBackForwardNavigationGestures" value="true" />
+    <preference name="Allow3DTouchLinkPreview" value="true" />
     <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="AutoHideSplashScreen" value="true" />
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="StatusBarStyle" value="lightcontent" />
     <preference name="Orientation" value="portrait" />
     <platform name="android">
         <allow-intent href="market:*" />
-        <icon density="hdpi" src="resources/android/icon/mipmap-hdpi/ic_launcher.png" />
-        <icon density="mdpi" src="resources/android/icon/mipmap-mdpi/ic_launcher.png" />
-        <icon density="xhdpi" src="resources/android/icon/mipmap-xhdpi/ic_launcher.png" />
-        <icon density="xxhdpi" src="resources/android/icon/mipmap-xxhdpi/ic_launcher.png" />
-        <icon density="xxxhdpi" src="resources/android/icon/mipmap-xxxhdpi/ic_launcher.png" />
+        <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
+        <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
+        <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
+        <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
+        <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
         <splash density="ldpi" src="resources/android/splash/splash-port-ldpi.png" />
         <splash density="mdpi" src="resources/android/splash/splash-port-mdpi.png" />
         <splash density="hdpi" src="resources/android/splash/splash-port-hdpi.png" />
         <splash density="xhdpi" src="resources/android/splash/splash-port-xhdpi.png" />
         <splash density="xxhdpi" src="resources/android/splash/splash-port-xxhdpi.png" />
         <splash density="xxxhdpi" src="resources/android/splash/splash-port-xxxhdpi.png" />
-        <splash density="port-ldpi" src="resources/android/splash/splash-port-ldpi.png" />
-        <splash density="port-mdpi" src="resources/android/splash/splash-port-mdpi.png" />
-        <splash density="port-hdpi" src="resources/android/splash/splash-port-hdpi.png" />
-        <splash density="port-xhdpi" src="resources/android/splash/splash-port-xhdpi.png" />
-        <splash density="port-xxhdpi" src="resources/android/splash/splash-port-xxhdpi.png" />
-        <splash density="port-xxxhdpi" src="resources/android/splash/splash-port-xxxhdpi.png" />
+        <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png" />
+        <splash density="port-mdpi" src="resources/android/splash/drawable-port-mdpi-screen.png" />
+        <splash density="port-hdpi" src="resources/android/splash/drawable-port-hdpi-screen.png" />
+        <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
+        <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
+        <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+        <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
     </platform>
     <platform name="ios">
+        <resource-file src="platforms/ios/GoogleService-Info.plist" />
         <config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
             <string>We use your camera to update the user avatar.</string>
         </config-file>

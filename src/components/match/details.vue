@@ -1,17 +1,18 @@
 <template>
   <q-page>
-    <div class="row q-mt-md justify-end">
-      <q-btn
-        class="q-mr-sm"
-        color="secondary"
-        flat
-        icon="arrow_back"
-        v-on:click="handleCloseMatch"
-        >Wedstrijden
-      </q-btn>
+    <div class="row">
+      <div class="col-12 text-right">
+        <q-btn
+          color="secondary"
+          flat
+          icon="arrow_back"
+          v-on:click="handleCloseMatch"
+          >Wedstrijden
+        </q-btn>
+      </div>
     </div>
     <div class="row">
-      <div class="col q-pl-md q-pr-md q-pb-md">
+      <div class="col q-pb-md">
         <details-list
           v-if="page == 1"
           :match="match"

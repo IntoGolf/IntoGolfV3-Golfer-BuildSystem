@@ -97,3 +97,13 @@ body {
   background-color: $secondary;
   color: $secondary_font;
 }
+
+.dashboard-card {
+  opacity: 0.9;
+
+  .dashboard-card-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    padding: 8px;
+  }
+}

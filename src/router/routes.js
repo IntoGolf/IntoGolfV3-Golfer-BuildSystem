@@ -1,12 +1,27 @@
+import { Platform } from "quasar";
+import pageLayout from "layouts/PageLayout.vue";
+import blankLayout from "layouts/BlankLayout.vue";
+
+import Home from "pages/Home.vue";
+import HomeWeb from "pages/HomeWeb.vue";
+
+let homeComponent = Home;
+let layoutComponent = pageLayout;
+
+if (Platform.is.desktop) {
+  homeComponent = HomeWeb;
+  layoutComponent = blankLayout;
+}
+
 const routes = [
   {
     path: "/",
     name: "Home",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Home.vue") }],
+    component: layoutComponent,
+    children: [{ path: "", component: homeComponent }],
     meta: {
       requiresAuth: true,
-      title: "Home",
+      title: "Dashboard",
     },
   },
   {
@@ -21,6 +36,15 @@ const routes = [
     name: "teetimes",
     component: () => import("layouts/BlankLayout.vue"),
     children: [{ path: "", component: () => import("pages/Teetimes.vue") }],
+    meta: { requiresAuth: false },
+  },
+  {
+    path: "/public_lessons",
+    name: "publicLesson",
+    component: () => import("layouts/BlankLayout.vue"),
+    children: [
+      { path: "", component: () => import("pages/PublicLessons.vue") },
+    ],
     meta: { requiresAuth: false },
   },
   {
