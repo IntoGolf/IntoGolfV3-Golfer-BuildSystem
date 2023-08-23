@@ -12,14 +12,21 @@
         v-if="canBookPublic"
         color="primary"
         flat
-        label="Starttijd boeken"
+        label="Starttijd"
         v-on:click="$router.push('teetimes')"
+      />
+      <q-btn
+        v-if="canBookPublic"
+        color="primary"
+        flat
+        label="Les"
+        v-on:click="$router.push('public_lessons')"
       />
       <q-btn
         v-if="canBookCourse"
         color="primary"
         flat
-        label="Cursussen"
+        label="Cursus"
         v-on:click="$router.push('classes')"
       />
     </div>

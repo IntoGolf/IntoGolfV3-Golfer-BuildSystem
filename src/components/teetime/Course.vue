@@ -22,7 +22,7 @@
         :class="backgroundColor(time)"
         class="col-7 text-right q-pa-sm cursor-pointer"
       >
-        {{ $filters.money(price(time)) }}
+        {{ $filters.money(price(time)) }} pp
       </div>
     </div>
   </div>
@@ -70,15 +70,13 @@ export default {
   methods: {
     price: function (time) {
       if (this.holes.value === 18) {
-        return (
-          Math.round(time.greenFeePrice18[0].price * this.size * 100) / 100
-        );
+        return time.greenFeePrice18[0].price;
       } else {
-        return Math.round(time.greenFeePrice9[0].price * this.size * 100) / 100;
+        return time.greenFeePrice9[0].price;
       }
     },
     backgroundColor: function (time) {
-      return time.playerCount > 0 ? "bg-orange-3" : "bg-green-3";
+      return time.playerCount > 0 ? "bg-blue-3" : "bg-green-3";
     },
   },
 };

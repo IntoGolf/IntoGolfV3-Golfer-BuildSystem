@@ -111,22 +111,34 @@
         <div
           v-for="(time, tKey) of timeFilter(course.times)"
           :key="tKey"
-          class="row text-center q-pt-xs"
+          :class="time.sttPlayerArray.length > 0 ? 'bg-blue-3' : 'bg-green-3'"
+          class="text-center q-mt-xs q-pa-sm"
           @click="handleOpenDialog(time, course)"
         >
-          <div
-            :class="time.sttRefNr > 0 ? 'bg-blue-3' : 'bg-green-3'"
-            class="col q-pa-sm"
-          >
-            {{ $filters.minuteToTime(time.sttTimeFrom) }}
-            <q-icon
-              v-show="time.sttRefNr > 0"
-              class="q-ml-sm q-mb-xs q-mr-xs"
-              name="group"
-              size="18px"
-            >
-              {{ time.sttMPlayers }}
-            </q-icon>
+          <div class="row">
+            <div class="col">
+              {{ $filters.minuteToTime(time.sttTimeFrom) }}
+              <q-icon
+                v-show="time.sttPlayerArray.length > 0"
+                class="q-ml-sm q-mb-xs q-mr-xs"
+                name="group"
+                size="18px"
+              >
+                {{ time.sttPlayers }}
+              </q-icon>
+            </div>
+          </div>
+
+          <div v-if="time.sttPlayerArray.length > 0" class="row">
+            <div class="col">
+              <span
+                v-for="(player, pKey) of time.sttPlayerArray"
+                :key="pKey"
+                class="text-center"
+              >
+                {{ pKey > 0 ? "/" : "" }} {{ player.name }}
+              </span>
+            </div>
           </div>
         </div>
       </div>

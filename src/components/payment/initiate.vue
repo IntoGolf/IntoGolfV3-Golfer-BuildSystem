@@ -1,21 +1,25 @@
 <template>
   <div class="row">
-    <div class="col">
-      <div class="row">
-        <div class="col text-center text-h4">Status betaling</div>
-      </div>
-
-      <q-separator class="q-mb-md" />
-
-      <div :class="emotion" class="row">
-        <div class="col text-h5 text-center">
-          {{ text }}
+    <div class="col-md-4 offset-md-4 col-xs-12">
+      <q-card class="q-pa-md q-mt-sm q-mb-lg">
+        <div class="row">
+          <div class="col text-center text-h4">Status betaling</div>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="col text-center">Dit scherm wordt automatisch gesloten</div>
-      </div>
+        <q-separator class="q-mb-md" />
+
+        <div :class="emotion" class="row">
+          <div class="col text-h5 text-center">
+            {{ text }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col text-center">
+            Dit scherm wordt automatisch gesloten
+          </div>
+        </div>
+      </q-card>
     </div>
   </div>
 </template>

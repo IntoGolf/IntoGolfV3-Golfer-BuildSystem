@@ -22,14 +22,13 @@
         </div>
       </q-card>
 
-      <q-card v-if="lesson !== null" class="q-pa-md q-mt-sm q-mb-lg">
-        <comp-book
-          :date="date"
-          :lesson="lesson"
-          v-on:handleBack="handleBack"
-          v-on:handleClose="handleClose"
-        />
-      </q-card>
+      <comp-book
+        v-if="lesson !== null"
+        :date="date"
+        :lesson="lesson"
+        v-on:handleBack="handleBack"
+        v-on:handleClose="handleClose"
+      />
     </q-page>
   </q-page-container>
 </template>

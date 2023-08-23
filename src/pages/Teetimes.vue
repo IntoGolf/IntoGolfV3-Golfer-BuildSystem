@@ -93,6 +93,19 @@
             </div>
           </div>
         </div>
+        <div v-else-if="loading">
+          <div
+            class="text-h5 text-center"
+            style="
+              width: 100%;
+              height: 641px;
+              padding-top: 50px;
+              border: 1px solid darkgray;
+            "
+          >
+            Starttijden worden opgehaald.
+          </div>
+        </div>
         <div v-else>
           <div
             class="text-h5 text-center"
@@ -147,7 +160,7 @@
         <div class="row q-mb-lg">
           <div class="col-4 text-bold">Te betalen bedrag:</div>
           <div class="col-8">
-            {{ $filters.money(timePrice) }}
+            {{ $filters.money(flightPrice) }}
           </div>
         </div>
 
@@ -232,36 +245,13 @@
       </div>
     </div>
 
-    <div v-show="step === 3" class="row q-mt-md">
-      <div class="col-md-4 offset-md-4 col-xs-12">
-        <div class="row text-center q-mb-lg">
-          <payment
-            v-if="mollie !== null"
-            :id="mollie.id"
-            :url="mollie.url"
-            v-on:handleClosePayment="handleClosePayment"
-          />
-        </div>
-      </div>
-
-      <!--      <div class="col-md-4 offset-md-4 col-xs-12">-->
-      <!--        <div class="row">-->
-      <!--          <div class="text-h5 q-mt-md q-mb-md">-->
-      <!--            Wij kijken uit naar jouw komst-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--        <div class="row q-mb-md">-->
-      <!--          {{ mergeText }}-->
-      <!--        </div>-->
-      <!--        <div class="row">-->
-      <!--          <q-btn-->
-      <!--            color="primary"-->
-      <!--            label="Sluiten"-->
-      <!--            v-on:click="$router.push('login')"-->
-      <!--          />-->
-      <!--        </div>-->
-      <!--      </div>-->
-    </div>
+    <payment
+      v-if="mollie !== null"
+      v-show="step === 3"
+      :id="mollie.id"
+      :url="mollie.url"
+      v-on:handleClosePayment="handleClosePayment"
+    />
   </q-page-container>
 </template>
 
@@ -282,6 +272,7 @@ export default {
     return {
       step: 1,
       courses: [],
+      loading: false,
       holesArray: [
         { label: "9 Holes", value: 9 },
         { label: "18 Holes", value: 18 },
@@ -314,9 +305,9 @@ export default {
         fltCrlNr2: null,
         fltSize: 3,
 
-        flpName1: "",
-        flpEmail1: "",
-        flpPhone1: "",
+        flpName1: "laurens",
+        flpEmail1: "laurens@intogolf.nl",
+        flpPhone1: "878987898",
         flpHandicap1: null,
 
         flpName2: "",
@@ -333,7 +324,7 @@ export default {
         flpEmail4: "",
         flpPhone4: "",
         flpHandicap4: null,
-        agreeConditions: false,
+        agreeConditions: true,
         agreeCommerce: false,
       },
       mollie: null,
@@ -393,9 +384,14 @@ export default {
         return emailPattern.test(val) || "onvolledig e-mailadres";
       };
     },
+    flightPrice: function () {
+      return Math.round(this.timePrice * this.flight.fltSize * 100) / 100;
+    },
   },
   methods: {
     handleLoadDate: function () {
+      this.courses = [];
+      this.loading = true;
       this.$http.get("igg?date=" + this.date).then((res) => {
         this.loading = false;
         this.courses = res.payload;
