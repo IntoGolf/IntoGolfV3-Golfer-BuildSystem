@@ -38,10 +38,10 @@
       <q-card-section>
         <div class="row q-mt-sm">
           <div class="col text-center">
-            <img
-              alt="logo"
-              class="logo"
-              src="../assets/images/logo-black.svg"
+            <q-img
+              :fit="'scale-down'"
+              :src="blobUrl"
+              style="max-width: 400px; max-height: 100px"
             />
           </div>
         </div>
@@ -114,6 +114,7 @@ export default {
         repKey: "",
       },
       isPwd: true,
+      blobUrl: "",
     };
   },
   mounted() {
@@ -121,6 +122,15 @@ export default {
       this.form.repKey = this.$route.query.key;
       this.onlogin();
     }
+  },
+  watch: {
+    settings: function () {
+      if (this.settings != null) {
+        this.$http.get("golfer/image/" + this.settings.logo).then((res) => {
+          this.blobUrl = "data:image/png;base64," + res;
+        });
+      }
+    },
   },
   computed: {
     canSignIn: function () {
