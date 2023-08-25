@@ -80,7 +80,7 @@
         </q-input>
 
         <div class="text-center">
-          <q-btn color="primary" label="Inloggen" v-on:click="onlogin" />
+          <q-btn color="secondary" label="Inloggen" v-on:click="onlogin" />
           <q-btn
             class="q-mt-md"
             color="secondary"
