@@ -83,7 +83,7 @@
           <q-btn color="primary" label="Inloggen" v-on:click="onlogin" />
           <q-btn
             class="q-mt-md"
-            color="primary"
+            color="secondary"
             flat
             label="Wachtwoord vergeten"
             v-on:click="$router.push('verify-code')"
