@@ -2,7 +2,10 @@
   <div>
     <q-layout view="lHh Lpr lFf">
       <q-header class="bg-secondary" flat>
-        <q-toolbar class="text-primary" style="background-color: #2b2d2e">
+        <q-toolbar
+          :style="{ backgroundColor: headerColor }"
+          class="text-primary"
+        >
           <q-btn
             v-if="!$q.platform.is.desktop"
             class="text-white"
@@ -82,6 +85,9 @@ export default defineComponent({
   computed: {
     isCordova() {
       return this.$q.platform.is.cordova || this.$q.platform.is.mobile;
+    },
+    headerColor() {
+      return this.settings.app_primary_color;
     },
   },
   mounted() {
