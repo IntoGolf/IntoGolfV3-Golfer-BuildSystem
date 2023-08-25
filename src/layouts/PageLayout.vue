@@ -8,7 +8,7 @@
         >
           <q-btn
             v-if="!$q.platform.is.desktop"
-            class="text-white"
+            :style="{ color: settings.app_primary_font_color }"
             dense
             flat
             icon="menu"
@@ -18,7 +18,7 @@
 
           <q-btn
             v-if="$q.platform.is.desktop"
-            class="text-white"
+            :style="{ color: settings.app_primary_font_color }"
             dense
             flat
             icon="menu"
@@ -26,7 +26,10 @@
             @click="$router.push('/')"
           />
 
-          <q-toolbar-title class="text-center" style="color: #edfcff">
+          <q-toolbar-title
+            :style="{ color: settings.app_primary_font_color }"
+            class="text-center"
+          >
             {{ this.$route.meta.title }}
           </q-toolbar-title>
 
