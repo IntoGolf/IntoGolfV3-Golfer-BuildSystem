@@ -30,7 +30,7 @@
                 @change="loadTeetimes"
               >
                 <div class="row items-center justify-end" flat>
-                  <q-btn v-close-popup color="primary" flat label="Sluiten" />
+                  <q-btn v-close-popup color="secondary" flat label="Sluiten" />
                 </div>
               </q-date>
             </q-popup-proxy>

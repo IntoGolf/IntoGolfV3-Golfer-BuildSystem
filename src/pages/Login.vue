@@ -10,21 +10,21 @@
       />
       <q-btn
         v-if="canBookPublic"
-        color="primary"
+        color="secondary"
         flat
         label="Starttijd"
         v-on:click="$router.push('teetimes')"
       />
       <q-btn
         v-if="canBookPublic"
-        color="primary"
+        color="secondary"
         flat
         label="Les"
         v-on:click="$router.push('public_lessons')"
       />
       <q-btn
         v-if="canBookCourse"
-        color="primary"
+        color="secondary"
         flat
         label="Cursus"
         v-on:click="$router.push('classes')"

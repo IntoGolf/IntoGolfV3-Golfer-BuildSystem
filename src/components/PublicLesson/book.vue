@@ -119,13 +119,13 @@
         </div>
         <q-btn
           class="q-mr-sm"
-          color="primary"
+          color="secondary"
           label="Terug"
           v-on:click="handleBack"
         />
         <q-btn
           :disable="!valid"
-          color="primary"
+          color="secondary"
           label="Betalen"
           v-on:click="handleSave"
         />

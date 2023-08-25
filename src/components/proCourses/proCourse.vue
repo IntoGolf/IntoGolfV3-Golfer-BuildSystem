@@ -32,7 +32,7 @@
         <div class="col text-right">
           <q-btn
             class="q-mt-sm"
-            color="primary"
+            color="secondary"
             label="Inschrijven"
             size="sm"
             v-on:click="handleSubscribe"

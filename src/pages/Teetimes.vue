@@ -7,7 +7,7 @@
           <div class="col-4 text-right">
             <q-btn-group>
               <q-btn
-                color="primary"
+                color="secondary"
                 label="<"
                 size="sm"
                 v-on:click="setDay(-1)"

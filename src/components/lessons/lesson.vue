@@ -18,7 +18,7 @@
         </div>
         <div class="col-6 text-right">
           <q-btn
-            color="primary"
+            color="secondary"
             size="xs"
             v-on:click="handleCancel(lesson.pro_lesson)"
             >Annuleer
