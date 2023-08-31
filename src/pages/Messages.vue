@@ -1,80 +1,84 @@
 <template>
   <q-page-container>
-    <q-card v-if="list.length === 0" class="">
-      <q-card-section class="text-center text-h6">
-        {{ no_messages }}
-      </q-card-section>
-    </q-card>
-
-    <div v-else>
-      <q-card
-        v-for="(item, index) in unreadMessages"
-        :key="index"
-        class="q-mb-md"
-      >
-        <q-card-section>
-          <div class="row">
-            <div class="col">
-              <div class="text-h6">{{ item.msgTitle }}</div>
-              <div class="text-subtitle2">
-                {{ $dayjs(item.msgFrom).format("DD-MM-YYYY") }}
-              </div>
-            </div>
-
-            <div v-show="item.message_opened === null" class="col-auto q-pt-sm">
-              <q-btn
-                color="white"
-                size="sm"
-                text-color="black"
-                v-on:click="setMessagesOpened(item)"
-              >
-                gelezen
-              </q-btn>
-            </div>
-          </div>
+    <q-page>
+      <q-card v-if="list.length === 0" class="">
+        <q-card-section class="text-center text-h6">
+          {{ no_messages }}
         </q-card-section>
-
-        <q-separator />
-
-        <q-card-section v-html="item.msgText" />
       </q-card>
 
-      <div v-show="readMessages.length > 0" class="text-h6 q-mb-md q-mt-md">
-        Gelezen berichten
+      <div v-else>
+        <q-card
+          v-for="(item, index) in unreadMessages"
+          :key="index"
+          class="q-mb-md"
+        >
+          <q-card-section>
+            <div class="row">
+              <div class="col">
+                <div class="text-h6">{{ item.msgTitle }}</div>
+                <div class="text-subtitle2">
+                  {{ $dayjs(item.msgFrom).format("DD-MM-YYYY") }}
+                </div>
+              </div>
+
+              <div
+                v-show="item.message_opened === null"
+                class="col-auto q-pt-sm"
+              >
+                <q-btn
+                  color="white"
+                  size="sm"
+                  text-color="black"
+                  v-on:click="setMessagesOpened(item)"
+                >
+                  gelezen
+                </q-btn>
+              </div>
+            </div>
+          </q-card-section>
+
+          <q-separator />
+
+          <q-card-section v-html="item.msgText" />
+        </q-card>
+
+        <q-card
+          v-for="(item, index) in readMessages"
+          :key="index"
+          class="q-mb-md"
+        >
+          <q-card-section>
+            <div class="row">
+              <div class="col">
+                <div class="text-h6">{{ item.msgTitle }}</div>
+                <div class="text-subtitle2">
+                  {{ $dayjs(item.msgFrom).format("DD-MM-YYYY") }}
+                </div>
+              </div>
+
+              <div
+                v-show="item.message_opened === null"
+                class="col-auto q-pt-sm"
+              >
+                <q-btn
+                  color="white"
+                  size="sm"
+                  text-color="black"
+                  v-on:click="setMessagesOpened(item)"
+                >
+                  gelezen
+                </q-btn>
+              </div>
+            </div>
+          </q-card-section>
+
+          <q-separator />
+
+          <q-card-section v-html="item.msgText" />
+        </q-card>
       </div>
-
-      <q-card
-        v-for="(item, index) in readMessages"
-        :key="index"
-        class="q-mb-md"
-      >
-        <q-card-section>
-          <div class="row">
-            <div class="col">
-              <div class="text-h6">{{ item.msgTitle }}</div>
-              <div class="text-subtitle2">
-                {{ $dayjs(item.msgFrom).format("DD-MM-YYYY") }}
-              </div>
-            </div>
-
-            <div v-show="item.message_opened === null" class="col-auto q-pt-sm">
-              <q-btn
-                color="white"
-                size="sm"
-                text-color="black"
-                v-on:click="setMessagesOpened(item)"
-              >
-                gelezen
-              </q-btn>
-            </div>
-          </div>
-        </q-card-section>
-
-        <q-separator />
-
-        <q-card-section v-html="item.msgText" />
-      </q-card>
-    </div>
+    </q-page>
   </q-page-container>
 </template>
 

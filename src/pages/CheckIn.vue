@@ -71,35 +71,35 @@
           <div class="q-ml-auto q-mr-auto q-mb-sm">
             <q-btn
               class="q-ma-sm"
-              color="secondary"
+              color="primary"
               label="0"
               style="font-size: 24px"
               v-on:click="pressKey(0)"
             />
             <q-btn
               class="q-ma-sm"
-              color="secondary"
+              color="primary"
               label="1"
               style="font-size: 24px"
               v-on:click="pressKey(1)"
             />
             <q-btn
               class="q-ma-sm"
-              color="secondary"
+              color="primary"
               label="2"
               style="font-size: 24px"
               v-on:click="pressKey(2)"
             />
             <q-btn
               class="q-ma-sm"
-              color="secondary"
+              color="primary"
               label="3"
               style="font-size: 24px"
               v-on:click="pressKey(3)"
             />
             <q-btn
               class="q-ma-sm"
-              color="secondary"
+              color="primary"
               label="4"
               style="font-size: 24px"
               v-on:click="pressKey(4)"
@@ -110,35 +110,35 @@
           <div class="q-ml-auto q-mr-auto">
             <q-btn
               class="q-ma-sm"
-              color="secondary"
+              color="primary"
               label="5"
               style="font-size: 24px"
               v-on:click="pressKey(5)"
             />
             <q-btn
               class="q-ma-sm"
-              color="secondary"
+              color="primary"
               label="6"
               style="font-size: 24px"
               v-on:click="pressKey(6)"
             />
             <q-btn
               class="q-ma-sm"
-              color="secondary"
+              color="primary"
               label="7"
               style="font-size: 24px"
               v-on:click="pressKey(7)"
             />
             <q-btn
               class="q-ma-sm"
-              color="secondary"
+              color="primary"
               label="8"
               style="font-size: 24px"
               v-on:click="pressKey(8)"
             />
             <q-btn
               class="q-ma-sm"
-              color="secondary"
+              color="primary"
               label="9"
               style="font-size: 24px"
               v-on:click="pressKey(9)"
@@ -150,7 +150,7 @@
           <div class="q-ml-auto q-mr-auto">
             <q-btn
               class="q-ma-sm"
-              color="secondary"
+              color="primary"
               label="wissen"
               style="font-size: 24px"
               v-on:click="onClear"
@@ -169,7 +169,7 @@
           <q-btn
             v-show="!done"
             class="q-ma-sm"
-            color="secondary"
+            color="primary"
             label="Inchecken"
             style="font-size: 24px"
             v-on:click="onCheckIn"

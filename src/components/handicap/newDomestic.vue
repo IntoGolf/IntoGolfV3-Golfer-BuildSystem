@@ -76,7 +76,7 @@
         <q-btn-group class="q-mt-lg" spread>
           <q-btn
             :disabled="gsnIsInvalid || !date || !time"
-            color="secondary"
+            color="primary"
             icon-right="navigate_next"
             label="Baan"
             @click="step = 2"
@@ -99,14 +99,14 @@
 
         <q-btn-group class="q-mt-lg" spread>
           <q-btn
-            color="secondary"
+            color="primary"
             icon="navigate_before"
             label="datum"
             @click="step = 1"
           />
           <q-btn
             :disabled="!location"
-            color="secondary"
+            color="primary"
             icon-right="navigate_next"
             label="Lus"
             @click="step = 3"
@@ -135,7 +135,7 @@
 
         <q-btn-group class="q-mt-lg" spread>
           <q-btn
-            color="secondary"
+            color="primary"
             icon="navigate_before"
             label="Baan"
             @click="step = 2"
@@ -168,7 +168,7 @@
 
         <q-btn-group class="q-mt-lg" spread>
           <q-btn
-            color="secondary"
+            color="primary"
             icon="navigate_before"
             label="Lus"
             @click="step = 3"
@@ -235,10 +235,10 @@
         </div>
 
         <q-btn-group class="q-mt-lg" spread>
-          <q-btn color="secondary" icon="navigate_before" @click="step = 4" />
+          <q-btn color="primary" icon="navigate_before" @click="step = 4" />
 
           <q-btn
-            color="secondary"
+            color="primary"
             icon="check"
             @click="$emit('handleSave', local_scorecard, true)"
           />

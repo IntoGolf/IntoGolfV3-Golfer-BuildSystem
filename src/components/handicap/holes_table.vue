@@ -8,7 +8,7 @@
       <div class="col">
         <q-btn
           class="full-width"
-          color="secondary"
+          color="primary"
           label="Details"
           @click="handleSwitchHoles"
         />
@@ -16,7 +16,7 @@
       <div class="col">
         <q-btn
           class="full-width"
-          color="secondary"
+          color="primary"
           label="Terug"
           @click="handleCloseHoles"
         />
@@ -60,7 +60,7 @@
               style="padding: 0px; text-align: left"
             >
               <q-btn
-                color="secondary"
+                color="primary"
                 label="-"
                 outline
                 round
@@ -99,7 +99,7 @@
               "
             >
               <q-btn
-                color="secondary"
+                color="primary"
                 label="+"
                 outline
                 round

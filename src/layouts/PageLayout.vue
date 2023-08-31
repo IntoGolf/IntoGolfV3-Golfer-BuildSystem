@@ -1,11 +1,8 @@
 <template>
   <div>
     <q-layout view="lHh Lpr lFf">
-      <q-header class="bg-secondary" flat>
-        <q-toolbar
-          :style="{ backgroundColor: headerColor }"
-          class="text-primary"
-        >
+      <q-header class="web-width q-header" flat>
+        <q-toolbar>
           <q-btn
             v-if="!$q.platform.is.desktop"
             :style="{ color: settings.app_primary_font_color }"
@@ -42,15 +39,29 @@
           />
         </q-toolbar>
       </q-header>
-      <router-view class="web-width q-pl-md q-pr-md q-mt-sm" />
+      <router-view class="q-background web-width q-pl-md q-pr-md q-mt-sm" />
     </q-layout>
 
     <q-drawer
       v-model="drawer"
       :style="{ marginTop: isCordova ? '0' : '42px' }"
+      class="q-drawer"
       show-if-above
-      style="background-color: #2e4651; color: #edfcff"
     >
+      <div
+        style="
+          width: 100%;
+          text-align: center;
+          padding-top: 10px;
+          padding-bottom: 5px;
+        "
+      >
+        <q-img
+          src="/logoInternational.png"
+          style="margin-left: auto; margin-right: auto"
+          width="60%"
+        />
+      </div>
       <q-list style="min-width: 250px">
         <q-item
           v-for="(item, key) in menuArray"

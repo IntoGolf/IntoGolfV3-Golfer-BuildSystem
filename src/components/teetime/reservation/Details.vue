@@ -110,7 +110,7 @@
         <div class="col">
           <q-btn
             class="q-mr-sm"
-            color="secondary"
+            color="primary"
             icon="arrow_back"
             v-on:click="$emit('handleClose')"
           />

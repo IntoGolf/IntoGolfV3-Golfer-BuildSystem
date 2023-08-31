@@ -1,5 +1,8 @@
 <template>
-  <div class="row full-width q-mt-md bg-orange q-pa-sm">
+  <div
+    class="row full-width q-mt-md q-pa-sm"
+    style="border: 1px solid lightgrey; border-radius: 4px"
+  >
     <div class="col-12">
       <div class="row">
         <div class="col-6">
@@ -18,7 +21,7 @@
         </div>
         <div class="col-6 text-right">
           <q-btn
-            color="secondary"
+            color="primary"
             size="xs"
             v-on:click="handleCancel(lesson.pro_lesson)"
             >Annuleer

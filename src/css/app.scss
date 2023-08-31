@@ -4,6 +4,7 @@
 @import "_variables";
 @import "rewrite_quasar";
 @import "addToCalender";
+@import "quasar.variables";
 
 #app {
   -webkit-font-smoothing: antialiased;
@@ -86,6 +87,21 @@ body {
 
 .q-table th, .q-table td {
   font-size: 14px;
+}
+
+.q-header {
+  background-color: $header;
+  color: $header_font;
+}
+
+.q-drawer {
+  background-color: $qDrawer;
+  color: $qDrawer_font;
+}
+
+.q-background {
+  background-color: $bg-primary;
+  opacity: 0.8;
 }
 
 .bg-primary {

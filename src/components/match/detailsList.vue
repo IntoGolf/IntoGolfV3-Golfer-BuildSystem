@@ -128,7 +128,7 @@
           mySubscription === null &&
           specialRules.length === 0
         "
-        color="secondary"
+        color="primary"
         label="Inschrijven"
         @click="handleSubscribe"
       />
@@ -140,7 +140,7 @@
           specialRules.length === 0 &&
           match.StartlijstGereed !== 1
         "
-        color="secondary"
+        color="primary"
         label="Mijn inschrijving"
         @click="handleSubscribe"
       />
@@ -149,7 +149,7 @@
     <q-btn-group class="q-mt-md" spread>
       <q-btn
         v-if="inScorecardWindow && mySubscription !== null"
-        color="secondary"
+        color="primary"
         label="Score invoeren"
         @click="handleEnterScore"
       />
@@ -186,7 +186,7 @@
           <q-btn
             :disabled="mySubscription === null"
             class="full-width"
-            color="secondary"
+            color="primary"
             label="Gast inschrijven"
             @click="handleSubscribeGuest"
           />
@@ -226,7 +226,7 @@
               (fullTeam ? ' (uw team is compleet)' : '')
             "
             class="full-width"
-            color="secondary"
+            color="primary"
             @click="handleSubscribeMember"
           />
         </div>
@@ -318,7 +318,7 @@ export default {
     specialRules: function () {
       if (
         this.match.restrictionBySex !== 0 &&
-        this.match.restrictionBySex !== this.currentUser.relGender
+        this.match.restrictionBySex !== parseInt(this.currentUser.relGender)
       ) {
         return (
           "Dit is een wedstrijd voor " +

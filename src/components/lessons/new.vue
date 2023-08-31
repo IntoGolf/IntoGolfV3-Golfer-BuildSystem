@@ -1,16 +1,5 @@
 <template>
   <div>
-    <div class="row q-mr-none q-pr-none justify-end">
-      <q-btn
-        class="q-pr-none"
-        color="secondary"
-        flat
-        icon="arrow_back"
-        v-on:click="newLesson = false"
-        >Lessen
-      </q-btn>
-    </div>
-
     <div class="row q-mt-md q-gutter-sm">
       <div class="col">
         <q-input

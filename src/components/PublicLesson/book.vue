@@ -119,7 +119,7 @@
         </div>
         <q-btn
           class="q-mr-sm"
-          color="secondary"
+          color="primary"
           label="Terug"
           v-on:click="handleBack"
         />

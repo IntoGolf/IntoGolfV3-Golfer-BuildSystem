@@ -44,7 +44,7 @@
             <q-btn-group class="q-mt-lg" spread>
               <q-btn
                 :disabled="gsnIsInvalid || !scorecard.date || !scorecard.time"
-                color="secondary"
+                color="primary"
                 icon-right="navigate_next"
                 label="Baan"
                 @click="scorecard.step = 2"
@@ -67,14 +67,14 @@
 
             <q-btn-group class="q-mt-lg" spread>
               <q-btn
-                color="secondary"
+                color="primary"
                 icon="navigate_before"
                 label="datum"
                 @click="scorecard.step = 1"
               />
               <q-btn
                 :disabled="!scorecard.course"
-                color="secondary"
+                color="primary"
                 icon-right="navigate_next"
                 label="Lus"
                 @click="scorecard.step = 3"
@@ -103,7 +103,7 @@
 
             <q-btn-group class="q-mt-lg" spread>
               <q-btn
-                color="secondary"
+                color="primary"
                 icon="navigate_before"
                 label="Baan"
                 @click="scorecard.step = 2"
@@ -139,7 +139,7 @@
 
             <q-btn-group class="q-mt-lg" spread>
               <q-btn
-                color="secondary"
+                color="primary"
                 icon="navigate_before"
                 label="Lus"
                 @click="scorecard.step = 3"
@@ -207,18 +207,14 @@
 
             <q-btn-group class="q-mt-lg" spread>
               <q-btn
-                color="secondary"
+                color="primary"
                 icon="navigate_before"
                 @click="scorecard.step = 4"
               />
 
-              <q-btn color="secondary" icon="check" @click="onSaveScorecard" />
+              <q-btn color="primary" icon="check" @click="onSaveScorecard" />
 
-              <q-btn
-                color="secondary"
-                icon="close"
-                @click="onCancelScorecard"
-              />
+              <q-btn color="primary" icon="close" @click="onCancelScorecard" />
             </q-btn-group>
           </div>
         </div>

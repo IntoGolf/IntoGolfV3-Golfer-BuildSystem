@@ -1,224 +1,235 @@
 <template>
   <q-page>
-    <div class="row">
-      <div class="col">
-        Datum:
-        <q-btn-group class="full-width" unelevated>
-          <q-btn
-            color="secondary"
-            icon="chevron_left"
-            style="width: 50px"
-            v-on:click="navDay(-1)"
-          />
-          <q-btn
-            class="full-width"
-            color="secondary"
-            style="width: calc(100% - 100px)"
-          >
-            {{ $dayjs(form.fltDate).format("dddd DD MMMM") }}
-
-            <q-popup-proxy
-              ref="qDateTeeTime"
-              transition-hide="scale"
-              transition-show="scale"
+    <q-card class="q-pa-sm">
+      <div class="row">
+        <div class="col">
+          Datum:
+          <q-btn-group class="full-width" unelevated>
+            <q-btn
+              color="primary"
+              icon="chevron_left"
+              style="width: 50px"
+              v-on:click="navDay(-1)"
+            />
+            <q-btn
+              class="full-width"
+              color="primary"
+              style="width: calc(100% - 100px)"
             >
-              <q-date
-                v-model="date"
-                :options="optionsFn"
-                mask="YYYY-MM-DD"
-                today-btn
-                @change="loadTeetimes"
+              {{ $dayjs(form.fltDate).format("dddd DD MMMM") }}
+
+              <q-popup-proxy
+                ref="qDateTeeTime"
+                transition-hide="scale"
+                transition-show="scale"
               >
-                <div class="row items-center justify-end" flat>
-                  <q-btn v-close-popup color="secondary" flat label="Sluiten" />
-                </div>
-              </q-date>
-            </q-popup-proxy>
-          </q-btn>
-          <q-btn
-            color="secondary"
-            icon="chevron_right"
-            style="width: 50px"
-            v-on:click="navDay(1)"
-          />
-        </q-btn-group>
-      </div>
-    </div>
-
-    <div class="row q-mt-md">
-      <div class="col-5 q-pr-sm">
-        Holes:
-        <q-btn-group class="full-width" spread unelevated>
-          <q-btn
-            v-for="(item, index) of filterForm.holes"
-            :key="index"
-            :color="form.holes === item ? 'secondary' : 'white'"
-            :label="item"
-            :text-color="form.holes === item ? '' : 'black'"
-            @click="handleFilterHole(item)"
-          />
-        </q-btn-group>
+                <q-date
+                  v-model="date"
+                  :options="optionsFn"
+                  mask="YYYY-MM-DD"
+                  today-btn
+                  @change="loadTeetimes"
+                >
+                  <div class="row items-center justify-end" flat>
+                    <q-btn
+                      v-close-popup
+                      color="primary"
+                      flat
+                      label="Sluiten"
+                    />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-btn>
+            <q-btn
+              color="primary"
+              icon="chevron_right"
+              style="width: 50px"
+              v-on:click="navDay(1)"
+            />
+          </q-btn-group>
+        </div>
       </div>
 
-      <div class="col-7">
-        Spelers:
-        <q-btn-group class="full-width" spread unelevated>
-          <q-btn
-            v-for="(item, index) of filterForm.players"
-            :key="index"
-            :color="form.fltSize === item ? 'secondary' : 'white'"
-            :label="item"
-            :text-color="form.fltSize === item ? '' : 'black'"
-            @click="handleFilterPlayers(item)"
-          />
-        </q-btn-group>
-      </div>
-    </div>
+      <div class="row q-mt-md">
+        <div class="col-5 q-pr-sm">
+          Holes:
+          <q-btn-group class="full-width" spread unelevated>
+            <q-btn
+              v-for="(item, index) of filterForm.holes"
+              :key="index"
+              :color="form.holes === item ? 'primary' : 'white'"
+              :label="item"
+              :text-color="form.holes === item ? '' : 'black'"
+              @click="handleFilterHole(item)"
+            />
+          </q-btn-group>
+        </div>
 
-    <div v-if="teetimes.length > 0" class="row">
-      <div
-        v-for="(course, cKey) of teetimes"
-        :key="cKey"
-        class="q-mt-md col items-start"
-      >
+        <div class="col-7">
+          Spelers:
+          <q-btn-group class="full-width" spread unelevated>
+            <q-btn
+              v-for="(item, index) of filterForm.players"
+              :key="index"
+              :color="form.fltSize === item ? 'primary' : 'white'"
+              :label="item"
+              :text-color="form.fltSize === item ? '' : 'black'"
+              @click="handleFilterPlayers(item)"
+            />
+          </q-btn-group>
+        </div>
+      </div>
+
+      <div v-if="teetimes.length > 0" class="row">
         <div
-          class="row text-center text-white bg-secondary"
-          style="height: 40px; border-bottom: black"
+          v-for="(course, cKey) of teetimes"
+          :key="cKey"
+          class="q-mt-md col items-start"
         >
           <div
-            class="col"
-            style="
-              font-size: 18px;
-              margin-top: 5px;
-              font-weight: bold;
-              border-bottom: black;
-            "
+            class="row text-center text-white bg-secondary"
+            style="height: 40px; border-bottom: black"
           >
-            {{ course.crlName }}
+            <div
+              class="col"
+              style="
+                font-size: 18px;
+                margin-top: 5px;
+                font-weight: bold;
+                border-bottom: black;
+              "
+            >
+              {{ course.crlName }}
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <q-separator />
+      <q-separator />
 
-    <div class="row q-gutter-xs" style="max-height: 600px; overflow: scroll">
-      <div
-        v-for="(course, cKey) of teetimes"
-        :key="cKey"
-        class="col text-grey-8 text-bold"
-      >
+      <div class="row q-gutter-xs" style="max-height: 600px; overflow: scroll">
         <div
-          v-for="(time, tKey) of timeFilter(course.times)"
-          :key="tKey"
-          :class="time.sttPlayerArray.length > 0 ? 'bg-blue-3' : 'bg-green-3'"
-          class="text-center q-mt-xs q-pa-sm"
-          @click="handleOpenDialog(time, course)"
+          v-for="(course, cKey) of teetimes"
+          :key="cKey"
+          class="col text-grey-8 text-bold"
         >
-          <div class="row">
-            <div class="col">
-              {{ $filters.minuteToTime(time.sttTimeFrom) }}
-              <q-icon
-                v-show="time.sttPlayerArray.length > 0"
-                class="q-ml-sm q-mb-xs q-mr-xs"
-                name="group"
-                size="18px"
-              >
-                {{ time.sttPlayers }}
-              </q-icon>
+          <div
+            v-for="(time, tKey) of timeFilter(course.times)"
+            :key="tKey"
+            :class="time.sttPlayerArray.length > 0 ? 'bg-blue-3' : 'bg-green-3'"
+            class="text-center q-mt-xs q-pa-sm"
+            @click="handleOpenDialog(time, course)"
+          >
+            <div class="row">
+              <div class="col">
+                {{ $filters.minuteToTime(time.sttTimeFrom) }}
+                <q-icon
+                  v-show="time.sttPlayerArray.length > 0"
+                  class="q-ml-sm q-mb-xs q-mr-xs"
+                  name="group"
+                  size="18px"
+                >
+                  {{ time.sttPlayers }}
+                </q-icon>
+              </div>
             </div>
-          </div>
 
-          <div v-if="time.sttPlayerArray.length > 0" class="row">
-            <div class="col">
-              <span
-                v-for="(player, pKey) of time.sttPlayerArray"
-                :key="pKey"
-                class="text-center"
-              >
-                {{ pKey > 0 ? "/" : "" }} {{ player.name }}
-              </span>
+            <div v-if="time.sttPlayerArray.length > 0" class="row">
+              <div class="col">
+                <span
+                  v-for="(player, pKey) of time.sttPlayerArray"
+                  :key="pKey"
+                  class="text-center"
+                >
+                  {{ pKey > 0 ? "/" : "" }} {{ player.name }}
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!--    <div v-else class="row">-->
-    <!--      <div class="col">-->
-    <!--        <p class="text-center">Geen starttijden beschikbaar~</p>-->
-    <!--      </div>-->
-    <!--    </div>-->
+      <!--    <div v-else class="row">-->
+      <!--      <div class="col">-->
+      <!--        <p class="text-center">Geen starttijden beschikbaar~</p>-->
+      <!--      </div>-->
+      <!--    </div>-->
 
-    <q-dialog v-if="dialogVisible" v-model="dialogVisible">
-      <q-card style="max-width: 320px; width: 95%">
-        <q-card-section class="text-h6">
-          <div v-if="dialogErrors.length === 0">Uw reservering</div>
-          <div v-if="dialogErrors.length > 0">Probleem gevonden!</div>
-        </q-card-section>
+      <q-dialog v-if="dialogVisible" v-model="dialogVisible">
+        <q-card style="max-width: 320px; width: 95%">
+          <q-card-section class="text-h6">
+            <div v-if="dialogErrors.length === 0">Uw reservering</div>
+            <div v-if="dialogErrors.length > 0">Probleem gevonden!</div>
+          </q-card-section>
 
-        <q-separator inset />
+          <q-separator inset />
 
-        <q-card-section v-if="dialogErrors.length === 0">
-          <div class="row">
-            <div class="col text-left text-bold">Datum</div>
-            <div class="col text-right">
-              {{ $dayjs(form.fltDate).format("dddd DD MMMM") }}
+          <q-card-section v-if="dialogErrors.length === 0">
+            <div class="row">
+              <div class="col text-left text-bold">Datum</div>
+              <div class="col text-right">
+                {{ $dayjs(form.fltDate).format("dddd DD MMMM") }}
+              </div>
             </div>
-          </div>
 
-          <div class="row q-mt-xs">
-            <div class="col text-left text-bold">Tijd</div>
-            <div class="col text-right">
-              {{ $filters.minuteToTime(selectedTimeItem.sttTimeFrom) }}
+            <div class="row q-mt-xs">
+              <div class="col text-left text-bold">Tijd</div>
+              <div class="col text-right">
+                {{ $filters.minuteToTime(selectedTimeItem.sttTimeFrom) }}
+              </div>
             </div>
-          </div>
 
-          <div class="row q-mt-xs">
-            <div class="col text-left text-bold">Spelers</div>
-            <div class="col text-right">{{ form.fltSize }}</div>
-          </div>
+            <div class="row q-mt-xs">
+              <div class="col text-left text-bold">Spelers</div>
+              <div class="col text-right">{{ form.fltSize }}</div>
+            </div>
 
-          <!--          <div class="row q-mt-xs">-->
-          <!--            <div class="col text-left text-bold">Holes</div>-->
-          <!--            <div class="col text-right">{{ form.holes }}</div>-->
-          <!--          </div>-->
+            <!--          <div class="row q-mt-xs">-->
+            <!--            <div class="col text-left text-bold">Holes</div>-->
+            <!--            <div class="col text-right">{{ form.holes }}</div>-->
+            <!--          </div>-->
 
-          <div class="row q-mt-xs">
-            <div class="col text-left text-bold">Baan</div>
-            <div class="col text-right">{{ selectedCourseItem.crlName }}</div>
-          </div>
-        </q-card-section>
+            <div class="row q-mt-xs">
+              <div class="col text-left text-bold">Baan</div>
+              <div class="col text-right">{{ selectedCourseItem.crlName }}</div>
+            </div>
+          </q-card-section>
 
-        <q-card-section v-if="dialogErrors.length > 0">
-          <div v-for="(error, index) in dialogErrors" :key="index" class="row">
-            <div class="col text-left">{{ error }}</div>
-          </div>
-        </q-card-section>
+          <q-card-section v-if="dialogErrors.length > 0">
+            <div
+              v-for="(error, index) in dialogErrors"
+              :key="index"
+              class="row"
+            >
+              <div class="col text-left">{{ error }}</div>
+            </div>
+          </q-card-section>
 
-        <q-separator inset />
+          <q-separator inset />
 
-        <q-card-actions align="right">
-          <q-btn
-            color="secondary"
-            flat
-            size="mds"
-            v-on:click="handleDialogClose"
-          >
-            Annuleer
-          </q-btn>
+          <q-card-actions align="right">
+            <q-btn
+              color="primary"
+              flat
+              size="mds"
+              v-on:click="handleDialogClose"
+            >
+              Annuleer
+            </q-btn>
 
-          <q-btn
-            v-if="dialogErrors.length === 0"
-            color="secondary"
-            size="md"
-            v-on:click="handleReservation"
-          >
-            Reserveer
-          </q-btn>
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+            <q-btn
+              v-if="dialogErrors.length === 0"
+              color="primary"
+              size="md"
+              v-on:click="handleReservation"
+            >
+              Reserveer
+            </q-btn>
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+    </q-card>
   </q-page>
 </template>
 

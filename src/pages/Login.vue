@@ -3,28 +3,28 @@
     <div v-if="settings !== null" class="row cordova-hide fixed-bottom">
       <q-btn
         v-if="canSignIn"
-        color="secondary"
+        color="primary"
         flat
         label="Inschrijven"
         v-on:click="$router.push('sign-up')"
       />
       <q-btn
         v-if="canBookPublic"
-        color="secondary"
+        color="primary"
         flat
         label="Starttijd"
         v-on:click="$router.push('teetimes')"
       />
       <q-btn
-        v-if="canBookPublic"
-        color="secondary"
+        v-if="canBookCourse"
+        color="primary"
         flat
         label="Les"
         v-on:click="$router.push('public_lessons')"
       />
       <q-btn
         v-if="canBookCourse"
-        color="secondary"
+        color="primary"
         flat
         label="Cursus"
         v-on:click="$router.push('classes')"
@@ -80,10 +80,10 @@
         </q-input>
 
         <div class="text-center">
-          <q-btn color="secondary" label="Inloggen" v-on:click="onlogin" />
+          <q-btn color="primary" label="Inloggen" v-on:click="onlogin" />
           <q-btn
             class="q-mt-md"
-            color="secondary"
+            color="primary"
             flat
             label="Wachtwoord vergeten"
             v-on:click="$router.push('verify-code')"

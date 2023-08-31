@@ -15,7 +15,7 @@
     <allow-intent href="mailto:*"/>
     <allow-intent href="geo:*"/>
     <preference name="AllowNewWindows" value="true"/>
-    <preference name="MediaPlaybackAllowsAirPlay" value="true"/>
+    <preference name="AllowsAirPlayForMediaPlayback" value="true"/>
     <preference name="AllowBackForwardNavigationGestures" value="true"/>
     <preference name="Allow3DTouchLinkPreview" value="true"/>
     <preference name="ShowSplashScreenSpinner" value="false"/>

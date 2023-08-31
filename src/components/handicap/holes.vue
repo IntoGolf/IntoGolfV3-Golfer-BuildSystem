@@ -11,7 +11,7 @@
 
           <q-btn
             class="full-width q-mt-md q-mb-md"
-            color="secondary"
+            color="primary"
             label="Holes"
             @click="handleSwitchHoles"
           />
@@ -71,7 +71,7 @@
               style="padding: 0px; text-align: left"
             >
               <q-btn
-                color="secondary"
+                color="primary"
                 label="-"
                 outline
                 round
@@ -106,7 +106,7 @@
               "
             >
               <q-btn
-                color="secondary"
+                color="primary"
                 label="+"
                 outline
                 round
@@ -146,11 +146,11 @@
     </q-list>
 
     <q-btn-group class="mt-3" spread>
-      <q-btn color="secondary" icon="chevron_left" @click="prevHole" />
+      <q-btn color="primary" icon="chevron_left" @click="prevHole" />
 
-      <q-btn color="secondary" icon="close" @click="handleCloseHoles" />
+      <q-btn color="primary" icon="close" @click="handleCloseHoles" />
 
-      <q-btn color="secondary" icon="chevron_right" @click="nextHole" />
+      <q-btn color="primary" icon="chevron_right" @click="nextHole" />
     </q-btn-group>
   </div>
 </template>

@@ -18,17 +18,17 @@
                   local_scorecard.course !== 993 &&
                   local_scorecard.course_country_code === 'NL'
                 "
-                color="secondary"
+                color="primary"
                 label="score"
                 @click="showHole = 9"
               />
               <q-btn
                 v-show="canDelete"
-                color="secondary"
+                color="primary"
                 icon="save"
                 @click="handleSave"
               />
-              <q-btn color="secondary" icon="close" @click="onClose" />
+              <q-btn color="primary" icon="close" @click="onClose" />
               <q-btn
                 v-if="canDelete"
                 color="negative"

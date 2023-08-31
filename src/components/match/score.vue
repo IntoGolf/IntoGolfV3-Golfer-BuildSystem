@@ -28,7 +28,7 @@
           <div class="row">
             <div class="col-4" style="padding: 0px; text-align: left">
               <q-btn
-                color="secondary"
+                color="primary"
                 label="-"
                 outline
                 round
@@ -53,7 +53,7 @@
               "
             >
               <q-btn
-                color="secondary"
+                color="primary"
                 label="+"
                 outline
                 round
@@ -83,7 +83,7 @@
       <q-item class="itg-q-item">
         <q-item-section>
           <q-btn-group spread>
-            <q-btn color="secondary" label="Opslaan" @click="handleSave" />
+            <q-btn color="primary" label="Opslaan" @click="handleSave" />
           </q-btn-group>
         </q-item-section>
       </q-item>

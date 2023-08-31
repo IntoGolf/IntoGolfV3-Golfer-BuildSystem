@@ -85,26 +85,26 @@
           v-if="
             !(match.ideal === 1 && match.fee > 0) || mySubscription !== null
           "
-          color="secondary"
+          color="primary"
           label="Opslaan"
           @click="handleSubscribe"
         />
         <q-btn
           v-if="match.ideal === 1 && match.fee > 0 && mySubscription === null"
           :disable="player.bank === ''"
-          color="secondary"
+          color="primary"
           label="Betaal"
           @click="handleSubscribe"
         />
         <q-btn
           v-if="mySubscription !== null"
           :disabled="doIHaveGuests || teamCaptainWithTeam"
-          color="secondary"
+          color="primary"
           label="Uitschrijven"
           @click="handleUnSubscribe"
         />
         <q-btn
-          color="secondary"
+          color="primary"
           label="Sluiten"
           @click="handleCloseSubscribe"
         />

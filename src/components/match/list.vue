@@ -1,102 +1,107 @@
 <template>
   <q-page>
-    <div class="row q-mb-md">
-      <div class="col">
-        <q-input
-          v-model="filter"
-          clear-icon="close"
-          clearable
-          label="Zoek wedstrijd"
-        />
-      </div>
-    </div>
-
-    <div class="row q-mb-md">
-      <div class="col">
-        <q-btn-group spread>
-          <q-btn
-            :color="subFilter === 1 ? 'warning' : 'secondary'"
-            label="Ingeschreven"
-            v-on:click="subFilter = 1"
+    <q-card class="q-pa-sm">
+      <div class="row q-mb-md">
+        <div class="col">
+          <q-input
+            v-model="filter"
+            clear-icon="close"
+            clearable
+            label="Zoek wedstrijd"
           />
-          <q-btn
-            :color="subFilter === 2 ? 'warning' : 'secondary'"
-            label="Inschrijven"
-            v-on:click="subFilter = 2"
-          />
-          <q-btn
-            :color="subFilter === 0 ? 'warning' : 'secondary'"
-            label="Alles"
-            v-on:click="subFilter = 0"
-          />
-        </q-btn-group>
+        </div>
       </div>
-    </div>
 
-    <div class="row" style="height: calc(100vh - 200px); overflow-y: scroll">
-      <div class="col">
-        <q-list class="full-width" separator>
-          <q-item
-            v-for="(match, index) in filterArray"
-            v-bind:key="index"
-            v-ripple
-            class="full-width bg-white shadow-1 q-mb-sm"
-            clickable
-            v-on:click="handleOpenMatch(match)"
-          >
-            <q-item-section>
-              <q-item-label class="overflow-hidden">
-                <i class="far fa-trophy-alt mr-2" />
-
-                {{
-                  $filters.capitalizeFirstLetter(match.name) +
-                  " " +
-                  match.match_type.name +
-                  " " +
-                  (match.match_type.name !== "MatchPlay"
-                    ? match.match_scoring_type.name
-                    : "")
-                }}
-              </q-item-label>
-
-              <q-item-label caption>
-                <div style="float: left">
-                  {{ getMatchDate(match) + " " + getMatchTime(match) }}
-                </div>
-                <div style="float: right">
-                  <div v-if="match.UitslagenGereed === 1" style="float: right">
-                    Uitslagen beschikbaar
-                  </div>
-                  <div
-                    v-else-if="match.StartlijstGereed === 1"
-                    style="float: right"
-                  >
-                    Startlijst gereed
-                  </div>
-                  <div
-                    v-else-if="!getUserOnMatch(match) && getOpenForMe(match)"
-                    style="float: right"
-                  >
-                    Inschrijven
-                  </div>
-                  <div
-                    v-else-if="
-                      !getOpenForMe(match) && getOpenForSubscription(match)
-                    "
-                    style="float: right"
-                  >
-                    Open voor anderen
-                  </div>
-                  <div v-else-if="getUserOnMatch(match)" style="float: right">
-                    Ingeschreven
-                  </div>
-                </div>
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
+      <div class="row q-mb-md">
+        <div class="col">
+          <q-btn-group spread>
+            <q-btn
+              :color="subFilter === 1 ? 'warning' : 'primary'"
+              label="Ingeschreven"
+              v-on:click="subFilter = 1"
+            />
+            <q-btn
+              :color="subFilter === 2 ? 'warning' : 'primary'"
+              label="Inschrijven"
+              v-on:click="subFilter = 2"
+            />
+            <q-btn
+              :color="subFilter === 0 ? 'warning' : 'primary'"
+              label="Alles"
+              v-on:click="subFilter = 0"
+            />
+          </q-btn-group>
+        </div>
       </div>
-    </div>
+
+      <div class="row" style="height: calc(100vh - 200px); overflow-y: scroll">
+        <div class="col">
+          <q-list class="full-width" separator>
+            <q-item
+              v-for="(match, index) in filterArray"
+              v-bind:key="index"
+              v-ripple
+              class="full-width bg-white shadow-1 q-mb-sm"
+              clickable
+              v-on:click="handleOpenMatch(match)"
+            >
+              <q-item-section>
+                <q-item-label class="overflow-hidden">
+                  <i class="far fa-trophy-alt mr-2" />
+
+                  {{
+                    $filters.capitalizeFirstLetter(match.name) +
+                    " " +
+                    match.match_type.name +
+                    " " +
+                    (match.match_type.name !== "MatchPlay"
+                      ? match.match_scoring_type.name
+                      : "")
+                  }}
+                </q-item-label>
+
+                <q-item-label caption>
+                  <div style="float: left">
+                    {{ getMatchDate(match) + " " + getMatchTime(match) }}
+                  </div>
+                  <div style="float: right">
+                    <div
+                      v-if="match.UitslagenGereed === 1"
+                      style="float: right"
+                    >
+                      Uitslagen beschikbaar
+                    </div>
+                    <div
+                      v-else-if="match.StartlijstGereed === 1"
+                      style="float: right"
+                    >
+                      Startlijst gereed
+                    </div>
+                    <div
+                      v-else-if="!getUserOnMatch(match) && getOpenForMe(match)"
+                      style="float: right"
+                    >
+                      Inschrijven
+                    </div>
+                    <div
+                      v-else-if="
+                        !getOpenForMe(match) && getOpenForSubscription(match)
+                      "
+                      style="float: right"
+                    >
+                      Open voor anderen
+                    </div>
+                    <div v-else-if="getUserOnMatch(match)" style="float: right">
+                      Ingeschreven
+                    </div>
+                  </div>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </div>
+      </div>
+    </q-card>
   </q-page>
 </template>
 
@@ -167,7 +172,7 @@ export default {
 
       if (
         match.restrictionBySex !== 0 &&
-        match.restrictionBySex !== this.currentUser.relGender
+        match.restrictionBySex !== parseInt(this.currentUser.relGender)
       ) {
         return false;
       }

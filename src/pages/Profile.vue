@@ -1,174 +1,176 @@
 <template>
   <q-page-container>
-    <div class="pb-3 bg-white">
-      <q-form @submit="saveProfile">
-        <div class="ml-auto mr-auto text-center">
-          <q-img :src="blobUrl" style="max-width: 240px; max-height: 240px" />
-          <!--          <UploadPhoto :uploadUrl="uploadUrl"></UploadPhoto>-->
-        </div>
+    <q-page>
+      <q-card class="q-pa-sm">
+        <q-form @submit="saveProfile">
+          <div class="ml-auto mr-auto text-center">
+            <q-img :src="blobUrl" style="max-width: 240px; max-height: 240px" />
+            <!--          <UploadPhoto :uploadUrl="uploadUrl"></UploadPhoto>-->
+          </div>
 
-        <q-tabs v-model="tab" class="text-teal">
-          <q-tab class="pl-0" label="Naam" name="Name" />
-          <q-tab class="pl-0" label="Contact" name="Contact" />
-          <q-tab class="pl-0" label="Golf" name="Golf" />
-          <q-tab class="pl-0" label="Voorkeuren" name="Voorkeuren" />
-        </q-tabs>
+          <q-tabs v-model="tab" class="text-teal">
+            <q-tab class="pl-0" label="Naam" name="Name" />
+            <q-tab class="pl-0" label="Contact" name="Contact" />
+            <q-tab class="pl-0" label="Golf" name="Golf" />
+            <q-tab class="pl-0" label="Voorkeuren" name="Voorkeuren" />
+          </q-tabs>
 
-        <q-tab-panels v-model="tab" class="p-0">
-          <q-tab-panel class="p-0" name="Name">
-            <q-input
-              v-model="form.relFirstName"
-              :disable="!canChange"
-              :label="$t('Initialen')"
-              lazy-rules
-            />
-
-            <q-input
-              v-model="form.relCallName"
-              :disable="!canChange"
-              :label="$t('Voornaam')"
-              lazy-rules
-            />
-
-            <q-input
-              v-model="form.relPrefix"
-              :disable="!canChange"
-              :label="$t('Tussenvoegsel')"
-              lazy-rules
-            />
-
-            <q-input
-              v-model="form.relName"
-              :disable="!canChange"
-              :label="$t('Achternaam')"
-              lazy-rules
-            />
-
-            <q-input
-              v-model="form.relAddress1"
-              :disable="!canChange"
-              :label="$t('Straat')"
-              lazy-rules
-            />
-
-            <div class="row q-col-gutter-md">
+          <q-tab-panels v-model="tab" class="p-0">
+            <q-tab-panel class="p-0" name="Name">
               <q-input
-                v-model="form.relAddressStreetNumber"
+                v-model="form.relFirstName"
                 :disable="!canChange"
-                :label="$t('Huisnummer')"
+                :label="$t('Initialen')"
                 lazy-rules
               />
 
               <q-input
-                v-model="form.relAddressStreetAddition"
+                v-model="form.relCallName"
                 :disable="!canChange"
-                :label="$t('Toevoeging')"
+                :label="$t('Voornaam')"
                 lazy-rules
               />
-            </div>
 
-            <q-input
-              v-model="form.relPostalCode"
-              :disable="!canChange"
-              :label="$t('Postcode')"
-              lazy-rules
+              <q-input
+                v-model="form.relPrefix"
+                :disable="!canChange"
+                :label="$t('Tussenvoegsel')"
+                lazy-rules
+              />
+
+              <q-input
+                v-model="form.relName"
+                :disable="!canChange"
+                :label="$t('Achternaam')"
+                lazy-rules
+              />
+
+              <q-input
+                v-model="form.relAddress1"
+                :disable="!canChange"
+                :label="$t('Straat')"
+                lazy-rules
+              />
+
+              <div class="row q-col-gutter-md">
+                <q-input
+                  v-model="form.relAddressStreetNumber"
+                  :disable="!canChange"
+                  :label="$t('Huisnummer')"
+                  lazy-rules
+                />
+
+                <q-input
+                  v-model="form.relAddressStreetAddition"
+                  :disable="!canChange"
+                  :label="$t('Toevoeging')"
+                  lazy-rules
+                />
+              </div>
+
+              <q-input
+                v-model="form.relPostalCode"
+                :disable="!canChange"
+                :label="$t('Postcode')"
+                lazy-rules
+              />
+
+              <q-input
+                v-model="form.relCity"
+                :disable="!canChange"
+                :label="$t('Woonplaats')"
+                lazy-rules
+              />
+            </q-tab-panel>
+
+            <q-tab-panel class="p-0" name="Contact">
+              <q-input
+                v-model="form.relPhone"
+                :disable="!canChange"
+                :label="$t('Phone number')"
+                lazy-rules
+              />
+
+              <q-input
+                v-model="form.relPhoneMobile"
+                :disable="!canChange"
+                :label="$t('Mobiel telefoonnummer')"
+                lazy-rules
+              />
+
+              <q-input
+                v-model="form.relEmail"
+                :disable="!canChange"
+                :label="$t('Emailadres')"
+                lazy-rules
+              />
+            </q-tab-panel>
+
+            <q-tab-panel class="p-0" name="Golf">
+              <q-input
+                v-model="form.relGsn"
+                :label="$t('Golfservicenummer')"
+                lazy-rules
+                readonly
+              />
+
+              <q-input
+                v-model="form.relHandicap"
+                :label="$t('Speelsterkte')"
+                lazy-rules
+                readonly
+              />
+            </q-tab-panel>
+
+            <q-tab-panel class="p-0" name="Voorkeuren">
+              <q-select
+                v-model="relVisibilityLevel"
+                :options="visibilityArray"
+                emit-value
+                label="Zichtbaarheid in ledenboekje"
+                map-options
+              />
+
+              <br />
+
+              <q-toggle
+                v-model="relMagazineGolfNL"
+                :disable="!canChange"
+                label="Golfers magazine ontvangen"
+              />
+
+              <br />
+
+              <q-toggle
+                v-model="relEmailnewsletterNGF"
+                :disable="!canChange"
+                label="E-mail nieuwsbrief NGF ontvangen"
+              />
+
+              <br />
+
+              <q-toggle
+                v-model="relInvoiceByEmail"
+                :disable="!canChange"
+                label="Factuur per e-mail ontvangen"
+              />
+            </q-tab-panel>
+          </q-tab-panels>
+
+          <div class="text-center q-mt-md q-pb-md">
+            <q-btn color="primary" label="Opslaan" type="submit" />
+
+            <q-btn
+              class="q-ml-md"
+              color="primary"
+              label="Uitloggen"
+              outline
+              v-on:click="logout"
             />
-
-            <q-input
-              v-model="form.relCity"
-              :disable="!canChange"
-              :label="$t('Woonplaats')"
-              lazy-rules
-            />
-          </q-tab-panel>
-
-          <q-tab-panel class="p-0" name="Contact">
-            <q-input
-              v-model="form.relPhone"
-              :disable="!canChange"
-              :label="$t('Phone number')"
-              lazy-rules
-            />
-
-            <q-input
-              v-model="form.relPhoneMobile"
-              :disable="!canChange"
-              :label="$t('Mobiel telefoonnummer')"
-              lazy-rules
-            />
-
-            <q-input
-              v-model="form.relEmail"
-              :disable="!canChange"
-              :label="$t('Emailadres')"
-              lazy-rules
-            />
-          </q-tab-panel>
-
-          <q-tab-panel class="p-0" name="Golf">
-            <q-input
-              v-model="form.relGsn"
-              :label="$t('Golfservicenummer')"
-              lazy-rules
-              readonly
-            />
-
-            <q-input
-              v-model="form.relHandicap"
-              :label="$t('Speelsterkte')"
-              lazy-rules
-              readonly
-            />
-          </q-tab-panel>
-
-          <q-tab-panel class="p-0" name="Voorkeuren">
-            <q-select
-              v-model="relVisibilityLevel"
-              :options="visibilityArray"
-              emit-value
-              label="Zichtbaarheid in ledenboekje"
-              map-options
-            />
-
-            <br />
-
-            <q-toggle
-              v-model="relMagazineGolfNL"
-              :disable="!canChange"
-              label="Golfers magazine ontvangen"
-            />
-
-            <br />
-
-            <q-toggle
-              v-model="relEmailnewsletterNGF"
-              :disable="!canChange"
-              label="E-mail nieuwsbrief NGF ontvangen"
-            />
-
-            <br />
-
-            <q-toggle
-              v-model="relInvoiceByEmail"
-              :disable="!canChange"
-              label="Factuur per e-mail ontvangen"
-            />
-          </q-tab-panel>
-        </q-tab-panels>
-
-        <div class="text-center q-mt-md q-pb-md">
-          <q-btn color="primary" label="Opslaan" type="submit" />
-
-          <q-btn
-            class="q-ml-md"
-            color="primary"
-            label="Uitloggen"
-            outline
-            v-on:click="logout"
-          />
-        </div>
-      </q-form>
-    </div>
+          </div>
+        </q-form>
+      </q-card>
+    </q-page>
   </q-page-container>
 </template>
 

@@ -1,70 +1,72 @@
 <template>
   <q-page>
-    <div class="row">
-      <div class="col-12 text-right">
-        <q-btn
-          color="secondary"
-          flat
-          icon="arrow_back"
-          v-on:click="handleCloseMatch"
-          >Wedstrijden
-        </q-btn>
+    <q-card class="q-pa-sm">
+      <div class="row">
+        <div class="col-12 text-right">
+          <q-btn
+            color="primary"
+            flat
+            icon="arrow_back"
+            v-on:click="handleCloseMatch"
+            >Wedstrijden
+          </q-btn>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col q-pb-md">
-        <details-list
-          v-if="page == 1"
-          :match="match"
-          :mySubscription="mySubscription"
-          v-on:handleCloseSubscribe="handleCloseSubscribe"
-          v-on:handleEnterScore="handleEnterScore"
-          v-on:handleSubscribe="handleSubscribe"
-          v-on:handleSubscribeGuest="handleSubscribeGuest"
-          v-on:handleSubscribeMember="handleSubscribeMember"
-        />
+      <div class="row">
+        <div class="col q-pb-md">
+          <details-list
+            v-if="page == 1"
+            :match="match"
+            :mySubscription="mySubscription"
+            v-on:handleCloseSubscribe="handleCloseSubscribe"
+            v-on:handleEnterScore="handleEnterScore"
+            v-on:handleSubscribe="handleSubscribe"
+            v-on:handleSubscribeGuest="handleSubscribeGuest"
+            v-on:handleSubscribeMember="handleSubscribeMember"
+          />
 
-        <details-players
-          v-if="page === 1 && match.UitslagenGereed !== 1"
-          :match="match"
-          v-on:handleSubscribe="handleSubscribe"
-          v-on:handleSubscribeGuest="handleSubscribeGuest"
-          v-on:handleSubscribeMember="handleSubscribeMember"
-        />
+          <details-players
+            v-if="page === 1 && match.UitslagenGereed !== 1"
+            :match="match"
+            v-on:handleSubscribe="handleSubscribe"
+            v-on:handleSubscribeGuest="handleSubscribeGuest"
+            v-on:handleSubscribeMember="handleSubscribeMember"
+          />
 
-        <details-result
-          v-if="page === 1 && match.UitslagenGereed === 1"
-          :match="match"
-        />
+          <details-result
+            v-if="page === 1 && match.UitslagenGereed === 1"
+            :match="match"
+          />
 
-        <subscribe-member-self
-          v-if="page === 2"
-          :match="match"
-          :mySubscription="mySubscription"
-          v-on:handleCloseSubscribe="handleCloseSubscribe"
-        />
+          <subscribe-member-self
+            v-if="page === 2"
+            :match="match"
+            :mySubscription="mySubscription"
+            v-on:handleCloseSubscribe="handleCloseSubscribe"
+          />
 
-        <subscribe-member
-          v-if="page === 4"
-          :aSubscription="aSubscription"
-          :match="match"
-          v-on:handleCloseSubscribe="handleCloseSubscribe"
-        />
+          <subscribe-member
+            v-if="page === 4"
+            :aSubscription="aSubscription"
+            :match="match"
+            v-on:handleCloseSubscribe="handleCloseSubscribe"
+          />
 
-        <subscribe-guest
-          v-if="page === 3"
-          :aSubscription="aSubscription"
-          :match="match"
-          v-on:handleCloseSubscribe="handleCloseSubscribe"
-        />
+          <subscribe-guest
+            v-if="page === 3"
+            :aSubscription="aSubscription"
+            :match="match"
+            v-on:handleCloseSubscribe="handleCloseSubscribe"
+          />
 
-        <score
-          v-if="page === 5"
-          v-bind:player="player"
-          v-on:handleClose="handleClose"
-        />
+          <score
+            v-if="page === 5"
+            v-bind:player="player"
+            v-on:handleClose="handleClose"
+          />
+        </div>
       </div>
-    </div>
+    </q-card>
   </q-page>
 </template>
 

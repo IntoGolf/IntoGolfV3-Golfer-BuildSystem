@@ -1,10 +1,10 @@
 <template>
   <q-page>
-    <div class="row">
+    <div class="row q-mb-sm">
       <div class="col">
         <q-btn
-          class="full-width q-mb-md"
-          color="secondary"
+          class="full-width"
+          color="primary"
           icon="add"
           label="Nieuwe reservering"
           v-on:click="handleOpenNew"

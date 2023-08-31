@@ -1,28 +1,35 @@
 \
 <template>
   <q-page-container>
-    <div class="text-h6">Uw cursussen:</div>
-    <q-separator />
-    <div v-show="clientCourseArray.length === 0" class="q-mt-md text-subtitle1">
-      U bent niet ingeschreven op een cursus
-    </div>
-    <comp-pro-client-course
-      v-for="(proClientCourse, key) in clientCourseArray"
-      :key="key"
-      :proClientCourse="proClientCourse"
-    />
+    <q-page>
+      <q-card class="q-pa-sm">
+        <div class="text-h6">Uw cursussen:</div>
+        <q-separator />
+        <div
+          v-show="clientCourseArray.length === 0"
+          class="q-mt-md text-subtitle1"
+        >
+          U bent niet ingeschreven op een cursus
+        </div>
+        <comp-pro-client-course
+          v-for="(proClientCourse, key) in clientCourseArray"
+          :key="key"
+          :proClientCourse="proClientCourse"
+        />
 
-    <div class="q-mt-md text-h6">Cursusagenda:</div>
-    <q-separator />
-    <div v-show="courseArrayFilter.length === 0">
-      Er zijn geen cursussen beschikbaar
-    </div>
-    <comp-pro-course
-      v-for="(proCourse, key) in courseArrayFilter"
-      :key="key"
-      :proCourse="proCourse"
-      v-on:handleRefresh="handleRefresh"
-    />
+        <div class="q-mt-md text-h6">Cursusagenda:</div>
+        <q-separator />
+        <div v-show="courseArrayFilter.length === 0">
+          Er zijn geen cursussen beschikbaar
+        </div>
+        <comp-pro-course
+          v-for="(proCourse, key) in courseArrayFilter"
+          :key="key"
+          :proCourse="proCourse"
+          v-on:handleRefresh="handleRefresh"
+        />
+      </q-card>
+    </q-page>
   </q-page-container>
 </template>
 

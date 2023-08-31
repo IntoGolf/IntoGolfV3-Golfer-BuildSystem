@@ -1,7 +1,7 @@
 <template>
   <q-page-container>
-    <div class="row bg-white">
-      <div class="col">
+    <q-page>
+      <q-card class="q-pa-sm">
         <main v-show="focusedItem === null">
           <div class="row q-mb-md">
             <div class="col">
@@ -119,8 +119,8 @@
             />
           </div>
         </main>
-      </div>
-    </div>
+      </q-card>
+    </q-page>
   </q-page-container>
 </template>
 

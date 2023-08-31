@@ -3,7 +3,7 @@
     <q-page>
       <messages />
       <bookings />
-      <lessons />
+      <lessons v-if="1 == 2" />
     </q-page>
   </q-page-container>
 </template>

@@ -153,21 +153,21 @@
           <q-btn-group spread>
             <q-btn
               v-show="step > 1"
-              color="secondary"
+              color="primary"
               label="Vorig"
               @click="setStep(-1)"
             />
             <q-btn
               v-show="step < 4"
               :disable="!isStepValid"
-              color="secondary"
+              color="primary"
               label="Volgende"
               @click="setStep(1)"
             />
             <q-btn
               v-show="step === 4"
               :disable="!isStepValid"
-              color="secondary"
+              color="primary"
               label="Opslaan"
               @click="onSaveScorecard()"
             />

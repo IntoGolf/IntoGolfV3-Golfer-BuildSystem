@@ -66,7 +66,7 @@
                 style="padding: 0px; text-align: left"
               >
                 <q-btn
-                  color="secondary"
+                  color="primary"
                   label="-"
                   round
                   @click="onScoreChangeHandler(hole, -1)"
@@ -91,7 +91,7 @@
                 "
               >
                 <q-btn
-                  color="secondary"
+                  color="primary"
                   label="+"
                   round
                   @click="onScoreChangeHandler(hole, 1)"
@@ -125,13 +125,13 @@
       </q-list>
 
       <q-btn-group class="mt-2" spread>
-        <q-btn color="secondary" @click="prevHole">
+        <q-btn color="primary" @click="prevHole">
           <q-icon class="fal fa-chevron-left"></q-icon>
         </q-btn>
-        <q-btn color="secondary" @click="handleCloseHoles">
+        <q-btn color="primary" @click="handleCloseHoles">
           <q-icon class="fal fa-window-close"></q-icon>
         </q-btn>
-        <q-btn color="secondary" @click="nextHole">
+        <q-btn color="primary" @click="nextHole">
           <q-icon class="fal fa-chevron-right"></q-icon>
         </q-btn>
       </q-btn-group>

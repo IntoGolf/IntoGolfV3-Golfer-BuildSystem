@@ -1,40 +1,44 @@
 <template>
   <q-page-container>
-    <div class="row justify-between">
-      <div class="text-h5">
-        {{ showOrder ? "Uw winkel wagen" : "Artikelen" }}
+    <q-page>
+      <div class="row justify-between">
+        <div class="text-h5">
+          {{ showOrder ? "Uw winkel wagen" : "Artikelen" }}
+        </div>
+
+        <q-btn
+          v-show="!showOrder"
+          icon="shopping_cart"
+          round
+          type="default"
+          v-on:click="showOrder = true"
+        >
+          <q-badge color="blue" floating
+            >{{
+              this.order.items.length + this.order.upgradablePayMethod.length
+            }}
+          </q-badge>
+        </q-btn>
+
+        <q-btn
+          v-show="showOrder"
+          icon="arrow_back"
+          round
+          type="default"
+          v-on:click="showOrder = false"
+        />
       </div>
 
-      <q-btn
-        v-show="!showOrder"
-        icon="shopping_cart"
-        round
-        type="default"
-        v-on:click="showOrder = true"
-      >
-        <q-badge color="blue" floating
-          >{{ this.order.items.length + this.order.upgradablePayMethod.length }}
-        </q-badge>
-      </q-btn>
-
-      <q-btn
-        v-show="showOrder"
-        icon="arrow_back"
-        round
-        type="default"
-        v-on:click="showOrder = false"
+      <items
+        v-if="!showOrder"
+        :items="items"
+        :upgradablePayMethod="upgradablePayMethod"
+        v-on:handleAddToCart="handleAddToCart"
+        v-on:handleAddUpgradeToCart="handleAddUpgradeToCart"
       />
-    </div>
 
-    <items
-      v-if="!showOrder"
-      :items="items"
-      :upgradablePayMethod="upgradablePayMethod"
-      v-on:handleAddToCart="handleAddToCart"
-      v-on:handleAddUpgradeToCart="handleAddUpgradeToCart"
-    />
-
-    <cart v-else :order="order" v-on:handlePay="handlePay" />
+      <cart v-else :order="order" v-on:handlePay="handlePay" />
+    </q-page>
   </q-page-container>
 </template>
 
