@@ -56,11 +56,11 @@
           padding-bottom: 5px;
         "
       >
-        <q-img
-          src="/logoInternational.png"
-          style="margin-left: auto; margin-right: auto"
-          width="60%"
-        />
+        <!--        <q-img-->
+        <!--          src="/logoInternational.png"-->
+        <!--          style="margin-left: auto; margin-right: auto"-->
+        <!--          width="60%"-->
+        <!--        />-->
       </div>
       <q-list style="min-width: 250px">
         <q-item
