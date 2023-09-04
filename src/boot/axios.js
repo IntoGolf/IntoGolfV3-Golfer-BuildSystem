@@ -16,7 +16,7 @@ axios.interceptors.request.use(
     if (ls.getItem("currentUser").value !== null) {
       let currentUser = ls.getItem("currentUser").value;
       config.headers.common["Authorization"] =
-        "Bearer " + currentUser.value.relation_password.apiToken;
+        "Bearer " + currentUser.relation_password.apiToken;
     }
 
     return config;
@@ -40,7 +40,7 @@ axios.interceptors.response.use(
   function (error) {
     Loading.hide();
     console.log("--- error response ---");
-    console.log(error.response);
+    console.log(error);
     let errorsObj = {};
     if (error.response.status >= 400) {
       let messages = [];
