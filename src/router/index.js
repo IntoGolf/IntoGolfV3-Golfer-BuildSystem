@@ -37,6 +37,8 @@ export default route(function (/* { store, ssrContext } */) {
 
   Router.beforeEach((to, from, next) => {
     const user = ls.getItem("currentUser", null).value;
+    console.log("user");
+    console.log(user);
     if (to.matched.some((r) => r.meta.requiresAuth)) {
       if (user && user.relation_password && user.relation_password.apiToken) {
         if (to.path === "/login") {

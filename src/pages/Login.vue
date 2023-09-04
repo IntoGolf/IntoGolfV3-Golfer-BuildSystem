@@ -118,6 +118,8 @@ export default {
     };
   },
   mounted() {
+    console.log("test login");
+
     if (this.$route.query.key) {
       this.form.repKey = this.$route.query.key;
       this.onlogin();
