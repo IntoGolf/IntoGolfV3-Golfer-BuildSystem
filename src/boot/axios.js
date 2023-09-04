@@ -13,10 +13,7 @@ axios.interceptors.request.use(
     }
     Loading.show();
     config.url = `${baseURL}api/${config.url}`;
-    console.log(config.url);
-    console.log(ls.getItem("currentUser").value);
     let currentUser = ls.getItem("currentUser").value;
-    console.log(currentUser.relation_password);
     if (currentUser.relation_password !== undefined) {
       config.headers.common["Authorization"] =
         "Bearer " + currentUser.relation_password.apiToken;
@@ -43,7 +40,6 @@ axios.interceptors.response.use(
   function (error) {
     Loading.hide();
     console.log("--- error response ---");
-    console.log(error);
     console.log(error.response);
     let errorsObj = {};
     if (error.response.status >= 400) {
