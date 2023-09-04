@@ -39,7 +39,7 @@ export default route(function (/* { store, ssrContext } */) {
     const user = ls.getItem("currentUser", null).value;
     console.log("user");
     console.log(user);
-    console.log(user.relation_password);
+    console.log(user.value.relation_password);
     console.log("user done");
     if (to.matched.some((r) => r.meta.requiresAuth)) {
       if (user && user.relation_password && user.relation_password.apiToken) {
