@@ -218,6 +218,7 @@ export default {
     };
   },
   created() {
+    console.log(this.settings);
     this.$http.get("golfer/image/" + this.settings.system_logo).then((res) => {
       this.blobUrl = "data:image/png;base64," + res;
     });
