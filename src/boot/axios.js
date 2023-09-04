@@ -14,6 +14,7 @@ axios.interceptors.request.use(
     Loading.show();
     config.url = `${baseURL}api/${config.url}`;
     console.log(config.url);
+    console.log(ls.getItem("currentUser").value);
 
     if (ls.getItem("currentUser").value) {
       let currentUser = ls.getItem("currentUser").value;
