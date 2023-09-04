@@ -13,10 +13,10 @@ axios.interceptors.request.use(
     }
     Loading.show();
     config.url = `${baseURL}api/${config.url}`;
-    if (ls.getItem("currentUser").value) {
+    if (ls.getItem("currentUser").value !== null) {
       let currentUser = ls.getItem("currentUser").value;
       config.headers.common["Authorization"] =
-        "Bearer " + currentUser.relation_password.apiToken;
+        "Bearer " + currentUser.value.relation_password.apiToken;
     }
 
     return config;
