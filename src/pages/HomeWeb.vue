@@ -220,6 +220,7 @@ export default {
   created() {
     console.log("settings");
     console.log(this.settings);
+    console.log(this.settings.system_logo);
     this.$http.get("golfer/image/" + this.settings.system_logo).then((res) => {
       this.blobUrl = "data:image/png;base64," + res;
     });
