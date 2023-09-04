@@ -151,7 +151,7 @@
 
               <q-toggle
                 v-model="relInvoiceByEmail"
-                :disable="!canChange"
+                :disable="!canChangeInvoiceByEmail"
                 label="Factuur per e-mail ontvangen"
               />
             </q-tab-panel>
@@ -242,6 +242,12 @@ export default {
   computed: {
     canChange: function () {
       return parseInt(this.settings.app_allow_member_change_contact) === 1;
+    },
+    canChangeInvoiceByEmail: function () {
+      return (
+        parseInt(this.settings.app_allow_member_change_contact) === 1 &&
+        parseInt(this.settings.app_allow_member_set_invoice_email === 1)
+      );
     },
     relMagazineGolfNL: {
       get: function () {
