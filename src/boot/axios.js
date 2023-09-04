@@ -13,6 +13,8 @@ axios.interceptors.request.use(
     }
     Loading.show();
     config.url = `${baseURL}api/${config.url}`;
+    console.log(config.url);
+
     if (ls.getItem("currentUser").value) {
       let currentUser = ls.getItem("currentUser").value;
       config.headers.common["Authorization"] =
@@ -40,6 +42,7 @@ axios.interceptors.response.use(
   function (error) {
     Loading.hide();
     console.log("--- error response ---");
+    console.log(error);
     console.log(error.response);
     let errorsObj = {};
     if (error.response.status >= 400) {
