@@ -14,12 +14,18 @@ axios.interceptors.request.use(
     Loading.show();
     config.url = `${baseURL}api/${config.url}`;
     let currentUser = ls.getItem("currentUser");
+    console.log("a");
     console.log(currentUser);
+    console.log("b");
     console.log(currentUser.value);
+    console.log("c");
     console.log(currentUser.value.value);
+    console.log("d");
     if (currentUser.value.relation_password !== undefined) {
+      console.log("e");
+      console.log(currentUser.value.value.relation_password.apiToken);
       config.headers.common["Authorization"] =
-        "Bearer " + currentUser.value.relation_password.apiToken;
+        "Bearer " + currentUser.value.value.relation_password.apiToken;
     }
 
     return config;
