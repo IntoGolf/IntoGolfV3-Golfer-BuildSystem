@@ -20,9 +20,9 @@ axios.interceptors.request.use(
     console.log(currentUser.value);
     console.log("c");
     console.log(currentUser.value.value);
-    console.log("d");
-    console.log(currentUser.value.value.relation_password);
-    if (currentUser.value.relation_password !== undefined) {
+    //    console.log("d");
+    //    console.log(currentUser.value.value.relation_password);
+    if (currentUser.value.value !== null) {
       console.log("e");
       console.log(currentUser.value.value.relation_password.apiToken);
       config.headers.common["Authorization"] =
