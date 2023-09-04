@@ -21,7 +21,7 @@ axios.interceptors.request.use(
     console.log("c");
     console.log(currentUser.value.value);
     console.log("d");
-    console.log(currentUser.value.relation_password);
+    console.log(currentUser.value.value.relation_password);
     if (currentUser.value.relation_password !== undefined) {
       console.log("e");
       console.log(currentUser.value.value.relation_password.apiToken);
