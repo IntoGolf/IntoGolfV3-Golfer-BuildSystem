@@ -13,20 +13,10 @@ axios.interceptors.request.use(
     }
     Loading.show();
     config.url = `${baseURL}api/${config.url}`;
-    let currentUser = ls.getItem("currentUser");
-    console.log("a");
-    console.log(currentUser);
-    console.log("b");
-    console.log(currentUser.value);
-    console.log("c");
-    console.log(currentUser.value.value);
-    //    console.log("d");
-    //    console.log(currentUser.value.value.relation_password);
-    if (currentUser.value.value !== null) {
-      console.log("e");
-      console.log(currentUser.value.value.relation_password.apiToken);
+    if (ls.getItem("currentUser").value) {
+      let currentUser = ls.getItem("currentUser").value;
       config.headers.common["Authorization"] =
-        "Bearer " + currentUser.value.value.relation_password.apiToken;
+        "Bearer " + currentUser.relation_password.apiToken;
     }
 
     return config;
