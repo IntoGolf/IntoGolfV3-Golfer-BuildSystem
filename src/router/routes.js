@@ -142,6 +142,16 @@ const routes = [
     },
   },
   {
+    path: "/lessoncards",
+    name: "Lessenkaarten",
+    component: () => import("layouts/PageLayout.vue"),
+    children: [{ path: "", component: () => import("pages/Lessoncards.vue") }],
+    meta: {
+      requiresAuth: true,
+      title: "Leskaarten",
+    },
+  },
+  {
     path: "/shop",
     name: "Shop",
     component: () => import("layouts/PageLayout.vue"),

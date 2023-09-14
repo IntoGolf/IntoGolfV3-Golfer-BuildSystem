@@ -46,6 +46,7 @@ export const message = {
   shop: "Winkel",
   proCourse: "Cursussen",
   lessons: "Lessen",
+  lessoncards: "Lessenkaarten",
   messages: "Berichten",
   message: "Bericht",
   profile: "Account",

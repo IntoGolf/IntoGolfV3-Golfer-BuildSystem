@@ -172,6 +172,11 @@ export default defineComponent({
         visible: this.currentUser.tile_lessons_y_n == 1,
       },
       {
+        name: "lessoncards",
+        icon: "school",
+        visible: this.currentUser.tile_lessons_y_n == 1,
+      },
+      {
         name: "profile",
         icon: "account_circle",
         visible: true,

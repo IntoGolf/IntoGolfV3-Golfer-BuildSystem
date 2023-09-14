@@ -13,6 +13,8 @@ axios.interceptors.request.use(
     }
     Loading.show();
     config.url = `${baseURL}api/${config.url}`;
+    console.log(ls.getItem("currentUser"));
+    console.log(ls.getItem("currentUser").value);
     if (ls.getItem("currentUser").value !== null) {
       let currentUser = ls.getItem("currentUser").value;
       config.headers.common["Authorization"] =
