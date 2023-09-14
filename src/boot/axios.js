@@ -14,11 +14,11 @@ axios.interceptors.request.use(
     Loading.show();
     config.url = `${baseURL}api/${config.url}`;
     console.log(ls);
-    console.log(ls.getItem("currentUser", "test"));
-    console.log(ls.getItem("currentUser", "false"));
-    if (ls.getItem("currentUser", false)) {
+    console.log(ls.getItem("currentUser", "test").value);
+    console.log(ls.getItem("currentUser", "false").value);
+    if (ls.getItem("currentUser", false).value) {
       console.log("test");
-      let currentUser = ls.getItem("currentUser");
+      let currentUser = ls.getItem("currentUser").value;
       console.log(currentUser);
       console.log(currentUser.relation_password);
       if (currentUser.relation_password !== undefined) {
