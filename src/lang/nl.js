@@ -47,6 +47,7 @@ export const message = {
   proCourse: "Cursussen",
   lessons: "Lessen",
   lessoncards: "Lessenkaarten",
+  greenfeecards: "Rondekaarten",
   messages: "Berichten",
   message: "Bericht",
   profile: "Account",

@@ -102,6 +102,7 @@
 
 <script>
 import publicMixin from "../mixins/public";
+import { setCssVar } from "quasar";
 
 export default {
   mixins: [publicMixin],
@@ -115,22 +116,24 @@ export default {
       },
       isPwd: true,
       blobUrl: "",
+      redirect: "",
     };
   },
   mounted() {
-    console.log("test login");
-
     if (this.$route.query.key) {
       this.form.repKey = this.$route.query.key;
       this.onlogin();
     }
+    this.form.redirect = this.$route.query.redirect;
   },
   watch: {
     settings: function () {
       if (this.settings != null) {
-        this.$http.get("golfer/image/" + this.settings.logo).then((res) => {
-          this.blobUrl = "data:image/png;base64," + res;
-        });
+        this.$http
+          .get("golfer/image/" + this.settings.system_logo)
+          .then((res) => {
+            this.blobUrl = "data:image/png;base64," + res;
+          });
       }
     },
   },
@@ -147,6 +150,8 @@ export default {
   },
   methods: {
     async onlogin() {
+      let currentUser = null;
+
       this.$q.loading.show();
 
       if (this.$q.platform.is.desktop) {
@@ -154,39 +159,52 @@ export default {
         this.form.captcha = await this.$recaptcha("login");
       }
 
-      this.$http
+      await this.$http
         .post("golfer/login", this.form)
         .then((res) => {
           if (res) {
-            this.$ls.setItem("currentUser", res, 1000 * 60 * 60 * 24 * 1000);
-
-            this.$http.get("golfer/settings").then((settings) => {
-              this.$ls.setItem(
-                "settings",
-                settings,
-                1000 * 60 * 60 * 24 * 1000
-              );
-              this.settings = settings;
-
-              let currentUserPref = {
-                matchList: {
-                  subFilter: 0,
-                },
-              };
-              this.$ls.setItem(
-                "currentUserPref",
-                currentUserPref,
-                1000 * 60 * 60 * 24 * 7
-              );
-
-              this.$q.loading.hide();
-              this.$router.push("/");
-            });
+            currentUser = res;
+            this.$ls.setItem(
+              "currentUser",
+              currentUser,
+              1000 * 60 * 60 * 24 * 1000
+            );
           }
         })
         .catch((e) => {
           this.$message.error(e);
         });
+
+      await this.$http.get("golfer/settings").then((settings) => {
+        this.$ls.setItem("settings", settings, 1000 * 60 * 60 * 24 * 1000);
+        this.settings = settings;
+
+        setCssVar("primary", this.settings.app_primary_color);
+        setCssVar("primary_font", this.settings.app_primary_font_color);
+        setCssVar("secondary", this.settings.app_secondary_color);
+        setCssVar("secondary_font", this.settings.app_secondary_font_color);
+
+        let currentUserPref = {
+          matchList: {
+            subFilter: 0,
+          },
+        };
+        this.$ls.setItem(
+          "currentUserPref",
+          currentUserPref,
+          1000 * 60 * 60 * 24 * 7
+        );
+      });
+
+      if (currentUser.redirect) {
+        return (window.location =
+          currentUser.redirect +
+          "?key=" +
+          currentUser.relation_password.apiToken);
+      } else {
+        this.$q.loading.hide();
+        this.$router.push("/");
+      }
     },
   },
 };

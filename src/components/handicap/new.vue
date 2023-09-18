@@ -647,7 +647,6 @@ export default {
       ];
     },
     validSlopeRating: function () {
-      console.log(this.scorecard.sloperate);
       return [
         (val) =>
           (this.scorecard.sloperate > 0 && this.scorecard.sloperate < 200) ||

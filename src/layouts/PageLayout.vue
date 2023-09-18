@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="settings">
     <q-layout view="lHh Lpr lFf">
       <q-header class="web-width q-header" flat>
         <q-toolbar>
@@ -114,6 +114,11 @@ export default defineComponent({
       },
       {
         name: "reservations",
+        icon: "schedule",
+        visible: this.currentUser.tile_teetimes_y_n == 1,
+      },
+      {
+        name: "greenfeecards",
         icon: "schedule",
         visible: this.currentUser.tile_teetimes_y_n == 1,
       },

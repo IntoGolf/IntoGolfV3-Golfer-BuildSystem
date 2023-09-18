@@ -155,7 +155,6 @@ export default {
   },
   created() {
     let key = this.getUrlParameter("key");
-    console.log(key);
     this.$http.get("golfer/startlist?key=" + key).then((res) => {
       this.list = res.data;
     });

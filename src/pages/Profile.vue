@@ -298,6 +298,12 @@ export default {
     this.loadImage();
   },
   methods: {
+    async update() {
+      await this.$http.get("golfer/user").then((res) => {
+        this.$ls.setItem("currentUser", res, 1000 * 60 * 60 * 24 * 7);
+        this.form = Object.assign({}, this.currentUser);
+      });
+    },
     loadImage: function () {
       let that = this;
       this.$http
@@ -315,38 +321,19 @@ export default {
       this.$http.post(`golfer/user`, payload);
     },
     logout() {
-      this.$ls.removeItem("currentUser");
-      this.$ls.removeItem("authorization");
-      this.$ls.removeItem("weather");
-      this.$ls.removeItem("settings");
-      this.$ls.removeItem("currentUserPref");
-      this.$router.push("/login");
-    },
-    onLogout() {
-      this.$confirm("Will log out, Whether or not to continue?", "Prompt", {
-        confirmButtonText: "Confirm",
-        cancelButtonText: "Cancel",
-        type: "warning",
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "Successful exit!",
-          });
-          this.$ls.clear();
-          this.$router.push("/");
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "Cancel out!",
-          });
-        });
+      this.$http.post(`golfer/logout`).then(() => {
+        this.$ls.removeItem("currentUser");
+        this.$ls.removeItem("authorization");
+        this.$ls.removeItem("weather");
+        this.$ls.removeItem("settings");
+        this.$ls.removeItem("currentUserPref");
+        this.$router.push("/login");
+      });
     },
   },
   created() {
     document.body.classList.add("page-profile");
-    this.form = Object.assign({}, this.currentUser);
+    this.update();
   },
 };
 </script>

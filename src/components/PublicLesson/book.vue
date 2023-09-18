@@ -207,12 +207,10 @@ export default {
       les.lesRelNrPro = this.lesson.pro.relNr;
       les.lesRelNrPro = this.lesson.pro.relNr;
 
-      console.log(this.lesson);
       les.ProLessonClient.plcLsfNr = this.lesson.pro_lesson_fee_player.lfpNr;
       les.ProLessonClient.plcPrice = this.lesson.pro_lesson_fee_player.lfpPrice;
       les.ProLessonClient.plcItmNr = this.lesson.pro_lesson_fee_player.lfpItmNr;
 
-      console.log(les);
       this.$http.post("public/lesson", les).then((res) => {
         this.mollie = res.data;
       });

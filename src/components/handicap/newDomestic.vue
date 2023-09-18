@@ -348,8 +348,6 @@ export default {
       );
     },
     teeListFiltered: function () {
-      console.log(this.teeList);
-      console.log(this.currentUser.relGender === "1");
       return this.teeList.filter(
         (item) =>
           (this.currentUser.relGender === "1" && item.gender === "M") ||

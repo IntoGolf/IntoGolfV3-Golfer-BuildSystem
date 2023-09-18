@@ -567,7 +567,6 @@ export default {
 
       that.loading = true;
       that.$http.post(`golfer/sign-up`, that.account_form).then((res) => {
-        console.log(res);
         if (res.success === 1) {
           this.status = 2;
         } else {

@@ -34,7 +34,6 @@ export default {
       return this.max - this.lesson.pagGolfers;
     },
     bg: function () {
-      console.log(this.players / this.max);
       if (this.players / this.max > 0.5) {
         return "bg-orange-3";
       }

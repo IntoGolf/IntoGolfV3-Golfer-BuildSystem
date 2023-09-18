@@ -62,7 +62,6 @@ export default {
   created() {
     this.$http.get("public/lessonTypes").then((res) => {
       this.typeArray = res;
-      console.log(this.typeArray[0]);
       this.localLessonType = this.typeArray[0];
     });
   },

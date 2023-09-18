@@ -16,8 +16,6 @@ import lessons from "../components/dashboard/lessons.vue";
 export default {
   components: { messages, bookings, lessons },
   mounted() {
-    console.log("test");
-
     this.$http.get(`golfer/greenfee_card`).then((res) => {
       this.$ls.setItem("greenfee_cards", res, 1000 * 60 * 60 * 24 * 1000);
     });

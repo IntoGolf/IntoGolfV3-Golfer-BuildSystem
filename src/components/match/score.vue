@@ -135,7 +135,6 @@ export default {
     },
 
     handleInitiateScore: function () {
-      console.log(this.local_player);
       let that = this;
       let holes =
         parseInt(this.local_player.match_score["hcsH10_par"]) > 0 ? 18 : 9;

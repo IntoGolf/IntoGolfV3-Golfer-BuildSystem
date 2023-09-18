@@ -46,7 +46,6 @@ export default {
   },
   methods: {
     handleBook: function (lesson) {
-      console.log("c");
       this.$emit("handleBook", lesson);
     },
   },

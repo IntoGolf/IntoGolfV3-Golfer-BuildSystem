@@ -189,7 +189,6 @@ export default {
   },
   watch: {
     tee: function (newValue) {
-      console.log(newValue);
       this.player.details.startingTeeId = newValue.color;
     },
     timePref: function (newValue) {

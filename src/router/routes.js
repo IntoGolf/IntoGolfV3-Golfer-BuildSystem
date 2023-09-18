@@ -143,12 +143,24 @@ const routes = [
   },
   {
     path: "/lessoncards",
-    name: "Lessenkaarten",
+    name: "lessoncards",
     component: () => import("layouts/PageLayout.vue"),
     children: [{ path: "", component: () => import("pages/Lessoncards.vue") }],
     meta: {
       requiresAuth: true,
       title: "Leskaarten",
+    },
+  },
+  {
+    path: "/greenfeecards",
+    name: "greenfeecards",
+    component: () => import("layouts/PageLayout.vue"),
+    children: [
+      { path: "", component: () => import("pages/Greenfeecards.vue") },
+    ],
+    meta: {
+      requiresAuth: true,
+      title: "Rondekaarten",
     },
   },
   {

@@ -78,7 +78,6 @@ export default {
     handleLoadClientCourseArray: function () {
       this.$http.get("golfer/pro_client_courses").then((res) => {
         this.clientCourseArray = res.data;
-        console.log(this.clientCourseArray);
       });
     },
   },

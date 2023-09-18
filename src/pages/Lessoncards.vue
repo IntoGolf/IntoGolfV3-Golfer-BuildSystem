@@ -63,7 +63,7 @@
 }
 
 .card-header {
-  background-color: #007bff; /* Blue background */
+  background-color: #33698c; /* Blue background */
   color: white; /* Text color set to white for better contrast */
   padding: 8px 12px;
   border-bottom: 1px solid #0056b3; /* Darker blue for border */
@@ -104,7 +104,6 @@ export default {
     handleLoad: function () {
       this.$http.get("golfer/lessonCards").then((res) => {
         this.list = res.data;
-        console.log(this.list);
       });
     },
   },
