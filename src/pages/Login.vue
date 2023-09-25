@@ -110,8 +110,8 @@ export default {
   data: function () {
     return {
       form: {
-        relEmail: "laurens@intogolf.nl",
-        repPassword: "Test543@!",
+        relEmail: "",
+        repPassword: "",
         repKey: "",
       },
       isPwd: true,
