@@ -269,7 +269,9 @@ export default {
       step: 1,
 
       date: this.$dayjs(this.scorecard.datetime).format("YYYY-MM-DD"),
-      time: this.$dayjs(this.scorecard.datetime).format("HH:mm"),
+      time: this.$dayjs(this.scorecard.datetime)
+        .add(-240, "minute")
+        .format("HH:mm"),
 
       local_scorecard: this.scorecard,
 

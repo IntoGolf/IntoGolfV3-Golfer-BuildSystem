@@ -154,7 +154,7 @@ export default {
 
       this.$q.loading.show();
 
-      if (this.$q.platform.is.desktop) {
+      if (!this.$q.platform.is.cordova) {
         await this.$recaptchaLoaded();
         this.form.captcha = await this.$recaptcha("login");
       }

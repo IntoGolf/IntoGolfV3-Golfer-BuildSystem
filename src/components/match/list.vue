@@ -185,8 +185,17 @@ export default {
       }
 
       if (
-        this.currentUser.relHandicap < match.handicapFemaleMin ||
-        this.currentUser.relHandicap > match.handicapFemaleMax
+        this.currentUser.relGender === 1 &&
+        (this.currentUser.relHandicap < match.handicapMaleMin ||
+          this.currentUser.relHandicap > match.handicapMaleMax)
+      ) {
+        return false;
+      }
+
+      if (
+        this.currentUser.relGender === 2 &&
+        (this.currentUser.relHandicap < match.handicapFemaleMin ||
+          this.currentUser.relHandicap > match.handicapFemaleMax)
       ) {
         return false;
       }
