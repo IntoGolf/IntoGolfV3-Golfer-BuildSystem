@@ -8,7 +8,7 @@ const baseURL = process.env.VUE_APP_BASE_URL;
 
 axios.interceptors.request.use(
   (config) => {
-    if (Platform.is.cordova) {
+    if (!Platform.is.desktop) {
       axios.defaults.headers.common["X-App-Identifier"] = process.env.APP_ID;
     }
     Loading.show();
