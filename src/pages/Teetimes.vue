@@ -71,7 +71,7 @@
               :key="cKey"
               class="q-pa-sm col items-start text-center text-white bg-secondary text-bold"
             >
-              {{ course.crlName }}
+              {{ course.crlNameInternet }}
             </div>
           </div>
           <div class="row q-gutter-xs">
