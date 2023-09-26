@@ -229,7 +229,6 @@
           v-on:click="step = 1"
         />
         <q-btn
-          v-show="1 == 2"
           :disable="!valid"
           class="q-mr-sm"
           color="primary"
@@ -237,6 +236,7 @@
           v-on:click="handleSave"
         />
         <q-btn
+          v-show="1 == 2"
           :disable="!valid"
           color="primary"
           label="Betaal"
@@ -252,6 +252,8 @@
       :url="mollie.url"
       v-on:handleClosePayment="handleClosePayment"
     />
+
+    <confirmation v-if="step === 4" />
   </q-page-container>
 </template>
 
@@ -261,10 +263,12 @@ import CourseComp from "../components/teetime/Course.vue";
 import publicMixin from "../mixins/public";
 import dayjs from "dayjs";
 import Payment from "components/payment/initiate.vue";
+import Confirmation from "components/teetime/Confirmation.vue";
 
 export default {
   mixins: [publicMixin],
   components: {
+    Confirmation,
     Payment,
     CourseComp,
   },
@@ -404,8 +408,12 @@ export default {
     },
     handleSave: function () {
       this.$http.post("igg/guest", this.flight).then((res) => {
-        this.mollie = res.data;
-        this.step = 3;
+        if (res.data.mollie) {
+          this.mollie = res.data;
+          this.step = 3;
+        } else {
+          this.step = 4;
+        }
       });
     },
     setTimeObject: function (obj) {
