@@ -10,8 +10,9 @@
 
         <div :class="emotion" class="row">
           <div class="col q-mt-md text-center">
-            Je boeking is in de pocket! Check je e-mail voor de bevestiging. Via
-            de link in die mail kun je alles rondom je reservering regelen.
+            Je boeking is gemaakt! Je ontvangt een e-mail ter bevestiging van je
+            reservering. In deze e-mail vind je een link waarmee je je
+            reservering kunt aanpassen.
           </div>
         </div>
 

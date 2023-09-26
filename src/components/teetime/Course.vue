@@ -8,21 +8,33 @@
         this.$emit('setTimeObject', { time: time, price: price(time) })
       "
     >
-      <div :class="backgroundColor(time)" class="col-5 q-pa-sm cursor-pointer">
-        {{ $filters.minuteToTime(time.sttTimeFrom) }}
-        <q-icon
-          v-for="(p, k) in time.playerCount"
-          v-show="time.playerCount > 0"
-          :key="k"
-          name="person"
-          style="margin-bottom: 4px"
-        />
-      </div>
       <div
+        v-if="settings.app_display_greenfee_pay == 0"
         :class="backgroundColor(time)"
-        class="col-7 text-right q-pa-sm cursor-pointer"
+        class="col-12 q-pa-sm cursor-pointer"
       >
-        {{ $filters.money(price(time)) }} pp
+        {{ $filters.minuteToTime(time.sttTimeFrom) }}
+      </div>
+      <div v-else>
+        <div
+          :class="backgroundColor(time)"
+          class="col-5 q-pa-sm cursor-pointer"
+        >
+          {{ $filters.minuteToTime(time.sttTimeFrom) }}
+          <q-icon
+            v-for="(p, k) in time.playerCount"
+            v-show="time.playerCount > 0"
+            :key="k"
+            name="person"
+            style="margin-bottom: 4px"
+          />
+        </div>
+        <div
+          :class="backgroundColor(time)"
+          class="col-7 text-right q-pa-sm cursor-pointer"
+        >
+          {{ $filters.money(price(time)) }} pp
+        </div>
       </div>
     </div>
   </div>
@@ -35,6 +47,7 @@ export default {
     holes: Number,
     size: Number,
     per: Object,
+    settings: Object,
   },
   computed: {
     from: function () {

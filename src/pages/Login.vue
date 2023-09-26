@@ -128,6 +128,7 @@ export default {
   },
   watch: {
     settings: function () {
+      console.log("ok");
       if (this.settings != null) {
         this.$http
           .get("golfer/image/" + this.settings.system_logo)

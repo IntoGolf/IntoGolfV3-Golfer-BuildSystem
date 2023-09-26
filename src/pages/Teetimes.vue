@@ -74,10 +74,7 @@
               {{ course.crlName }}
             </div>
           </div>
-          <div
-            class="row q-gutter-xs"
-            style="max-height: 600px; overflow: scroll"
-          >
+          <div class="row q-gutter-xs">
             <div
               v-for="(course, cKey) in courses"
               :key="cKey"
@@ -87,6 +84,7 @@
                 :course="course"
                 :holes="holes"
                 :per="per"
+                :settings="settings"
                 :size="flight.fltSize"
                 v-on:setTimeObject="setTimeObject"
               />
@@ -157,15 +155,26 @@
           </div>
         </div>
 
-        <div class="row q-mb-lg">
+        <div
+          v-if="settings !== null && settings.app_display_greenfee_pay == 1"
+          class="row q-mb-lg"
+        >
           <div class="col-4 text-bold">Te betalen bedrag:</div>
           <div class="col-8">
             {{ $filters.money(flightPrice) }}
           </div>
         </div>
 
-        <div class="row">
+        <div
+          v-if="settings !== null && settings.app_display_greenfee_pay == 1"
+          class="row q-mt-sm"
+        >
           Nadat je de flight hebt betaald ontvang je een e-mail ter bevestiging
+          van je reservering. In deze e-mail vindt je een link waarmee je je
+          resevering kan aanvullen met de details van je medespelers.
+        </div>
+        <div v-else class="row q-mt-sm">
+          Nadat je de flight hebt geboekt ontvang je een e-mail ter bevestiging
           van je reservering. In deze e-mail vindt je een link waarmee je je
           resevering kan aanvullen met de details van je medespelers.
         </div>
@@ -192,35 +201,37 @@
           lazy-rules
           stack-label
         />
-        <div class="row">Leveringsvoorwaarden:</div>
-        <div
-          class="row q-pa-sm"
-          style="
-            border: 1px solid lightgrey;
-            height: 150px;
-            font-size: 10px;
-            overflow-y: scroll;
-          "
-        >
-          {{ conditions }}
-        </div>
-        <div class="row q-mt-md">
-          <q-checkbox
-            v-model="flight.agreeConditions"
-            :rules="[(val) => !!val || '* Required']"
-            class="q-mb-sm"
-            label="Ik ga akkoord met de leveringsvoorvaarden"
-            stack-label
-          />
-        </div>
-        <div class="row">
-          <q-checkbox
-            v-model="flight.agreeCommerce"
-            :rules="[(val) => !!val || '* Required']"
-            class="q-mb-sm"
-            label="Stuur mij aanbiedingen"
-            stack-label
-          />
+        <div v-if="settings !== null && settings.app_display_greenfee_pay == 1">
+          <div class="row">Leveringsvoorwaarden:</div>
+          <div
+            class="row q-pa-sm"
+            style="
+              border: 1px solid lightgrey;
+              height: 150px;
+              font-size: 10px;
+              overflow-y: scroll;
+            "
+          >
+            {{ conditions }}
+          </div>
+          <div class="row q-mt-md">
+            <q-checkbox
+              v-model="flight.agreeConditions"
+              :rules="[(val) => !!val || '* Required']"
+              class="q-mb-sm"
+              label="Ik ga akkoord met de leveringsvoorvaarden"
+              stack-label
+            />
+          </div>
+          <div class="row">
+            <q-checkbox
+              v-model="flight.agreeCommerce"
+              :rules="[(val) => !!val || '* Required']"
+              class="q-mb-sm"
+              label="Stuur mij aanbiedingen"
+              stack-label
+            />
+          </div>
         </div>
         <q-btn
           class="q-mr-sm"
@@ -309,9 +320,9 @@ export default {
         fltCrlNr2: null,
         fltSize: 3,
 
-        flpName1: "laurens",
-        flpEmail1: "laurens@intogolf.nl",
-        flpPhone1: "878987898",
+        flpName1: "",
+        flpEmail1: "",
+        flpPhone1: "",
         flpHandicap1: null,
 
         flpName2: "",
