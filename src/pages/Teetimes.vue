@@ -144,7 +144,7 @@
         <div class="row">
           <div class="col-4 text-bold">Personen:</div>
           <div class="col-8">
-            {{ size }}
+            {{ flight.fltSize }}
           </div>
         </div>
 
