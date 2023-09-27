@@ -1,5 +1,5 @@
 <template>
-  <q-page-container>
+  <q-page-container class="q-pa-md">
     <div v-show="step == 1" class="row">
       <div class="col-md-4 offset-md-4 col-xs-12">
         <div class="row">
