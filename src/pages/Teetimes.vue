@@ -494,7 +494,8 @@ export default {
     handleSave: function () {
       this.$http.post("igg/guest", this.flight).then((res) => {
         if (res.data.mollie) {
-          this.mollie = res.data;
+          this.mollie = res.data.mollie;
+          console.log(this.mollie);
           this.step = 3;
         } else {
           this.step = 4;

@@ -15,25 +15,27 @@
       >
         {{ $filters.minuteToTime(time.sttTimeFrom) }}
       </div>
-      <div v-else>
-        <div
-          :class="backgroundColor(time)"
-          class="col-5 q-pa-sm cursor-pointer"
-        >
-          {{ $filters.minuteToTime(time.sttTimeFrom) }}
-          <q-icon
-            v-for="(p, k) in time.playerCount"
-            v-show="time.playerCount > 0"
-            :key="k"
-            name="person"
-            style="margin-bottom: 4px"
-          />
-        </div>
-        <div
-          :class="backgroundColor(time)"
-          class="col-7 text-right q-pa-sm cursor-pointer"
-        >
-          {{ $filters.money(price(time)) }} pp
+      <div v-else class="col-12">
+        <div class="row">
+          <div
+            :class="backgroundColor(time)"
+            class="col-5 q-pa-sm cursor-pointer"
+          >
+            {{ $filters.minuteToTime(time.sttTimeFrom) }}
+            <q-icon
+              v-for="(p, k) in time.playerCount"
+              v-show="time.playerCount > 0"
+              :key="k"
+              name="person"
+              style="margin-bottom: 4px"
+            />
+          </div>
+          <div
+            :class="backgroundColor(time)"
+            class="col-7 text-right q-pa-sm cursor-pointer"
+          >
+            {{ $filters.money(price(time)) }} pp
+          </div>
         </div>
       </div>
     </div>
