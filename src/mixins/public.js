@@ -7,6 +7,7 @@ const mixin = {
     };
   },
   created() {
+    console.log("test");
     this.getSettings();
   },
   methods: {

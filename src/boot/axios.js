@@ -5,6 +5,7 @@ import { Loading, Notify, Platform } from "quasar";
 import { lsWatcher as ls } from "./app";
 
 const baseURL = process.env.VUE_APP_BASE_URL;
+console.log(baseURL);
 
 axios.interceptors.request.use(
   (config) => {
