@@ -59,11 +59,7 @@
 
         <div v-if="hasTimes">
           <div class="row q-gutter-xs q-mb-md">
-            Om de baan optimaal te benutten kan het zijn dat uw boeking wordt
-            samengevoegd met een andere boeking. U kunt ook bij een reeds
-            bestaande boeking aansluiten. Een boeking waarbij u kunt aansluiten
-            is oranje gekleurd. U ziet in deze boeking een aantal poppetjes dit
-            geeft aan hoeveel personen er al in de boeking staan.
+            {{ mergeText }}
           </div>
           <div class="row q-gutter-xs">
             <div
@@ -201,6 +197,84 @@
           lazy-rules
           stack-label
         />
+
+        <p>Voer hier de gegevens van uw medespelers in:</p>
+        <div v-if="flight.fltSize >= 2" class="row">
+          <div class="col-8">
+            <q-input
+              v-model="flight.flpName2"
+              :rules="[(val) => !!val || '* Required']"
+              class="q-mb-sm"
+              label="Speler 2"
+              stack-label
+            />
+          </div>
+          <div class="col-4">
+            <q-input
+              v-model="flight.flpHandicap2"
+              :rules="[
+                (val) => (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
+              ]"
+              class="q-mb-sm"
+              fill-mask="0"
+              label="Handicap"
+              mask="##.#"
+              reverse-fill-mask
+              stack-label
+            />
+          </div>
+        </div>
+        <div v-if="flight.fltSize >= 3" class="row">
+          <div class="col-8">
+            <q-input
+              v-model="flight.flpName3"
+              :rules="[(val) => !!val || '* Required']"
+              class="q-mb-sm"
+              label="Speler 3"
+              stack-label
+            />
+          </div>
+          <div class="col-4">
+            <q-input
+              v-model="flight.flpHandicap3"
+              :rules="[
+                (val) => (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
+              ]"
+              class="q-mb-sm"
+              fill-mask="0"
+              label="Handicap"
+              mask="##.#"
+              reverse-fill-mask
+              stack-label
+            />
+          </div>
+        </div>
+        <div v-if="flight.fltSize >= 4" class="row">
+          <div class="col-8">
+            <q-input
+              v-model="flight.flpName4"
+              :rules="[(val) => !!val || '* Required']"
+              class="q-mb-sm"
+              label="Speler 4"
+              stack-label
+            />
+          </div>
+          <div class="col-4">
+            <q-input
+              v-model="flight.flpHandicap4"
+              :rules="[
+                (val) => (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
+              ]"
+              class="q-mb-sm"
+              fill-mask="0"
+              label="Handicap"
+              mask="##.#"
+              reverse-fill-mask
+              stack-label
+            />
+          </div>
+        </div>
+
         <div v-if="settings !== null && settings.app_display_greenfee_pay == 1">
           <div class="row">Leveringsvoorwaarden:</div>
           <div
