@@ -300,7 +300,7 @@ export default {
   methods: {
     async update() {
       await this.$http.get("golfer/user").then((res) => {
-        this.$ls.setItem("currentUser", res, 1000 * 60 * 60 * 24 * 7);
+        localStorage.setItem("golfer__currentUser", JSON.stringify(res));
         this.form = Object.assign({}, this.currentUser);
       });
     },
@@ -314,7 +314,7 @@ export default {
     },
     saveProfile() {
       this.form.relNr = this.currentUser.relNr;
-      this.$ls.setItem("currentUser", this.form, 1000 * 60 * 60 * 24 * 7);
+      localStorage.setItem("golfer__currentUser", JSON.stringify(this.form));
       const payload = Object.assign(this.form, {
         relNr: this.currentUser.relNr,
       });
@@ -322,11 +322,8 @@ export default {
     },
     logout() {
       this.$http.post(`golfer/logout`).then(() => {
-        this.$ls.removeItem("currentUser");
-        this.$ls.removeItem("authorization");
-        this.$ls.removeItem("weather");
-        this.$ls.removeItem("settings");
-        this.$ls.removeItem("currentUserPref");
+        console.log("clearr");
+        localStorage.clear();
         this.$router.push("/login");
       });
     },

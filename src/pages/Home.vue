@@ -17,7 +17,7 @@ export default {
   components: { messages, bookings, lessons },
   mounted() {
     this.$http.get(`golfer/greenfee_card`).then((res) => {
-      this.$ls.setItem("greenfee_cards", res, 1000 * 60 * 60 * 24 * 1000);
+      localStorage.setItem("golfer__greenfee_cards", JSON.stringify(res));
     });
   },
 };

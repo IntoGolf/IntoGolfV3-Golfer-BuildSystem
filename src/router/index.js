@@ -6,7 +6,6 @@ import {
   createWebHistory,
 } from "vue-router";
 import routes from "./routes";
-import { lsWatcher as ls } from "../boot/app";
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation;
@@ -36,7 +35,7 @@ export default route(function (/* { store, ssrContext } */) {
   });
 
   Router.beforeEach((to, from, next) => {
-    const user = ls.getItem("currentUser", null).value;
+    const user = JSON.parse(localStorage.getItem("golfer__currentUser"));
     if (to.matched.some((r) => r.meta.requiresAuth)) {
       if (user && user.relation_password && user.relation_password.apiToken) {
         if (to.path === "/login") {

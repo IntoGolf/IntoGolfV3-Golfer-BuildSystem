@@ -232,7 +232,7 @@ export default {
   },
   computed: {
     cardInMemory: function () {
-      return this.$ls.getItem("scorecard").value !== null;
+      return localStorage.getItem("golfer__scorecard") !== null;
     },
     unreadCount: function () {
       return this.messageList.filter(

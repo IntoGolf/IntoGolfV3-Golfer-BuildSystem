@@ -124,10 +124,9 @@ export default {
   watch: {
     subFilter: function (newValue) {
       this.currentUserPref.matchList.subFilter = newValue;
-      this.$ls.setItem(
-        "currentUserPref",
-        { ...this.currentUserPref },
-        1000 * 60 * 60 * 24 * 7
+      localStorage.setItem(
+        "golfer__currentUserPref",
+        JSON.stringify(this.currentUserPref)
       );
     },
   },

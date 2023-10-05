@@ -13,11 +13,10 @@ axios.interceptors.request.use(
     Loading.show();
     config.url = `${baseURL}api/${config.url}`;
 
-    console.log(localStorage.getItem("gofler__currentUser"));
-    if (localStorage.getItem("gofler__currentUser")) {
-      let currentUser = JSON.parse(
-        localStorage.getItem("gofler__currentUser")
-      ).value;
+    if (localStorage.getItem("golfer__currentUser")) {
+      let currentUser = JSON.parse(localStorage.getItem("golfer__currentUser"));
+
+      console.log("currentUser");
       console.log(currentUser);
 
       if (currentUser.relation_password !== undefined) {
@@ -62,9 +61,8 @@ axios.interceptors.response.use(
         error.response &&
         (error.response.status === 419 || error.response.data.code === 404)
       ) {
-        localStorage.removeItem("gofler__authorization");
-        localStorage.removeItem("gofler__currentUser");
-        localStorage.removeItem("gofler__scorecard");
+        console.log("clear");
+        localStorage.clear();
         router.push("/login");
       }
       if (error.response.status === 400 || error.response.status === 422) {

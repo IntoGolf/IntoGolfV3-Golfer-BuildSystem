@@ -1,5 +1,4 @@
 import { boot } from "quasar/wrappers";
-import { createWatcher } from "next-vue-storage-watcher";
 import dayjs from "dayjs";
 
 // document.addEventListener(
@@ -40,14 +39,7 @@ dayjs.extend(isSameOrBefore);
 let isToday = require("dayjs/plugin/isToday");
 dayjs.extend(isToday);
 
-export const lsWatcher = createWatcher({
-  prefix: "gofler__",
-  storage: "local",
-});
-
 export default boot(({ app }) => {
-  app.use(lsWatcher);
   app.use(dayjs);
-  app.config.globalProperties.$ls = lsWatcher;
   app.config.globalProperties.$dayjs = dayjs;
 });

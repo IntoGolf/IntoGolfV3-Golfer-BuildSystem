@@ -164,11 +164,11 @@ export default {
         .then((res) => {
           if (res) {
             currentUser = res;
-            this.$ls.setItem(
-              "currentUser",
-              currentUser,
-              1000 * 60 * 60 * 24 * 1000
+            localStorage.setItem(
+              "golfer__currentUser",
+              JSON.stringify(currentUser)
             );
+            console.log(localStorage.getItem("golfer__currentUser"));
           }
         })
         .catch((e) => {
@@ -176,11 +176,8 @@ export default {
         });
 
       await this.$http.get("golfer/settings").then((settings) => {
-        this.$ls.setItem("settings", settings, 1000 * 60 * 60 * 24 * 1000);
+        localStorage.setItem("golfer__settings", JSON.stringify(settings));
         this.settings = settings;
-        console.log("C");
-        console.log(this.settings);
-
         setCssVar("primary", this.settings.app_primary_color);
         setCssVar("primary_font", this.settings.app_primary_font_color);
         setCssVar("secondary", this.settings.app_secondary_color);
@@ -191,10 +188,9 @@ export default {
             subFilter: 0,
           },
         };
-        this.$ls.setItem(
-          "currentUserPref",
-          currentUserPref,
-          1000 * 60 * 60 * 24 * 7
+        localStorage.setItem(
+          "golfer__currentUserPref",
+          JSON.stringify(currentUserPref)
         );
       });
 
