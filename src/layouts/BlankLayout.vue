@@ -11,6 +11,8 @@ export default defineComponent({
   mixins: [authMixin],
   name: "BlankLayout",
   mounted() {
+    console.log("A");
+    console.log(this.settings);
     if (this.currentUser) {
       setCssVar("primary", this.settings.app_primary_color);
       setCssVar("primary_font", this.settings.app_primary_font_color);

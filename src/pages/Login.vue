@@ -178,6 +178,8 @@ export default {
       await this.$http.get("golfer/settings").then((settings) => {
         this.$ls.setItem("settings", settings, 1000 * 60 * 60 * 24 * 1000);
         this.settings = settings;
+        console.log("C");
+        console.log(this.settings);
 
         setCssVar("primary", this.settings.app_primary_color);
         setCssVar("primary_font", this.settings.app_primary_font_color);

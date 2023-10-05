@@ -12,6 +12,9 @@ const mixin = {
   methods: {
     async getSettings() {
       await this.$http.get("golfer/psettings").then((settings) => {
+        console.log("B");
+        console.log(this.settings);
+
         this.settings = settings;
         setCssVar("primary", this.settings.app_primary_color);
         setCssVar("primary_font", this.settings.app_primary_font_color);
