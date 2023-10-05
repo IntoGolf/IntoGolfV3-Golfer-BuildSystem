@@ -12,13 +12,10 @@ axios.interceptors.request.use(
       axios.defaults.headers.common["X-App-Identifier"] = process.env.APP_ID;
     }
     Loading.show();
-    console.log("config");
     config.url = `${baseURL}api/${config.url}`;
-    console.log(config);
     if (ls.getItem("currentUser", false).value) {
-      let currentUser = ls.getItem("currentUser").value;
+      let currentUser = ls.getItem("currentUser");
       console.log(currentUser);
-      console.log(currentUser.relation_password);
       if (currentUser.relation_password !== undefined) {
         config.headers.common["Authorization"] =
           "Bearer " + currentUser.relation_password.apiToken;

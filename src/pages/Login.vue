@@ -128,7 +128,6 @@ export default {
   },
   watch: {
     settings: function () {
-      console.log("ok");
       if (this.settings != null) {
         this.$http
           .get("golfer/image/" + this.settings.system_logo)
@@ -165,6 +164,7 @@ export default {
         .then((res) => {
           if (res) {
             currentUser = res;
+            console.log(currentUser);
             this.$ls.setItem(
               "currentUser",
               currentUser,
