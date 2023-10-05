@@ -13,10 +13,12 @@ axios.interceptors.request.use(
     Loading.show();
     config.url = `${baseURL}api/${config.url}`;
 
+    console.log(localStorage.getItem("gofler__currentUser"));
     if (localStorage.getItem("gofler__currentUser")) {
       let currentUser = JSON.parse(
         localStorage.getItem("gofler__currentUser")
       ).value;
+      console.log(currentUser);
 
       if (currentUser.relation_password !== undefined) {
         config.headers.common["Authorization"] =
