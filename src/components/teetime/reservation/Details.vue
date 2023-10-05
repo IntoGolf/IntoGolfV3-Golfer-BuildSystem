@@ -57,7 +57,7 @@
         </div>
       </div>
 
-      <div class="row q-mb-sm">
+      <div v-show="showPay" class="row q-mb-sm">
         <div class="col text-bold">Greenfee</div>
         <div class="col-8 text-right">
           {{
@@ -68,7 +68,7 @@
         </div>
       </div>
 
-      <div class="row q-mb-sm">
+      <div v-show="showPay" class="row q-mb-sm">
         <div class="col text-bold">Greenfee tarief</div>
         <div class="col-8 text-right">
           {{
@@ -79,7 +79,7 @@
         </div>
       </div>
 
-      <div class="row q-mb-sm">
+      <div v-show="showPay" class="row q-mb-sm">
         <div class="col text-bold">Greenfee totaal</div>
         <div class="col-8 text-right">
           {{ $filters.money(total) }}
@@ -162,7 +162,7 @@ export default {
     };
   },
   mounted() {
-    this.showPay = this.settings.app_display_greenfee_pay;
+    this.showPay = this.settings.app_display_greenfee_pay === "1";
     this.showSecondNine = this.settings.app_display_second_nine_select;
   },
   computed: {

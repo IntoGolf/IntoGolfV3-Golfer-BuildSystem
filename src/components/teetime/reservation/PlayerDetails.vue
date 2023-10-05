@@ -42,14 +42,14 @@
         </div>
       </div>
 
-      <div class="row q-mb-sm">
+      <div v-show="showPay" class="row q-mb-sm">
         <div class="col text-bold">Greenfee</div>
         <div class="col-8 text-right">
           {{ player.greenfee === null ? "-" : player.greenfee.grfName }}
         </div>
       </div>
 
-      <div class="row">
+      <div v-show="showPay" class="row">
         <div class="col text-bold">Greenfee tarief</div>
         <div class="col-8 text-right">
           {{ player.flpPrice === null ? "-" : $filters.money(player.flpPrice) }}
@@ -72,7 +72,10 @@
 </template>
 
 <script>
+import authMixin from "../../../mixins/auth";
+
 export default {
+  mixins: [authMixin],
   props: {
     flight: Object,
     player: Object,
@@ -81,6 +84,9 @@ export default {
     return {};
   },
   computed: {
+    showPay: function () {
+      return this.settings.app_display_greenfee_pay === "1";
+    },
     canCancel: function () {
       if (
         this.$dayjs(
