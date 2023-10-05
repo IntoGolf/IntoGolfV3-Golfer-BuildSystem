@@ -5,8 +5,6 @@ import { Loading, Notify, Platform } from "quasar";
 import { lsWatcher as ls } from "./app";
 
 const baseURL = process.env.VUE_APP_BASE_URL;
-console.log("baseURL");
-console.log(baseURL);
 
 axios.interceptors.request.use(
   (config) => {
@@ -14,7 +12,10 @@ axios.interceptors.request.use(
       axios.defaults.headers.common["X-App-Identifier"] = process.env.APP_ID;
     }
     Loading.show();
+    console.log("config");
     config.url = `${baseURL}api/${config.url}`;
+    console.log(config);
+    console.log(config.url);
     if (ls.getItem("currentUser", false).value) {
       let currentUser = ls.getItem("currentUser").value;
       if (currentUser.relation_password !== undefined) {
