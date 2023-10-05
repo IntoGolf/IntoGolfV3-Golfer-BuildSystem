@@ -16,6 +16,7 @@ axios.interceptors.request.use(
 
     console.log("testttt");
     console.log(ls.getItem("currentUser", false).value);
+    console.log(localStorage.getItem("gofler__currentUser"));
     console.log("----");
 
     if (ls.getItem("currentUser", false).value) {
