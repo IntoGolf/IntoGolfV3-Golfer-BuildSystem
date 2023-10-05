@@ -164,7 +164,6 @@ export default {
         .then((res) => {
           if (res) {
             currentUser = res;
-            console.log(currentUser);
             this.$ls.setItem(
               "currentUser",
               currentUser,

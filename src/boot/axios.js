@@ -13,9 +13,13 @@ axios.interceptors.request.use(
     }
     Loading.show();
     config.url = `${baseURL}api/${config.url}`;
+
+    console.log("testttt");
+    console.log(ls.getItem("currentUser", false).value);
+    console.log("----");
+
     if (ls.getItem("currentUser", false).value) {
-      let currentUser = ls.getItem("currentUser");
-      console.log(currentUser);
+      let currentUser = ls.getItem("currentUser").value;
       if (currentUser.relation_password !== undefined) {
         config.headers.common["Authorization"] =
           "Bearer " + currentUser.relation_password.apiToken;
