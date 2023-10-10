@@ -290,7 +290,7 @@
           />
         </div>
       </div>
-      <div class="row q-gutter-sm q-pb-lg">
+      <div class="row q-pb-lg">
         <div class="col">
           <q-btn
             class="full-width"
@@ -301,12 +301,12 @@
           />
         </div>
       </div>
-      <div class="row q-gutter-sm q-pb-md">
+      <div class="row q-pb-md">
         <div class="col">
           <q-btn
             v-show="canDelete"
             class="full-width"
-            color="danger"
+            color="negative"
             icon="delete"
             label="Verwijderen"
             @click="handleDelete"
