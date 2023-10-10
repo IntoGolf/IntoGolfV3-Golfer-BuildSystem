@@ -171,6 +171,7 @@
       :scorecardData="local_scorecard"
       :teeArray="teeArray"
       v-on:handleCloseHoles="handleCloseHoles"
+      v-on:handleSave="handleSave"
       v-on:handleSwitchHoles="handleSwitchHoles"
     />
 
@@ -211,7 +212,11 @@ export default {
       showHole: 0,
     };
   },
-  mounted() {},
+  mounted() {
+    if (this.scorecard.number_of_holes_played > 0) {
+      this.showHole = 9;
+    }
+  },
   computed: {
     title: function () {
       if (this.local_scorecard.course === -1) {

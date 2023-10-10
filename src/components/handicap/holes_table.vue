@@ -124,6 +124,17 @@
         </q-item-section>
       </q-item>
     </q-list>
+
+    <div class="row q-gutter-sm q-pa-md">
+      <div class="col">
+        <q-btn
+          class="full-width"
+          color="primary"
+          label="Opslaan"
+          @click="$emit('handleSave')"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
