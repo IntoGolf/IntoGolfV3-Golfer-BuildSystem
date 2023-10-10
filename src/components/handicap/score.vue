@@ -366,7 +366,7 @@ export default {
   },
   mounted() {
     if (this.scorecard.number_of_holes_played > 0) {
-      this.showHole = 9;
+      this.showHole = 0;
     }
   },
   computed: {
