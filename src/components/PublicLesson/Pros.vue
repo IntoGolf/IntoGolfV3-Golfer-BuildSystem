@@ -28,7 +28,7 @@ export default {
   components: { Pro },
   computed: {
     colWidth: function () {
-      return this.proArray.length * 120 + "px";
+      return this.proArray.length * 180 + "px";
     },
     proArray: function () {
       if (this.lessons === undefined) {

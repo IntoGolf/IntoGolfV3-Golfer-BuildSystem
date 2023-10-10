@@ -239,9 +239,10 @@
 
           <q-btn
             color="primary"
-            icon="check"
             @click="$emit('handleSave', local_scorecard, true)"
-          />
+          >
+            Score
+          </q-btn>
 
           <q-btn
             color="secondary"
@@ -290,7 +291,7 @@ export default {
     this.$http.get("golfer/locationList").then((res) => {
       this.locationList = res;
       this.location = this.locationList.find(
-        (location) => location.ngfNumber === 2
+        (location) => location.ngfNumber === this.scorecard.club
       );
     });
   },

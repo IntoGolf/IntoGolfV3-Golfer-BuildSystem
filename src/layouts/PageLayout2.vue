@@ -11,7 +11,7 @@
         />
 
         <q-toolbar-title class="text-center">
-          {{ this.$route.meta.title }}
+          tt{{ this.$route.meta.title }}
         </q-toolbar-title>
 
         <q-btn

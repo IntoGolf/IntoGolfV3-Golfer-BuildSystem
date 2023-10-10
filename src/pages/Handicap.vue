@@ -110,6 +110,9 @@ export default {
     this.handleLoadCourses();
     this.handleLoadCountries();
   },
+  mounted() {
+    this.loadSettings();
+  },
   computed: {
     defaultTee: function () {
       if (this.currentUser.relGender == 2) {
@@ -191,6 +194,12 @@ export default {
       this.$http.get("golfer/courses").then((res) => {
         this.courseArray = res;
         this.teeArray = [];
+      });
+    },
+    async loadSettings() {
+      await this.$http.get("golfer/settings").then((settings) => {
+        localStorage.setItem("golfer__settings", JSON.stringify(settings));
+        this.scorecard_template.club = parseInt(settings.system_ngf_code);
       });
     },
   },

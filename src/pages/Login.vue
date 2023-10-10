@@ -168,7 +168,6 @@ export default {
               "golfer__currentUser",
               JSON.stringify(currentUser)
             );
-            console.log(localStorage.getItem("golfer__currentUser"));
           }
         })
         .catch((e) => {

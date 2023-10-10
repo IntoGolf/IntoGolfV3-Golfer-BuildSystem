@@ -16,9 +16,6 @@ axios.interceptors.request.use(
     if (localStorage.getItem("golfer__currentUser")) {
       let currentUser = JSON.parse(localStorage.getItem("golfer__currentUser"));
 
-      console.log("currentUser");
-      console.log(currentUser);
-
       if (currentUser.relation_password !== undefined) {
         config.headers.common["Authorization"] =
           "Bearer " + currentUser.relation_password.apiToken;
@@ -61,7 +58,6 @@ axios.interceptors.response.use(
         error.response &&
         (error.response.status === 419 || error.response.data.code === 404)
       ) {
-        console.log("clear");
         localStorage.clear();
         router.push("/login");
       }

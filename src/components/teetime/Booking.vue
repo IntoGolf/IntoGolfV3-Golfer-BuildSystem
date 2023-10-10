@@ -355,7 +355,8 @@ export default {
           this.$emit("handleOpenFlight", that.flight);
         })
         .catch((error) => {
-          that.dialogErrors = error;
+          this.dialogVisible = false;
+          this.loadTeetimes();
         });
     },
 

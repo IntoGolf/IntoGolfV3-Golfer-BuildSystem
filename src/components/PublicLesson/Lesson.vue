@@ -3,12 +3,10 @@
     <div class="col">
       <div class="row">
         <div class="col">
-          <b>{{ $filters.minuteToTime(lesson.pagTimeFrom) }}</b>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <i>{{ slots }} plaatsen</i>
+          <b class="float-left">{{
+            $filters.minuteToTime(lesson.pagTimeFrom)
+          }}</b>
+          <i class="float-right">{{ slots }} deelnemers</i>
         </div>
       </div>
     </div>

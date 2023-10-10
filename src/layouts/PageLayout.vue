@@ -39,7 +39,7 @@
           />
         </q-toolbar>
       </q-header>
-      <router-view class="q-background web-width q-pl-md q-pr-md q-mt-sm" />
+      <router-view class="bg-white web-width q-pl-md q-pr-md q-mt-sm" />
     </q-layout>
 
     <q-drawer

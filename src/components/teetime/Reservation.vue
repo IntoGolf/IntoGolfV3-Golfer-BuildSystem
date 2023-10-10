@@ -72,28 +72,20 @@ export default {
   },
   methods: {
     handleSave: function (flight, close, index) {
-      let that = this;
       this.loading = false;
-      this.$http.post(`golfer/booking`, flight).then((res) => {
-        if (res.errors.length > 0) {
-          that.$q
-            .dialog({
-              title: "Probleem gevonden!",
-              message: res.data.errors[0],
-              cancel: false,
-              persistent: true,
-            })
-            .onOk(() => {});
-        } else {
+      this.$http
+        .post(`golfer/booking`, flight)
+        .then((res) => {
           this.local_flight = res.flight;
-        }
-
-        if (index > -1) {
-          this.handleEditPlayer(this.local_flight.flight_players[index]);
-        } else if (close) {
-          this.$emit("handleClose");
-        }
-      });
+          if (index > -1) {
+            this.handleEditPlayer(this.local_flight.flight_players[index]);
+          } else if (close) {
+            this.$emit("handleClose");
+          }
+        })
+        .catch((error) => {
+          this.handleClose();
+        });
     },
     handleClose: function () {
       this.$emit("handleClose");
