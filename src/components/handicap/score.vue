@@ -12,29 +12,35 @@
               spread
               unelevated
             >
+              <!--              <q-btn-->
+              <!--                v-show="-->
+              <!--                  1 === 2 &&-->
+              <!--                  local_scorecard.course !== -1 &&-->
+              <!--                  local_scorecard.course !== 993 &&-->
+              <!--                  local_scorecard.course_country_code === 'NL'-->
+              <!--                "-->
+              <!--                color="primary"-->
+              <!--                label="score"-->
+              <!--                @click="showHole = 9"-->
+              <!--              />-->
+              <!--              <q-btn-->
+              <!--                v-show="canDelete"-->
+              <!--                color="primary"-->
+              <!--                icon="save"-->
+              <!--                @click="handleSave"-->
+              <!--              />-->
               <q-btn
-                v-show="
-                  local_scorecard.course !== -1 &&
-                  local_scorecard.course !== 993 &&
-                  local_scorecard.course_country_code === 'NL'
-                "
                 color="primary"
-                label="score"
-                @click="showHole = 9"
+                icon="close"
+                label="Sluiten"
+                @click="onClose"
               />
-              <q-btn
-                v-show="canDelete"
-                color="primary"
-                icon="save"
-                @click="handleSave"
-              />
-              <q-btn color="primary" icon="close" @click="onClose" />
-              <q-btn
-                v-if="canDelete"
-                color="negative"
-                icon="delete"
-                @click="handleDelete"
-              />
+              <!--              <q-btn-->
+              <!--                v-if="canDelete"-->
+              <!--                color="negative"-->
+              <!--                icon="delete"-->
+              <!--                @click="handleDelete"-->
+              <!--              />-->
             </q-btn-group>
           </q-item-section>
         </q-item>
@@ -163,7 +169,15 @@
         </q-item>
       </q-list>
 
-      <q-list bordered separator>
+      <q-list
+        v-show="
+          local_scorecard.course !== -1 &&
+          local_scorecard.course !== 993 &&
+          local_scorecard.course_country_code === 'NL'
+        "
+        bordered
+        separator
+      >
         <q-item class="itg-q-item">
           <q-item-section class="col-2 text-bold"> Hole</q-item-section>
 
@@ -270,8 +284,32 @@
           <q-btn
             class="full-width"
             color="primary"
+            icon="save"
             label="Opslaan"
             @click="handleSave"
+          />
+        </div>
+      </div>
+      <div class="row q-gutter-sm q-pa-md">
+        <div class="col">
+          <q-btn
+            class="full-width"
+            color="primary"
+            icon="exit"
+            label="Sluiten"
+            @click="onClose"
+          />
+        </div>
+      </div>
+      <div class="row q-gutter-sm q-pa-md q-mt-lg">
+        <div class="col">
+          <q-btn
+            v-show="canDelete"
+            class="full-width"
+            color="primary"
+            icon="trash"
+            label="Verwijderen"
+            @click="handleDelete"
           />
         </div>
       </div>
