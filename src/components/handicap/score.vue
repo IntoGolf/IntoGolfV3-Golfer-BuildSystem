@@ -290,7 +290,7 @@
           />
         </div>
       </div>
-      <div class="row q-pb-lg">
+      <div class="row q-pb-lg q-pl-md q-pr-md">
         <div class="col">
           <q-btn
             class="full-width"
@@ -301,7 +301,7 @@
           />
         </div>
       </div>
-      <div class="row q-pb-md">
+      <div class="row q-pb-md q-pl-md q-pr-md">
         <div class="col">
           <q-btn
             v-show="canDelete"
