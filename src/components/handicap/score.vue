@@ -183,6 +183,7 @@
       :scorecardData="local_scorecard"
       :teeArray="teeArray"
       v-on:handleCloseHoles="handleCloseHoles"
+      v-on:handleSave="handleSave"
       v-on:handleSwitchHoles="handleSwitchHoles"
     />
   </q-card>
