@@ -203,7 +203,7 @@
           </q-item-section>
 
           <q-item-section class="col-2">
-            {{ plHcpHole(hole) }}
+            {{ hole.par }}
           </q-item-section>
 
           <q-item-section class="col-5">
@@ -367,6 +367,21 @@ export default {
   mounted() {
     if (this.scorecard.number_of_holes_played > 0) {
       this.showHole = 0;
+    }
+  },
+  created() {
+    if (!this.canEdit) {
+      return;
+    }
+    let that = this;
+
+    if (this.scorecard.ngf_card_id.length > 0) {
+      this.scorecard.holes.forEach(function (hole) {
+        if (hole.strokes === 0) {
+          hole.strokes = that.plHcpHole(hole);
+          that.onScoreChangeHandler(hole, 0);
+        }
+      });
     }
   },
   computed: {
