@@ -279,7 +279,7 @@
         </q-item>
       </q-list>
 
-      <div class="row q-gutter-sm q-pa-md">
+      <div class="row q-pa-md">
         <div class="col">
           <q-btn
             class="full-width"
@@ -290,24 +290,24 @@
           />
         </div>
       </div>
-      <div class="row q-gutter-sm q-pa-md">
+      <div class="row q-gutter-sm q-pb-lg">
         <div class="col">
           <q-btn
             class="full-width"
             color="primary"
-            icon="exit"
+            icon="close"
             label="Sluiten"
             @click="onClose"
           />
         </div>
       </div>
-      <div class="row q-gutter-sm q-pa-md q-mt-lg">
+      <div class="row q-gutter-sm q-pb-md">
         <div class="col">
           <q-btn
             v-show="canDelete"
             class="full-width"
-            color="primary"
-            icon="trash"
+            color="danger"
+            icon="delete"
             label="Verwijderen"
             @click="handleDelete"
           />
