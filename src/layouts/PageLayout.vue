@@ -120,7 +120,7 @@ export default defineComponent({
       {
         name: "greenfeecards",
         icon: "schedule",
-        visible: this.currentUser.tile_teetimes_y_n == 1,
+        visible: this.currentUser.app_display_greenfeecard == 1,
       },
       {
         name: "match",
