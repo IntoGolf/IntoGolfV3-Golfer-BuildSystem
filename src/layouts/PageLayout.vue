@@ -120,7 +120,7 @@ export default defineComponent({
       {
         name: "greenfeecards",
         icon: "schedule",
-        visible: this.currentUser.app_display_greenfeecard == 1,
+        visible: this.settings.app_display_greenfeecard == 1,
       },
       {
         name: "match",
