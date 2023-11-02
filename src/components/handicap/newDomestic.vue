@@ -214,23 +214,11 @@
         </div>
 
         <div class="row q-mt-md">
-          <div class="col text-bold">Courserating</div>
+          <div class="col text-bold">Cr, Sr, Par</div>
           <div class="col text-right itg-text-overflow">
-            {{ tee.courseRating }}
-          </div>
-        </div>
-
-        <div class="row q-mt-md">
-          <div class="col text-bold">Sloperating</div>
-          <div class="col text-right itg-text-overflow">
-            {{ tee.slopeRating }}
-          </div>
-        </div>
-
-        <div class="row q-mt-md">
-          <div class="col" style="font-weight: bold">Par</div>
-          <div class="col text-right itg-text-overflow">
-            {{ tee.totalPar }}
+            {{
+              tee.courseRating + " / " + tee.slopeRating + " / " + tee.totalPar
+            }}
           </div>
         </div>
 

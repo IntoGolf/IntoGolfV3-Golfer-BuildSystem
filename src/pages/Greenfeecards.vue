@@ -1,7 +1,11 @@
 <template>
   <q-page-container>
     <q-page>
-      <div v-for="card in list" :key="card.id" class="q-mb-md">
+      <div
+        v-for="card in $store.state.greenfeeCards.items"
+        :key="card.id"
+        class="q-mb-md"
+      >
         <q-card class="lesson-card">
           <q-card-section class="card-header">
             <div class="text-h6">{{ card.Name }}</div>
@@ -16,7 +20,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-4 text-bold">Aantal lessen:</div>
+              <div class="col-4 text-bold">Aantal rondes:</div>
               <div class="col-8">{{ card.gfcRounds }}</div>
             </div>
             <div class="row">
@@ -90,24 +94,9 @@
 </style>
 
 <script>
-import authMixin from "../mixins/auth";
-
 export default {
-  mixins: [authMixin],
-  data: function () {
-    return {
-      list: [],
-    };
-  },
-  mounted() {
-    this.handleLoad();
-  },
-  methods: {
-    handleLoad: function () {
-      this.$http.get("golfer/greenfee_card").then((res) => {
-        this.list = res;
-      });
-    },
+  created() {
+    this.$store.dispatch("greenfeeCards/fetch");
   },
 };
 </script>

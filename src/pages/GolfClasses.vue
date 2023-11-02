@@ -187,11 +187,9 @@
 </style>
 
 <script>
-import publicMixin from "../mixins/public";
 import signUp from "./SignUp.vue";
 
 export default {
-  mixins: [publicMixin],
   components: { signUp },
   data() {
     return {

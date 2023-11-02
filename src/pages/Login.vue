@@ -101,11 +101,7 @@
 </style>
 
 <script>
-import publicMixin from "../mixins/public";
-import { setCssVar } from "quasar";
-
 export default {
-  mixins: [publicMixin],
   name: "Login",
   data: function () {
     return {
@@ -120,35 +116,46 @@ export default {
     };
   },
   mounted() {
+    this.loadImage();
     if (this.$route.query.key) {
       this.form.repKey = this.$route.query.key;
       this.onlogin();
     }
     this.form.redirect = this.$route.query.redirect;
   },
-  watch: {
-    settings: function () {
-      if (this.settings != null) {
-        this.$http
-          .get("golfer/image/" + this.settings.system_logo)
-          .then((res) => {
-            this.blobUrl = "data:image/png;base64," + res;
-          });
-      }
-    },
-  },
   computed: {
     canSignIn: function () {
-      return parseInt(this.settings.website_display_register_button) == 1;
+      return (
+        parseInt(
+          this.$store.state.settings.publicItems.website_display_register_button
+        ) === 1
+      );
     },
     canBookPublic: function () {
-      return parseInt(this.settings.website_display_teetime_public) == 1;
+      return (
+        parseInt(
+          this.$store.state.settings.publicItems.website_display_teetime_public
+        ) === 1
+      );
     },
     canBookCourse: function () {
-      return parseInt(this.settings.website_display_lessons_public) == 1;
+      return (
+        parseInt(
+          this.$store.state.settings.publicItems.website_display_lessons_public
+        ) === 1
+      );
     },
   },
   methods: {
+    loadImage() {
+      this.$http
+        .get(
+          "golfer/image/" + this.$store.state.settings.publicItems.system_logo
+        )
+        .then((res) => {
+          this.blobUrl = "data:image/png;base64," + res;
+        });
+    },
     async onlogin() {
       let currentUser = null;
 
@@ -168,30 +175,15 @@ export default {
               "golfer__currentUser",
               JSON.stringify(currentUser)
             );
+            localStorage.setItem(
+              "golfer__user_token",
+              currentUser.relation_password.apiToken
+            );
           }
         })
         .catch((e) => {
           this.$message.error(e);
         });
-
-      await this.$http.get("golfer/settings").then((settings) => {
-        localStorage.setItem("golfer__settings", JSON.stringify(settings));
-        this.settings = settings;
-        setCssVar("primary", this.settings.app_primary_color);
-        setCssVar("primary_font", this.settings.app_primary_font_color);
-        setCssVar("secondary", this.settings.app_secondary_color);
-        setCssVar("secondary_font", this.settings.app_secondary_font_color);
-
-        let currentUserPref = {
-          matchList: {
-            subFilter: 0,
-          },
-        };
-        localStorage.setItem(
-          "golfer__currentUserPref",
-          JSON.stringify(currentUserPref)
-        );
-      });
 
       if (currentUser.redirect) {
         return (window.location =

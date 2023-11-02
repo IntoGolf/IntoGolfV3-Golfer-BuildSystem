@@ -1,4 +1,11 @@
 <template>
+  <q-banner
+    v-if="flight.booking_at_risk"
+    class="text-white bg-red q-mb-md text-center"
+    dense
+  >
+    Let op, u heeft tot {{ expire }} om uw boeking af te ronden?
+  </q-banner>
   <q-card class="q-mb-md">
     <q-card-section class="text-h6">
       Uw starttijd
@@ -166,6 +173,9 @@ export default {
     this.showSecondNine = this.settings.app_display_second_nine_select;
   },
   computed: {
+    expire: function () {
+      return this.$dayjs(this.flight.fltExpire).format("HH:mm");
+    },
     cancelHours: function () {
       if (
         this.settings.planner_cancel_hours &&

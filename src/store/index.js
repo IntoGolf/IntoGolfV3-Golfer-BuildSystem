@@ -1,0 +1,34 @@
+// src/store/index.js
+import { createStore } from "vuex";
+import messages from "./messages"; // Import your messages module
+import scorecards from "./scorecards"; // Import your messages module
+import countries from "./countries"; // Import your messages module
+import settings from "./settings"; // Import your messages module
+import currentUser from "./currentUser";
+import courseStatus from "./courseStatus";
+import greenfeeCards from "./greenfeeCards";
+
+const store = createStore({
+  modules: {
+    messages,
+    scorecards,
+    countries,
+    settings,
+    currentUser,
+    courseStatus,
+    greenfeeCards,
+  },
+  actions: {
+    async initializeApp({ dispatch }) {
+      await dispatch("settings/fetchSettings", null, { root: true });
+      await dispatch("currentUser/fetch", null, { root: true });
+      await dispatch("messages/fetchMessages", null, { root: true });
+      await dispatch("courseStatus/fetch", null, { root: true });
+    },
+    async initializePublicApp({ dispatch }) {
+      await dispatch("settings/fetchPublicSettings", null, { root: true });
+    },
+  },
+});
+
+export default store;

@@ -1,119 +1,54 @@
 <template>
   <q-page-container>
     <q-page>
-      <q-card v-if="list.length === 0" class="">
-        <q-card-section class="text-center text-h6">
-          {{ no_messages }}
+      <q-card v-for="(item, index) in items" :key="index" class="q-mb-md">
+        <q-card-section>
+          <div class="row">
+            <div class="col">
+              <div class="text-h6">{{ item.msgTitle }}</div>
+              <div class="text-subtitle2">
+                {{ $dayjs(item.msgFrom).format("DD-MM-YYYY") }}
+              </div>
+            </div>
+
+            <div v-show="item.message_opened === null" class="col-auto q-pt-sm">
+              <q-btn
+                color="white"
+                size="sm"
+                text-color="black"
+                v-on:click="handleSetMessage(item)"
+              >
+                gelezen
+              </q-btn>
+            </div>
+          </div>
         </q-card-section>
+        <q-separator />
+        <q-card-section v-html="item.msgText" />
       </q-card>
-
-      <div v-else>
-        <q-card
-          v-for="(item, index) in unreadMessages"
-          :key="index"
-          class="q-mb-md"
-        >
-          <q-card-section>
-            <div class="row">
-              <div class="col">
-                <div class="text-h6">{{ item.msgTitle }}</div>
-                <div class="text-subtitle2">
-                  {{ $dayjs(item.msgFrom).format("DD-MM-YYYY") }}
-                </div>
-              </div>
-
-              <div
-                v-show="item.message_opened === null"
-                class="col-auto q-pt-sm"
-              >
-                <q-btn
-                  color="white"
-                  size="sm"
-                  text-color="black"
-                  v-on:click="setMessagesOpened(item)"
-                >
-                  gelezen
-                </q-btn>
-              </div>
-            </div>
-          </q-card-section>
-
-          <q-separator />
-
-          <q-card-section v-html="item.msgText" />
-        </q-card>
-
-        <q-card
-          v-for="(item, index) in readMessages"
-          :key="index"
-          class="q-mb-md"
-        >
-          <q-card-section>
-            <div class="row">
-              <div class="col">
-                <div class="text-h6">{{ item.msgTitle }}</div>
-                <div class="text-subtitle2">
-                  {{ $dayjs(item.msgFrom).format("DD-MM-YYYY") }}
-                </div>
-              </div>
-
-              <div
-                v-show="item.message_opened === null"
-                class="col-auto q-pt-sm"
-              >
-                <q-btn
-                  color="white"
-                  size="sm"
-                  text-color="black"
-                  v-on:click="setMessagesOpened(item)"
-                >
-                  gelezen
-                </q-btn>
-              </div>
-            </div>
-          </q-card-section>
-
-          <q-separator />
-
-          <q-card-section v-html="item.msgText" />
-        </q-card>
-      </div>
     </q-page>
   </q-page-container>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   data() {
     return {
-      listUrl: "golfer/messages",
-      openedUrl: "golfer/message",
       no_messages: "Er zijn op dit moment geen berichten",
-      list: [],
     };
   },
   computed: {
-    unreadMessages: function () {
-      return this.list.filter((message) => message.message_opened === null);
-    },
-    readMessages: function () {
-      return this.list.filter((message) => message.message_opened !== null);
-    },
+    ...mapGetters("messages", ["items"]),
   },
-  created() {
-    this.loadList();
+  mounted() {
+    this.fetchMessages();
   },
   methods: {
-    loadList: function () {
-      let that = this;
-      this.$http.get(this.listUrl).then((res) => {
-        that.list = res;
-      });
-    },
-    setMessagesOpened(item) {
-      this.$http.post(this.openedUrl, item).then(() => {
-        this.loadList();
-      });
+    ...mapActions("messages", ["fetchMessages", "setMessage"]),
+    handleSetMessage: function (item) {
+      this.setMessage(item);
     },
   },
 };

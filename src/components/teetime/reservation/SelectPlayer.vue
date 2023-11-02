@@ -52,14 +52,16 @@
         </template>
       </q-select>
 
-      <p>Of u voert de naam in van de gast die u wenst uit te nodigen.</p>
-      <q-input
-        v-model="guest"
-        :disable="knownPlayer !== '' || relation !== ''"
-        clearable
-        label="Voer de naam van uw gast in"
-        outlined
-      />
+      <template v-if="flight.open_for_guest">
+        <p>Of u voert de naam in van de gast die u wenst uit te nodigen.</p>
+        <q-input
+          v-model="guest"
+          :disable="knownPlayer !== '' || relation !== ''"
+          clearable
+          label="Voer de naam van uw gast in"
+          outlined
+        />
+      </template>
     </q-card-section>
 
     <q-separator />
@@ -109,9 +111,11 @@ export default {
   methods: {
     handleLoad: function () {
       let that = this;
-      this.$http.get("golfer/knownPlayers").then((res) => {
-        that.knownPlayerList = res;
-      });
+      this.$http
+        .get("golfer/knownPlayers?fltNr=" + this.flight.fltNr)
+        .then((res) => {
+          that.knownPlayerList = res;
+        });
     },
 
     handleSave: function () {
@@ -145,8 +149,9 @@ export default {
       }
 
       let that = this;
+      let fltNr = this.flight.fltNr;
       await this.$http
-        .get(`golfer/relation/0/search/${val}`)
+        .get(`golfer/relation?search=${val}&fltNr=${fltNr}`)
         .then((response) => {
           update(() => {
             that.relations = response;

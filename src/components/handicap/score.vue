@@ -115,33 +115,17 @@
 
         <q-item v-show="local_scorecard.course !== -1" v-ripple>
           <q-item-section>
-            <q-item-label class="font-weight-bold">Courserating</q-item-label>
+            <q-item-label class="font-weight-bold">Cr, Sr, Par</q-item-label>
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-right"
-              >{{ local_scorecard.courserate }}
-            </q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item v-show="local_scorecard.course !== -1" v-ripple>
-          <q-item-section>
-            <q-item-label class="font-weight-bold">Sloperating</q-item-label>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label class="text-right"
-              >{{ local_scorecard.sloperate }}
-            </q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item v-show="local_scorecard.course !== -1" v-ripple>
-          <q-item-section>
-            <q-item-label class="font-weight-bold">Par</q-item-label>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label class="text-right"
-              >{{ local_scorecard.total_par }}
+              >{{
+                local_scorecard.courserate +
+                " / " +
+                local_scorecard.sloperate +
+                " / " +
+                local_scorecard.total_par
+              }}
             </q-item-label>
           </q-item-section>
         </q-item>

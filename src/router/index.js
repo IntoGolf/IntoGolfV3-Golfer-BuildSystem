@@ -6,6 +6,7 @@ import {
   createWebHistory,
 } from "vue-router";
 import routes from "./routes";
+import store from "src/store";
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation;
@@ -34,23 +35,34 @@ export default route(function (/* { store, ssrContext } */) {
     ),
   });
 
-  Router.beforeEach((to, from, next) => {
-    const user = JSON.parse(localStorage.getItem("golfer__currentUser"));
+  Router.beforeEach(async (to, from, next) => {
+    const token = localStorage.getItem("golfer__user_token");
+
+    // Ensure the store is initialized before proceeding
+    if (token && store.getters["settings/isItemEmpty"]) {
+      await store.dispatch("initializeApp");
+    }
+
+    if (!token && store.getters["settings/isPublicEmpty"]) {
+      await store.dispatch("initializePublicApp");
+    }
+
     if (to.matched.some((r) => r.meta.requiresAuth)) {
-      if (user && user.relation_password && user.relation_password.apiToken) {
+      if (token) {
         if (to.path === "/login") {
-          next({ path: "/" });
+          return next({ path: "/" });
         }
       } else {
-        next(to.path !== "/login" ? { path: "/login" } : true);
+        return next(to.path !== "/login" ? { path: "/login" } : true);
       }
     } else {
-      if (user && user.relation_password && user.relation_password.apiToken) {
+      if (token) {
         if (to.path === "/login") {
-          next({ path: "/" });
+          return next({ path: "/" });
         }
       }
     }
+
     next();
   });
 

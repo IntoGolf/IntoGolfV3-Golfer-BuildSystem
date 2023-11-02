@@ -16,19 +16,31 @@
         <div class="col">
           <q-btn-group spread>
             <q-btn
-              :color="subFilter === 1 ? 'warning' : 'primary'"
+              :color="
+                $store.state.currentUser.matchFilter === 1
+                  ? 'warning'
+                  : 'primary'
+              "
               label="Ingeschreven"
-              v-on:click="subFilter = 1"
+              v-on:click="$store.dispatch('currentUser/updateMatchFilter', 1)"
             />
             <q-btn
-              :color="subFilter === 2 ? 'warning' : 'primary'"
+              :color="
+                $store.state.currentUser.matchFilter === 2
+                  ? 'warning'
+                  : 'primary'
+              "
               label="Inschrijven"
-              v-on:click="subFilter = 2"
+              v-on:click="$store.dispatch('currentUser/updateMatchFilter', 2)"
             />
             <q-btn
-              :color="subFilter === 0 ? 'warning' : 'primary'"
+              :color="
+                $store.state.currentUser.matchFilter === 0
+                  ? 'warning'
+                  : 'primary'
+              "
               label="Alles"
-              v-on:click="subFilter = 0"
+              v-on:click="$store.dispatch('currentUser/updateMatchFilter', 0)"
             />
           </q-btn-group>
         </div>
@@ -114,21 +126,10 @@ export default {
     return {
       list: [],
       filter: "",
-      subFilter: 0,
     };
   },
   created() {
-    this.subFilter = this.currentUserPref.matchList.subFilter;
     this.loadList();
-  },
-  watch: {
-    subFilter: function (newValue) {
-      this.currentUserPref.matchList.subFilter = newValue;
-      localStorage.setItem(
-        "golfer__currentUserPref",
-        JSON.stringify(this.currentUserPref)
-      );
-    },
   },
   computed: {
     filterArray: function () {
@@ -138,9 +139,11 @@ export default {
           (!that.filter ||
             (that.filter &&
               item.name.toLowerCase().includes(that.filter.toLowerCase()))) &&
-          (that.subFilter === 0 ||
-            (that.subFilter === 1 && that.getUserOnMatch(item)) ||
-            (that.subFilter === 2 && that.getOpenForSubscription(item)))
+          (that.$store.state.currentUser.matchFilter === 0 ||
+            (that.$store.state.currentUser.matchFilter === 1 &&
+              that.getUserOnMatch(item)) ||
+            (that.$store.state.currentUser.matchFilter === 2 &&
+              that.getOpenForSubscription(item)))
       );
     },
   },

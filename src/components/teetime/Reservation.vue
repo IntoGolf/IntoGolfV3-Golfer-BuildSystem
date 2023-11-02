@@ -84,7 +84,7 @@ export default {
           }
         })
         .catch((error) => {
-          this.handleClose();
+          //this.handleClose();
         });
     },
     handleClose: function () {

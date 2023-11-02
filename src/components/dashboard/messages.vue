@@ -21,19 +21,12 @@
 
 <script>
 export default {
-  data() {
-    return {
-      messageList: [],
-    };
-  },
-  mounted() {
-    this.$http.get(`golfer/messages`).then((res) => {
-      this.messageList = res;
-    });
+  created() {
+    this.$store.dispatch("messages/fetchMessages");
   },
   computed: {
     unreadMessages: function () {
-      return this.messageList.filter(
+      return this.$store.state.messages.items.filter(
         (message) => message.message_opened === null
       );
     },

@@ -1,5 +1,5 @@
 <template>
-  <q-page-container v-if="!loading" class="web-width">
+  <q-page-container class="web-width">
     <q-page>
       <div class="row cordova-hide" style="height: 230px">
         <div class="col text-center q-pt-lg">
@@ -9,13 +9,13 @@
             style="max-width: 400px; max-height: 150px"
           />
           <div v-if="1 === 2" class="text-h4 q-mb-md">
-            {{ settings.system_organisation_name }}
+            {{ $store.state.settings.item.system_organisation_name }}
           </div>
         </div>
       </div>
 
       <div
-        v-if="settings.app_display_weather === 1"
+        v-if="$store.state.settings.item.app_display_weather === 1"
         class="row cordova-hide q-mb-md"
       >
         <div v-for="(hour, key) in weatherHours" :key="key" class="col">
@@ -38,32 +38,49 @@
       </div>
 
       <div
-        v-if="currentUser.tile_teetimes_y_n && settings.teetime !== null"
+        v-if="
+          $store.state.currentUser.item.tile_teetimes_y_n &&
+          $store.state.settings.item.teetime !== null &&
+          $store.state.settings.item.teetime !== undefined
+        "
         class="row q-mb-md"
       >
         <div class="col text-center">
           <q-btn
             color="secondary"
             outline
-            v-on:click="$router.push('/checkin?id=' + settings.teetime.flpNr)"
+            v-on:click="
+              $router.push(
+                '/checkin?id=' + $store.state.settings.item.teetime.flpNr
+              )
+            "
           >
             Aanmelden starttijd
-            {{ $filters.minuteToTime(settings.teetime.fltTime1) }}
+            {{
+              $filters.minuteToTime($store.state.settings.item.teetime.fltTime1)
+            }}
           </q-btn>
         </div>
       </div>
 
       <div
-        v-if="currentUser.tile_match_y_n && settings.match !== null"
+        v-if="
+          $store.state.currentUser.item.tile_match_y_n &&
+          $store.state.settings.item.match !== null
+        "
         class="row q-mb-md"
       >
         <div class="col text-center">
           <q-btn
             color="secondary"
             outline
-            v-on:click="$router.push('/match?id=' + settings.match.matchId)"
+            v-on:click="
+              $router.push(
+                '/match?id=' + $store.state.settings.item.match.matchId
+              )
+            "
           >
-            Wedstrijd {{ settings.name }}
+            Wedstrijd {{ $store.state.settings.item.match.name }}
           </q-btn>
         </div>
       </div>
@@ -82,7 +99,7 @@
 
       <div class="row q-pl-md q-pr-md q-gutter-sm">
         <div
-          v-show="currentUser.tile_teetimes_y_n"
+          v-show="$store.state.currentUser.item.tile_teetimes_y_n"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/reservations')"
         >
@@ -92,7 +109,7 @@
         </div>
 
         <div
-          v-if="currentUser.tile_match_y_n"
+          v-if="$store.state.currentUser.item.tile_match_y_n"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/match')"
         >
@@ -102,7 +119,7 @@
 
       <div class="row text-h6 q-pl-md q-pr-md q-pt-sm q-gutter-sm">
         <div
-          v-if="settings.app_display_message_tile == 1"
+          v-if="$store.state.settings.item.app_display_message_tile === 1"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/messages')"
         >
@@ -114,8 +131,8 @@
 
         <div
           v-if="
-            currentUser.tile_teetimes_y_n &&
-            settings.app_display_course_status_tile == 1
+            $store.state.currentUser.item.tile_teetimes_y_n &&
+            $store.state.settings.item.app_display_course_status_tile === 1
           "
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/course')"
@@ -126,14 +143,14 @@
 
       <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
         <div
-          v-if="currentUser.tile_handicap_y_n"
+          v-if="$store.state.currentUser.item.tile_handicap_y_n"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/handicap')"
         >
           <span class="title"><i class="far fa-golf-ball"></i>Handicap</span>
         </div>
         <div
-          v-if="currentUser.tile_handicap_y_n"
+          v-if="$store.state.currentUser.item.tile_handicap_y_n"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/NGF')"
         >
@@ -143,7 +160,7 @@
 
       <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
         <div
-          v-if="currentUser.tile_members_y_n"
+          v-if="$store.state.currentUser.item.tile_members_y_n"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/members')"
         >
@@ -151,7 +168,7 @@
         </div>
 
         <div
-          v-if="settings.app_display_profile_tile == 1"
+          v-if="$store.state.settings.item.app_display_profile_tile === 1"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/profile')"
         >
@@ -160,12 +177,13 @@
       </div>
 
       <div
-        v-show="currentUser.tile_horeca_y_n"
+        v-show="$store.state.currentUser.item.tile_horeca_y_n"
         class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
       >
         <div
           v-show="
-            currentUser.tile_horeca_y_n && settings.app_display_balance === 1
+            $store.state.currentUser.item.tile_horeca_y_n &&
+            $store.state.settings.item.app_display_balance === 1
           "
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/pos')"
@@ -174,7 +192,7 @@
         </div>
 
         <div
-          v-if="currentUser.tile_shop_y_n"
+          v-if="$store.state.currentUser.item.tile_shop_y_n"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/shop')"
         >
@@ -183,7 +201,7 @@
       </div>
 
       <div
-        v-show="currentUser.tile_lessons_y_n"
+        v-show="$store.state.currentUser.item.tile_lessons_y_n"
         class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
       >
         <div
@@ -212,30 +230,20 @@ export default {
   mixins: [authMixin],
   data() {
     return {
-      messageList: [],
       weather: null,
       blobUrl: "",
     };
   },
   created() {
-    this.$http.get("golfer/image/" + this.settings.system_logo).then((res) => {
-      this.blobUrl = "data:image/png;base64," + res;
-    });
-    if (this.settings.app_display_weather === 1) {
-      this.$http.get(`golfer/weather`).then((res) => {
-        this.weather = res;
-      });
-    }
-    this.$http.get(`golfer/messages`).then((res) => {
-      this.messageList = res;
-    });
+    this.loadImage();
+    this.loadWeather();
   },
   computed: {
     cardInMemory: function () {
       return localStorage.getItem("golfer__scorecard") !== null;
     },
     unreadCount: function () {
-      return this.messageList.filter(
+      return this.$store.state.messages.items.filter(
         (message) => message.message_opened === null
       ).length;
     },
@@ -251,6 +259,22 @@ export default {
       hour = hour > 20 ? 20 : hour;
 
       return this.weather.forecast.forecastday[0].hour.slice(hour, hour + 4);
+    },
+  },
+  methods: {
+    loadImage() {
+      this.$http
+        .get("golfer/image/" + this.$store.state.settings.item.system_logo)
+        .then((res) => {
+          this.blobUrl = "data:image/png;base64," + res;
+        });
+    },
+    loadWeather() {
+      if (this.$store.state.settings.item.app_display_weather === 1) {
+        this.$http.get(`golfer/weather`).then((res) => {
+          this.weather = res;
+        });
+      }
     },
   },
 };

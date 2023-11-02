@@ -80,7 +80,6 @@
                 :course="course"
                 :holes="holes"
                 :per="per"
-                :settings="settings"
                 :size="flight.fltSize"
                 v-on:setTimeObject="setTimeObject"
               />
@@ -152,7 +151,7 @@
         </div>
 
         <div
-          v-if="settings !== null && settings.app_display_greenfee_pay == 1"
+          v-if="$store.state.settings.publicItems.app_display_greenfee_pay == 1"
           class="row q-mb-lg"
         >
           <div class="col-4 text-bold">Te betalen bedrag:</div>
@@ -162,7 +161,7 @@
         </div>
 
         <div
-          v-if="settings !== null && settings.app_display_greenfee_pay == 1"
+          v-if="$store.state.settings.publicItems.app_display_greenfee_pay == 1"
           class="row q-mt-sm"
         >
           Nadat je de flight hebt betaald ontvang je een e-mail ter bevestiging
@@ -275,7 +274,9 @@
           </div>
         </div>
 
-        <div v-if="settings !== null && settings.app_display_greenfee_pay == 1">
+        <div
+          v-if="$store.state.settings.publicItems.app_display_greenfee_pay == 1"
+        >
           <div class="row">Leveringsvoorwaarden:</div>
           <div
             class="row q-pa-sm"
@@ -345,13 +346,11 @@
 <script>
 import CourseComp from "../components/teetime/Course.vue";
 
-import publicMixin from "../mixins/public";
 import dayjs from "dayjs";
 import Payment from "components/payment/initiate.vue";
 import Confirmation from "components/teetime/Confirmation.vue";
 
 export default {
-  mixins: [publicMixin],
   components: {
     Confirmation,
     Payment,
@@ -394,25 +393,25 @@ export default {
         fltCrlNr2: null,
         fltSize: 3,
 
-        flpName1: "Laurens",
-        flpEmail1: "laurens@intogolf.nl",
-        flpPhone1: "0172617000",
-        flpHandicap1: null,
+        flpName1: "",
+        flpEmail1: "",
+        flpPhone1: "",
+        flpHandicap1: "54.0",
 
-        flpName2: "test",
+        flpName2: "",
         flpEmail2: "",
         flpPhone2: "",
-        flpHandicap2: null,
+        flpHandicap2: "54.0",
 
         flpName3: null,
         flpEmail3: null,
         flpPhone3: null,
-        flpHandicap3: null,
+        flpHandicap3: "54.0",
 
         flpName4: null,
         flpEmail4: null,
         flpPhone4: null,
-        flpHandicap4: null,
+        flpHandicap4: "54.0",
         agreeConditions: true,
         agreeCommerce: false,
       },
@@ -441,16 +440,10 @@ export default {
       return dayjs;
     },
     conditions: function () {
-      if (this.settings === null) {
-        return "";
-      }
-      return this.settings.website_payment_conditions;
+      return this.$store.state.settings.publicItems.website_payment_conditions;
     },
     mergeText: function () {
-      if (this.settings === null) {
-        return "";
-      }
-      return this.settings.website_flight_merge_text;
+      return this.$store.state.settings.publicItems.website_flight_merge_text;
     },
     valid: function () {
       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

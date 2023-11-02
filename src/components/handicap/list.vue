@@ -32,6 +32,11 @@ export default {
   props: {
     handicapList: Array,
   },
+  watch: {
+    handicapList: function () {
+      console.log(this.handicapList);
+    },
+  },
   methods: {
     handleOpen: function (card) {
       this.$emit("handleOpen", card);

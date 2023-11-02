@@ -142,12 +142,10 @@
 </template>
 
 <script>
-import publicMixin from "../../mixins/public";
 import Payment from "components/payment/initiate.vue";
 
 export default {
   components: { Payment },
-  mixins: [publicMixin],
   props: {
     date: String,
     lesson: Array,

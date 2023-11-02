@@ -1,5 +1,5 @@
 <template>
-  <div v-if="settings">
+  <div>
     <q-layout view="lHh Lpr lFf">
       <q-header class="web-width q-header" flat>
         <q-toolbar>
@@ -105,6 +105,7 @@ export default defineComponent({
     },
   },
   mounted() {
+    console.log(this.currentUser.tile_lessons_y_n);
     this.drawer = false;
     this.menuArray = [
       {
@@ -115,71 +116,71 @@ export default defineComponent({
       {
         name: "reservations",
         icon: "schedule",
-        visible: this.currentUser.tile_teetimes_y_n == 1,
+        visible: this.currentUser.tile_teetimes_y_n,
       },
       {
         name: "greenfeecards",
         icon: "schedule",
-        visible: this.settings.app_display_greenfeecard == 1,
+        visible: this.settings.app_display_greenfeecard || 1 === 1,
       },
       {
         name: "match",
         icon: "sports_golf",
-        visible: this.currentUser.tile_match_y_n == 1,
+        visible: this.currentUser.tile_match_y_n,
       },
       {
         name: "messages",
         icon: "notes",
-        visible: this.settings.app_display_message_tile == 1,
+        visible: this.settings.app_display_message_tile === 1,
       },
       {
         name: "course",
         icon: "grass",
         visible:
-          this.currentUser.tile_teetimes_y_n == 1 &&
-          this.settings.app_display_course_status_tile == 1,
+          this.currentUser.tile_teetimes_y_n &&
+          this.settings.app_display_course_status_tile === 1,
       },
       {
         name: "handicap",
         icon: "grade",
-        visible: this.currentUser.tile_handicap_y_n == 1,
+        visible: this.currentUser.tile_handicap_y_n,
       },
       {
         name: "NGF",
         icon: "credit_card",
-        visible: this.currentUser.tile_handicap_y_n == 1,
+        visible: this.currentUser.tile_handicap_y_n,
       },
       {
         name: "members",
         icon: "groups",
-        visible: this.currentUser.tile_members_y_n == 1,
+        visible: this.currentUser.tile_members_y_n,
       },
       {
         name: "pos",
         icon: "restaurant_enu",
         visible:
           this.currentUser.tile_horeca_y_n &&
-          this.settings.app_display_balance == 1,
+          this.settings.app_display_balance === 1,
       },
       {
         name: "shop",
         icon: "shopping_bag",
-        visible: this.currentUser.tile_shop_y_n == 1,
+        visible: this.currentUser.tile_shop_y_n,
       },
       {
         name: "proCourse",
         icon: "shop",
-        visible: this.currentUser.tile_lessons_y_n == 1,
+        visible: this.currentUser.tile_lessons_y_n,
       },
       {
         name: "lessons",
         icon: "school",
-        visible: this.currentUser.tile_lessons_y_n == 1,
+        visible: this.currentUser.tile_lessons_y_n,
       },
       {
         name: "lessoncards",
         icon: "school",
-        visible: this.currentUser.tile_lessons_y_n == 1,
+        visible: this.currentUser.tile_lessons_y_n,
       },
       {
         name: "profile",

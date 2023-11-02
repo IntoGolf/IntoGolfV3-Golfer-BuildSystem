@@ -290,10 +290,7 @@
 <script>
 import CourseComp from "../components/teetime/Course.vue";
 
-import publicMixin from "../mixins/public";
-
 export default {
-  mixins: [publicMixin],
   components: {
     CourseComp,
   },

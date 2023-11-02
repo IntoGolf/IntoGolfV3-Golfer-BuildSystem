@@ -51,11 +51,10 @@
 </template>
 
 <script>
-import publicMixin from "../mixins/public";
 import toolMixin from "../mixins/toolMixin";
 
 export default {
-  mixins: [publicMixin, toolMixin],
+  mixins: [toolMixin],
   data() {
     return {
       list: [],

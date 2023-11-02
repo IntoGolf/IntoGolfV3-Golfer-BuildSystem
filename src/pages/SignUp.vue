@@ -313,13 +313,10 @@
 </style>
 
 <script>
-import publicMixin from "../mixins/public";
-
 export default {
   props: {
     ProCourse: Object,
   },
-  mixins: [publicMixin],
   data() {
     return {
       status: 1,

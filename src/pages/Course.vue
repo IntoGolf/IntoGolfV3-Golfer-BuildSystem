@@ -1,7 +1,11 @@
 <template>
   <q-page-container>
     <q-page>
-      <q-card v-for="(loop, index) in list" :key="index" class="q-mb-sm">
+      <q-card
+        v-for="(loop, index) in $store.state.courseStatus.items"
+        :key="index"
+        class="q-mb-sm"
+      >
         <q-card-section class="text-h6">
           <div class="text-h6">{{ loop.course_loop.crlName }}</div>
           <div class="text-subtitle2 text-italic">
@@ -82,21 +86,8 @@
 
 <script>
 export default {
-  components: {},
-  data() {
-    return {
-      list: [],
-    };
-  },
   created: function () {
-    this.handleLoad();
-  },
-  methods: {
-    handleLoad() {
-      this.$http.get("golfer/courseStatus").then((res) => {
-        this.list = res;
-      });
-    },
+    this.$store.dispatch("courseStatus/fetch");
   },
 };
 </script>

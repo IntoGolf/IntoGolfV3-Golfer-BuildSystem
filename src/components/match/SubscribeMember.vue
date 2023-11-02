@@ -272,7 +272,7 @@ export default {
 
       let that = this;
       await this.$http
-        .get(`golfer/relation/${this.match.id}/search/${val}`)
+        .get(`golfer/relation/${this.match.id}/search/${val}/fltNr/0`)
         .then((response) => {
           update(() => {
             that.relations = response;

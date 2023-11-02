@@ -9,7 +9,7 @@
       "
     >
       <div
-        v-if="settings.app_display_greenfee_pay == 0"
+        v-if="$store.state.settings.publicItems.app_display_greenfee_pay == 0"
         :class="backgroundColor(time)"
         class="col-12 q-pa-sm cursor-pointer"
       >
@@ -49,7 +49,6 @@ export default {
     holes: Number,
     size: Number,
     per: Object,
-    settings: Object,
   },
   computed: {
     from: function () {

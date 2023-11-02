@@ -12,14 +12,10 @@ axios.interceptors.request.use(
     }
     Loading.show();
     config.url = `${baseURL}api/${config.url}`;
+    let token = localStorage.getItem("golfer__user_token");
 
-    if (localStorage.getItem("golfer__currentUser")) {
-      let currentUser = JSON.parse(localStorage.getItem("golfer__currentUser"));
-
-      if (currentUser.relation_password !== undefined) {
-        config.headers.common["Authorization"] =
-          "Bearer " + currentUser.relation_password.apiToken;
-      }
+    if (token !== undefined) {
+      config.headers.common["Authorization"] = "Bearer " + token;
     }
 
     return config;
@@ -73,6 +69,7 @@ axios.interceptors.response.use(
   }
 );
 
-export default boot(({ app }) => {
+export default boot(({ app, store }) => {
   app.config.globalProperties.$http = axios;
+  store.$axios = axios;
 });
