@@ -151,11 +151,9 @@ export default {
     ...mapActions("settings", ["fetchSettings"]),
     async handleOpen(card) {
       let that = this;
-      console.log({ id: card.ngf_card_id });
       await this.$http
         .get("golfer/scorecard?id=" + card.ngf_card_id)
         .then((res) => {
-          console.log(res);
           if (res.data.is_penalty_score) {
             return;
           }
@@ -166,7 +164,14 @@ export default {
         });
     },
     handleSave: function (scorecard, open) {
-      this.$http.post("golfer/scorecard", scorecard).then((res) => {});
+      let that = this;
+      this.$http.post("golfer/scorecard", scorecard).then((res) => {
+        console.log(res);
+        that.scorecard = res.response.scorecard;
+        that.scorecard.handicap = res.response.handicap_index;
+        that.scorecard.type = 1;
+        that.page = 2;
+      });
     },
     handleNew: function (type) {
       this.scorecard = { ...this.scorecard_template };
