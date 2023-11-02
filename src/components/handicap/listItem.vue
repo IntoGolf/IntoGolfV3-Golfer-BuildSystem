@@ -17,7 +17,7 @@
       </q-item-label>
 
       <q-item-label caption>
-        {{ $dayjs(card.details.datetime).format("ddd D MMM YYYY HH:mm") }}
+        {{ $dayjs(card.datetime).format("ddd D MMM YYYY HH:mm") }}
       </q-item-label>
     </q-item-section>
 
