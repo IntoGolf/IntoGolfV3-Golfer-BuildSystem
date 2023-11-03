@@ -10,7 +10,7 @@ const mutations = {
   SET_VALUE(state, newValue) {
     state.matchFilter = newValue;
   },
-  CLEAR_VALUE(state, newValue) {
+  CLEAR_VALUE(state) {
     state.item = [];
     state.matchFilter = 0;
   },

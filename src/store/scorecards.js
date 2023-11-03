@@ -6,7 +6,7 @@ const mutations = {
   SET_SCORECARDS(state, scorecards) {
     state.scorecards = scorecards;
   },
-  CLEAR_VALUE(state, newValue) {
+  CLEAR_VALUE(state) {
     state.scorecards = [];
   },
 };

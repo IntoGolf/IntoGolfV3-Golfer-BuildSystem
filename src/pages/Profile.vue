@@ -321,6 +321,7 @@ export default {
     logout() {
       this.$http.post(`golfer/logout`).then(() => {
         localStorage.clear();
+        this.$store.dispatch("clearState");
         this.$router.push("/login");
       });
     },

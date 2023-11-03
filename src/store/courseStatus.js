@@ -6,7 +6,7 @@ const mutations = {
   SET_ITEMS(state, items) {
     state.items = items;
   },
-  CLEAR_VALUE(state, newValue) {
+  CLEAR_VALUE(state) {
     state.items = [];
   },
 };

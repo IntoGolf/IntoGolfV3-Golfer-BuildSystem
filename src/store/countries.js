@@ -6,7 +6,7 @@ const mutations = {
   SET_COUNTRIES(state, countries) {
     state.countries = countries;
   },
-  CLEAR_VALUE(state, newValue) {
+  CLEAR_VALUE(state) {
     state.countries = [];
   },
 };

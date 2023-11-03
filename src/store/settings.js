@@ -10,7 +10,7 @@ const mutations = {
   SET_PUBLIC_SETTINGS(state, item) {
     state.publicItems = item;
   },
-  CLEAR_VALUE(state, newValue) {
+  CLEAR_VALUE(state) {
     state.item = [];
     state.publicItems = [];
   },
