@@ -3,6 +3,7 @@ let parsedEnvCommon = DotEnv.config({ path: ".env" }).parsed;
 
 argsEnv = {};
 //if (process.env.ENVIRONMENT && process.env.ENVIRONMENT !== "live") {
+console.log("test");
 console.log(parsedEnvCommon);
 if (process.env.ENVIRONMENT) {
   console.log("use env file: .env." + process.env.ENVIRONMENT);

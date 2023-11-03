@@ -28,6 +28,15 @@ const store = createStore({
     async initializePublicApp({ dispatch }) {
       await dispatch("settings/fetchPublicSettings", null, { root: true });
     },
+    async clearState({ dispatch }) {
+      await dispatch("countries/clear");
+      await dispatch("courseStatus/clear");
+      await dispatch("currentUser/clear");
+      await dispatch("greenfeeCards/clear");
+      await dispatch("messages/clear");
+      await dispatch("scorecards/clear");
+      await dispatch("settings/clear");
+    },
   },
 });
 

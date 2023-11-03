@@ -13,7 +13,8 @@
       <q-select
         v-model="knownPlayer"
         :disable="guest !== '' || relation !== ''"
-        :options="knownPlayerList"
+        :options="list"
+        behavior="menu"
         class="q-mb-sm"
         clearable
         emit-value
@@ -21,7 +22,8 @@
         map-options
         option-label="flpName"
         option-value="flpName"
-        outlined
+        use-input
+        @filter="knownFilterFn"
         @update:model-value="knownPlayerList"
       />
 
@@ -31,6 +33,7 @@
         v-model="relation"
         :disable="guest !== '' || knownPlayer !== ''"
         :options="relations"
+        behavior="menu"
         class="q-mb-sm"
         clearable
         emit-value
@@ -41,7 +44,6 @@
         map-options
         option-label="full_name"
         option-value="relNr"
-        outlined
         use-input
         @filter="filterFn"
       >
@@ -87,10 +89,12 @@ export default {
   data: function () {
     return {
       knownPlayerList: [],
+      list: [],
       relations: [],
       knownPlayer: "",
       relation: "",
       guest: "",
+      filterVal: "",
     };
   },
   watch: {
@@ -109,12 +113,20 @@ export default {
     this.handleLoad();
   },
   methods: {
+    knownFilterFn(val, update, abort) {
+      update(() => {
+        const needle = val.toLowerCase();
+        this.list = this.knownPlayerList.filter(
+          (v) => v.flpName.toLowerCase().indexOf(needle) > -1
+        );
+      });
+    },
     handleLoad: function () {
       let that = this;
       this.$http
         .get("golfer/knownPlayers?fltNr=" + this.flight.fltNr)
         .then((res) => {
-          that.knownPlayerList = res;
+          that.knownPlayerList = that.list = res;
         });
     },
 

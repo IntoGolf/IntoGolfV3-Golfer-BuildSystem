@@ -6,6 +6,9 @@ const mutations = {
   SET_COUNTRIES(state, countries) {
     state.countries = countries;
   },
+  CLEAR_VALUE(state, newValue) {
+    state.countries = [];
+  },
 };
 
 const actions = {
@@ -16,6 +19,9 @@ const actions = {
     } catch (error) {
       console.error("There was an error fetching the countries!", error);
     }
+  },
+  async clear({ commit }) {
+    commit("CLEAR_VALUE");
   },
 };
 

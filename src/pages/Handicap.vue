@@ -4,10 +4,12 @@
       <div v-if="page === 1">
         <handicap-menu v-on:handleNew="handleNew" />
 
-        <handicap-list
-          :handicapList="scorecards"
-          v-on:handleOpen="handleOpen"
-        />
+        <q-pull-to-refresh @refresh="refreshScoreCards">
+          <handicap-list
+            :handicapList="scorecards"
+            v-on:handleOpen="handleOpen"
+          />
+        </q-pull-to-refresh>
       </div>
 
       <handicap-score
@@ -149,6 +151,12 @@ export default {
     ...mapActions("scorecards", ["fetchScorecards"]),
     ...mapActions("countries", ["fetchCountries"]),
     ...mapActions("settings", ["fetchSettings"]),
+    refreshScoreCards: function (done) {
+      console.log("refreshScoreCards");
+      this.fetchScorecards().then(() => {
+        done();
+      });
+    },
     async handleOpen(card) {
       let that = this;
       await this.$http

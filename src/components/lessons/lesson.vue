@@ -6,7 +6,6 @@
     <div class="col-12">
       <div class="row">
         <div class="col-6">
-          <q-img :src="'/public/image' + lesson.pro_lesson.proImage" />
           <b>{{ lesson.pro_lesson.pro_lesson_type.pltName }}</b>
         </div>
         <div class="col-6 text-right">

@@ -6,6 +6,9 @@ const mutations = {
   SET_SCORECARDS(state, scorecards) {
     state.scorecards = scorecards;
   },
+  CLEAR_VALUE(state, newValue) {
+    state.scorecards = [];
+  },
 };
 
 const actions = {
@@ -24,6 +27,9 @@ const actions = {
     } catch (error) {
       console.error("There was an error saving the scorecard!", error);
     }
+  },
+  async clear({ commit }) {
+    commit("CLEAR_VALUE");
   },
 };
 

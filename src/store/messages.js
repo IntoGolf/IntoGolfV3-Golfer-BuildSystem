@@ -6,6 +6,9 @@ const mutations = {
   SET_MESSAGES(state, items) {
     state.items = items;
   },
+  CLEAR_VALUE(state, newValue) {
+    state.items = [];
+  },
 };
 
 const actions = {
@@ -24,6 +27,9 @@ const actions = {
     } catch (error) {
       console.error("There was an error fetching the messages!", error);
     }
+  },
+  async clear({ commit }) {
+    commit("CLEAR_VALUE");
   },
 };
 

@@ -8,7 +8,6 @@
           dense
           label="Datum"
           lazy-rules
-          outlined
           type="date"
         />
       </div>
@@ -16,13 +15,13 @@
         <q-select
           v-model="pltNr"
           :options="lessonType1Array"
+          behavior="menu"
           dense
           emit-value
           label="Soort les"
           map-options
           option-label="pltName"
           option-value="pltNr"
-          outlined
         />
       </div>
     </div>
@@ -32,16 +31,13 @@
     <div class="row">
       <div class="col hide-scrollbar" style="overflow-x: scroll">
         <div :style="{ width: colWidth }" class="row q-gutter-sm">
-          <div v-for="(pro, key) in proArray" :key="key" class="col">
+          <div v-for="(pro, key) in proArray" :key="key" class="col q-mb-lg">
             <div class="row">
               <div class="col q-pt-sm text-bold text-center">
                 <b>{{ pro.full_name2 }}</b>
               </div>
             </div>
-            <div
-              class="row hide-scrollbar"
-              style="overflow-y: scroll; height: 400px"
-            >
+            <div class="row hide-scrollbar">
               <comp-lesson
                 :lessons="lessonArray"
                 :pro="pro"

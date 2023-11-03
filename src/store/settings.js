@@ -10,6 +10,10 @@ const mutations = {
   SET_PUBLIC_SETTINGS(state, item) {
     state.publicItems = item;
   },
+  CLEAR_VALUE(state, newValue) {
+    state.item = [];
+    state.publicItems = [];
+  },
 };
 
 const actions = {
@@ -28,6 +32,9 @@ const actions = {
     } catch (error) {
       console.error("There was an error fetching the settings!", error);
     }
+  },
+  async clear({ commit }) {
+    commit("CLEAR_VALUE");
   },
 };
 

@@ -10,6 +10,10 @@ const mutations = {
   SET_VALUE(state, newValue) {
     state.matchFilter = newValue;
   },
+  CLEAR_VALUE(state, newValue) {
+    state.item = [];
+    state.matchFilter = 0;
+  },
 };
 
 const actions = {
@@ -31,6 +35,9 @@ const actions = {
   },
   async updateMatchFilter({ commit }, newValue) {
     commit("SET_VALUE", newValue);
+  },
+  async clear({ commit }) {
+    commit("CLEAR_VALUE");
   },
 };
 

@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-card class="q-pa-sm">
+    <q-pull-to-refresh @refresh="refreshList">
       <div class="row q-mb-md">
         <div class="col">
           <q-input
@@ -46,74 +46,67 @@
         </div>
       </div>
 
-      <div class="row" style="height: calc(100vh - 200px); overflow-y: scroll">
-        <div class="col">
-          <q-list class="full-width" separator>
-            <q-item
-              v-for="(match, index) in filterArray"
-              v-bind:key="index"
-              v-ripple
-              class="full-width bg-white shadow-1 q-mb-sm"
-              clickable
-              v-on:click="handleOpenMatch(match)"
-            >
-              <q-item-section>
-                <q-item-label class="overflow-hidden">
-                  <i class="far fa-trophy-alt mr-2" />
+      <q-list separator>
+        <q-item
+          v-for="(match, index) in filterArray"
+          v-bind:key="index"
+          v-ripple
+          class="w-100 bg-white border rounded shadow-1 q-mb-sm"
+          clickable
+          v-on:click="handleOpenMatch(match)"
+        >
+          <q-item-section>
+            <q-item-label class="overflow-hidden">
+              <i class="far fa-trophy-alt mr-2" />
 
-                  {{
-                    $filters.capitalizeFirstLetter(match.name) +
-                    " " +
-                    match.match_type.name +
-                    " " +
-                    (match.match_type.name !== "MatchPlay"
-                      ? match.match_scoring_type.name
-                      : "")
-                  }}
-                </q-item-label>
+              {{
+                $filters.capitalizeFirstLetter(match.name) +
+                " " +
+                match.match_type.name +
+                " " +
+                (match.match_type.name !== "MatchPlay"
+                  ? match.match_scoring_type.name
+                  : "")
+              }}
+            </q-item-label>
 
-                <q-item-label caption>
-                  <div style="float: left">
-                    {{ getMatchDate(match) + " " + getMatchTime(match) }}
-                  </div>
-                  <div style="float: right">
-                    <div
-                      v-if="match.UitslagenGereed === 1"
-                      style="float: right"
-                    >
-                      Uitslagen beschikbaar
-                    </div>
-                    <div
-                      v-else-if="match.StartlijstGereed === 1"
-                      style="float: right"
-                    >
-                      Startlijst gereed
-                    </div>
-                    <div
-                      v-else-if="!getUserOnMatch(match) && getOpenForMe(match)"
-                      style="float: right"
-                    >
-                      Inschrijven
-                    </div>
-                    <div
-                      v-else-if="
-                        !getOpenForMe(match) && getOpenForSubscription(match)
-                      "
-                      style="float: right"
-                    >
-                      Open voor anderen
-                    </div>
-                    <div v-else-if="getUserOnMatch(match)" style="float: right">
-                      Ingeschreven
-                    </div>
-                  </div>
-                </q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </div>
-      </div>
-    </q-card>
+            <q-item-label caption>
+              <div style="float: left">
+                {{ getMatchDate(match) + " " + getMatchTime(match) }}
+              </div>
+              <div style="float: right">
+                <div v-if="match.UitslagenGereed === 1" style="float: right">
+                  Uitslagen beschikbaar
+                </div>
+                <div
+                  v-else-if="match.StartlijstGereed === 1"
+                  style="float: right"
+                >
+                  Startlijst gereed
+                </div>
+                <div
+                  v-else-if="!getUserOnMatch(match) && getOpenForMe(match)"
+                  style="float: right"
+                >
+                  Inschrijven
+                </div>
+                <div
+                  v-else-if="
+                    !getOpenForMe(match) && getOpenForSubscription(match)
+                  "
+                  style="float: right"
+                >
+                  Open voor anderen
+                </div>
+                <div v-else-if="getUserOnMatch(match)" style="float: right">
+                  Ingeschreven
+                </div>
+              </div>
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-pull-to-refresh>
   </q-page>
 </template>
 
@@ -148,22 +141,25 @@ export default {
     },
   },
   methods: {
+    refreshList: function (done) {
+      this.$http.get("golfer/events").then((res) => {
+        this.list = res;
+        done();
+      });
+    },
     getMatchDate(match) {
       let d = new Date(match.playingDate);
       return d.toLocaleDateString();
     },
-
     getMatchTime(match) {
       return match.startingTime.substr(0, 5);
     },
-
     getOpenForSubscription(match) {
       let compareDate = this.$dayjs();
       let startDate = this.$dayjs(match.StartDatumTGInschrijven);
       let endDate = this.$dayjs(match.subscriptionDeadline);
       return compareDate.isBetween(startDate, endDate);
     },
-
     getOpenForMe: function (match) {
       let compareDate = this.$dayjs();
       let startDate = this.$dayjs(match.StartDatumTGInschrijven);

@@ -41,14 +41,18 @@ try {
 }
 
 try {
-  const iosOutput = execSync("cordova-res ios", { encoding: "utf8" });
+  const iosOutput = execSync("cordova-res ios --skip-config", {
+    encoding: "utf8",
+  });
   console.log(`stdout: ${iosOutput}`);
 } catch (error) {
   console.error(`stderr: ${error}`);
 }
 
 try {
-  const androidOutput = execSync("cordova-res android", { encoding: "utf8" });
+  const androidOutput = execSync("cordova-res android --skip-config", {
+    encoding: "utf8",
+  });
   console.log(`stdout: ${androidOutput}`);
 } catch (error) {
   console.error(`stderr: ${error}`);
