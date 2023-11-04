@@ -6,7 +6,12 @@ importScripts(
 
 // Initialize the Firebase app in the service worker by passing the messagingSenderId.
 firebase.initializeApp({
+  apiKey: "AIzaSyDOwcKOkup7E6qx5SXEXYqkyjRK7vo9bAk",
+  authDomain: "golferapp-eda52.firebaseapp.com",
+  projectId: "golferapp-eda52",
+  storageBucket: "golferapp-eda52.appspot.com",
   messagingSenderId: "572456838586",
+  appId: "1:572456838586:web:8fca0a21d61116a66da983",
 });
 
 // Retrieve an instance of Firebase Messaging so that it can handle background messages.
