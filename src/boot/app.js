@@ -45,6 +45,8 @@ export default boot(({ app }) => {
     messaging
       .getToken()
       .then((token) => {
+        console.log("token");
+        console.log(token);
         if (token) {
           // Handle the obtained FCM registration token
           localStorage.setItem("fcm_token", token);
