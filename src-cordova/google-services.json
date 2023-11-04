@@ -1,0 +1,84 @@
+{
+  "project_info": {
+    "project_number": "572456838586",
+    "project_id": "golferapp-eda52",
+    "storage_bucket": "golferapp-eda52.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572456838586:android:a3955e651e426b936da983",
+        "android_client_info": {
+          "package_name": "nl.intogolf.development"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "572456838586-sfefv3oq4h1bi9h4pv40hp7b8spevo5d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxWQ5PC49TbkEojhxQCDPGccaNqYP1YaU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "572456838586-sfefv3oq4h1bi9h4pv40hp7b8spevo5d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "572456838586-dkorgpcl4q858nip80u37o87cmmvr8d3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "nl.igolfer.app",
+                "app_store_id": "1579639869"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572456838586:android:187f497fe04940f46da983",
+        "android_client_info": {
+          "package_name": "nl.intogolf.v3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "572456838586-sfefv3oq4h1bi9h4pv40hp7b8spevo5d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxWQ5PC49TbkEojhxQCDPGccaNqYP1YaU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "572456838586-sfefv3oq4h1bi9h4pv40hp7b8spevo5d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "572456838586-dkorgpcl4q858nip80u37o87cmmvr8d3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "nl.igolfer.app",
+                "app_store_id": "1579639869"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
