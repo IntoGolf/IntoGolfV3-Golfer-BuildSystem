@@ -73,20 +73,9 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
-      proxy: {
-        // proxy all requests starting with /api to jsonplaceholder
-        "/api": {
-          target: "http://intogolf.test",
-          changeOrigin: true,
-          pathRewrite: {
-            "^/api": "",
-          },
-        },
+      server: {
+        type: "https",
       },
-      // server: {
-      //   type: "http",
-      // },
-      port: 8082,
       open: true, // opens browser window automatically
     },
 

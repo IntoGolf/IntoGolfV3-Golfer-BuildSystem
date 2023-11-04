@@ -172,9 +172,9 @@ export default {
         });
     },
     handleSave: function (scorecard, open) {
+      console.log(scorecard);
       let that = this;
       this.$http.post("golfer/scorecard", scorecard).then((res) => {
-        console.log(res);
         that.scorecard = res.response.scorecard;
         that.scorecard.handicap = res.response.handicap_index;
         that.scorecard.type = 1;

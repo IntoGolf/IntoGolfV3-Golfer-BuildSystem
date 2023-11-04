@@ -8,14 +8,14 @@
         </div>
 
         <q-tabs v-model="tab" class="text-teal">
-          <q-tab class="pl-0" label="Naam" name="Name" />
-          <q-tab class="pl-0" label="Contact" name="Contact" />
-          <q-tab class="pl-0" label="Golf" name="Golf" />
-          <q-tab class="pl-0" label="Voorkeuren" name="Voorkeuren" />
+          <q-tab class="pl-0" label="Naam" name="adres" />
+          <q-tab class="pl-0" label="Contact" name="contact" />
+          <q-tab class="pl-0" label="Golf" name="golf" />
+          <q-tab class="pl-0" label="Voorkeuren" name="preference" />
         </q-tabs>
 
-        <q-tab-panels v-model="tab" class="p-0">
-          <q-tab-panel class="q-pa-none q-ma-none" name="Name">
+        <q-tab-panels v-model="tab">
+          <q-tab-panel class="q-pa-none" name="adres">
             <q-input
               v-model="form.relFirstName"
               :disable="!canChange"
@@ -81,8 +81,7 @@
               lazy-rules
             />
           </q-tab-panel>
-
-          <q-tab-panel class="q-pa-none q-ma-none" name="Contact">
+          <q-tab-panel class="q-pa-none" name="contact">
             <q-input
               v-model="form.relPhone"
               :disable="!canChange"
@@ -104,8 +103,7 @@
               lazy-rules
             />
           </q-tab-panel>
-
-          <q-tab-panel class="p-0" name="Golf">
+          <q-tab-panel class="q-pa-none" name="golf">
             <q-input
               v-model="form.relGsn"
               :label="$t('Golfservicenummer')"
@@ -120,11 +118,11 @@
               readonly
             />
           </q-tab-panel>
-
-          <q-tab-panel class="p-0" name="Voorkeuren">
+          <q-tab-panel class="q-pa-none" name="preference">
             <q-select
               v-model="relVisibilityLevel"
               :options="visibilityArray"
+              behavior="menu"
               emit-value
               label="Zichtbaarheid in ledenboekje"
               map-options

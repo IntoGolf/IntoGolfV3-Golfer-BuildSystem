@@ -1,5 +1,5 @@
 <template>
-  <q-page-container class="page-bgr">
+  <q-page-container className="page-bgr">
     <q-page>
       <messages />
       <bookings />
@@ -15,10 +15,6 @@ import lessons from "../components/dashboard/lessons.vue";
 
 export default {
   components: { messages, bookings, lessons },
-  mounted() {
-    this.$http.get(`golfer/greenfee_card`).then((res) => {
-      localStorage.setItem("golfer__greenfee_cards", JSON.stringify(res));
-    });
-  },
+  mounted() {},
 };
 </script>

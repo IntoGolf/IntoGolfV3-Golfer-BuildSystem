@@ -259,7 +259,7 @@ export default {
 
       date: this.$dayjs(this.scorecard.datetime).format("YYYY-MM-DD"),
       time: this.$dayjs(this.scorecard.datetime)
-        .add(-240, "minute")
+        .add(-260, "minute")
         .format("HH:mm"),
 
       local_scorecard: this.scorecard,
@@ -282,6 +282,12 @@ export default {
         (location) => location.ngfNumber === this.scorecard.club
       );
     });
+  },
+  mounted() {
+    this.local_scorecard.datetime = this.$dayjs(this.scorecard.datetime).add(
+      -260,
+      "minute"
+    );
   },
   watch: {
     date: function (newValue) {

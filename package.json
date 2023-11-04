@@ -42,6 +42,7 @@
     "core-js": "^3.22.2",
     "cross-env": "^7.0.3",
     "dayjs": "^1.11.1",
+    "firebase": "^8.10.1",
     "lodash": "^4.17.21",
     "macos-release": "^3.0.1",
     "next-vue-storage-watcher": "^0.0.7",
@@ -69,6 +70,7 @@
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-vue": "^7.0.0",
     "eslint-webpack-plugin": "^2.4.0",
+    "http-proxy-middleware": "^2.0.6",
     "prettier": "^2.6.2"
   },
   "browserslist": [
