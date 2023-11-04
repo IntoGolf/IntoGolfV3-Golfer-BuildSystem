@@ -53,6 +53,7 @@ export default boot(({ app }) => {
       .catch((error) => {
         console.error("Error requesting notification permission:", error);
       });
+    console.log("d");
 
     // Listen for incoming messages
     messaging.onMessage((payload) => {
@@ -60,6 +61,7 @@ export default boot(({ app }) => {
       console.log("FCM Message Received:", payload);
       // You can display the message or trigger custom actions here
     });
+    console.log("e");
   } else {
     console.log("Push messaging is not supported in this browser.");
   }
