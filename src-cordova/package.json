@@ -17,8 +17,8 @@
     "macos-release": "^3.0.1"
   },
   "devDependencies": {
-    "@havesource/cordova-plugin-push": "^4.0.0",
     "cordova-android": "^12.0.1",
+    "cordova-ios": "^7.0.1",
     "cordova-plugin-camera": "^6.0.0",
     "cordova-plugin-file": "^7.0.0",
     "cordova-plugin-ionic-webview": "^5.0.0",
@@ -33,11 +33,7 @@
       "cordova-plugin-itsappusesnonexemptencryption": {},
       "cordova-plugin-camera": {},
       "cordova-plugin-file": {},
-      "cordova-plugin-splashscreen": {},
-      "@havesource/cordova-plugin-push": {
-        "ANDROIDX_CORE_VERSION": "1.6.+",
-        "FCM_VERSION": "23.+"
-      }
+      "cordova-plugin-splashscreen": {}
     },
     "platforms": [
       "android"

@@ -1,6 +1,6 @@
 <template>
   <q-page-container className="page-bgr">
-    <q-page>
+    <q-page class="q-pa-sm">
       <messages />
       <bookings />
       <lessons v-if="1 == 2" />

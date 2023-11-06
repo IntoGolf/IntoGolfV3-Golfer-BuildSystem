@@ -1,44 +1,32 @@
 <template>
-  <q-card
-    v-for="(booking, key) in bookingsArray"
-    :key="key"
-    class="dashboard-card q-mb-md"
-  >
-    <q-card-section class="bg-blue-3 dashboard-card-title">
-      Starttijd
-    </q-card-section>
-    <q-card-section class="q-pa-sm">
-      <div class="row q-pa-sm" style="background-color: #f2f2f2">
-        <div class="col-4 text-bold">Datum:</div>
-        <div class="col-8">
-          {{ $filters.unixToDate(booking.fltDate, "dddd DD MMMM") }}
-        </div>
-      </div>
-      <div class="row q-pa-sm">
-        <div class="col-4 text-bold">Tijd:</div>
-        <div class="col-8">
-          {{ $filters.minuteToTime(booking.fltTime1) }}
-        </div>
-      </div>
-      <div class="row q-pa-sm" style="background-color: #f2f2f2">
-        <div class="col-4 text-bold">Loop out:</div>
-        <div class="col-8">{{ booking.loop1.crlName }}</div>
-      </div>
-      <div v-if="booking.loop2 !== null" class="row q-pa-sm">
-        <div class="col-6 text-bold">Loop in:</div>
-        <div class="col-6">{{ booking.loop2.crlName }}</div>
-      </div>
-      <div
-        v-for="(player, key) in booking.flight_players"
-        :key="key"
-        :style="{ backgroundColor: key % 2 !== 0 ? '#f2f2f2' : '' }"
-        class="row q-pa-sm"
-      >
-        <div class="col-4 text-bold">Speler {{ key + 1 }}:</div>
-        <div class="col-8">{{ player.flpName ? player.flpName : "?" }}</div>
-      </div>
-    </q-card-section>
-  </q-card>
+  <q-list v-if="bookingsArray.length > 0" separator>
+    <q-item
+      v-for="(item, index) in bookingsArray"
+      v-bind:key="index"
+      v-ripple
+      class="full-width bg-white shadow-1 q-mb-sm"
+      clickable
+      style="border-radius: 4px"
+      v-on:click="handleOpenFlight(item)"
+    >
+      <q-item-section>
+        <q-item-label class="itg-text-overflow">
+          <i class="far fa-calendar-alt mr-2" />
+          <b>Starttijd:</b>
+          {{ $filters.unixToDate(item.fltDate, "ddd D MMM") }}
+          {{}} -
+                    {{ $filters.minuteToTime(item.fltTime1) }}
+        </q-item-label>
+
+        <q-item-label caption>
+          <i class="far fa-golf-club mr-2" />
+          {{ item.fltSize }} spelers. Start van:
+          {{ item.loop1.crlName }}
+        </q-item-label>
+      </q-item-section>
+      <q-item-section avatar> ></q-item-section>
+    </q-item>
+  </q-list>
 </template>
 
 <script>
@@ -52,6 +40,9 @@ export default {
     this.$http.get("golfer/bookings").then((res) => {
       this.bookingsArray = res;
     });
+  },
+  methods: {
+    handleOpenFlight() {},
   },
 };
 </script>

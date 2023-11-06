@@ -1,22 +1,24 @@
 <template>
-  <q-card
-    v-for="(message, key) in unreadMessages"
-    :key="key"
-    class="dashboard-card q-mb-md"
-  >
-    <q-card-section class="bg-blue-grey-3 dashboard-card-title">
-      <div class="row items-center no-wrap">
-        <div class="col">
-          {{ $t("message") }}
-        </div>
-        <div class="col-auto">
-          <q-icon name="close" />
-        </div>
-      </div>
-    </q-card-section>
-    <q-separator />
-    <q-card-section class="q-pa-sm" v-html="message.msgText" />
-  </q-card>
+  <q-list v-if="this.$store.state.messages.items.length > 0" separator>
+    <q-item
+      v-for="(item, index) in this.$store.state.messages.items"
+      v-bind:key="index"
+      v-ripple
+      class="full-width bg-white shadow-1 q-mb-sm"
+      clickable
+      style="border-radius: 4px"
+    >
+      <q-item-section>
+        <q-item-label>
+          <b>Bericht: {{ item.msgTitle }}</b>
+        </q-item-label>
+        <q-item-label v-html="item.msgText" />
+      </q-item-section>
+      <q-item-section avatar side top
+        ><i class="icon text-danger far fa-times mr-2"></i
+      ></q-item-section>
+    </q-item>
+  </q-list>
 </template>
 
 <script>
