@@ -57,15 +57,26 @@ export default {
     this.loadReservationList();
   },
   methods: {
-    loadReservationList() {
+    async loadReservationList() {
       this.loading = true;
-      this.$http.get("golfer/bookings").then((res) => {
+      await this.$http.get("golfer/bookings").then((res) => {
         this.loading = false;
         this.array = res;
-        this.page = this.LIST;
+
+        if (this.$store.state.settings.fltNr > 0) {
+          let flight = this.array.find(
+            (item) => item.fltNr === this.$store.state.settings.fltNr
+          );
+          if (flight !== undefined) {
+            this.handleOpenFlight(flight);
+          }
+        } else {
+          this.page = this.LIST;
+        }
       });
     },
     handleOpenFlight: function (flight) {
+      this.$store.commit("settings/CLEAR_FLIGHT");
       this.back_icon = "fa-arrow-left";
       this.back_link = "/reservations";
       this.title = "Reservering";

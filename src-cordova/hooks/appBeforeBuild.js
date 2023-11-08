@@ -21,6 +21,9 @@ const sourcePathSplash = path.join(
   "../../res/" + vue_app_name + "/splash.png"
 );
 const destinationPathSplash = path.join(__dirname, "../resources/splash.png");
+console.log(sourcePathSplash);
+console.log(destinationPathSplash);
+
 try {
   fs.copyFileSync(sourcePathSplash, destinationPathSplash);
   console.log("File was successfully copied");
@@ -33,6 +36,8 @@ const sourcePathIcon = path.join(
   "../../res/" + vue_app_name + "/icon.png"
 );
 const destinationPathIcon = path.join(__dirname, "../resources/icon.png");
+console.log(sourcePathIcon);
+console.log(destinationPathIcon);
 try {
   fs.copyFileSync(sourcePathIcon, destinationPathIcon);
   console.log("File was successfully copied");

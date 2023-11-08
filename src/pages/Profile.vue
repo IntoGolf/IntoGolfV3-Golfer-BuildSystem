@@ -198,8 +198,7 @@ export default {
           value: "EN(+44)",
         },
       ],
-      tab: "Name",
-      activeName: "first",
+      tab: "adres",
       uploading: "",
       form: {
         relFirstName: "",

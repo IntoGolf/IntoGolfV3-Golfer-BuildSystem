@@ -42,7 +42,10 @@ export default {
     });
   },
   methods: {
-    handleOpenFlight() {},
+    handleOpenFlight(item) {
+      this.$store.commit("settings/SET_FLIGHT", item.fltNr);
+      this.$router.push("/reservations");
+    },
   },
 };
 </script>

@@ -1,11 +1,18 @@
 const state = {
   item: [],
   publicItems: [],
+  fltNr: null,
 };
 
 const mutations = {
   SET_SETTINGS(state, item) {
     state.item = item;
+  },
+  SET_FLIGHT(state, fltNr) {
+    state.fltNr = fltNr;
+  },
+  CLEAR_FLIGHT(state, fltNr) {
+    state.fltNr = null;
   },
   SET_PUBLIC_SETTINGS(state, item) {
     state.publicItems = item;
