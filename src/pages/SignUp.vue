@@ -70,7 +70,7 @@
                 </div>
               </div>
               <div class="row q-mb-sm">
-                <div class="col">
+                <div class="col-8">
                   <q-input
                     v-model="account_form.relName"
                     :rules="[(val) => !!val || 'Achternaam is een verplicht']"
@@ -78,6 +78,18 @@
                     dense
                     label="Achternaam*"
                     maxlength="40"
+                    stack-label
+                  />
+                </div>
+                <div class="col-4">
+                  <q-select
+                    v-model="account_form.relGender"
+                    :options="[
+                      { value: 1, label: 'Man' },
+                      { value: 2, label: 'Vrouw' },
+                    ]"
+                    dense
+                    label="Geslacht*"
                     stack-label
                   />
                 </div>
@@ -392,6 +404,7 @@ export default {
         phone_empPreferLang: "",
         relPhoneMobile: "",
         relGsn: "",
+        relGender: { value: 1, label: "Man" },
         relHandicap: "",
         repPassword: "",
         confirmRepPassword: "",
