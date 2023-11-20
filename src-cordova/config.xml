@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="nl.intogolf.engelenburg" version="0.1.44" xmlns="http://www.w3.org/ns/widgets">
+<widget id="nl.intogolf.development" version="0.1" xmlns="http://www.w3.org/ns/widgets">
     <hook src="hooks/appBeforeBuild.js" type="before_build"/>
     <name>Golfer</name>
     <description>IntoGolf Golfer app</description>
