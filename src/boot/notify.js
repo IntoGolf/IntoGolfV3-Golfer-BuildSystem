@@ -18,12 +18,17 @@ export default async ({ Vue }) => {
 
     push.on("registration", (data) => {
       console.log("Registration token:", data.registrationId);
-      console.log(data);
+      console.log(JSON.stringify(data));
     });
 
+    // Notification received when app is in foreground
     push.on("notification", (data) => {
       console.log("push_notification");
-      alert(data.title);
+      cordova.plugins.notification.local.schedule({
+        title: data.title,
+        text: data.message,
+        foreground: true,
+      });
     });
 
     push.on("error", (e) => {
