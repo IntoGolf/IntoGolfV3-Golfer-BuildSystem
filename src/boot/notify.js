@@ -36,6 +36,10 @@ export default async ({ Vue }) => {
       console.log(e);
     });
 
+    cordova.plugins.notification.local.on("click", function (notification) {
+      console.log("notification clicked");
+      console.log(notification);
+    });
     // Make `push` available in all components
     // Vue.prototype.$push = push;
   }
