@@ -1,6 +1,22 @@
-export default async ({ Vue }) => {
+export default async ({
+  app
+}) => {
   console.log("deviceready");
   document.addEventListener("deviceready", onDeviceReady, false);
+
+  var isActive = true;
+
+  // Listen for the event of the application switching from the background to the foreground.
+  document.addEventListener("resume", () => {
+    console.log("App is in the foreground");
+    isActive = true;
+  });
+
+  // Listen for the event of switching from the foreground to the background in the application.
+  document.addEventListener("pause", () => {
+    console.log("App is in the background");
+    isActive = false;
+  });
 
   function onDeviceReady() {
     console.log("device is ready");
@@ -24,6 +40,11 @@ export default async ({ Vue }) => {
     // Notification received when app is in foreground
     push.on("notification", (data) => {
       console.log("push_notification");
+      // TODO: need to judge whether the app is in foreground
+      if (!isActive) {
+        console.log("app is not active");
+        return;
+      }
       cordova.plugins.notification.local.schedule({
         title: data.title,
         text: data.message,
