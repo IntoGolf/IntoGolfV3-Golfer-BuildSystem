@@ -69,16 +69,16 @@
         wordt u uitgeschreven.
       </q-banner>
 
-      <q-select
-        v-if="match.ideal == 1 && match.fee > 0 && mySubscription === null"
-        v-model="player.bank"
-        :options="match.iDealIssuers"
-        class="q-mb-md"
-        hint="Selecteer uw bank"
-        label="Uw bank"
-        option-label="name"
-        option-value="id"
-      />
+      <!--      <q-select-->
+      <!--        v-if="match.ideal == 1 && match.fee > 0 && mySubscription === null"-->
+      <!--        v-model="player.bank"-->
+      <!--        :options="match.iDealIssuers"-->
+      <!--        class="q-mb-md"-->
+      <!--        hint="Selecteer uw bank"-->
+      <!--        label="Uw bank"-->
+      <!--        option-label="name"-->
+      <!--        option-value="id"-->
+      <!--      />-->
 
       <q-btn-group class="mt-4" spread>
         <q-btn
@@ -91,7 +91,6 @@
         />
         <q-btn
           v-if="match.ideal === 1 && match.fee > 0 && mySubscription === null"
-          :disable="player.bank === ''"
           color="primary"
           label="Betaal"
           @click="handleSubscribe"
@@ -103,11 +102,7 @@
           label="Uitschrijven"
           @click="handleUnSubscribe"
         />
-        <q-btn
-          color="primary"
-          label="Sluiten"
-          @click="handleCloseSubscribe"
-        />
+        <q-btn color="primary" label="Sluiten" @click="handleCloseSubscribe" />
       </q-btn-group>
     </div>
 

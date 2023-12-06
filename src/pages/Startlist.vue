@@ -137,6 +137,8 @@ export default {
       if (this.list.length === 0) {
         return "";
       }
+      return this.list.length + " uit " + this.list[0].maximumNumberOfPlayers;
+
       return this.list[0].maximumNumberOfPlayers;
     },
     longest: function () {
