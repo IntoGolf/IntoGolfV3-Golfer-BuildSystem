@@ -55,17 +55,10 @@
           padding-top: 10px;
           padding-bottom: 5px;
         "
-      >
-        <!--        <q-img-->
-        <!--          src="/logoInternational.png"-->
-        <!--          style="margin-left: auto; margin-right: auto"-->
-        <!--          width="60%"-->
-        <!--        />-->
-      </div>
+      ></div>
       <q-list style="min-width: 250px">
         <q-item
-          v-for="(item, key) in menuArray"
-          v-show="item.visible"
+          v-for="(item, key) in menuVisibleArray"
           :key="key"
           v-ripple
           clickable
@@ -103,14 +96,21 @@ export default defineComponent({
     headerColor() {
       return this.settings.app_primary_color;
     },
+    menuVisibleArray() {
+      return this.menuArray.filter((item) => item.visible);
+    },
   },
   mounted() {
-    console.log(this.currentUser.tile_lessons_y_n);
     this.drawer = false;
     this.menuArray = [
       {
         name: "Dashboard",
         icon: "home",
+        visible: true,
+      },
+      {
+        name: "Baankalender",
+        icon: "schedule",
         visible: true,
       },
       {
@@ -134,11 +134,9 @@ export default defineComponent({
         visible: this.settings.app_display_message_tile === 1,
       },
       {
-        name: "course",
+        name: "Baanstatus",
         icon: "grass",
-        visible:
-          this.currentUser.tile_teetimes_y_n &&
-          this.settings.app_display_course_status_tile === 1,
+        visible: this.settings.app_display_course_status_tile === 1,
       },
       {
         name: "handicap",

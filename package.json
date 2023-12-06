@@ -51,7 +51,7 @@
     "macos-release": "^3.0.1",
     "mkcert": "^3.1.0",
     "next-vue-storage-watcher": "^0.0.7",
-    "quasar": "^2.6.6",
+    "quasar": "2.11.4",
     "three": "^0.152.2",
     "vue": "^3.2.33",
     "vue-chartjs": "^5.0.1",

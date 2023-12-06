@@ -33,9 +33,7 @@ export default {
     handicapList: Array,
   },
   watch: {
-    handicapList: function () {
-      console.log(this.handicapList);
-    },
+    handicapList: function () {},
   },
   methods: {
     handleOpen: function (card) {

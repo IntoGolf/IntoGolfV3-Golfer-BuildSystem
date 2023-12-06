@@ -82,16 +82,27 @@
       wordt u uitgeschreven.
     </q-banner>
 
+    <!--    <q-select-->
+    <!--      v-if="match.ideal == 1 && match.fee > 0 && aSubscription === null"-->
+    <!--      v-model="player.bank"-->
+    <!--      :options="match.iDealIssuers"-->
+    <!--      class="q-mb-md"-->
+    <!--      hint="Selecteer uw bank"-->
+    <!--      label="Uw bank"-->
+    <!--      option-label="name"-->
+    <!--      option-value="id"-->
+    <!--    />-->
+
     <q-btn-group class="q-mt-md" spread>
       <q-btn
-        v-if="!(match.ideal && match.fee > 0) || mySubscription !== null"
+        v-if="!match.ideal"
         :disabled="player.details.id === null && relation === null"
         color="primary"
         label="Opslaan"
         @click="handleSubscribe"
       />
       <q-btn
-        v-if="match.ideal && match.fee > 0 && mySubscription === null"
+        v-if="match.ideal && match.fee > 0"
         :disabled="player.details.id === null && relation === null"
         color="primary"
         label="Betaal"
@@ -272,7 +283,7 @@ export default {
 
       let that = this;
       await this.$http
-        .get(`golfer/relation/${this.match.id}/search/${val}/fltNr/0`)
+        .get(`golfer/relation?search=${val}&id=${this.match.id}`)
         .then((response) => {
           update(() => {
             that.relations = response;

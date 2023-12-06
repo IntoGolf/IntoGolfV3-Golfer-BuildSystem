@@ -162,7 +162,6 @@ export default {
         .get("golfer/relation?search=" + this.searchValue)
         .then((res) => {
           that.list = res;
-          console.log(that.list);
           that.loading = false;
         });
     },

@@ -34,20 +34,9 @@
 <script>
 export default {
   data() {
-    return {
-      bookingsArray: [],
-    };
+    return {};
   },
-  mounted() {
-    this.$http.get("golfer/bookings").then((res) => {
-      this.bookingsArray = res;
-    });
-  },
-  methods: {
-    handleOpenFlight(item) {
-      this.$store.commit("settings/SET_FLIGHT", item.fltNr);
-      this.$router.push("/reservations");
-    },
-  },
+  mounted() {},
+  methods: {},
 };
 </script>

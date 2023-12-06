@@ -97,6 +97,16 @@
         </div>
       </div>
 
+      <div v-show="1 === 1" class="row q-pl-md q-pr-md q-pb-sm q-gutter-sm">
+        <div
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/Baankalender')"
+        >
+          <span class="title"
+            ><i class="far fa-calendar-star"></i>Baankalender</span
+          >
+        </div>
+      </div>
       <div class="row q-pl-md q-pr-md q-gutter-sm">
         <div
           v-show="$store.state.currentUser.item.tile_teetimes_y_n"
@@ -130,14 +140,11 @@
         </div>
 
         <div
-          v-if="
-            $store.state.currentUser.item.tile_teetimes_y_n &&
-            $store.state.settings.item.app_display_course_status_tile === 1
-          "
+          v-if="$store.state.settings.item.app_display_course_status_tile === 1"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
-          @click="$router.push('/course')"
+          @click="$router.push('/Baanstatus')"
         >
-          <span class="title"><i class="far fa-golf-ball"></i>Baan</span>
+          <span class="title"><i class="far fa-golf-ball"></i>Baanstatus</span>
         </div>
       </div>
 

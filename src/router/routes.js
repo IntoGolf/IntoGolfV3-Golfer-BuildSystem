@@ -82,13 +82,13 @@ const routes = [
     },
   },
   {
-    path: "/course",
-    name: "Course",
+    path: "/Baanstatus",
+    name: "Baanstatus",
     component: () => import("layouts/PageLayout.vue"),
     children: [{ path: "", component: () => import("pages/Course.vue") }],
     meta: {
       requiresAuth: true,
-      title: "Baan",
+      title: "Baanstatus",
     },
   },
   {
@@ -211,6 +211,16 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: "Ledenlijst",
+    },
+  },
+  {
+    path: "/Baankalender",
+    name: "Baankalender",
+    component: () => import("layouts/PageLayout.vue"),
+    children: [{ path: "", component: () => import("pages/Calendar.vue") }],
+    meta: {
+      requiresAuth: true,
+      title: "Baankalender",
     },
   },
   {
