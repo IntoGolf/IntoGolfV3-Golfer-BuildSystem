@@ -152,7 +152,6 @@ export default {
     ...mapActions("countries", ["fetchCountries"]),
     ...mapActions("settings", ["fetchSettings"]),
     refreshScoreCards: function (done) {
-      console.log("refreshScoreCards");
       this.fetchScorecards().then(() => {
         done();
       });
