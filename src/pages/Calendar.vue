@@ -136,6 +136,7 @@ export default {
   },
   methods: {
     async loadCalendar() {
+      this.data = [];
       this.data = await this.$http.get("calendar?date=" + this.date);
     },
     hourRowClass(hour) {
@@ -148,8 +149,6 @@ export default {
       return this.$filters.minuteToTime((this.startHour + hour) * 60);
     },
     closePopup() {
-      console.log("test");
-      console.log(this.$refs.myPopup);
       this.$refs.myPopup.hide(); // Assuming 'myPopup' is the ref for q-popup-proxy
     },
   },

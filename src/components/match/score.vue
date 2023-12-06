@@ -2,14 +2,24 @@
   <div class="p-0 m-0">
     <q-list bordered separator>
       <q-item class="itg-q-item">
-        <q-item-section class="col-2 text-left text-bold"> Hole</q-item-section>
+        <q-item-section class="col-1 text-left text-bold"> H</q-item-section>
         <q-item-section class="col-2 text-left text-bold"> Par</q-item-section>
-        <q-item-section class="col-6 text-center text-bold">
-          Slagen
+        <q-item-section
+          :class="match.scoringTypeId === 3 ? 'col-5' : 'col-6'"
+          class="text-center text-bold"
+        >
+          Sl
         </q-item-section>
-        <q-item-section class="col-2 text-center text-bold">
+        <q-item-section
+          :class="match.scoringTypeId === 3 ? 'col-1' : 'col-2'"
+          class="text-center text-bold"
+        >
           Pnt
         </q-item-section>
+        <q-item-section
+          v-if="match.scoringTypeId === 3"
+          class="col-2 text-right text-bold"
+        />
       </q-item>
 
       <q-item
@@ -18,18 +28,21 @@
         :key="index"
         class="itg-q-item"
       >
-        <q-item-section class="col-2 text-left text-bold">
+        <q-item-section class="col-1 text-left text-bold">
           {{ hole.nr }}
         </q-item-section>
         <q-item-section class="col-2 text-left">
-          {{ hole.par }}
+          {{ hole.par }}+{{ hole.hsl }}
         </q-item-section>
-        <q-item-section class="col-6 text-center">
+        <q-item-section
+          :class="match.scoringTypeId === 3 ? 'col-5' : 'col-6'"
+          class="text-center"
+        >
           <div class="row">
             <div class="col-4" style="padding: 0px; text-align: left">
               <q-btn
                 color="primary"
-                label="-"
+                icon="expand_more"
                 outline
                 round
                 @click="onScoreChangeHandler(hole, -1)"
@@ -40,7 +53,7 @@
               class="text-center col-4"
               style="padding-top: 10px; font-weight: bold"
             >
-              <q-item-label>{{ hole.sl }}</q-item-label>
+              <q-item-label>{{ hole.sl === 21 ? "-" : hole.sl }}</q-item-label>
             </div>
 
             <div
@@ -54,7 +67,7 @@
             >
               <q-btn
                 color="primary"
-                label="+"
+                icon="expand_less"
                 outline
                 round
                 @click="onScoreChangeHandler(hole, 1)"
@@ -62,8 +75,28 @@
             </div>
           </div>
         </q-item-section>
-        <q-item-section class="col-2 text-center">
-          {{ hole.stab }}
+        <q-item-section
+          :class="match.scoringTypeId === 3 ? 'col-1' : 'col-2'"
+          class="text-center"
+        >
+          {{ hole.pnt }}
+        </q-item-section>
+        <q-item-section
+          v-if="match.scoringTypeId === 3"
+          class="col-2 text-right"
+        >
+          <div class="row">
+            <div class="col-12 text-right">
+              <q-btn
+                color="primary"
+                label="-"
+                outline
+                round
+                style="width: 20px; float: right"
+                @click="onScoreChangeHandler(hole, 21)"
+              />
+            </div>
+          </div>
         </q-item-section>
       </q-item>
 
@@ -75,7 +108,7 @@
           <q-item-label
             class="itg-text-overflow text-center"
             style="font-size: 1.2em"
-            >{{ total_stableford }}
+            >{{ total }}
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -95,7 +128,10 @@
 
 <script>
 export default {
-  props: ["player"],
+  props: {
+    player: Object,
+    match: Object,
+  },
   data() {
     return {
       holesArray: [],
@@ -103,12 +139,12 @@ export default {
     };
   },
   computed: {
-    total_stableford: function () {
-      let total_stableford = 0;
+    total: function () {
+      let total = 0;
       this.holesArray.forEach(function (hole) {
-        total_stableford += hole.stab;
+        total += hole.pnt;
       });
-      return total_stableford;
+      return total;
     },
   },
   created: function () {
@@ -155,7 +191,7 @@ export default {
           pPar:
             this.local_player.match_score["hcsH" + i + "_par"] +
             this.local_player.match_score["hcsH" + i + "_HcpSl"],
-          stab: this.calcStab(
+          pnt: this.calcPoints(
             this.local_player.match_score["hcsH" + i + "_par"],
             this.local_player.match_score["hcsH" + i + "_HcpSl"],
             sl
@@ -164,15 +200,36 @@ export default {
       }
     },
 
-    calcStab: function (par, hsl, sl) {
-      let stab = par + hsl + 2 - sl;
-      return stab < 0 ? 0 : stab;
+    calcPoints: function (par, hsl, sl) {
+      if (this.match.scoringTypeId === 1) {
+        let stab = par + hsl + 2 - sl;
+        return stab < 0 ? 0 : stab;
+      } else if (this.match.scoringTypeId === 2) {
+        return sl - hsl;
+      } else if (this.match.scoringTypeId === 3) {
+        let hlp = par + hsl;
+        if (hlp > sl) {
+          return 1;
+        } else if (hlp === sl) {
+          return 0;
+        } else {
+          return -1;
+        }
+      }
     },
 
     onScoreChangeHandler: function (hole, value) {
-      hole.sl += value;
-      hole.sl = hole.sl === 0 ? 1 : hole.sl;
-      hole.stab = this.calcStab(hole.par, hole.hsl, hole.sl);
+      if (value === 21) {
+        hole.sl = value;
+      } else if (hole.sl === 21) {
+        if (value === -1) {
+          hole.sl = hole.par + hole.hsl;
+        }
+      } else {
+        hole.sl += value;
+        hole.sl = hole.sl === 0 ? 1 : hole.sl;
+      }
+      hole.pnt = this.calcPoints(hole.par, hole.hsl, hole.sl);
     },
   },
 };

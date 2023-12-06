@@ -61,6 +61,7 @@
 
           <score
             v-if="page === 5"
+            v-bind:match="prop_match"
             v-bind:player="player"
             v-on:handleClose="handleClose"
           />

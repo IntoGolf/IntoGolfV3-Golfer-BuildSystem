@@ -19,7 +19,9 @@ export default {
   computed: {
     text() {
       let time = this.$filters.minuteToTime(this.start.sttTimeFrom) + " ";
-      if (this.start.sttDescr.length > 0) {
+      if (this.start.sttDescr === null) {
+        return "";
+      } else if (this.start.sttDescr.length > 0) {
         return time + this.start.sttDescr;
       } else if (this.start.sttPlayerName1 !== undefined) {
         return time + this.start.sttPlayerName1;
@@ -38,6 +40,9 @@ export default {
         fontColor = this.start.sttGrpFontColor1;
       } else if (this.start.sttRefType > 1) {
         color = "blue";
+      } else if (this.start.sttRefType < 0) {
+        fontColor = "black";
+        color = "lightblue";
       }
       return {
         backgroundColor: color,
