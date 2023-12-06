@@ -2,26 +2,9 @@
   <div
     style="width: 100%; margin-left: auto; margin-right: auto; margin-top: 80px"
   >
-    <div class="row">
+    <div class="row q-mb-sm">
       <div class="col">
-        <q-input v-model="date" :rules="['date']" filled mask="date">
-          <template v-slot:append>
-            <q-icon class="cursor-pointer" name="event">
-              <q-popup-proxy
-                ref="myPopup"
-                cover
-                transition-hide="scale"
-                transition-show="scale"
-              >
-                <q-date v-model="date" @update:model-value="closePopup">
-                  <div class="row items-center justify-end">
-                    <q-btn v-close-popup color="primary" flat label="Close" />
-                  </div>
-                </q-date>
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
+        <q-input v-model="date" filled type="date" />
       </div>
     </div>
     <div class="row calendar-row">
