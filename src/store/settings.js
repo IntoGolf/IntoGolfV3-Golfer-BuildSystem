@@ -72,6 +72,7 @@ const getters = {
     );
   },
   setHasCalendar: (state) => {
+    console.log(state.item);
     return (
       state.item &&
       typeof state.item === "object" &&
