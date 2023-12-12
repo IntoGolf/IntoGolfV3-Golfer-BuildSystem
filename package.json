@@ -8,7 +8,7 @@
   "scripts": {
     "start": "cross-env quasar dev",
     "start:demo": "cross-env ENVIRONMENT=demo quasar dev",
-    "start:dev": "cross-env ENVIRONMENT=engelenburg quasar dev",
+    "start:dev": "cross-env ENVIRONMENT=dev quasar dev",
     "start:development": "cross-env ENVIRONMENT=development quasar dev",
     "start:delfland": "cross-env ENVIRONMENT=delfland quasar dev",
     "start:engelenburg": "cross-env ENVIRONMENT=engelenburg quasar dev",
