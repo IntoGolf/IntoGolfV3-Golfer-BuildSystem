@@ -17,10 +17,16 @@ export default {
     };
   },
   created: function () {
-    window.open(this.url, "_blank");
+    this.openWindow(this.url);
     this.handleStatusLoop();
   },
   methods: {
+    openWindow: function (url) {
+      let newWindow = window.open(url, "_blank");
+      if (!newWindow) {
+        window.location = url;
+      }
+    },
     handleStatusLoop: function () {
       let that = this;
       if (this.counter < this.maxCount && this.status === "open") {

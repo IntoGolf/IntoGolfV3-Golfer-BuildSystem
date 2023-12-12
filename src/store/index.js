@@ -7,6 +7,7 @@ import settings from "./settings"; // Import your messages module
 import currentUser from "./currentUser";
 import courseStatus from "./courseStatus";
 import greenfeeCards from "./greenfeeCards";
+import circles from "./circles";
 
 const store = createStore({
   modules: {
@@ -17,6 +18,7 @@ const store = createStore({
     currentUser,
     courseStatus,
     greenfeeCards,
+    circles,
   },
   actions: {
     async initializeApp({ dispatch }) {
@@ -24,6 +26,7 @@ const store = createStore({
       await dispatch("currentUser/fetch", null, { root: true });
       await dispatch("messages/fetchMessages", null, { root: true });
       await dispatch("courseStatus/fetch", null, { root: true });
+      // await dispatch("circles/fetchCircles", null, { root: true });
     },
     async initializePublicApp({ dispatch }) {
       await dispatch("settings/fetchPublicSettings", null, { root: true });
@@ -36,6 +39,7 @@ const store = createStore({
       await dispatch("messages/clear");
       await dispatch("scorecards/clear");
       await dispatch("settings/clear");
+      await dispatch("circles/clear");
     },
   },
 });

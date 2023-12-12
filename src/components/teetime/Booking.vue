@@ -301,7 +301,6 @@ export default {
         .get("golfer/teetimes", {
           params: {
             date: this.$dayjs(this.form.fltDate).format("YYYY-MM-DD"),
-            relNr: this.currentUser.relNr,
           },
         })
         .then((res) => {

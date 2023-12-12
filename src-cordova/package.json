@@ -17,18 +17,14 @@
     "macos-release": "^3.0.1"
   },
   "devDependencies": {
-    "@havesource/cordova-plugin-push": "github:Attiv/cordova-plugin-push",
     "cordova-android": "^12.0.1",
     "cordova-ios": "^7.0.1",
     "cordova-plugin-androidx": "^3.0.0",
     "cordova-plugin-androidx-adapter": "^1.1.3",
-    "cordova-plugin-badge": "^0.8.9",
     "cordova-plugin-camera": "^6.0.0",
-    "cordova-plugin-device": "^2.1.0",
     "cordova-plugin-file": "^7.0.0",
     "cordova-plugin-ionic-webview": "^5.0.0",
     "cordova-plugin-itsappusesnonexemptencryption": "^0.1.0",
-    "cordova-plugin-local-notification": "github:Attiv/cordova-plugin-local-notifications",
     "cordova-plugin-splashscreen": "^6.0.1",
     "cordova-plugin-wkwebview-engine": "^1.2.2",
     "cordova-support-android-plugin": "~2.0.4"
@@ -40,19 +36,11 @@
       "cordova-plugin-camera": {},
       "cordova-plugin-file": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-androidx-adapter": {},
-      "@havesource/cordova-plugin-push": {
-        "ANDROIDX_CORE_VERSION": "1.6.+",
-        "FCM_VERSION": "23.+",
-        "IOS_FIREBASE_MESSAGING_VERSION": "~> 8.1.1"
-      },
-      "cordova-plugin-local-notification": {
-        "ANDROID_SUPPORT_V4_VERSION": "26.+"
-      }
+      "cordova-plugin-androidx-adapter": {}
     },
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }

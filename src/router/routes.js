@@ -102,6 +102,16 @@ const routes = [
     },
   },
   {
+    path: "/circle",
+    name: "circle",
+    component: () => import("layouts/PageLayout.vue"),
+    children: [{ path: "", component: () => import("pages/Circle.vue") }],
+    meta: {
+      requiresAuth: true,
+      title: "Circle",
+    },
+  },
+  {
     path: "/checkin",
     name: "CheckIn",
     component: () => import("layouts/PageLayout.vue"),

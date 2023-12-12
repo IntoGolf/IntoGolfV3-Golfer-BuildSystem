@@ -87,6 +87,8 @@
               :disable="!canChange"
               :label="$t('Phone number')"
               lazy-rules
+              mask="###############"
+              maxlength="15"
             />
 
             <q-input
@@ -94,6 +96,8 @@
               :disable="!canChange"
               :label="$t('Mobiel telefoonnummer')"
               lazy-rules
+              mask="###############"
+              maxlength="15"
             />
 
             <q-input
@@ -301,6 +305,9 @@ export default {
     },
     loadImage: function () {
       let that = this;
+      if (!this.currentUser.relImage) {
+        return;
+      }
       this.$http
         .get("golfer/image/" + this.currentUser.relImage)
         .then((res) => {

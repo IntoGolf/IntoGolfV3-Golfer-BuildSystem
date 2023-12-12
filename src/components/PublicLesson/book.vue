@@ -85,6 +85,7 @@
           class="q-mb-sm"
           label="Telefoonummer"
           lazy-rules
+          mask="###############"
         />
 
         <div class="row text-h6">Leveringsvoorwaarden:</div>

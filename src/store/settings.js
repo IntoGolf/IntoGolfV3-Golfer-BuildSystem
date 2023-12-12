@@ -21,6 +21,9 @@ const mutations = {
     state.item = [];
     state.publicItems = [];
   },
+  CLEAR_PUBLIC_VALUE(state) {
+    state.publicItems = [];
+  },
 };
 
 const actions = {
@@ -43,6 +46,9 @@ const actions = {
   async clear({ commit }) {
     commit("CLEAR_VALUE");
   },
+  async clearPublic({ commit }) {
+    commit("CLEAR_PUBLIC_VALUE");
+  },
 };
 
 const getters = {
@@ -55,6 +61,54 @@ const getters = {
     return (
       state.publicItems.length === 0 &&
       Object.keys(state.publicItems).length === 0
+    );
+  },
+  setHasCircles: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "app_display_circles_tile" in state.item &&
+      state.item.app_display_circles_tile === 1
+    );
+  },
+  setHasCalendar: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "app_display_calendar_tile" in state.item &&
+      state.item.app_display_calendar_tile === 1
+    );
+  },
+  setHasBalance: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "app_display_balance" in state.item &&
+      state.item.app_display_balance === 1
+    );
+  },
+  setHasGreenFeeCard: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "app_display_greenfeecard" in state.item &&
+      state.item.app_display_greenfeecard
+    );
+  },
+  setHasMessages: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "app_display_message_tile" in state.item &&
+      state.item.app_display_message_tile === 1
+    );
+  },
+  setHasCourseStatus: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "app_display_course_status_tile" in state.item &&
+      state.item.app_display_course_status_tile === 1
     );
   },
 };

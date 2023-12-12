@@ -1,6 +1,6 @@
 <template>
   <q-page-container>
-    <div v-if="settings !== null" class="row cordova-hide fixed-bottom">
+    <div class="row cordova-hide fixed-bottom">
       <q-btn
         v-if="canSignIn"
         color="primary"
@@ -31,10 +31,7 @@
       />
     </div>
 
-    <q-card
-      v-if="settings !== null"
-      class="login_card q-ml-auto q-mr-auto q-mt-xl"
-    >
+    <q-card class="login_card q-ml-auto q-mr-auto q-mt-xl">
       <q-card-section>
         <div class="row q-mt-sm">
           <div class="col text-center">
@@ -179,6 +176,7 @@ export default {
               "golfer__user_token",
               currentUser.relation_password.apiToken
             );
+            this.$store.dispatch("settings/clearPublic");
           }
         })
         .catch((e) => {

@@ -53,6 +53,8 @@
     <q-input
       v-model="player.relation.relPhone"
       label="Telefoonnummer"
+      mask="###############"
+      maxlength="15"
       style="height: 76px"
       type="text"
     />

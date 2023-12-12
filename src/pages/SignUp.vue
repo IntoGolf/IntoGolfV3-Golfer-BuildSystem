@@ -192,7 +192,8 @@
                     counter
                     dense
                     label="Telefoonnummer*"
-                    maxlength="10"
+                    mask="###############"
+                    maxlength="15"
                     stack-label
                   />
                 </div>

@@ -194,6 +194,8 @@
           class="q-mb-sm"
           label="Telefoonummer"
           lazy-rules
+          mask="###############"
+          maxlength="15"
           stack-label
         />
 

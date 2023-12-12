@@ -43,6 +43,62 @@ const actions = {
 
 const getters = {
   item: (state) => state.item,
+  usrHasLessons: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "tile_lessons_y_n" in state.item &&
+      state.item.tile_lessons_y_n
+    );
+  },
+  usrHasShop: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "tile_shop_y_n" in state.item &&
+      state.item.tile_shop_y_n
+    );
+  },
+  usrHasPos: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "tile_horeca_y_n" in state.item &&
+      state.item.tile_horeca_y_n
+    );
+  },
+  usrHasMembers: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "tile_members_y_n" in state.item &&
+      state.item.tile_members_y_n
+    );
+  },
+  usrHasHandicap: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "tile_handicap_y_n" in state.item &&
+      state.item.tile_handicap_y_n
+    );
+  },
+  usrHasMatch: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "tile_match_y_n" in state.item &&
+      state.item.tile_match_y_n
+    );
+  },
+  usrHasTeeTimes: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "tile_teetimes_y_n" in state.item &&
+      state.item.tile_teetimes_y_n
+    );
+  },
 };
 
 export default {

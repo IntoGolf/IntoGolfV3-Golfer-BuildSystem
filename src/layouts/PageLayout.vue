@@ -5,7 +5,9 @@
         <q-toolbar>
           <q-btn
             v-if="!$q.platform.is.desktop"
-            :style="{ color: settings.app_primary_font_color }"
+            :style="{
+              color: $store.state.settings.item.app_primary_font_color,
+            }"
             dense
             flat
             icon="menu"
@@ -15,7 +17,9 @@
 
           <q-btn
             v-if="$q.platform.is.desktop"
-            :style="{ color: settings.app_primary_font_color }"
+            :style="{
+              color: $store.state.settings.item.app_primary_font_color,
+            }"
             dense
             flat
             icon="menu"
@@ -24,7 +28,9 @@
           />
 
           <q-toolbar-title
-            :style="{ color: settings.app_primary_font_color }"
+            :style="{
+              color: $store.state.settings.item.app_primary_font_color,
+            }"
             class="text-center"
           >
             {{ this.$route.meta.title }}
@@ -78,10 +84,9 @@
 
 <script>
 import { defineComponent } from "vue";
-import authMixin from "../mixins/auth";
+import { mapGetters } from "vuex";
 
 export default defineComponent({
-  mixins: [authMixin],
   name: "PageLayout",
   data() {
     return {
@@ -94,11 +99,29 @@ export default defineComponent({
       return this.$q.platform.is.cordova || this.$q.platform.is.mobile;
     },
     headerColor() {
-      return this.settings.app_primary_color;
+      return this.$store.state.settings.item.app_primary_color;
     },
     menuVisibleArray() {
       return this.menuArray.filter((item) => item.visible);
     },
+    ...mapGetters("settings", [
+      "setHasCalendar",
+      "setHasCircles",
+      "setHasBalance",
+      "setHasCourseStatus",
+      "setHasGreenFeeCard",
+      "setHasMessages",
+    ]),
+    ...mapGetters("currentUser", [
+      "usrHasLessons",
+      "usrHasShop",
+      "usrHasPos",
+      "usrHasHandicap",
+      "usrHasMatch",
+      "usrHasMembers",
+      "usrHasLessons",
+      "usrHasTeeTimes",
+    ]),
   },
   mounted() {
     this.drawer = false;
@@ -111,79 +134,82 @@ export default defineComponent({
       {
         name: "Baankalender",
         icon: "schedule",
-        visible: true,
+        visible: this.setHasCalendar,
       },
       {
         name: "reservations",
         icon: "schedule",
-        visible: this.currentUser.tile_teetimes_y_n,
+        visible: this.usrHasTeeTimes,
       },
       {
         name: "greenfeecards",
         icon: "schedule",
-        visible: this.settings.app_display_greenfeecard,
+        visible: this.setHasGreenFeeCard,
       },
       {
         name: "match",
         icon: "sports_golf",
-        visible: this.currentUser.tile_match_y_n,
+        visible: this.usrHasMatch,
       },
       {
         name: "messages",
         icon: "notes",
-        visible: this.settings.app_display_message_tile === 1,
+        visible: this.setHasMessages,
       },
       {
         name: "Baanstatus",
         icon: "grass",
-        visible: this.settings.app_display_course_status_tile === 1,
+        visible: this.setHasCourseStatus,
       },
       {
         name: "handicap",
         icon: "grade",
-        visible: this.currentUser.tile_handicap_y_n,
+        visible: this.usrHasHandicap,
       },
       {
         name: "NGF",
         icon: "credit_card",
-        visible: this.currentUser.tile_handicap_y_n,
+        visible: this.usrHasHandicap,
       },
       {
         name: "members",
         icon: "groups",
-        visible: this.currentUser.tile_members_y_n,
+        visible: this.usrHasMembers,
       },
       {
         name: "pos",
         icon: "restaurant_enu",
-        visible:
-          this.currentUser.tile_horeca_y_n &&
-          this.settings.app_display_balance === 1,
+        visible: this.usrHasPos && this.setHasBalance,
       },
       {
         name: "shop",
         icon: "shopping_bag",
-        visible: this.currentUser.tile_shop_y_n,
+        visible: this.usrHasShop,
       },
       {
         name: "proCourse",
         icon: "shop",
-        visible: this.currentUser.tile_lessons_y_n,
+        visible: this.usrHasLessons,
       },
       {
         name: "lessons",
         icon: "school",
-        visible: this.currentUser.tile_lessons_y_n,
+        visible: this.usrHasLessons,
       },
       {
         name: "lessoncards",
         icon: "school",
-        visible: this.currentUser.tile_lessons_y_n,
+        visible: this.usrHasLessons,
       },
       {
         name: "profile",
         icon: "account_circle",
         visible: true,
+      },
+      {
+        name: "circle",
+        icon: "account_circle",
+        visible: this.setHasCircles,
       },
     ];
   },

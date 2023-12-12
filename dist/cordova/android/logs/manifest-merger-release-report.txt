@@ -54,15 +54,15 @@ INJECTED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/
 		ADDED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:1-32:12
 		INJECTED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml
 	android:versionName
-		ADDED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:72-100
+		ADDED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:74-102
 		INJECTED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml
 	android:hardwareAccelerated
 		ADDED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:11-45
 	xmlns:android
-		ADDED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:101-159
+		ADDED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:103-161
 	android:versionCode
-		ADDED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:46-71
+		ADDED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:46-73
 		INJECTED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml
 supports-screens

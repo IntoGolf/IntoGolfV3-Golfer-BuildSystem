@@ -8,9 +8,6 @@
             :src="blobUrl"
             style="max-width: 400px; max-height: 150px"
           />
-          <div v-if="1 === 2" class="text-h4 q-mb-md">
-            {{ $store.state.settings.item.system_organisation_name }}
-          </div>
         </div>
       </div>
 
@@ -97,7 +94,10 @@
         </div>
       </div>
 
-      <div v-show="1 === 1" class="row q-pl-md q-pr-md q-pb-sm q-gutter-sm">
+      <div
+        v-show="setHasCalendar"
+        class="row q-pl-md q-pr-md q-pb-sm q-gutter-sm"
+      >
         <div
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/Baankalender')"
@@ -109,7 +109,7 @@
       </div>
       <div class="row q-pl-md q-pr-md q-gutter-sm">
         <div
-          v-show="$store.state.currentUser.item.tile_teetimes_y_n"
+          v-show="usrHasTeeTimes"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/reservations')"
         >
@@ -119,7 +119,7 @@
         </div>
 
         <div
-          v-if="$store.state.currentUser.item.tile_match_y_n"
+          v-if="usrHasMatch"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/match')"
         >
@@ -129,7 +129,7 @@
 
       <div class="row text-h6 q-pl-md q-pr-md q-pt-sm q-gutter-sm">
         <div
-          v-if="$store.state.settings.item.app_display_message_tile === 1"
+          v-if="setHasMessages"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/messages')"
         >
@@ -140,7 +140,7 @@
         </div>
 
         <div
-          v-if="$store.state.settings.item.app_display_course_status_tile === 1"
+          v-if="setHasCourseStatus"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/Baanstatus')"
         >
@@ -150,14 +150,14 @@
 
       <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
         <div
-          v-if="$store.state.currentUser.item.tile_handicap_y_n"
+          v-if="usrHasHandicap"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/handicap')"
         >
           <span class="title"><i class="far fa-golf-ball"></i>Handicap</span>
         </div>
         <div
-          v-if="$store.state.currentUser.item.tile_handicap_y_n"
+          v-if="usrHasHandicap"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/NGF')"
         >
@@ -167,7 +167,7 @@
 
       <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
         <div
-          v-if="$store.state.currentUser.item.tile_members_y_n"
+          v-if="usrHasMembers"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/members')"
         >
@@ -175,7 +175,6 @@
         </div>
 
         <div
-          v-if="$store.state.settings.item.app_display_profile_tile === 1"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/profile')"
         >
@@ -183,15 +182,9 @@
         </div>
       </div>
 
-      <div
-        v-show="$store.state.currentUser.item.tile_horeca_y_n"
-        class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
-      >
+      <div v-show="usrHasPos" class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
         <div
-          v-show="
-            $store.state.currentUser.item.tile_horeca_y_n &&
-            $store.state.settings.item.app_display_balance === 1
-          "
+          v-show="usrHasPos && setHasBalance"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/pos')"
         >
@@ -199,7 +192,7 @@
         </div>
 
         <div
-          v-if="$store.state.currentUser.item.tile_shop_y_n"
+          v-if="usrHasShop"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/shop')"
         >
@@ -208,7 +201,7 @@
       </div>
 
       <div
-        v-show="$store.state.currentUser.item.tile_lessons_y_n"
+        v-show="usrHasLessons"
         class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
       >
         <div
@@ -232,6 +225,7 @@
 
 <script>
 import authMixin from "../mixins/auth";
+import { mapGetters } from "vuex";
 
 export default {
   mixins: [authMixin],
@@ -267,6 +261,24 @@ export default {
 
       return this.weather.forecast.forecastday[0].hour.slice(hour, hour + 4);
     },
+    ...mapGetters("settings", [
+      "setHasCalendar",
+      "setHasCircles",
+      "setHasBalance",
+      "setHasCourseStatus",
+      "setHasGreenFeeCard",
+      "setHasMessages",
+    ]),
+    ...mapGetters("currentUser", [
+      "usrHasLessons",
+      "usrHasShop",
+      "usrHasPos",
+      "usrHasHandicap",
+      "usrHasMatch",
+      "usrHasMembers",
+      "usrHasLessons",
+      "usrHasTeeTimes",
+    ]),
   },
   methods: {
     loadImage() {

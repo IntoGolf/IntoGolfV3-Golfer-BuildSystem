@@ -16,7 +16,7 @@
       option-label="label"
       option-value="relNr"
       use-input
-      @filter="filterFn"
+      @filter="handleFilter"
     >
       <template v-slot:no-option>
         <q-item>
@@ -197,6 +197,7 @@ export default {
     this.timePref = this.timeArray.find(
       (time) => time.value === this.player.details.timePref
     );
+    this.debouncedFetchData = this.debounce(this.fetchData, 300);
   },
   watch: {
     tee: function (newValue) {
@@ -275,20 +276,45 @@ export default {
             });
         });
     },
+    beforeDestroy() {
+      clearTimeout(this.debounceTimeout);
+    },
+    debounce(func, wait) {
+      let timeout;
 
-    async filterFn(val, update, abort) {
-      if (val === undefined || val.length < 2) {
+      return (...args) => {
+        const later = () => {
+          clearTimeout(timeout);
+          func.apply(this, args);
+        };
+
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    },
+    async fetchData(searchQuery) {
+      if (searchQuery === undefined || searchQuery.length < 2) {
         return;
       }
 
-      let that = this;
-      await this.$http
-        .get(`golfer/relation?search=${val}&id=${this.match.id}`)
-        .then((response) => {
-          update(() => {
-            that.relations = response;
-          });
-        });
+      // Your AJAX call logic here
+      try {
+        this.relations = await this.$http.get(
+          `golfer/relation?search=${searchQuery}&id=${this.match.id}`
+        );
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle errors appropriately
+      }
+    },
+    handleFilter(val, update) {
+      update(() => {
+        if (val) {
+          this.debouncedFetchData(val);
+        } else {
+          this.options = [];
+        }
+      });
     },
   },
 };

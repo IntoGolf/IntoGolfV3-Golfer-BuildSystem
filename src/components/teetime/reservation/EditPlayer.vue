@@ -60,6 +60,7 @@
         clearable
         counter
         label="Telefoonnummer"
+        mask="###############"
         maxlength="15"
         outlined
       />
