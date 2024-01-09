@@ -1,147 +1,210 @@
 <template>
   <q-banner
-    v-if="flight.booking_at_risk"
+    v-if="
+      $store.getters['settings/item'].app_display_booking_at_risk &&
+      flight.booking_at_risk
+    "
     class="text-white bg-red q-mb-md text-center"
     dense
   >
     Let op, u heeft tot {{ expire }} om uw boeking af te ronden?
   </q-banner>
+
   <q-card class="q-mb-md">
     <q-card-section class="text-h6">
       Uw starttijd
 
       <q-btn
-        v-show="canCancel && !paid && isMyBooking"
         class="float-right"
-        color="negative"
-        icon="delete"
-        v-on:click="handleCancel"
+        flat
+        icon="arrow_back"
+        v-on:click="$emit('handleClose')"
       />
     </q-card-section>
 
     <q-separator />
 
-    <q-card-section>
-      <div class="row q-mb-sm">
-        <div class="col text-bold">Slot</div>
-        <div class="col-8 text-right">
-          {{ slot }}
-        </div>
-      </div>
+    <details-booking :flight="flight" />
 
-      <div class="row q-mb-sm">
-        <div class="col text-bold">Lus uit</div>
-        <div class="col-8 text-right">
-          {{ local_flight.loop1.crlName }}
-        </div>
-      </div>
+    <q-item-label header>Deelnemers</q-item-label>
 
-      <div v-if="local_flight.fltCrlNr2 > 0" class="row q-mb-sm">
-        <div class="col text-bold">Lus in</div>
-        <div class="col-8 text-right">
-          {{ courseLoop }}
-        </div>
-      </div>
+    <detail-players
+      :flight="flight"
+      v-on:handleRefresh="$emit('handleRefresh')"
+      v-on:handleSave="handleSave"
+    />
 
-      <div class="row q-mb-sm">
-        <div class="col text-bold">Boeker</div>
-        <div class="col-8 text-right">
-          {{ bookerName }}
-        </div>
-      </div>
+    <template
+      v-if="
+        $store.getters['settings/item'].app_display_rent &&
+        flight.UniReservations.length > 0
+      "
+    >
+      <q-item-label header>Verhuur</q-item-label>
+      <rent :flight="flight" v-on:handleRefresh="$emit('handleRefresh')" />
+    </template>
+  </q-card>
 
-      <div class="row q-mb-sm">
-        <div class="col text-bold">Spelers</div>
-        <div class="col-8 text-right">
-          {{ flight.fltSize }}
-        </div>
-      </div>
+  <q-card class="q-mb-md">
+    <q-list bordered separator>
+      <q-item
+        v-if="freeSlots > 0 && isMyBooking && !inThePast"
+        v-ripple
+        clickable
+        v-on:click="handleAddPlayer"
+      >
+        <q-item-section side>
+          <q-icon name="person_add" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>
+            <b>Voeg speler toe</b>
+          </q-item-label>
+          <q-item-label caption>
+            nog {{ freeSlots }} plaatsen beschikbaar
+          </q-item-label>
+        </q-item-section>
+      </q-item>
 
-      <div class="row q-mb-sm">
-        <div class="col text-bold">Intro ruimte</div>
-        <div class="col-8 text-right">
-          {{ flight.IntroMax - flight.IntroCount }}X
-        </div>
-      </div>
+      <q-item
+        v-if="
+          $store.getters['settings/item'].app_display_rent &&
+          isMyBooking &&
+          !inThePast
+        "
+        v-ripple
+        clickable
+        v-on:click="handleAddRent"
+      >
+        <q-item-section side>
+          <q-icon name="add" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>
+            <b>Voeg verhuur toe</b>
+          </q-item-label>
+          <q-item-label caption> reserveer een handicap of buggy</q-item-label>
+        </q-item-section>
+      </q-item>
 
-      <div v-show="showPay" class="row q-mb-sm">
-        <div class="col text-bold">Greenfee</div>
-        <div class="col-8 text-right">
-          {{
-            flight.flight_players[0].greenfee === null
-              ? "-"
-              : flight.flight_players[0].greenfee.grfName
-          }}
-        </div>
-      </div>
+      <q-item
+        v-if="
+          $store.getters['settings/item'].app_display_chat &&
+          isMyBooking &&
+          !inThePast
+        "
+        v-ripple
+        clickable
+        v-on:click="showShareDialog"
+      >
+        <q-item-section side>
+          <q-icon name="ios_share" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>
+            <b>Deel uw flight</b>
+          </q-item-label>
+          <q-item-label caption> deel je flight via chats</q-item-label>
+        </q-item-section>
+      </q-item>
 
-      <div v-show="showPay" class="row q-mb-sm">
-        <div class="col text-bold">Greenfee tarief</div>
-        <div class="col-8 text-right">
-          {{
-            flight.flight_players[0].flpPrice === null
-              ? $filters.money(0)
-              : $filters.money(flight.flight_players[0].flpPrice)
-          }}
-        </div>
-      </div>
+      <q-item v-if="!inThePast" v-ripple clickable v-on:click="getIcs">
+        <q-item-section side>
+          <q-icon name="event" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>
+            <b>Voeg toe aan je agenda</b>
+          </q-item-label>
+          <q-item-label caption>via een ics link</q-item-label>
+        </q-item-section>
+      </q-item>
 
-      <div v-show="showPay" class="row q-mb-sm">
-        <div class="col text-bold">Greenfee totaal</div>
-        <div class="col-8 text-right">
-          {{ $filters.money(total) }}
-        </div>
-      </div>
+      <q-item
+        v-if="showPay && canCancel && isMyBooking && !paid"
+        v-ripple
+        clickable
+        v-on:click="onPay"
+      >
+        <q-item-section side>
+          <q-icon name="payments" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>
+            <b>Betaal</b>
+          </q-item-label>
+        </q-item-section>
+      </q-item>
 
-      <div v-show="showPay && !paid" class="row">
-        <div class="col text-bold">Vervalt op</div>
-        <div class="col-8 text-right">
-          {{
-            $dayjs(flight.fltTimestamp)
-              .add(30, "minutes")
-              .format("dddd D MMM HH:mm")
-          }}
-        </div>
-      </div>
-
-      <div v-show="showPay && paid" class="row">
-        <div class="col text-bold">Status</div>
-        <div class="col-8 text-right">Betaald</div>
-      </div>
-    </q-card-section>
-
-    <q-separator />
-
-    <q-card-section>
-      <div class="row q-gutter-md">
-        <div class="col">
-          <q-btn
-            class="q-mr-sm"
-            color="primary"
-            icon="arrow_back"
-            v-on:click="$emit('handleClose')"
+      <q-item
+        v-if="
+          !inThePast &&
+          $store.state.currentUser.item.tile_teetimes_y_n &&
+          $store.state.settings.item.teetime !== null &&
+          $store.state.settings.item.teetime !== undefined &&
+          $store.state.settings.item.teetime.flpFltNr === local_flight.fltNr
+        "
+        v-ripple
+        clickable
+        v-on:click="onCheckIn"
+      >
+        <q-item-section side>
+          <q-icon
+            :style="{ color: checkedIn ? 'green' : '' }"
+            name="check_circle"
           />
-          <q-btn
-            v-if="showSecondNine && canCancel && isMyBooking && !paid"
-            class="q-mr-sm"
-            color="primary"
-            label="Wijzig 18"
-            v-on:click="dialogVisible = true"
-          />
-          <q-btn
-            v-if="showPay && canCancel && isMyBooking && !paid"
-            v-show="!paid"
-            class="float-right"
-            color="primary"
-            icon="payments"
-            v-on:click="onPay"
-          />
-        </div>
-      </div>
-    </q-card-section>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>
+            <b>Checkin</b>
+          </q-item-label>
+          <q-item-label v-if="checkedIn" caption
+            >u bent ingechecked
+          </q-item-label>
+          <q-item-label v-else caption
+            >check uzelf in voor deze flight
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item
+        v-if="showSecondNine && canCancel && isMyBooking && !paid && !checkedIn"
+        v-ripple
+        clickable
+        v-on:click="showDialogSecNine"
+      >
+        <q-item-section side>
+          <q-icon name="counter_9" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>
+            <b>Boek 2de negen</b>
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <details-menu-cancel-flight
+        :canCancel="canCancel && !checkedIn"
+        :cancelHours="cancelHours"
+        :flight="flight"
+        :isMyBooking="isMyBooking"
+        :paid="paid"
+        v-on:handleSave="handleSave"
+      />
+
+      <details-menu-cancel-player
+        :canCancel="canCancel && !checkedIn"
+        :cancelHours="cancelHours"
+        :flight="flight"
+        :isMyBooking="isMyBooking"
+        :paid="paid"
+        v-on:handleClose="$emit('handleClose')"
+        v-on:handleSave="handleSave"
+      />
+    </q-list>
 
     <comp-dialog18-holes
-      :dialogVisible="dialogVisible"
+      :dialogVisible="dialogVisible && !checkedIn"
       :flight="flight"
       v-on:handleClose="handleClose18"
     />
@@ -151,10 +214,20 @@
 <script>
 import compDialog18Holes from "components/teetime/reservation/Dialog18Holes";
 import authMixin from "../../../mixins/auth";
+import Rent from "components/teetime/reservation/rent.vue";
+import DetailsBooking from "components/teetime/reservation/DetailsBooking.vue";
+import DetailPlayers from "components/teetime/reservation/detailPlayers.vue";
+import DetailsMenuCancelFlight from "components/teetime/reservation/DetailsMenuCancelFlight.vue";
+import DetailsMenuCancelPlayer from "components/teetime/reservation/DetailsMenuCancelPlayer.vue";
 
 export default {
   mixins: [authMixin],
   components: {
+    DetailsMenuCancelPlayer,
+    DetailsMenuCancelFlight,
+    DetailPlayers,
+    DetailsBooking,
+    Rent,
     compDialog18Holes,
   },
   props: {
@@ -162,17 +235,47 @@ export default {
   },
   data: function () {
     return {
-      local_flight: this.flight,
       dialogVisible: false,
       showPay: 0,
       showSecondNine: 0,
+      chatList: [],
+      circleShare: null,
     };
   },
   mounted() {
     this.showPay = this.settings.app_display_greenfee_pay === "1";
     this.showSecondNine = this.settings.app_display_second_nine_select;
+    this.getChats();
   },
   computed: {
+    local_flight() {
+      return this.flight;
+    },
+    playerArray: function () {
+      return this.local_flight.flight_players.filter(
+        (item) =>
+          item.flpSide !== this.firstNr &&
+          item.flpCarNr === null &&
+          (this.isMyBooking || item.flpName !== null)
+      );
+    },
+    players() {
+      return this.playerArray.filter((item) => item.flpName !== "");
+    },
+    checkedIn() {
+      return this.player.flpScorecard > 0;
+    },
+    freeSlots() {
+      return this.playerArray.filter((item) => item.flpName === "").length;
+    },
+    inThePast: function () {
+      return this.$dayjs(
+        this.$filters.unixToDate(this.local_flight.fltDate),
+        "DD-MM-YYYY"
+      )
+        .add(this.local_flight.fltTime1, "minutes")
+        .isBefore(this.$dayjs());
+    },
     expire: function () {
       return this.$dayjs(this.flight.fltExpire).format("HH:mm");
     },
@@ -193,33 +296,15 @@ export default {
         .add(this.local_flight.fltTime1, "minutes")
         .isAfter(this.$dayjs().add(this.cancelHours * 60, "minutes"));
     },
-    slot: function () {
-      return this.$dayjs(
-        this.$filters.unixToDate(this.local_flight.fltDate) +
-          " " +
-          this.$filters.minuteToTime(this.local_flight.fltTime1),
-        "DD-MM-YYYY H:mm"
-      ).format("dddd D MMM HH:mm");
-    },
-    courseLoop: function () {
-      return (
-        this.$filters.minuteToTime(this.local_flight.fltTime2) +
-        " - " +
-        this.local_flight.loop2.crlName
-      );
-    },
-    bookerName: function () {
-      return this.local_flight.flight_players[0].flpName;
-    },
     isMyBooking: function () {
       return (
         this.local_flight.flight_players[0].flpRelNr === this.currentUser.relNr
       );
     },
-    total: function () {
-      return this.local_flight.flight_players.reduce(function (result, item) {
-        return result + item.flpPrice;
-      }, 0);
+    player: function () {
+      return this.local_flight.flight_players.find(
+        (player) => player.flpRelNr === this.currentUser.relNr
+      );
     },
     paid: function () {
       return (
@@ -227,6 +312,14 @@ export default {
           (player) => player.flpBilNr > 0 || player.flpScorecard > 0
         ).length > 0
       );
+    },
+    chatCheckArray() {
+      return this.chatList.map(function (item) {
+        return {
+          value: item.chtNr,
+          label: item.chtName,
+        };
+      });
     },
   },
   methods: {
@@ -243,18 +336,13 @@ export default {
           this.$emit("handleSave", this.local_flight, true);
         });
     },
-    handleSave: function () {
-      this.local_flight.fltCarNr = 1;
-      this.$q
-        .dialog({
-          title: "Starttijd annuleren",
-          message: "Wilt u doorgaan?",
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(() => {
-          this.$emit("handleSave", this.local_flight, true);
-        });
+    handleSave: function (flight) {
+      this.$emit("handleSave", flight);
+    },
+    onCheckIn() {
+      if (!this.checkedIn) {
+        this.$emit("handleCheckIn");
+      }
     },
     onPay: function () {
       this.$http
@@ -269,11 +357,79 @@ export default {
           }
         });
     },
+    getIcs() {
+      this.$q
+        .dialog({
+          title: "Voeg toe aan agenda",
+          cancel: true,
+          message:
+            "Na het klikken op ok, kan uw browser het ICS-bestand automatisch openen of opslaan. " +
+            "Als het bestand wordt opgeslagen, open het dan handmatig om het aan uw agenda toe te voegen",
+        })
+        .onOk((selectedChats) => {
+          const res = this.getIcsFile();
+          if (res) {
+            const blob = new Blob([res], { type: "text/calendar" });
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = downloadUrl;
+            link.download = "event.ics";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
+        });
+    },
+    async getIcsFile() {
+      let data = { fltNr: this.local_flight.fltNr };
+      return await this.$http.get("golfer/flight/ics", { params: data });
+    },
+    showShareDialog() {
+      this.$q
+        .dialog({
+          title: "Selecteer Chat's",
+          message: "Kies de chats waar u uw boeking wilt delen",
+          cancel: true,
+          options: {
+            type: "checkbox", // Use checkboxes for multiple selection
+            model: [], // An array to hold selected values
+            items: this.chatCheckArray, // Array of chats
+          },
+        })
+        .onOk((selectedChats) => {
+          this.shareBooking(selectedChats);
+        });
+    },
+    async getChats() {
+      if (this.$store.getters["settings/item"].app_display_chat) {
+        const res = await this.$http.get("chat/list?flat=true");
+        this.chatList = res.data;
+      }
+    },
+    shareBooking(selectedChats) {
+      let data = {
+        fltNr: this.local_flight.fltNr,
+        cirArray: selectedChats,
+      };
+      this.$http.post("golfer/booking/share", data);
+    },
     handleClose18: function (flight) {
       if (flight !== undefined) {
         this.local_flight = flight;
       }
       this.dialogVisible = false;
+    },
+    handleAddPlayer() {
+      let player = this.playerArray.find(
+        (item) => item.flpRelNr === null && item.flpName === ""
+      );
+      this.$emit("handleAddPlayer", player);
+    },
+    showDialogSecNine() {
+      this.dialogVisible = true;
+    },
+    handleAddRent() {
+      this.$emit("handleAddRent");
     },
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <q-page-container>
-    <q-page>
+    <q-page class="q-pa-sm">
       <div v-show="!newLesson">
         <q-btn
           color="primary"

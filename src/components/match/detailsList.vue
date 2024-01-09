@@ -123,23 +123,21 @@
       spread
     >
       <q-btn
-        v-if="
-          openForSubscription &&
-          mySubscription === null &&
-          specialRules.length === 0
-        "
+        v-if="canSubscribe"
         color="primary"
         label="Inschrijven"
         @click="handleSubscribe"
       />
 
       <q-btn
-        v-if="
-          openForSubscription &&
-          mySubscription !== null &&
-          specialRules.length === 0 &&
-          match.StartlijstGereed !== 1
-        "
+        v-else-if="openPayment"
+        color="primary"
+        label="Open betaling"
+        @click="finishPayment"
+      />
+
+      <q-btn
+        v-else-if="editableSubscription"
         color="primary"
         label="Mijn inschrijving"
         @click="handleSubscribe"
@@ -222,7 +220,9 @@
           <q-btn
             :disable="fullTeam"
             :label="
-              (match.teamSize > 1 ? 'Team inschrijven' : 'Lid inschrijven') +
+              (match.teamSize > 1 && match.teammatch === 1
+                ? 'Team inschrijven'
+                : 'Lid inschrijven') +
               (fullTeam ? ' (uw team is compleet)' : '')
             "
             class="full-width"
@@ -248,8 +248,28 @@ export default {
     return {};
   },
   computed: {
+    canSubscribe() {
+      return (
+        this.openForSubscription &&
+        this.mySubscription === null &&
+        this.specialRules.length === 0
+      );
+    },
+    openPayment() {
+      return (
+        this.mySubscription !== null && this.mySubscription.opmStatus === "open"
+      );
+    },
+    editableSubscription() {
+      return (
+        this.openForSubscription &&
+        this.mySubscription !== null &&
+        this.specialRules.length === 0 &&
+        this.match.StartlijstGereed !== 1
+      );
+    },
     fullTeam: function () {
-      if (this.match.teamSize === 1) {
+      if (this.match.teamSize === 1 || this.match.teammatch !== 1) {
         return false;
       }
       return this.myPlayers.length === this.match.teamSize;
@@ -359,6 +379,10 @@ export default {
     },
   },
   methods: {
+    async finishPayment() {
+      const res = await this.$http.get(`golfer/event/payment/` + this.match.id);
+      this.$emit("handlePayment", res.data);
+    },
     handleSubscribe: function () {
       this.$emit("handleSubscribe");
     },

@@ -1,6 +1,6 @@
 <template>
   <q-page-container>
-    <q-page>
+    <q-page class="q-pa-sm">
       <q-card
         v-for="(loop, index) in $store.state.courseStatus.items"
         :key="index"

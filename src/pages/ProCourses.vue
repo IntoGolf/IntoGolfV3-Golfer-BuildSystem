@@ -1,7 +1,6 @@
-\
 <template>
   <q-page-container>
-    <q-page>
+    <q-page class="q-pa-sm">
       <q-card class="q-pa-sm">
         <div class="text-h6">Uw cursussen:</div>
         <q-separator />

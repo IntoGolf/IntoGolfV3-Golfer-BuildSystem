@@ -1,6 +1,6 @@
 <template>
   <q-page-container>
-    <q-page>
+    <q-page class="q-pa-sm">
       <main v-show="focusedItem === null">
         <div class="row q-mb-md">
           <div class="col">

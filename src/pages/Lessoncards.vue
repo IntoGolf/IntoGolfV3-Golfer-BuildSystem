@@ -1,6 +1,6 @@
 <template>
   <q-page-container>
-    <q-page>
+    <q-page class="q-pa-sm">
       <div v-for="card in list" :key="card.id" class="q-mb-md">
         <q-card class="lesson-card">
           <q-card-section class="card-header">

@@ -1,141 +1,143 @@
 <template>
   <div>
     <h5 class="q-mb-sm q-mt-sm">Inschrijven {{ match.name }}</h5>
+    <template v-if="id.length === 0">
+      <q-input
+        v-model="player.relation.relCallName"
+        :rules="[(val) => !!val || 'Voornaam is vereist']"
+        label="Voornaam"
+        type="text"
+      />
 
-    <q-input
-      v-model="player.relation.relCallName"
-      :rules="[(val) => !!val || 'Voornaam is vereist']"
-      label="Voornaam"
-      type="text"
-    />
+      <q-input
+        v-model="player.relation.relName"
+        :rules="[(val) => !!val || 'Achternaam is vereist']"
+        label="Achternaam"
+        type="text"
+      />
 
-    <q-input
-      v-model="player.relation.relName"
-      :rules="[(val) => !!val || 'Achternaam is vereist']"
-      label="Achternaam"
-      type="text"
-    />
-
-    <q-select
-      v-model="player.relation.relGender"
-      :options="genderArray"
-      emit-value
-      label="Geslacht"
-      map-options
-      style="height: 76px"
-    />
-
-    <q-input
-      v-model="player.relation.relHandicap"
-      :rules="hcpRules"
-      label="Handicap"
-      type="text"
-    />
-
-    <q-input
-      v-model="player.relation.relGsn"
-      :rules="gsnIsInvalid"
-      label="GSN"
-      mask="AA########"
-      type="text"
-    />
-
-    <q-input
-      v-model="player.relation.relEmail"
-      :rules="[
-        (val) =>
-          reg.test(this.player.relation.relEmail) || 'E-mail adres is vereist',
-      ]"
-      label="E-mailadres"
-      type="text"
-    />
-
-    <q-input
-      v-model="player.relation.relPhone"
-      label="Telefoonnummer"
-      mask="###############"
-      maxlength="15"
-      style="height: 76px"
-      type="text"
-    />
-
-    <q-input
-      v-model="player.details.Description"
-      label="Opmerking"
-      maxlength="40"
-      style="height: 76px"
-      type="text"
-    />
-
-    <q-select
-      v-if="match.allow_select_tee == 1"
-      v-model="tee"
-      :options="teesArray"
-      class="q-mb-md"
-      hint="Selecteer de gewenste tee"
-      label="Tee"
-      option-label="name"
-      option-value="color"
-      style="height: 76px"
-    />
-
-    <q-select
-      v-if="match.timePref == 1"
-      v-model="timePref"
-      :options="timeArray"
-      label="Start moment"
-    />
-
-    <div v-for="(pOption, index) in player.details.options" :key="index">
       <q-select
-        v-model="pOption.mpoValue"
-        :label="pOption.label"
-        :options="optionArray"
+        v-model="player.relation.relGender"
+        :options="genderArray"
+        emit-value
+        label="Geslacht"
+        map-options
         style="height: 76px"
       />
-    </div>
 
-    <q-banner
-      v-if="match.ideal && aSubscription === null"
-      class="bg-orange text-white q-mt-sm"
-      inline-actions
-      rounded
-    >
-      Voor deze wedstrijd is betaling via iDeal vereist. Na inschrijving word u
-      doorgestuurd naar de betaling. Wanneer de betaling niet wordt afgerond
-      wordt u uitgeschreven.
-    </q-banner>
-
-    <q-btn-group class="q-mt-md" spread>
-      <q-btn
-        v-if="!match.ideal || aSubscription !== null"
-        :disabled="inValid"
-        color="primary"
-        label="Opslaan"
-        @click="handleSubscribe"
+      <q-input
+        v-model="player.relation.relHandicap"
+        :rules="hcpRules"
+        label="Handicap"
+        type="text"
       />
-      <q-btn
+
+      <q-input
+        v-model="player.relation.relGsn"
+        :rules="gsnIsInvalid"
+        label="GSN"
+        mask="AA########"
+        type="text"
+      />
+
+      <q-input
+        v-model="player.relation.relEmail"
+        :rules="[
+          (val) =>
+            reg.test(this.player.relation.relEmail) ||
+            'E-mail adres is vereist',
+        ]"
+        label="E-mailadres"
+        type="text"
+      />
+
+      <q-input
+        v-model="player.relation.relPhone"
+        label="Telefoonnummer"
+        mask="###############"
+        maxlength="15"
+        style="height: 76px"
+        type="text"
+      />
+
+      <q-input
+        v-model="player.details.Description"
+        label="Opmerking"
+        maxlength="40"
+        style="height: 76px"
+        type="text"
+      />
+
+      <q-select
+        v-if="match.allow_select_tee == 1"
+        v-model="tee"
+        :options="teesArray"
+        class="q-mb-md"
+        hint="Selecteer de gewenste tee"
+        label="Tee"
+        option-label="name"
+        option-value="color"
+        style="height: 76px"
+      />
+
+      <q-select
+        v-if="match.timePref == 1"
+        v-model="timePref"
+        :options="timeArray"
+        label="Start moment"
+      />
+
+      <div v-for="(pOption, index) in player.details.options" :key="index">
+        <q-select
+          v-model="pOption.mpoValue"
+          :label="pOption.label"
+          :options="optionArray"
+          style="height: 76px"
+        />
+      </div>
+
+      <q-banner
         v-if="match.ideal && aSubscription === null"
-        :disabled="inValid"
-        color="primary"
-        label="Betaal"
-        @click="handleSubscribe"
-      />
-      <q-btn
-        v-if="aSubscription !== null"
-        color="primary"
-        label="Uitschrijven"
-        @click="handleUnSubscribe"
-      />
-      <q-btn color="primary" label="Sluiten" @click="handleCloseSubscribe" />
-    </q-btn-group>
+        class="bg-orange text-white q-mt-sm"
+        inline-actions
+        rounded
+      >
+        Voor deze wedstrijd is betaling via iDeal vereist. Na inschrijving word
+        u doorgestuurd naar de betaling. Wanneer de betaling niet wordt afgerond
+        wordt u uitgeschreven.
+      </q-banner>
+
+      <q-btn-group class="q-mt-md" spread>
+        <q-btn
+          v-if="!match.ideal || aSubscription !== null"
+          :disabled="inValid"
+          color="primary"
+          label="Opslaan"
+          @click="handleSubscribe"
+        />
+        <q-btn
+          v-if="match.ideal && aSubscription === null"
+          :disabled="inValid"
+          color="primary"
+          label="Betaal"
+          @click="handleSubscribe"
+        />
+        <q-btn
+          v-if="aSubscription !== null"
+          color="primary"
+          label="Uitschrijven"
+          @click="handleUnSubscribe"
+        />
+        <q-btn color="primary" label="Sluiten" @click="handleCloseSubscribe" />
+      </q-btn-group>
+    </template>
 
     <payment
-      v-if="id.length > 0"
+      v-else
       :id="id"
       :url="url"
       v-on:handleCloseSubscribe="handleCloseSubscribe"
-    ></payment>
+    />
   </div>
 </template>
 
@@ -326,7 +328,7 @@ export default {
         this.player.details.startingTeeId = this.tee.id;
       }
 
-      this.player.is_desktop = this.$q.platform.is.desktop === true ? 1 : 0;
+      this.player.is_desktop = this.$q.platform.is.cordova === true ? 0 : 1;
       this.player.details.Bron = 2;
       this.$http.post(`golfer/event/player`, this.player).then(function (res) {
         if (res.data.url.length > 0) {

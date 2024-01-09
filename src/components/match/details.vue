@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="q-pa-sm">
     <q-card class="q-pa-sm">
       <div class="row">
         <div class="col-12 text-right">
@@ -20,6 +20,7 @@
             :mySubscription="mySubscription"
             v-on:handleCloseSubscribe="handleCloseSubscribe"
             v-on:handleEnterScore="handleEnterScore"
+            v-on:handlePayment="handlePayment"
             v-on:handleSubscribe="handleSubscribe"
             v-on:handleSubscribeGuest="handleSubscribeGuest"
             v-on:handleSubscribeMember="handleSubscribeMember"
@@ -65,6 +66,13 @@
             v-bind:player="player"
             v-on:handleClose="handleClose"
           />
+
+          <payment
+            v-if="page === 6"
+            :id="mollie.opmKey"
+            :url="mollie.opmRedirectUrl"
+            v-on:handleCloseSubscribe="handleCloseSubscribe"
+          />
         </div>
       </div>
     </q-card>
@@ -80,10 +88,12 @@ import detailsPlayers from "components/match/detailsPlayers";
 import detailsResult from "components/match/detailsResult";
 import score from "components/match/score";
 import authMixin from "../../mixins/auth";
+import payment from "components/match/payment.vue";
 
 export default {
   mixins: [authMixin],
   components: {
+    payment,
     subscribeMemberSelf,
     subscribeMember,
     SubscribeGuest,
@@ -103,6 +113,7 @@ export default {
       player: null,
       match: this.prop_match,
       page: 1,
+      mollie: null,
     };
   },
   computed: {
@@ -120,8 +131,6 @@ export default {
   created: function () {
     if (this.prop_page === 5) {
       this.handleEnterScore();
-    } else {
-      this.handleRefreshMatch();
     }
   },
   methods: {
@@ -139,6 +148,10 @@ export default {
     handleCloseSubscribe: function () {
       this.page = 1;
       this.handleRefreshMatch();
+    },
+    handlePayment: function (mollie) {
+      this.page = 6;
+      this.mollie = mollie;
     },
     handleEnterScore: function () {
       let that = this;

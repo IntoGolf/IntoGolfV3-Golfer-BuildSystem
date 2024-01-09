@@ -1,51 +1,51 @@
 <template>
-  <div
-    style="width: 100%; margin-left: auto; margin-right: auto; margin-top: 80px"
-  >
-    <div class="row q-mb-sm">
-      <div class="col">
-        <q-input v-model="date" filled type="date" />
+  <q-page-container>
+    <q-page class="q-pa-sm">
+      <div class="row q-mb-sm">
+        <div class="col">
+          <q-input v-model="date" filled type="date" />
+        </div>
       </div>
-    </div>
-    <div class="row calendar-row">
-      <div class="hour-col">
-        <div
-          v-for="(hour, key) in hours"
-          :key="key"
-          :class="hourRowClass(hour)"
-          :style="loopStyle"
-        >
-          <div v-if="hour < hours" class="hour-label">
-            {{ timeText(hour) }}
+      <div class="row calendar-row">
+        <div class="hour-col">
+          <div
+            v-for="(hour, key) in hours"
+            :key="key"
+            :class="hourRowClass(hour)"
+            :style="loopStyle"
+          >
+            <div v-if="hour < hours" class="hour-label">
+              {{ timeText(hour) }}
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        v-for="(loop, key) in courseLoops"
-        :key="key"
-        :style="{ width: columnWidth }"
-        class="calendar-col"
-      >
         <div
-          :class="{
-            'border-left': key !== 0,
-          }"
-          class="calendar-header"
+          v-for="(loop, key) in courseLoops"
+          :key="key"
+          :style="{ width: columnWidth }"
+          class="calendar-col"
         >
-          {{ loop.crlName }}
+          <div
+            :class="{
+              'border-left': key !== 0,
+            }"
+            class="calendar-header"
+          >
+            {{ loop.crlName }}
+          </div>
+          <q-separator />
+          <calendar-loop
+            :data="data"
+            :fact="fact"
+            :hours="hours"
+            :loop="loop"
+            :loopKey="key"
+            :minTime="minTime"
+          />
         </div>
-        <q-separator />
-        <calendar-loop
-          :data="data"
-          :fact="fact"
-          :hours="hours"
-          :loop="loop"
-          :loopKey="key"
-          :minTime="minTime"
-        />
       </div>
-    </div>
-  </div>
+    </q-page>
+  </q-page-container>
 </template>
 
 <script>

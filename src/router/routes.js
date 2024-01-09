@@ -1,24 +1,21 @@
 import { Platform } from "quasar";
-import pageLayout from "layouts/PageLayout.vue";
-import blankLayout from "layouts/BlankLayout.vue";
+import app from "../App.vue";
 
 import Home from "pages/Home.vue";
 import HomeWeb from "pages/HomeWeb.vue";
 
-let homeComponent = Home;
-let layoutComponent = pageLayout;
+let layoutComponent = app;
 
+let homeComponent = Home;
 if (Platform.is.desktop) {
   homeComponent = HomeWeb;
-  layoutComponent = blankLayout;
 }
 
 const routes = [
   {
     path: "/",
     name: "Home",
-    component: layoutComponent,
-    children: [{ path: "", component: homeComponent }],
+    component: homeComponent,
     meta: {
       requiresAuth: true,
       title: "Dashboard",
@@ -27,45 +24,47 @@ const routes = [
   {
     path: "/login",
     name: "Login",
-    component: () => import("layouts/BlankLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Login.vue") }],
+    component: () => import("pages/Login.vue"),
     meta: { requiresAuth: false },
   },
   {
     path: "/teetimes",
     name: "teetimes",
-    component: () => import("layouts/BlankLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Teetimes.vue") }],
+    component: () => import("pages/Teetimes.vue"),
     meta: { requiresAuth: false },
   },
   {
+    path: "/chat",
+    name: "chat",
+    component: () => import("pages/Chat.vue"),
+    meta: {
+      requiresAuth: true,
+      title: "Chats",
+    },
+  },
+
+  {
     path: "/public_lessons",
     name: "publicLesson",
-    component: () => import("layouts/BlankLayout.vue"),
-    children: [
-      { path: "", component: () => import("pages/PublicLessons.vue") },
-    ],
+    component: () => import("pages/PublicLessons.vue"),
     meta: { requiresAuth: false },
   },
   {
     path: "/classes",
     name: "classes",
-    component: () => import("layouts/BlankLayout.vue"),
-    children: [{ path: "", component: () => import("pages/GolfClasses.vue") }],
+    component: () => import("pages/GolfClasses.vue"),
     meta: { requiresAuth: false },
   },
   {
     path: "/startlist",
     name: "startlist",
-    component: () => import("layouts/BlankLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Startlist.vue") }],
+    component: () => import("pages/Startlist.vue"),
     meta: { requiresAuth: false },
   },
   {
     path: "/proCourse",
     name: "proCourse",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/ProCourses.vue") }],
+    component: () => import("pages/ProCourses.vue"),
     meta: {
       requiresAuth: true,
       title: "Cursussen",
@@ -74,8 +73,7 @@ const routes = [
   {
     path: "/match",
     name: "Match",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Match.vue") }],
+    component: () => import("pages/Match.vue"),
     meta: {
       requiresAuth: true,
       title: "Wedstrijden",
@@ -84,8 +82,7 @@ const routes = [
   {
     path: "/Baanstatus",
     name: "Baanstatus",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Course.vue") }],
+    component: () => import("pages/Course.vue"),
     meta: {
       requiresAuth: true,
       title: "Baanstatus",
@@ -94,28 +91,16 @@ const routes = [
   {
     path: "/handicap",
     name: "Handicap",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Handicap.vue") }],
+    component: () => import("pages/Handicap.vue"),
     meta: {
       requiresAuth: true,
       title: "Handicap",
     },
   },
   {
-    path: "/circle",
-    name: "circle",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Circle.vue") }],
-    meta: {
-      requiresAuth: true,
-      title: "Circle",
-    },
-  },
-  {
     path: "/checkin",
     name: "CheckIn",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/CheckIn.vue") }],
+    component: () => import("pages/CheckIn.vue"),
     meta: {
       requiresAuth: true,
       title: "Starttijd inchecken",
@@ -124,8 +109,7 @@ const routes = [
   {
     path: "/messages",
     name: "Berichten",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Messages.vue") }],
+    component: () => import("pages/Messages.vue"),
     meta: {
       requiresAuth: true,
       title: "Berichten",
@@ -134,8 +118,7 @@ const routes = [
   {
     path: "/pos",
     name: "Horeca",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Pos.vue") }],
+    component: () => import("pages/Pos.vue"),
     meta: {
       requiresAuth: true,
       title: "Horeca",
@@ -144,8 +127,7 @@ const routes = [
   {
     path: "/lessons",
     name: "Lessen",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Lessons.vue") }],
+    component: () => import("pages/Lessons.vue"),
     meta: {
       requiresAuth: true,
       title: "Lessen",
@@ -154,8 +136,7 @@ const routes = [
   {
     path: "/lessoncards",
     name: "lessoncards",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Lessoncards.vue") }],
+    component: () => import("pages/Lessoncards.vue"),
     meta: {
       requiresAuth: true,
       title: "Leskaarten",
@@ -164,10 +145,7 @@ const routes = [
   {
     path: "/greenfeecards",
     name: "greenfeecards",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [
-      { path: "", component: () => import("pages/Greenfeecards.vue") },
-    ],
+    component: () => import("pages/Greenfeecards.vue"),
     meta: {
       requiresAuth: true,
       title: "Rondekaarten",
@@ -176,8 +154,7 @@ const routes = [
   {
     path: "/shop",
     name: "Shop",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Shop.vue") }],
+    component: () => import("pages/Shop.vue"),
     meta: {
       requiresAuth: true,
       title: "Shop",
@@ -186,8 +163,7 @@ const routes = [
   {
     path: "/reservations",
     name: "reservations",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Reservations.vue") }],
+    component: () => import("pages/Reservations.vue"),
     meta: {
       requiresAuth: false,
       title: "Starttijden",
@@ -196,8 +172,7 @@ const routes = [
   {
     path: "/profile",
     name: "profile",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Profile.vue") }],
+    component: () => import("pages/Profile.vue"),
     meta: {
       requiresAuth: true,
       title: "Profiel",
@@ -206,8 +181,7 @@ const routes = [
   {
     path: "/ngf",
     name: "NGF",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/NGF.vue") }],
+    component: () => import("pages/NGF.vue"),
     meta: {
       requiresAuth: true,
       title: "NGF kaart",
@@ -216,8 +190,7 @@ const routes = [
   {
     path: "/members",
     name: "Ledenlijst",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Members.vue") }],
+    component: () => import("pages/Members.vue"),
     meta: {
       requiresAuth: true,
       title: "Ledenlijst",
@@ -226,8 +199,7 @@ const routes = [
   {
     path: "/Baankalender",
     name: "Baankalender",
-    component: () => import("layouts/PageLayout.vue"),
-    children: [{ path: "", component: () => import("pages/Calendar.vue") }],
+    component: () => import("pages/Calendar.vue"),
     meta: {
       requiresAuth: true,
       title: "Baankalender",
@@ -236,7 +208,7 @@ const routes = [
   {
     path: "/sign-up",
     name: "signUp",
-    component: () => import("layouts/BlankLayout.vue"),
+    component: layoutComponent,
     children: [{ path: "", component: () => import("pages/SignUp.vue") }],
     meta: {
       requiresAuth: false,

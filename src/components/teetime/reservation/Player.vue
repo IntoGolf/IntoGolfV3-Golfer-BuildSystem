@@ -1,34 +1,63 @@
 <template>
   <div>
-    <select-player
-      v-if="!player.flpName"
-      :flight="flight"
-      :player="player"
-      v-on:handleSave="handleSave"
-    />
-
-    <player-details
-      v-else
-      :flight="flight"
-      :player="player"
-      v-on:handleEditPlayer="handleEditPlayer"
-      v-on:handleSave="handleSave"
-    />
+    <q-list bordered separator>
+      <q-item
+        v-for="(player, key) in players"
+        :key="key"
+        v-ripple
+        clickable
+        v-on:click="handleEditPlayer(player)"
+      >
+        <q-item-section>
+          <q-item-label>
+            <b>{{ player.flpName }}</b>
+          </q-item-label>
+          <q-item-label caption>
+            {{ player.flpEmail }}
+          </q-item-label>
+        </q-item-section>
+        <q-item-section side style="font-size: 24px">
+          {{ player.flpHandicap }}
+        </q-item-section>
+      </q-item>
+      <q-item
+        v-if="freeSlots > 0"
+        v-ripple
+        clickable
+        v-on:click="handleAddPlayer"
+      >
+        <q-item-section>
+          <q-item-label>
+            <b>Speler toevoegen</b>
+          </q-item-label>
+          <q-item-label caption>
+            Er zijn nog {{ freeSlots }} plaatsen beschikbaar
+          </q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-icon name="add" />
+        </q-item-section>
+      </q-item>
+    </q-list>
   </div>
 </template>
 
 <script>
-import SelectPlayer from "components/teetime/reservation/SelectPlayer";
-import PlayerDetails from "components/teetime/reservation/PlayerDetails";
-
 export default {
-  components: { PlayerDetails, SelectPlayer },
   props: {
     flight: Object,
-    player: Object,
+    playerArray: Array,
   },
   data: function () {
     return {};
+  },
+  computed: {
+    players() {
+      return this.playerArray.filter((item) => item.flpName !== "");
+    },
+    freeSlots() {
+      return this.playerArray.filter((item) => item.flpName === "").length;
+    },
   },
   methods: {
     handleSave: function (flight, close, index) {
@@ -36,6 +65,18 @@ export default {
     },
     handleEditPlayer: function (player) {
       this.$emit("handleEditPlayer", player);
+    },
+    handleAddPlayer() {
+      let newPlayer = {
+        flpNr: null,
+        flpSide: 2,
+        flpRelNr: null,
+        flpName: null,
+        flpEmail: "",
+        flpHandicap: "",
+        flpCarNr: null,
+      };
+      this.$emit("handleAddPlayer", newPlayer);
     },
   },
 };

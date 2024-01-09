@@ -1,5 +1,5 @@
 <template>
-  <q-page-container className="page-bgr">
+  <q-page-container>
     <q-page class="q-pa-sm">
       <match />
       <bookings v-if="usrHasTeeTimes" />

@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="q-pa-sm">
     <q-pull-to-refresh @refresh="refreshList">
       <div class="row q-mb-md">
         <div class="col">
@@ -148,8 +148,7 @@ export default {
       });
     },
     getMatchDate(match) {
-      let d = new Date(match.playingDate);
-      return d.toLocaleDateString();
+      return this.$dayjs(match.playingDate).format("ddd DD MMMM");
     },
     getMatchTime(match) {
       return match.startingTime.substr(0, 5);
@@ -158,13 +157,22 @@ export default {
       let compareDate = this.$dayjs();
       let startDate = this.$dayjs(match.StartDatumTGInschrijven);
       let endDate = this.$dayjs(match.subscriptionDeadline);
-      return compareDate.isBetween(startDate, endDate);
+
+      return (
+        compareDate.isBetween(startDate, endDate) &&
+        match.InschrijvenInternet === 1 &&
+        match.UitslagenGereed !== 1 &&
+        match.StartlijstGereed !== 1
+      );
     },
     getOpenForMe: function (match) {
       let compareDate = this.$dayjs();
       let startDate = this.$dayjs(match.StartDatumTGInschrijven);
       let endDate = this.$dayjs(match.subscriptionDeadline);
-      if (!compareDate.isBetween(startDate, endDate)) {
+      if (
+        !compareDate.isBetween(startDate, endDate) ||
+        match.InschrijvenInternet === 0
+      ) {
         return false;
       }
 

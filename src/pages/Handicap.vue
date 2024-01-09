@@ -1,6 +1,6 @@
 <template>
   <q-page-container>
-    <q-page>
+    <q-page class="q-pa-sm">
       <div v-if="page === 1">
         <handicap-menu v-on:handleNew="handleNew" />
 
@@ -120,7 +120,6 @@ export default {
   computed: {
     ...mapGetters("scorecards", ["scorecards"]),
     ...mapGetters("countries", ["countries"]),
-    ...mapGetters("settings", ["settings"]),
     defaultTee: function () {
       if (this.currentUser.relGender === 2) {
         return this.teeList.find((tee) => tee.Category === 15);
@@ -171,7 +170,6 @@ export default {
         });
     },
     handleSave: function (scorecard, open) {
-      console.log(scorecard);
       let that = this;
       this.$http.post("golfer/scorecard", scorecard).then((res) => {
         that.scorecard = res.response.scorecard;

@@ -83,6 +83,20 @@ export default {
   },
   methods: {
     price: function (time) {
+      if (
+        this.holes.value === 18 &&
+        (!time || !time.greenFeePrice18 || time.greenFeePrice18.length === 0)
+      ) {
+        return 0;
+      }
+
+      if (
+        this.holes.value === 9 &&
+        (!time || !time.greenFeePrice9 || time.greenFeePrice9.length === 0)
+      ) {
+        return 0;
+      }
+
       if (this.holes.value === 18) {
         return time.greenFeePrice18[0].price;
       } else {

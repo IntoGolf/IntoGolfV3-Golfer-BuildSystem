@@ -3,7 +3,7 @@
     <div v-show="myPlayers.length > 0">
       <div class="row">
         <div class="col text-h6">
-          {{ match.teamSize > 1 ? "Mijn team" : "Mijn deelnemers" }}
+          {{ isTeam ? "Mijn team" : "Mijn deelnemers" }}
         </div>
       </div>
 
@@ -224,10 +224,13 @@ export default {
       //     (this.match.InschrijvenInternet === 0 || (player.relation !== null && player.relNrDoor !== this.currentUser.relNr))
       //     && player.Status === 1);
     },
+    isTeam: function () {
+      return this.match.teamSize > 1 && this.match.teammatch === 1;
+    },
   },
   methods: {
     hasTeamMembers: function (relNr) {
-      if (this.match.teamSize === 1) {
+      if (!this.isTeam) {
         return false;
       }
       let team = this.match.players.filter(

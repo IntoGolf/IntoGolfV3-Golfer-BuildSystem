@@ -1,72 +1,7 @@
 <template>
   <q-card>
-    <q-card-section class="text-h6">
-      {{ player.flpName === null ? "Vrije plaats" : player.flpName }}
-    </q-card-section>
-
-    <q-separator />
-
-    <q-card-section v-show="player.flpName !== null">
-      <div v-show="player.flpRelNr === null" class="row q-mb-sm">
-        <div class="col text-bold">E-mail</div>
-        <div class="col-8 text-right">
-          {{ player.flpEmail === null ? "-" : player.flpEmail }}
-        </div>
-      </div>
-
-      <div v-show="player.flpRelNr === null" class="row q-mb-sm">
-        <div class="col text-bold">Telefoon</div>
-        <div class="col-8 text-right">
-          {{ player.flpPhone === null ? "-" : player.flpPhone }}
-        </div>
-      </div>
-
-      <div class="row q-mb-sm">
-        <div class="col text-bold">Handicap</div>
-        <div class="col-8 text-right">
-          {{ player.flpHandicap === null ? "-" : player.flpHandicap }}
-        </div>
-      </div>
-
-      <div v-show="player.flpRelNr === null" class="row q-mb-sm">
-        <div class="col text-bold">Gsn</div>
-        <div class="col-8 text-right">
-          {{ player.flpGsn === null ? "-" : player.flpGsn }}
-        </div>
-      </div>
-
-      <div v-show="player.flpRelNr === null" class="row q-mb-sm">
-        <div class="col text-bold">Intro</div>
-        <div class="col-8 text-right">
-          <q-icon v-show="player.flpIntro === 1" color="primary" name="check" />
-        </div>
-      </div>
-
-      <div v-show="showPay" class="row q-mb-sm">
-        <div class="col text-bold">Greenfee</div>
-        <div class="col-8 text-right">
-          {{ player.greenfee === null ? "-" : player.greenfee.grfName }}
-        </div>
-      </div>
-
-      <div v-show="showPay" class="row">
-        <div class="col text-bold">Greenfee tarief</div>
-        <div class="col-8 text-right">
-          {{ player.flpPrice === null ? "-" : $filters.money(player.flpPrice) }}
-        </div>
-      </div>
-    </q-card-section>
-
-    <q-separator v-show="canCancel && !paid" />
-
-    <q-card-section>
-      <q-btn
-        v-show="canCancel && !paid"
-        class="q-mr-md"
-        color="primary"
-        icon="edit"
-        v-on:click="$emit('handleEditPlayer', player)"
-      />
+    <q-card-section v-if="player.flpName !== null" v-on:click="handleEdit">
+      <b>{{ player.flpName }}</b>
     </q-card-section>
   </q-card>
 </template>
@@ -120,6 +55,11 @@ export default {
     },
   },
   methods: {
+    handleEdit() {
+      if (this.canCancel && !this.paid) {
+        this.$emit("handleEditPlayer", this.player);
+      }
+    },
     handleCancel: function () {
       this.$q
         .dialog({

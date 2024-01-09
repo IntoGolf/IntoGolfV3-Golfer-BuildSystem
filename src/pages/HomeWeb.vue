@@ -238,6 +238,7 @@ export default {
   created() {
     this.loadImage();
     this.loadWeather();
+    console.log(process.env.VUE_APP_BASE_URL);
   },
   computed: {
     cardInMemory: function () {

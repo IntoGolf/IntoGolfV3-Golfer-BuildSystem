@@ -1,6 +1,6 @@
 <template>
   <q-page-container>
-    <q-page>
+    <q-page class="q-pa-sm">
       <div v-if="settings.app_checkin_pincode == 1">
         <h4 v-show="!correct" class="text-center">
           Voer de 4 cijferige check-in code in
@@ -224,8 +224,18 @@ export default {
   },
   methods: {
     onCheckIn: function () {
+      console.log("onCheckIn");
       let flight = { flpNr: this.$route.query.id };
-      this.$http.post("golfer/booking/checkin", flight).then((res) => {
+      if (this.flight) {
+        let player = this.flight.flight_players.find(
+          (player) =>
+            player.flpRelNr === this.$store.state.currentUser.item.relNr
+        );
+        if (player) {
+          flight = { flpNr: player.flpNr };
+        }
+      }
+      this.$http.post("golfer/booking/checkin", flight).then(() => {
         this.done = true;
         setTimeout(this.onGoHome, 2000);
       });
@@ -248,20 +258,20 @@ export default {
       intTime = intTime * 5767871726;
       this.checkCode = intTime.toString().substr(0, 4);
 
-      if (this.nr == 1) {
+      if (this.nr === 1) {
         this.NR1 = key;
       }
-      if (this.nr == 2) {
+      if (this.nr === 2) {
         this.NR2 = key;
       }
-      if (this.nr == 3) {
+      if (this.nr === 3) {
         this.NR3 = key;
       }
-      if (this.nr == 4) {
+      if (this.nr === 4) {
         this.NR4 = key;
       }
 
-      this.nr = this.nr == 4 ? 1 : this.nr + 1;
+      this.nr = this.nr === 4 ? 1 : this.nr + 1;
     },
 
     handleCloseScorecard: function (reload) {

@@ -1,6 +1,6 @@
 <template>
   <q-page-container>
-    <q-page>
+    <q-page class="q-pa-sm">
       <q-card v-for="(item, index) in items" :key="index" class="q-mb-md">
         <q-card-section>
           <div class="row">

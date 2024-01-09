@@ -329,4 +329,5 @@ export const message = {
   "Crushed bugs": "Verholpen bugs",
   "Other improvements": "Andere verbeteringen",
   Okay: "Oké",
+  circle: "Chats",
 };

@@ -7,7 +7,7 @@ const baseURL = process.env.VUE_APP_BASE_URL;
 
 axios.interceptors.request.use(
   (config) => {
-    if (!Platform.is.desktop) {
+    if (Platform.is.mobile) {
       axios.defaults.headers.common["X-App-Identifier"] = process.env.APP_ID;
     }
     Loading.show();
@@ -28,7 +28,7 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   function (response) {
-    console.log(`==axios response==`, response);
+    // console.log(`==axios response==`, response);
     Loading.hide();
     if (response.data && response.data.code >= 400) {
       this.$message.error(response.data.message);

@@ -25,7 +25,7 @@
           class="el-icon-plus avatar-uploader-icon"
         ></i>
       </el-upload>
-      <el-button circle @click="onTriggerUpload"
+      <el-button chat @click="onTriggerUpload"
         ><i class="far fa-upload"></i>
       </el-button>
       <!--      <div class="btn-rewrite">-->
@@ -40,11 +40,13 @@ import authMixin from "../mixins/auth";
 
 export default {
   mixins: [authMixin],
-  props: ["uploadUrl"],
+  props: {
+    uploadUrl: String,
+  },
   data() {
     return {
-      relNr: this.currentUser.relNr,
-      relImage: this.currentUser.relImage,
+      relNr: this.$store.state.currentUser.item.relNr,
+      relImage: this.$store.state.currentUser.item.relImage,
       uploading: "",
     };
   },

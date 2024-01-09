@@ -31,6 +31,7 @@ const actions = {
     try {
       const response = await this.$axios.get("golfer/settings");
       commit("SET_SETTINGS", response);
+      return response;
     } catch (error) {
       console.error("There was an error fetching the settings!", error);
     }
@@ -72,7 +73,6 @@ const getters = {
     );
   },
   setHasCalendar: (state) => {
-    console.log(state.item);
     return (
       state.item &&
       typeof state.item === "object" &&

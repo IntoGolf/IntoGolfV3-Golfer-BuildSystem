@@ -17,7 +17,5 @@ let isToday = require("dayjs/plugin/isToday");
 dayjs.extend(isToday);
 
 export default boot(({ app }) => {
-  // Inject dayjs as a global property
-  app.use(dayjs);
   app.config.globalProperties.$dayjs = dayjs;
 });

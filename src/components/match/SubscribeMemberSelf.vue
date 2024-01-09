@@ -238,8 +238,9 @@ export default {
     handleSubscribe: function () {
       let that = this;
 
+      this.player.returnUrl = process.env.VUE_APP_BASE_URL;
       this.player.details.relNr = this.currentUser.relNr;
-      this.player.is_desktop = this.$q.platform.is.desktop === true ? 1 : 0;
+      this.player.is_desktop = this.$q.platform.is.cordova === true ? 0 : 1;
       this.player.details.Bron = 2;
 
       this.$http.post(`golfer/event/player`, this.player).then(function (res) {

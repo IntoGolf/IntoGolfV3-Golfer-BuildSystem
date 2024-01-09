@@ -1,10 +1,21 @@
 <template>
   <q-page-container>
-    <q-page>
+    <q-page class="q-pa-sm">
       <q-form @submit="saveProfile">
         <div class="ml-auto mr-auto text-center">
-          <q-img :src="blobUrl" style="max-width: 240px; max-height: 240px" />
-          <!--          <UploadPhoto :uploadUrl="uploadUrl"></UploadPhoto>-->
+          <q-img
+            :src="blobUrl"
+            style="max-width: 240px; max-height: 240px"
+            @click="triggerUpload"
+          />
+
+          <input
+            ref="fileInput"
+            accept="image/*"
+            hidden
+            type="file"
+            @change="onFileChange"
+          />
         </div>
 
         <q-tabs v-model="tab" class="text-teal">
@@ -175,14 +186,10 @@
 </template>
 
 <script>
-// import UploadPhoto from "../components/UploadPhoto";
 import authMixin from "../mixins/auth";
 
 export default {
   mixins: [authMixin],
-  // components: {
-  //   UploadPhoto
-  // },
   data: function () {
     return {
       back_icon: "fa-home",
@@ -239,6 +246,12 @@ export default {
     };
   },
   computed: {
+    Authorization() {
+      let authorization = JSON.parse(
+        localStorage.getItem("golfer__Authorization")
+      );
+      return authorization ? authorization : false;
+    },
     canChange: function () {
       return parseInt(this.settings.app_allow_member_change_contact) === 1;
     },
@@ -305,14 +318,9 @@ export default {
     },
     loadImage: function () {
       let that = this;
-      if (!this.currentUser.relImage) {
-        return;
-      }
-      this.$http
-        .get("golfer/image/" + this.currentUser.relImage)
-        .then((res) => {
-          that.blobUrl = "data:image/png;base64," + res;
-        });
+      this.$http.get("golfer/image").then((res) => {
+        that.blobUrl = "data:image/png;base64," + res;
+      });
     },
     saveProfile() {
       this.form.relNr = this.currentUser.relNr;
@@ -328,6 +336,44 @@ export default {
         this.$store.dispatch("clearState");
         this.$router.push("/login");
       });
+    },
+    triggerUpload() {
+      if (!this.$store.state.settings.item.app_allow_member_upload_photo) {
+        return;
+      }
+      // Trigger the hidden file input
+      this.$refs.fileInput.click();
+    },
+    onFileChange(event) {
+      const files = event.target.files;
+      if (files && files[0]) {
+        const file = files[0];
+        this.imageUrl = URL.createObjectURL(file);
+
+        // Optionally, upload the file to the server here
+        this.uploadAvatar(file);
+      }
+    },
+    async uploadAvatar(file) {
+      // Implement the upload logic here
+      // Typically, you would send an HTTP request to your server
+      // For demonstration, just logging the file
+
+      let formData = new FormData();
+      formData.append("avatar", file); // 'image' is the key expected on the server side
+
+      const response = await this.$http.post("golfer/image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      this.currentUser.relImage = response.filename;
+
+      this.loadImage();
+
+      // Reset the file input after upload
+      this.$refs.fileInput.value = null;
     },
   },
   created() {

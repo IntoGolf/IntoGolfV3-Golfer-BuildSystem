@@ -1,6 +1,6 @@
 <template>
   <q-page-container>
-    <q-page>
+    <q-page class="q-pa-sm">
       <div
         v-for="card in $store.state.greenfeeCards.items"
         :key="card.id"
