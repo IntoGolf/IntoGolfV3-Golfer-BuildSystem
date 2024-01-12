@@ -75,12 +75,14 @@ const mutations = {
 
 const actions = {
   async fetchChats({ dispatch, commit, state }, onlyRefresh = false) {
+    console.log("fetchChats");
     pusher = new Pusher(process.env.PUSHER_APP_KEY, {
       cluster: process.env.PUSHER_APP_CLUSTER,
       encrypted: true,
     });
 
-    if (!pusher) return;
+    //if (!pusher) return;
+    console.log("fetchChats2");
 
     try {
       const settings = await dispatch("settings/fetchSettings", null, {
