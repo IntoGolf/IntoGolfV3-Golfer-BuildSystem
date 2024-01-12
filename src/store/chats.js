@@ -76,8 +76,8 @@ const mutations = {
 const actions = {
   async fetchChats({ dispatch, commit, state }, onlyRefresh = false) {
     console.log("fetchChats");
-    pusher = new Pusher(process.env.PUSHER_APP_KEY, {
-      cluster: process.env.PUSHER_APP_CLUSTER,
+    pusher = new Pusher(process.env.VUE_PUSHER_APP_KEY, {
+      cluster: process.env.VUE_PUSHER_APP_KEY,
       encrypted: true,
     });
 
