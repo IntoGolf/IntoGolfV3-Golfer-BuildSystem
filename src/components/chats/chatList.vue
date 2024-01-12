@@ -32,6 +32,7 @@ export default {
   components: { ChatListItem },
   methods: {
     onRefresh(done) {
+      console.log("go");
       this.$store.dispatch("chats/fetchChats").then(() => {
         done();
       });

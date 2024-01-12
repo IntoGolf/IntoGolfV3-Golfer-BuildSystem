@@ -185,7 +185,7 @@ export default {
 
       if (
         this.currentUser.age < match.Min_Age ||
-        this.currentUser.relHandicap > match.Max_Age
+        this.currentUser.age > match.Max_Age
       ) {
         return false;
       }

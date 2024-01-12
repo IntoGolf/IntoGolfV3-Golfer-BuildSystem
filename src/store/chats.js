@@ -75,6 +75,11 @@ const mutations = {
 
 const actions = {
   async fetchChats({ dispatch, commit, state }, onlyRefresh = false) {
+    pusher = new Pusher(process.env.PUSHER_APP_KEY, {
+      cluster: process.env.PUSHER_APP_CLUSTER,
+      encrypted: true,
+    });
+
     if (!pusher) return;
 
     try {
@@ -82,9 +87,9 @@ const actions = {
         root: true,
       });
 
-      if (!settings.app_display_chat) {
-        return;
-      }
+      // if (!settings.app_display_chat) {
+      //   return;
+      // }
 
       commit("CLOSE_CHATS");
       const response = await this.$axios.get("chat/list");

@@ -349,7 +349,7 @@ export default {
 
       if (
         this.currentUser.age < this.match.Min_Age ||
-        this.currentUser.relHandicap > this.match.Max_Age
+        this.currentUser.age > this.match.Max_Age
       ) {
         return (
           "Voor deze wedstrijd is een restrictie op leeftijd van kracht, de minimale leeftijd voor deelname is " +
