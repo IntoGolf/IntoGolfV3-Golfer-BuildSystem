@@ -524,9 +524,9 @@ export default {
       this.account_form.relGrpNr1 = that.relationGroupArray[0];
     });
 
-    if (this.$q.platform.is.desktop) {
-      this.onCaptchaVerified();
-    }
+    //if (this.$q.platform.is.desktop) {
+    this.onCaptchaVerified();
+    //}
   },
   methods: {
     validateEmail(val) {
