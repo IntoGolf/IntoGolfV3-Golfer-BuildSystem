@@ -121,6 +121,7 @@ export default {
       this.onlogin();
     }
     this.form.redirect = this.$route.query.redirect;
+    this.form.redirect_page = this.$route.query.redirect_page;
   },
   computed: {
     canSignIn: function () {

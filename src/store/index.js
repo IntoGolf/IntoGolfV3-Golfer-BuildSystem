@@ -7,6 +7,7 @@ import settings from "./settings"; // Import your messages module
 import currentUser from "./currentUser";
 import courseStatus from "./courseStatus";
 import greenfeeCards from "./greenfeeCards";
+import bills from "./bills";
 import chats from "./chats";
 
 const store = createStore({
@@ -18,6 +19,7 @@ const store = createStore({
     currentUser,
     courseStatus,
     greenfeeCards,
+    bills,
     chats,
   },
   actions: {

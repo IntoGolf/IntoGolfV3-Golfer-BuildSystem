@@ -168,7 +168,14 @@
       </q-item>
 
       <q-item
-        v-if="showSecondNine && canCancel && isMyBooking && !paid && !checkedIn"
+        v-if="
+          showSecondNine &&
+          canCancel &&
+          isMyBooking &&
+          !paid &&
+          !checkedIn &&
+          flight.fltCrlNr2 === null
+        "
         v-ripple
         clickable
         v-on:click="showDialogSecNine"

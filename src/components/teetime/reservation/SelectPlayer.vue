@@ -149,7 +149,7 @@
             v-model="guest.flpName"
             clearable
             dense
-            label="Naam"
+            label="Naam*"
             outlined
           />
           <q-input
@@ -170,7 +170,7 @@
             v-model="guest.flpHandicap"
             clearable
             dense
-            label="Handicap"
+            label="Handicap*"
             outlined
           />
         </div>
@@ -178,7 +178,7 @@
       <q-separator />
       <q-card-section>
         <q-btn
-          :disable="knownPlayer === '' && relation === '' && guest === ''"
+          :disable="!validGuest"
           class="q-mr-md"
           color="primary"
           icon="save"
@@ -235,6 +235,20 @@ export default {
     this.handleLoad();
   },
   computed: {
+    handicapGuestValid() {
+      const stringValue = this.guest.flpHandicap.replace(",", ".");
+      const value = parseFloat(stringValue);
+      console.log(value);
+      if (!isNaN(value) && value >= -9.9 && value <= 54.0) {
+        const decimalCount = (stringValue.split(".")[1] || "").length;
+        return decimalCount <= 1;
+      } else {
+        return false;
+      }
+    },
+    validGuest() {
+      return this.guest.flpName.length > 2 && this.handicapGuestValid;
+    },
     currentPlayers() {
       return this.flight.flight_players.map((player) => player.flpName);
     },

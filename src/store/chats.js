@@ -75,14 +75,27 @@ const mutations = {
 
 const actions = {
   async fetchChats({ dispatch, commit, state }, onlyRefresh = false) {
-    console.log("fetchChats");
-    pusher = new Pusher(process.env.VUE_PUSHER_APP_KEY, {
-      cluster: process.env.VUE_PUSHER_APP_KEY,
-      encrypted: true,
-    });
+    try {
+      // Attempt to use the process object
+      pusher = new Pusher(process.env.VUE_PUSHER_APP_KEY, {
+        cluster: process.env.VUE_PUSHER_APP_KEY,
+        encrypted: true,
+      });
+    } catch (error) {
+      if (
+        error instanceof ReferenceError &&
+        error.message.includes("process is not defined")
+      ) {
+        // Handle the specific error
+        console.log("process is not available in this environment");
+        // Implement alternative logic for environments where process is not available
+      } else {
+        // Handle other types of errors
+        console.error("An unexpected error occurred:", error);
+      }
+    }
 
     //if (!pusher) return;
-    console.log("fetchChats2");
 
     try {
       const settings = await dispatch("settings/fetchSettings", null, {
