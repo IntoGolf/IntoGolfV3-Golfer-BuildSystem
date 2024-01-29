@@ -5,7 +5,7 @@ import { Platform } from "quasar";
 const captcha = process.env.VUE_APP_GOOGLE_RECAPTCHA;
 
 export default boot(({ app }) => {
-  if (Platform.is.desktop) {
+  if (!Platform.is.cordova) {
     app.use(VueReCaptcha, { siteKey: captcha });
   }
 });
