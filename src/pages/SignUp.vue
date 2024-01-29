@@ -559,10 +559,8 @@ export default {
       let that = this;
 
       if (!this.$q.platform.is.cordova) {
-        alert("onSubmit");
         await this.$recaptchaLoaded();
         that.account_form.captcha = await this.$recaptcha("login");
-        alert(that.account_form.captcha);
       }
 
       that.loading = true;
@@ -573,7 +571,6 @@ export default {
           this.status = 3;
         }
       });
-      alert("done");
     },
     onCaptchaVerified(response) {
       this.$emit("captcha-verified", response);
