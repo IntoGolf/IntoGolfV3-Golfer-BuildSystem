@@ -524,9 +524,9 @@ export default {
       this.account_form.relGrpNr1 = that.relationGroupArray[0];
     });
 
-    //if (this.$q.platform.is.desktop) {
-    this.onCaptchaVerified();
-    //}
+    if (!this.$q.platform.is.cordova) {
+      this.onCaptchaVerified();
+    }
   },
   methods: {
     validateEmail(val) {
@@ -558,10 +558,12 @@ export default {
     async onSubmit() {
       let that = this;
 
-      //if (this.$q.platform.is.desktop) {
-      await this.$recaptchaLoaded();
-      that.account_form.captcha = await this.$recaptcha("login");
-      //}
+      if (!this.$q.platform.is.cordova) {
+        alert("onSubmit");
+        await this.$recaptchaLoaded();
+        that.account_form.captcha = await this.$recaptcha("login");
+        alert(that.account_form.captcha);
+      }
 
       that.loading = true;
       that.$http.post(`golfer/sign-up`, that.account_form).then((res) => {
@@ -571,6 +573,7 @@ export default {
           this.status = 3;
         }
       });
+      alert("done");
     },
     onCaptchaVerified(response) {
       this.$emit("captcha-verified", response);
