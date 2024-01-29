@@ -246,12 +246,6 @@ export default {
     };
   },
   computed: {
-    Authorization() {
-      let authorization = JSON.parse(
-        localStorage.getItem("golfer__Authorization")
-      );
-      return authorization ? authorization : false;
-    },
     canChange: function () {
       return parseInt(this.settings.app_allow_member_change_contact) === 1;
     },
@@ -311,10 +305,8 @@ export default {
   },
   methods: {
     async update() {
-      await this.$http.get("golfer/user").then((res) => {
-        localStorage.setItem("golfer__currentUser", JSON.stringify(res));
-        this.form = Object.assign({}, this.currentUser);
-      });
+      await this.$store.dispatch("currentUser/fetch");
+      this.form = this.$store.getters["currentUser/item"];
     },
     loadImage: function () {
       let that = this;
@@ -322,17 +314,12 @@ export default {
         that.blobUrl = "data:image/png;base64," + res;
       });
     },
-    saveProfile() {
-      this.form.relNr = this.currentUser.relNr;
-      localStorage.setItem("golfer__currentUser", JSON.stringify(this.form));
-      const payload = Object.assign(this.form, {
-        relNr: this.currentUser.relNr,
-      });
-      this.$http.post(`golfer/user`, payload);
+    async saveProfile() {
+      await this.$http.post(`golfer/user`, this.form);
+      await this.update();
     },
     logout() {
       this.$http.post(`golfer/logout`).then(() => {
-        localStorage.clear();
         this.$store.dispatch("clearState");
         this.$router.push("/login");
       });

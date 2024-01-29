@@ -1,347 +1,358 @@
 <template>
-  <q-page-container class="q-pa-md">
-    <div v-show="step == 1" class="row">
-      <div class="col-md-4 offset-md-4 col-xs-12">
-        <div class="row">
-          <div class="col-8 text-h5">Boek een starttijd</div>
-          <div class="col-4 text-right">
-            <q-btn-group>
-              <q-btn
-                color="primary"
-                label="<"
-                size="sm"
-                v-on:click="setDay(-1)"
-              />
-              <q-btn
-                color="primary"
-                label=">"
-                size="sm"
-                v-on:click="setDay(1)"
-              />
-            </q-btn-group>
-          </div>
-        </div>
-
-        <div class="row q-mb-md">
-          <div class="col-md-3 col-xs-6 q-pr-md">
-            <q-input v-model="date" label="Datum" size="sm" type="date" />
-          </div>
-          <div class="col-md-3 col-xs-6 q-pr-md">
-            <q-select
-              v-model="flight.fltSize"
-              :options="sizeArray"
-              emit-value
-              label="Spelers"
-              size="sm"
-              toggle-color="primary"
-            />
-          </div>
-
-          <div class="col-md-3 col-xs-6 q-pr-md">
-            <q-select
-              v-model="holes"
-              :options="holesArray"
-              label="Holes"
-              size="sm"
-              toggle-color="primary"
-            />
-          </div>
-          <div class="col-md-3 col-xs-6 q-pr-md">
-            <q-select
-              v-model="per"
-              :options="perArray"
-              label="Periode"
-              size="sm"
-              toggle-color="primary"
-            />
-          </div>
-        </div>
-
-        <div v-if="hasTimes">
-          <div class="row q-gutter-xs q-mb-md">
-            {{ mergeText }}
-          </div>
-          <div class="row q-gutter-xs">
-            <div
-              v-for="(course, cKey) in courses"
-              :key="cKey"
-              class="q-pa-sm col items-start text-center text-white bg-secondary text-bold"
-            >
-              {{ course.crlNameInternet }}
-            </div>
-          </div>
-          <div class="row q-gutter-xs">
-            <div
-              v-for="(course, cKey) in courses"
-              :key="cKey"
-              class="col text-grey-8 text-bold"
-            >
-              <course-comp
-                :course="course"
-                :holes="holes"
-                :per="per"
-                :size="flight.fltSize"
-                v-on:setTimeObject="setTimeObject"
-              />
-            </div>
-          </div>
-        </div>
-        <div v-else-if="loading">
-          <div
-            class="text-h5 text-center"
-            style="
-              width: 100%;
-              height: 641px;
-              padding-top: 50px;
-              border: 1px solid darkgray;
-            "
-          >
-            Starttijden worden opgehaald.
-          </div>
-        </div>
-        <div v-else>
-          <div
-            class="text-h5 text-center"
-            style="
-              width: 100%;
-              height: 641px;
-              padding-top: 50px;
-              border: 1px solid darkgray;
-            "
-          >
-            Helaas we geen starttijden kunnen vinden voor de door u gekozen
-            datum en holes.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div v-show="step == 2" class="row q-mt-md">
-      <div class="col-md-4 offset-md-4 col-xs-12">
-        <div class="row text-center q-mb-lg">
-          <div class="col text-h5 q-ml-auto q-mr-auto">Jouw reservering</div>
-        </div>
-
-        <div class="row">
-          <div class="col-4 text-bold">Datum:</div>
-          <div class="col-8">
-            {{ dayjs(date).format("dddd DD MMMM") }}
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-4 text-bold">Tijd:</div>
-          <div class="col-8">
-            {{ $filters.minuteToTime(flight.fltTime1) }}
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-4 text-bold">Personen:</div>
-          <div class="col-8">
-            {{ flight.fltSize }}
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-4 text-bold">Holes:</div>
-          <div class="col-8">
-            {{ holes.value }}
-          </div>
-        </div>
-
-        <div
-          v-if="$store.state.settings.publicItems.app_display_greenfee_pay == 1"
-          class="row q-mb-lg"
-        >
-          <div class="col-4 text-bold">Te betalen bedrag:</div>
-          <div class="col-8">
-            {{ $filters.money(flightPrice) }}
-          </div>
-        </div>
-
-        <div
-          v-if="$store.state.settings.publicItems.app_display_greenfee_pay == 1"
-          class="row q-mt-sm"
-        >
-          Nadat je de flight hebt betaald ontvang je een e-mail ter bevestiging
-          van je reservering. In deze e-mail vindt je een link waarmee je je
-          resevering kan aanvullen met de details van je medespelers.
-        </div>
-        <div v-else class="row q-mt-sm">
-          Nadat je de flight hebt geboekt ontvang je een e-mail ter bevestiging
-          van je reservering. In deze e-mail vindt je een link waarmee je je
-          resevering kan aanvullen met de details van je medespelers.
-        </div>
-        <q-input
-          v-model="flight.flpName1"
-          :rules="[(val) => !!val || '* Required']"
-          class="q-mb-sm"
-          label="Naam"
-          stack-label
-        />
-        <q-input
-          v-model="flight.flpEmail1"
-          :rules="[emailRule]"
-          class="q-mb-sm"
-          label="E-mailadres"
-          lazy-rules
-          stack-label
-        />
-        <q-input
-          v-model="flight.flpPhone1"
-          :rules="[(val) => !!val || '* Required']"
-          class="q-mb-sm"
-          label="Telefoonummer"
-          lazy-rules
-          mask="###############"
-          maxlength="15"
-          stack-label
-        />
-
-        <p>Voer hier de gegevens van uw medespelers in:</p>
-        <div v-if="flight.fltSize >= 2" class="row">
-          <div class="col-8">
-            <q-input
-              v-model="flight.flpName2"
-              :rules="[(val) => !!val || '* Required']"
-              class="q-mb-sm"
-              label="Speler 2"
-              stack-label
-            />
-          </div>
-          <div class="col-4">
-            <q-input
-              v-model="flight.flpHandicap2"
-              :rules="[
-                (val) => (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
-              ]"
-              class="q-mb-sm"
-              fill-mask="0"
-              label="Handicap"
-              mask="##.#"
-              reverse-fill-mask
-              stack-label
-            />
-          </div>
-        </div>
-        <div v-if="flight.fltSize >= 3" class="row">
-          <div class="col-8">
-            <q-input
-              v-model="flight.flpName3"
-              :rules="[(val) => !!val || '* Required']"
-              class="q-mb-sm"
-              label="Speler 3"
-              stack-label
-            />
-          </div>
-          <div class="col-4">
-            <q-input
-              v-model="flight.flpHandicap3"
-              :rules="[
-                (val) => (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
-              ]"
-              class="q-mb-sm"
-              fill-mask="0"
-              label="Handicap"
-              mask="##.#"
-              reverse-fill-mask
-              stack-label
-            />
-          </div>
-        </div>
-        <div v-if="flight.fltSize >= 4" class="row">
-          <div class="col-8">
-            <q-input
-              v-model="flight.flpName4"
-              :rules="[(val) => !!val || '* Required']"
-              class="q-mb-sm"
-              label="Speler 4"
-              stack-label
-            />
-          </div>
-          <div class="col-4">
-            <q-input
-              v-model="flight.flpHandicap4"
-              :rules="[
-                (val) => (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
-              ]"
-              class="q-mb-sm"
-              fill-mask="0"
-              label="Handicap"
-              mask="##.#"
-              reverse-fill-mask
-              stack-label
-            />
-          </div>
-        </div>
-
-        <div
-          v-if="$store.state.settings.publicItems.app_display_greenfee_pay == 1"
-        >
-          <div class="row">Leveringsvoorwaarden:</div>
-          <div
-            class="row q-pa-sm"
-            style="
-              border: 1px solid lightgrey;
-              height: 150px;
-              font-size: 10px;
-              overflow-y: scroll;
-            "
-          >
-            {{ conditions }}
-          </div>
-          <div class="row q-mt-md">
-            <q-checkbox
-              v-model="flight.agreeConditions"
-              :rules="[(val) => !!val || '* Required']"
-              class="q-mb-sm"
-              label="Ik ga akkoord met de leveringsvoorvaarden"
-              stack-label
-            />
-          </div>
+  <q-page-container>
+    <q-page class="q-pa-md">
+      <div v-show="step == 1" class="row q-mb-sm">
+        <div class="col">
           <div class="row">
-            <q-checkbox
-              v-model="flight.agreeCommerce"
-              :rules="[(val) => !!val || '* Required']"
-              class="q-mb-sm"
-              label="Stuur mij aanbiedingen"
-              stack-label
-            />
+            <div class="col-8 text-h5">Boek een starttijd</div>
+            <div class="col-4 text-right">
+              <q-btn-group>
+                <q-btn
+                  color="primary"
+                  label="<"
+                  size="sm"
+                  v-on:click="setDay(-1)"
+                />
+                <q-btn
+                  color="primary"
+                  label=">"
+                  size="sm"
+                  v-on:click="setDay(1)"
+                />
+              </q-btn-group>
+            </div>
+          </div>
+          <div class="row q-mb-md">
+            <div class="col-md-3 col-xs-6 q-pr-md">
+              <q-input v-model="date" label="Datum" size="sm" type="date" />
+            </div>
+            <div class="col-md-3 col-xs-6 q-pr-md">
+              <q-select
+                v-model="flight.fltSize"
+                :options="sizeArray"
+                emit-value
+                label="Spelers"
+                size="sm"
+                toggle-color="primary"
+              />
+            </div>
+
+            <div class="col-md-3 col-xs-6 q-pr-md">
+              <q-select
+                v-model="holes"
+                :options="holesArray"
+                label="Holes"
+                size="sm"
+                toggle-color="primary"
+              />
+            </div>
+            <div class="col-md-3 col-xs-6 q-pr-md">
+              <q-select
+                v-model="per"
+                :options="perArray"
+                label="Periode"
+                size="sm"
+                toggle-color="primary"
+              />
+            </div>
+          </div>
+          <div v-if="hasTimes">
+            <div class="row q-gutter-xs q-mb-md">
+              {{ mergeText }}
+            </div>
+            <div class="row q-gutter-xs">
+              <div
+                v-for="(course, cKey) in courses"
+                :key="cKey"
+                class="q-pa-sm col items-start text-center text-white bg-secondary text-bold"
+              >
+                {{ course.crlNameInternet }}
+              </div>
+            </div>
+            <div class="row q-gutter-xs">
+              <div
+                v-for="(course, cKey) in courses"
+                :key="cKey"
+                class="col text-grey-8 text-bold"
+              >
+                <course-comp
+                  :course="course"
+                  :holes="holes"
+                  :per="per"
+                  :size="flight.fltSize"
+                  v-on:setTimeObject="setTimeObject"
+                />
+              </div>
+            </div>
+          </div>
+          <div v-else-if="loading">
+            <div
+              class="text-h5 text-center"
+              style="
+                width: 100%;
+                height: 641px;
+                padding-top: 50px;
+                border: 1px solid darkgray;
+              "
+            >
+              Starttijden worden opgehaald.
+            </div>
+          </div>
+          <div v-else>
+            <div
+              class="text-h5 text-center"
+              style="
+                width: 100%;
+                height: 641px;
+                padding-top: 50px;
+                border: 1px solid darkgray;
+              "
+            >
+              Helaas we geen starttijden kunnen vinden voor de door u gekozen
+              datum en holes.
+            </div>
           </div>
         </div>
-        <q-btn
-          class="q-mr-sm"
-          color="primary"
-          label="Terug"
-          v-on:click="step = 1"
-        />
-        <q-btn
-          :disable="!valid"
-          class="q-mr-sm"
-          color="primary"
-          label="Reserveren"
-          v-on:click="handleSave"
-        />
-        <q-btn
-          v-show="1 == 2"
-          :disable="!valid"
-          color="primary"
-          label="Betaal"
-          v-on:click="handleSave"
-        />
       </div>
-    </div>
 
-    <payment
-      v-if="mollie !== null"
-      v-show="step === 3"
-      :id="mollie.id"
-      :url="mollie.url"
-      v-on:handleClosePayment="handleClosePayment"
-    />
+      <div v-show="step == 2" class="row q-mt-md">
+        <div class="col">
+          <div class="row text-center q-mb-lg">
+            <div class="col text-h5 q-ml-auto q-mr-auto">Jouw reservering</div>
+          </div>
 
-    <confirmation v-if="step === 4" />
+          <div class="row">
+            <div class="col-4 text-bold">Datum:</div>
+            <div class="col-8">
+              {{ dayjs(date).format("dddd DD MMMM") }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-4 text-bold">Tijd:</div>
+            <div class="col-8">
+              {{ $filters.minuteToTime(flight.fltTime1) }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-4 text-bold">Personen:</div>
+            <div class="col-8">
+              {{ flight.fltSize }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-4 text-bold">Holes:</div>
+            <div class="col-8">
+              {{ holes.value }}
+            </div>
+          </div>
+
+          <div
+            v-if="
+              $store.state.settings.publicItems.app_display_greenfee_pay == 1
+            "
+            class="row q-mb-lg"
+          >
+            <div class="col-4 text-bold">Te betalen bedrag:</div>
+            <div class="col-8">
+              {{ $filters.money(flightPrice) }}
+            </div>
+          </div>
+
+          <div
+            v-if="
+              $store.state.settings.publicItems.app_display_greenfee_pay == 1
+            "
+            class="row q-mt-sm"
+          >
+            Nadat je de flight hebt betaald ontvang je een e-mail ter
+            bevestiging van je reservering. In deze e-mail vindt je een link
+            waarmee je je resevering kan aanvullen met de details van je
+            medespelers.
+          </div>
+          <div v-else class="row q-mt-sm">
+            Nadat je de flight hebt geboekt ontvang je een e-mail ter
+            bevestiging van je reservering. In deze e-mail vindt je een link
+            waarmee je je resevering kan aanvullen met de details van je
+            medespelers.
+          </div>
+          <q-input
+            v-model="flight.flpName1"
+            :rules="[(val) => !!val || '* Required']"
+            class="q-mb-sm"
+            label="Naam"
+            stack-label
+          />
+          <q-input
+            v-model="flight.flpEmail1"
+            :rules="[emailRule]"
+            class="q-mb-sm"
+            label="E-mailadres"
+            lazy-rules
+            stack-label
+          />
+          <q-input
+            v-model="flight.flpPhone1"
+            :rules="[(val) => !!val || '* Required']"
+            class="q-mb-sm"
+            label="Telefoonummer"
+            lazy-rules
+            mask="###############"
+            maxlength="15"
+            stack-label
+          />
+
+          <p>Voer hier de gegevens van uw medespelers in:</p>
+          <div v-if="flight.fltSize >= 2" class="row">
+            <div class="col-8">
+              <q-input
+                v-model="flight.flpName2"
+                :rules="[(val) => !!val || '* Required']"
+                class="q-mb-sm"
+                label="Speler 2"
+                stack-label
+              />
+            </div>
+            <div class="col-4">
+              <q-input
+                v-model="flight.flpHandicap2"
+                :rules="[
+                  (val) =>
+                    (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
+                ]"
+                class="q-mb-sm"
+                fill-mask="0"
+                label="Handicap"
+                mask="##.#"
+                reverse-fill-mask
+                stack-label
+              />
+            </div>
+          </div>
+          <div v-if="flight.fltSize >= 3" class="row">
+            <div class="col-8">
+              <q-input
+                v-model="flight.flpName3"
+                :rules="[(val) => !!val || '* Required']"
+                class="q-mb-sm"
+                label="Speler 3"
+                stack-label
+              />
+            </div>
+            <div class="col-4">
+              <q-input
+                v-model="flight.flpHandicap3"
+                :rules="[
+                  (val) =>
+                    (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
+                ]"
+                class="q-mb-sm"
+                fill-mask="0"
+                label="Handicap"
+                mask="##.#"
+                reverse-fill-mask
+                stack-label
+              />
+            </div>
+          </div>
+          <div v-if="flight.fltSize >= 4" class="row">
+            <div class="col-8">
+              <q-input
+                v-model="flight.flpName4"
+                :rules="[(val) => !!val || '* Required']"
+                class="q-mb-sm"
+                label="Speler 4"
+                stack-label
+              />
+            </div>
+            <div class="col-4">
+              <q-input
+                v-model="flight.flpHandicap4"
+                :rules="[
+                  (val) =>
+                    (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
+                ]"
+                class="q-mb-sm"
+                fill-mask="0"
+                label="Handicap"
+                mask="##.#"
+                reverse-fill-mask
+                stack-label
+              />
+            </div>
+          </div>
+
+          <div
+            v-if="
+              $store.state.settings.publicItems.app_display_greenfee_pay == 1
+            "
+          >
+            <div class="row">Leveringsvoorwaarden:</div>
+            <div
+              class="row q-pa-sm"
+              style="
+                border: 1px solid lightgrey;
+                height: 150px;
+                font-size: 10px;
+                overflow-y: scroll;
+              "
+            >
+              {{ conditions }}
+            </div>
+            <div class="row q-mt-md">
+              <q-checkbox
+                v-model="flight.agreeConditions"
+                :rules="[(val) => !!val || '* Required']"
+                class="q-mb-sm"
+                label="Ik ga akkoord met de leveringsvoorvaarden"
+                stack-label
+              />
+            </div>
+            <div class="row">
+              <q-checkbox
+                v-model="flight.agreeCommerce"
+                :rules="[(val) => !!val || '* Required']"
+                class="q-mb-sm"
+                label="Stuur mij aanbiedingen"
+                stack-label
+              />
+            </div>
+          </div>
+          <q-btn
+            class="q-mr-sm"
+            color="primary"
+            label="Terug"
+            v-on:click="step = 1"
+          />
+          <q-btn
+            :disable="!valid"
+            class="q-mr-sm"
+            color="primary"
+            label="Reserveren"
+            v-on:click="handleSave"
+          />
+          <q-btn
+            v-show="1 == 2"
+            :disable="!valid"
+            color="primary"
+            label="Betaal"
+            v-on:click="handleSave"
+          />
+        </div>
+      </div>
+
+      <payment
+        v-if="mollie !== null"
+        v-show="step === 3"
+        :id="mollie.id"
+        :url="mollie.url"
+        v-on:handleClosePayment="handleClosePayment"
+      />
+
+      <confirmation v-if="step === 4" />
+    </q-page>
   </q-page-container>
 </template>
 

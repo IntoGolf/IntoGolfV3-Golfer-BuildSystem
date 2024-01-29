@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-md-4 offset-md-4 col-xs-12">
+    <div class="col">
       <q-card class="q-pa-md q-mt-sm q-mb-lg">
         <div class="row">
           <div class="col text-center text-h5">Boeking Gelukt!</div>

@@ -1,5 +1,5 @@
 const state = {
-  item: [],
+  item: null,
   matchFilter: 0,
 };
 
@@ -11,15 +11,16 @@ const mutations = {
     state.matchFilter = newValue;
   },
   CLEAR_VALUE(state) {
-    state.item = [];
+    state.item = null;
     state.matchFilter = 0;
   },
 };
 
 const actions = {
-  async login({ commit, state }, { relEmail, repPassword, captcha }) {
+  async login({ commit, state }, form) {
     try {
-      const response = await this.$axios.post("golfer/login", {});
+      const response = await this.$axios.post("golfer/login", form);
+
       commit("SET_CURRENT_USER", response);
     } catch (error) {
       console.error("There was an error fetching the user!", error);

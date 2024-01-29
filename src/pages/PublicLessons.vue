@@ -1,29 +1,27 @@
 <template>
   <q-page-container>
-    <q-page style="width: 640px; margin-left: auto; margin-right: auto">
-      <q-card v-if="lesson === null" class="q-pa-md q-mt-sm q-mb-lg">
-        <div class="col-md-4 offset-md-4 col-xs-12">
-          <comp-header-filter :date="date" v-on:updateDate="updateDate" />
+    <q-page class="q-pa-md">
+      <div v-if="lesson === null">
+        <comp-header-filter :date="date" v-on:updateDate="updateDate" />
 
-          <comp-filter
-            :date="date"
-            :lessonType="lessonType"
-            v-on:updateDate="updateDate"
-            v-on:updateLessonType="updateLessonType"
-            v-on:updatePer="updatePer"
-          />
+        <comp-filter
+          :date="date"
+          :lessonType="lessonType"
+          v-on:updateDate="updateDate"
+          v-on:updateLessonType="updateLessonType"
+          v-on:updatePer="updatePer"
+        />
 
-          <comp-pros
-            :lessonType="lessonType"
-            :lessons="lessonArray"
-            :per="per"
-            v-on:handleBook="handleBook"
-          />
-        </div>
-      </q-card>
+        <comp-pros
+          :lessonType="lessonType"
+          :lessons="lessonArray"
+          :per="per"
+          v-on:handleBook="handleBook"
+        />
+      </div>
 
       <comp-book
-        v-if="lesson !== null"
+        v-else
         :date="date"
         :lesson="lesson"
         v-on:handleBack="handleBack"

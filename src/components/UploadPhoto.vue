@@ -6,7 +6,7 @@
         :before-upload="beforeAvatarUpload"
         :headers="{
           relNr: relNr || 0,
-          authorization: 'Bearer ' + Authorization,
+          authorization: 'Bearer ' + apiToken,
         }"
         :on-progress="handleAvatarUploading"
         :on-success="handleAvatarSuccess"
@@ -47,6 +47,7 @@ export default {
     return {
       relNr: this.$store.state.currentUser.item.relNr,
       relImage: this.$store.state.currentUser.item.relImage,
+      apiToken: this.$store.state.currentUser.relation_password.apiToken,
       uploading: "",
     };
   },

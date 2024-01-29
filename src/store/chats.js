@@ -239,7 +239,6 @@ const actions = {
     if (!pusher) return;
 
     const channel = state.channels[chtNr];
-    console.log("unsubscribeFromChatChannel");
     if (channel) {
       pusher.unsubscribe(`chat-${chtNr}`);
       commit("REMOVE_CHANNEL", chtNr);

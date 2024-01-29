@@ -186,7 +186,7 @@ export default {
       if (this.settings === null) {
         return "";
       }
-      return this.settings.website_payment_conditions;
+      return this.$store.state.settings.item.website_payment_conditions;
     },
     valid: function () {
       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

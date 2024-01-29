@@ -1,320 +1,307 @@
 <template>
   <q-page-container>
-    <q-card class="my-card q-ml-auto q-mr-auto q-mt-xl">
-      <q-card-section>
-        <div class="row justify-center q-mt-sm">
-          <div class="col-4 text-center">
-            <img
-              alt="logo"
-              class="logo"
-              src="../assets/images/logo-black.svg"
+    <q-page class="q-pa-md">
+      <div class="row justify-center q-mt-sm">
+        <div class="col-4 text-center">
+          <img alt="logo" class="logo" src="../assets/images/logo-black.svg" />
+        </div>
+      </div>
+
+      <div class="row justify-center q-mt-md q-mb-md">
+        <div class="col-12 text-center text-h5">{{ title }}</div>
+        <div class="col-12 text-center text-subtitle1">{{ subtitle }}</div>
+      </div>
+
+      <q-form v-if="status === 1" @submit.prevent="onSubmit">
+        <q-tabs
+          v-model="tab"
+          active-color="primary"
+          align="justify"
+          class="text-grey"
+          dense
+          indicator-color="primary"
+          narrow-indicator
+        >
+          <q-tab disable label="Naam" name="name" />
+          <q-tab disable label="Adres" name="address" />
+          <q-tab disable label="Contact" name="contact" />
+          <q-tab disable label="Golf" name="golf" />
+          <q-tab
+            v-if="needsPassword"
+            disable
+            label="Wachtwoord"
+            name="password"
+          />
+        </q-tabs>
+
+        <q-separator />
+
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="name">
+            <div class="row q-col-gutter-sm q-mb-sm">
+              <div class="col-8">
+                <q-input
+                  v-model="account_form.relCallName"
+                  :rules="[(val) => !!val || 'Voornaam is een verplicht']"
+                  bottom-slots
+                  counter
+                  dense
+                  label="Voornaam*"
+                  maxlength="20"
+                  stack-label
+                />
+              </div>
+
+              <div class="col-4">
+                <q-input
+                  v-model="account_form.relPrefix"
+                  bottom-slots
+                  counter
+                  dense
+                  label="Voorvoegsel"
+                  maxlength="15"
+                  stack-label
+                />
+              </div>
+            </div>
+            <div class="row q-mb-sm">
+              <div class="col-8">
+                <q-input
+                  v-model="account_form.relName"
+                  :rules="[(val) => !!val || 'Achternaam is een verplicht']"
+                  counter
+                  dense
+                  label="Achternaam*"
+                  maxlength="40"
+                  stack-label
+                />
+              </div>
+              <div class="col-4">
+                <q-select
+                  v-model="account_form.relGender"
+                  :options="[
+                    { value: 1, label: 'Man' },
+                    { value: 2, label: 'Vrouw' },
+                  ]"
+                  dense
+                  label="Geslacht*"
+                  stack-label
+                />
+              </div>
+            </div>
+            <div v-if="needsRelationGroup" class="row q-mb-sm">
+              <div class="col">
+                <q-select
+                  v-model="account_form.relGrpNr1"
+                  :options="relationGroupArray"
+                  dense
+                  label="Gewenste groep"
+                  stack-label
+                />
+              </div>
+            </div>
+          </q-tab-panel>
+          <q-tab-panel name="address">
+            <div class="row q-col-gutter-sm q-mb-sm">
+              <div class="col-6">
+                <q-input
+                  v-model="relPostalCode"
+                  :rules="[(val) => !!val || 'Postcode is een verplicht']"
+                  bottom-slots
+                  counter
+                  dense
+                  label="Postcode"
+                  mask="#### AA"
+                  maxlength="8"
+                  stack-label
+                />
+              </div>
+
+              <div class="col-6">
+                <q-input
+                  v-model="relAddressStreetNumber"
+                  :rules="[(val) => !!val || 'Huisnummer is een verplicht']"
+                  bottom-slots
+                  counter
+                  dense
+                  label="Huisnummer"
+                  maxlength="8"
+                  stack-label
+                />
+              </div>
+            </div>
+            <div class="row q-col-gutter-sm q-mb-sm">
+              <div class="col">
+                <q-input
+                  v-model="account_form.relCity"
+                  :rules="[(val) => !!val || 'Plaats is een verplicht']"
+                  bottom-slots
+                  counter
+                  dense
+                  label="Plaats"
+                  maxlength="30"
+                  stack-label
+                />
+              </div>
+            </div>
+
+            <div class="row q-col-gutter-sm q-mb-sm">
+              <div class="col">
+                <q-input
+                  v-model="account_form.relAddress1"
+                  :rules="[(val) => !!val || 'Straat is een verplicht']"
+                  bottom-slots
+                  counter
+                  dense
+                  label="Straat"
+                  maxlength="30"
+                  stack-label
+                />
+              </div>
+            </div>
+          </q-tab-panel>
+          <q-tab-panel name="contact">
+            <div class="row q-mb-sm">
+              <div class="col">
+                <q-input
+                  v-model="account_form.relEmail"
+                  :rules="[validateEmail]"
+                  bottom-slots
+                  counter
+                  dense
+                  label="E-mailadres*"
+                  lazy-rules
+                  maxlength="60"
+                  stack-label
+                />
+              </div>
+            </div>
+            <div class="row q-mb-sm">
+              <div class="col">
+                <q-input
+                  v-model="account_form.relPhoneMobile"
+                  :rules="[(val) => !!val || 'Telefoonnummer is een verplicht']"
+                  bottom-slots
+                  counter
+                  dense
+                  label="Telefoonnummer*"
+                  mask="###############"
+                  maxlength="15"
+                  stack-label
+                />
+              </div>
+            </div>
+          </q-tab-panel>
+          <q-tab-panel name="golf">
+            <div class="row q-col-gutter-md q-mb-sm">
+              <div class="col-12">
+                <q-input
+                  v-model="account_form.relGsn"
+                  bottom-slots
+                  counter
+                  dense
+                  label="Uw GSN"
+                  mask="AA########"
+                  maxlength="9"
+                  placeholder="NL00000000"
+                  stack-label
+                />
+              </div>
+              <div class="col-12">
+                <q-input
+                  v-model="account_form.relHandicap"
+                  bottom-slots
+                  dense
+                  input-class="text-right"
+                  label="Handicap"
+                  mask="##.#"
+                  maxlength="4"
+                  reverse-fill-mask
+                  stack-label
+                />
+              </div>
+            </div>
+          </q-tab-panel>
+          <q-tab-panel v-if="needsPassword" name="password">
+            <div class="row q-mb-sm">
+              <div class="col">
+                <q-input
+                  v-model="account_form.repPassword"
+                  bottom-slots
+                  counter
+                  dense
+                  error-message="Please use maximum 3 characters"
+                  hint="Min. 6 karaters bestaande uit cijfers en letters"
+                  label="Wachtwoord*"
+                  maxlength="60"
+                  stack-label
+                />
+              </div>
+            </div>
+            <div class="row q-mb-sm">
+              <div class="col">
+                <q-input
+                  v-model="account_form.confirmRepPassword"
+                  :rules="[(val) => !!val || 'Voornaam is een verplicht']"
+                  counter
+                  dense
+                  label="Bevestig wachtwoord*"
+                  maxlength="60"
+                  stack-label
+                />
+              </div>
+            </div>
+          </q-tab-panel>
+        </q-tab-panels>
+
+        <div class="row q-mb-sm">
+          <div class="col text-right">
+            <q-btn
+              v-show="!isFirstTab"
+              color="primary"
+              flat
+              label="Vorige"
+              v-on:click="onPrevTab"
+            />
+            <q-btn
+              v-show="!isLastTab"
+              :disable="currentTabInValid"
+              color="primary"
+              flat
+              label="Volgende"
+              v-on:click="onNextTab"
+            />
+            <q-btn
+              v-show="isLastTab"
+              color="primary"
+              flat
+              label="Verzenden"
+              v-on:click="onSubmit"
             />
           </div>
         </div>
 
-        <div class="row justify-center q-mt-md q-mb-md">
-          <div class="col-12 text-center text-h5">{{ title }}</div>
-          <div class="col-12 text-center text-subtitle1">{{ subtitle }}</div>
-        </div>
-
-        <q-form v-if="status === 1" @submit.prevent="onSubmit">
-          <q-tabs
-            v-model="tab"
-            active-color="primary"
-            align="justify"
-            class="text-grey"
-            dense
-            indicator-color="primary"
-            narrow-indicator
-          >
-            <q-tab disable label="Naam" name="name" />
-            <q-tab disable label="Adres" name="address" />
-            <q-tab disable label="Contact" name="contact" />
-            <q-tab disable label="Golf" name="golf" />
-            <q-tab
-              v-if="needsPassword"
-              disable
-              label="Wachtwoord"
-              name="password"
-            />
-          </q-tabs>
-
-          <q-separator />
-
-          <q-tab-panels v-model="tab" animated>
-            <q-tab-panel name="name">
-              <div class="row q-col-gutter-sm q-mb-sm">
-                <div class="col-8">
-                  <q-input
-                    v-model="account_form.relCallName"
-                    :rules="[(val) => !!val || 'Voornaam is een verplicht']"
-                    bottom-slots
-                    counter
-                    dense
-                    label="Voornaam*"
-                    maxlength="20"
-                    stack-label
-                  />
-                </div>
-
-                <div class="col-4">
-                  <q-input
-                    v-model="account_form.relPrefix"
-                    bottom-slots
-                    counter
-                    dense
-                    label="Voorvoegsel"
-                    maxlength="15"
-                    stack-label
-                  />
-                </div>
-              </div>
-              <div class="row q-mb-sm">
-                <div class="col-8">
-                  <q-input
-                    v-model="account_form.relName"
-                    :rules="[(val) => !!val || 'Achternaam is een verplicht']"
-                    counter
-                    dense
-                    label="Achternaam*"
-                    maxlength="40"
-                    stack-label
-                  />
-                </div>
-                <div class="col-4">
-                  <q-select
-                    v-model="account_form.relGender"
-                    :options="[
-                      { value: 1, label: 'Man' },
-                      { value: 2, label: 'Vrouw' },
-                    ]"
-                    dense
-                    label="Geslacht*"
-                    stack-label
-                  />
-                </div>
-              </div>
-              <div v-if="needsRelationGroup" class="row q-mb-sm">
-                <div class="col">
-                  <q-select
-                    v-model="account_form.relGrpNr1"
-                    :options="relationGroupArray"
-                    dense
-                    label="Gewenste groep"
-                    stack-label
-                  />
-                </div>
-              </div>
-            </q-tab-panel>
-            <q-tab-panel name="address">
-              <div class="row q-col-gutter-sm q-mb-sm">
-                <div class="col-6">
-                  <q-input
-                    v-model="relPostalCode"
-                    :rules="[(val) => !!val || 'Postcode is een verplicht']"
-                    bottom-slots
-                    counter
-                    dense
-                    label="Postcode"
-                    mask="#### AA"
-                    maxlength="8"
-                    stack-label
-                  />
-                </div>
-
-                <div class="col-6">
-                  <q-input
-                    v-model="relAddressStreetNumber"
-                    :rules="[(val) => !!val || 'Huisnummer is een verplicht']"
-                    bottom-slots
-                    counter
-                    dense
-                    label="Huisnummer"
-                    maxlength="8"
-                    stack-label
-                  />
-                </div>
-              </div>
-              <div class="row q-col-gutter-sm q-mb-sm">
-                <div class="col">
-                  <q-input
-                    v-model="account_form.relCity"
-                    :rules="[(val) => !!val || 'Plaats is een verplicht']"
-                    bottom-slots
-                    counter
-                    dense
-                    label="Plaats"
-                    maxlength="30"
-                    stack-label
-                  />
-                </div>
-              </div>
-
-              <div class="row q-col-gutter-sm q-mb-sm">
-                <div class="col">
-                  <q-input
-                    v-model="account_form.relAddress1"
-                    :rules="[(val) => !!val || 'Straat is een verplicht']"
-                    bottom-slots
-                    counter
-                    dense
-                    label="Straat"
-                    maxlength="30"
-                    stack-label
-                  />
-                </div>
-              </div>
-            </q-tab-panel>
-            <q-tab-panel name="contact">
-              <div class="row q-mb-sm">
-                <div class="col">
-                  <q-input
-                    v-model="account_form.relEmail"
-                    :rules="[validateEmail]"
-                    bottom-slots
-                    counter
-                    dense
-                    label="E-mailadres*"
-                    lazy-rules
-                    maxlength="60"
-                    stack-label
-                  />
-                </div>
-              </div>
-              <div class="row q-mb-sm">
-                <div class="col">
-                  <q-input
-                    v-model="account_form.relPhoneMobile"
-                    :rules="[
-                      (val) => !!val || 'Telefoonnummer is een verplicht',
-                    ]"
-                    bottom-slots
-                    counter
-                    dense
-                    label="Telefoonnummer*"
-                    mask="###############"
-                    maxlength="15"
-                    stack-label
-                  />
-                </div>
-              </div>
-            </q-tab-panel>
-            <q-tab-panel name="golf">
-              <div class="row q-col-gutter-md q-mb-sm">
-                <div class="col-12">
-                  <q-input
-                    v-model="account_form.relGsn"
-                    bottom-slots
-                    counter
-                    dense
-                    label="Uw GSN"
-                    mask="AA########"
-                    maxlength="9"
-                    placeholder="NL00000000"
-                    stack-label
-                  />
-                </div>
-                <div class="col-12">
-                  <q-input
-                    v-model="account_form.relHandicap"
-                    bottom-slots
-                    dense
-                    input-class="text-right"
-                    label="Handicap"
-                    mask="##.#"
-                    maxlength="4"
-                    reverse-fill-mask
-                    stack-label
-                  />
-                </div>
-              </div>
-            </q-tab-panel>
-            <q-tab-panel v-if="needsPassword" name="password">
-              <div class="row q-mb-sm">
-                <div class="col">
-                  <q-input
-                    v-model="account_form.repPassword"
-                    bottom-slots
-                    counter
-                    dense
-                    error-message="Please use maximum 3 characters"
-                    hint="Min. 6 karaters bestaande uit cijfers en letters"
-                    label="Wachtwoord*"
-                    maxlength="60"
-                    stack-label
-                  />
-                </div>
-              </div>
-              <div class="row q-mb-sm">
-                <div class="col">
-                  <q-input
-                    v-model="account_form.confirmRepPassword"
-                    :rules="[(val) => !!val || 'Voornaam is een verplicht']"
-                    counter
-                    dense
-                    label="Bevestig wachtwoord*"
-                    maxlength="60"
-                    stack-label
-                  />
-                </div>
-              </div>
-            </q-tab-panel>
-          </q-tab-panels>
-
-          <div class="row q-mb-sm">
-            <div class="col text-right">
-              <q-btn
-                v-show="!isFirstTab"
-                color="primary"
-                flat
-                label="Vorige"
-                v-on:click="onPrevTab"
-              />
-              <q-btn
-                v-show="!isLastTab"
-                :disable="currentTabInValid"
-                color="primary"
-                flat
-                label="Volgende"
-                v-on:click="onNextTab"
-              />
-              <q-btn
-                v-show="isLastTab"
-                color="primary"
-                flat
-                label="Verzenden"
-                v-on:click="onSubmit"
-              />
-            </div>
-          </div>
-
-          <div class="row q-mb-sm">
-            <div class="col text-center">
-              <q-btn
-                :label="backText"
-                color="primary"
-                flat
-                v-on:click="onBack"
-              />
-            </div>
-          </div>
-        </q-form>
-
-        <div v-else-if="status === 2" class="row q-mt-md q-mb-md">
-          <div class="col-12">
-            Uw aanvraag is ontvangen. Wij nemen uw aanvraag z.s.m. in
-            behandeling en nemen via de e-mail contact met u op.
+        <div class="row q-mb-sm">
+          <div class="col text-center">
+            <q-btn :label="backText" color="primary" flat v-on:click="onBack" />
           </div>
         </div>
+      </q-form>
 
-        <div v-else class="row q-mt-md q-mb-md">
-          <div class="col-12">
-            Uw aanvraag is mislukt, probeer het nogmaals of neem contact met ons
-            op.
-          </div>
+      <div v-else-if="status === 2" class="row q-mt-md q-mb-md">
+        <div class="col-12">
+          Uw aanvraag is ontvangen. Wij nemen uw aanvraag z.s.m. in behandeling
+          en nemen via de e-mail contact met u op.
         </div>
-      </q-card-section>
-    </q-card>
+      </div>
+
+      <div v-else class="row q-mt-md q-mb-md">
+        <div class="col-12">
+          Uw aanvraag is mislukt, probeer het nogmaals of neem contact met ons
+          op.
+        </div>
+      </div>
+    </q-page>
   </q-page-container>
 </template>
 

@@ -224,7 +224,6 @@ export default {
   },
   methods: {
     onCheckIn: function () {
-      console.log("onCheckIn");
       let flight = { flpNr: this.$route.query.id };
       if (this.flight) {
         let player = this.flight.flight_players.find(

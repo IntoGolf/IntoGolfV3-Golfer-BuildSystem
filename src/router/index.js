@@ -36,7 +36,9 @@ export default route(function (/* { store, ssrContext } */) {
   });
 
   Router.beforeEach(async (to, from, next) => {
-    const token = localStorage.getItem("golfer__user_token");
+    const currentUser = store.getters["currentUser/item"];
+    const token =
+      currentUser !== null ? currentUser.relation_password.apiToken : null;
 
     // Ensure the store is initialized before proceeding
     if (token && store.getters["settings/isItemEmpty"]) {

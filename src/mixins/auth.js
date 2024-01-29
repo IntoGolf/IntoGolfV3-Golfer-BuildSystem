@@ -22,18 +22,6 @@ const mixin = {
     currentUser() {
       return this.$store.state.currentUser.item;
     },
-    Authorization() {
-      let authorization = JSON.parse(
-        localStorage.getItem("golfer__Authorization")
-      );
-      return authorization ? authorization : false;
-    },
-    currentUserPref() {
-      let currentUserPref = JSON.parse(
-        localStorage.getItem("golfer__currentUserPref")
-      );
-      return currentUserPref ? currentUserPref : false;
-    },
   },
 };
 

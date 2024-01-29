@@ -4,7 +4,15 @@
   </q-layout>
   <q-layout v-else id="layoutParent" ref="layoutParent" view="lHh Lpr lFf">
     <q-header
-      v-if="!['/login'].includes($route.path)"
+      v-if="
+        ![
+          '/login',
+          '/teetimes',
+          '/sign-up',
+          '/public_lessons',
+          '/classes',
+        ].includes($route.path)
+      "
       ref="layoutHeader"
       class="web-width q-header"
       flat

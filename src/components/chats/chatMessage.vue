@@ -90,8 +90,6 @@ export default {
       let data = { fltNr: fltNr, chtNr: this.message.crmChtNr };
       this.$http.post("golfer/booking/join", data).then(() => {
         const chtNr = this.$store.state.chats.chat.chtNr;
-        console.log("ok");
-        console.log(chtNr);
         this.$store.dispatch("chats/getMessages", chtNr);
       });
     },

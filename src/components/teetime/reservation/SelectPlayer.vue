@@ -238,7 +238,6 @@ export default {
     handicapGuestValid() {
       const stringValue = this.guest.flpHandicap.replace(",", ".");
       const value = parseFloat(stringValue);
-      console.log(value);
       if (!isNaN(value) && value >= -9.9 && value <= 54.0) {
         const decimalCount = (stringValue.split(".")[1] || "").length;
         return decimalCount <= 1;

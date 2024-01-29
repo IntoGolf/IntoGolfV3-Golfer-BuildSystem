@@ -1,158 +1,156 @@
 <template>
   <div>
-    <q-card v-if="!ProCourse" class="pro-course-card q-mt-lg">
-      <q-card-section>
-        <div class="row justify-center q-mt-md q-mb-md">
-          <div class="col text-center text-h5">Ons cursus aanbod</div>
+    <div v-if="!ProCourse" class="q-pa-md">
+      <div class="row justify-center">
+        <div class="col text-center text-h5">Ons cursus aanbod</div>
+      </div>
+      <q-separator class="q-mt-sm" />
+      <div v-if="ProCourseArray.length === 0" class="row">
+        <div class="col text-h6 q-mt-xl">
+          Er zijn momenteel geen cursussen beschikbaar.
         </div>
-        <div class="row">
-          <div class="col">
-            <div
-              v-for="(item, key) in ProCourseArray"
-              :key="key"
-              class="flex-container div-pro-course"
-            >
-              <div class="row text-bold">
-                <div class="col-6">Cursus: {{ item.pcsName }}</div>
-                <div class="col-6 text-right">
-                  Start:
-                  {{ $filters.unixToDate(item.pcsDateFrom, "dddd D MMMM") }}
-                </div>
-              </div>
-              <hr />
-              <div class="row">
-                <div class="col-4">Tijd</div>
-                <div class="col-8">
-                  :
-                  {{
-                    $filters.minuteToTime(item.pro_lessons[0].lesBlockedFrom)
-                  }}
-                  tot
-                  {{ $filters.minuteToTime(item.pro_lessons[0].lesBlockedTo) }}
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-4">Aantal lessen</div>
-                <div class="col-8">: {{ item.pro_lessons.length }}</div>
-              </div>
-              <div class="row">
-                <div class="col-4">Lessen datums</div>
-                <div class="col-8">: {{ lessonsText(item) }}</div>
-              </div>
-              <div class="row">
-                <div class="col-4">Beschikbare plaatsen</div>
-                <div class="col-8">
-                  :
-                  {{ item.available_spots }}
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-4">Kosten</div>
-                <div class="col-8">: € 295,-</div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  {{ item.pro_lesson_type.pltNotes }}
-                </div>
-              </div>
-              <hr />
-              <div class="row">
-                <div class="col text-right">
-                  <q-btn
-                    color="primary"
-                    label="Details"
-                    size="sm"
-                    v-on:click="ProCourse = item"
-                  />
-                </div>
+      </div>
+      <div v-else class="row">
+        <div class="col">
+          <div
+            v-for="(item, key) in ProCourseArray"
+            :key="key"
+            class="flex-container div-pro-course"
+          >
+            <div class="row text-bold">
+              <div class="col-6">Cursus: {{ item.pcsName }}</div>
+              <div class="col-6 text-right">
+                Start:
+                {{ $filters.unixToDate(item.pcsDateFrom, "dddd D MMMM") }}
               </div>
             </div>
-          </div>
-        </div>
-      </q-card-section>
-    </q-card>
-
-    <q-card v-else-if="ProCourse && !subscribe" class="pro-course-card">
-      <q-card-section>
-        <div class="row justify-center q-mt-md q-mb-md">
-          <div class="col text-center text-h5">
-            Cursus {{ ProCourse.pcsName }}
-          </div>
-        </div>
-        <q-separator class="q-mb-md" />
-        <div class="row">
-          <div class="col">
-            <div class="row">
-              <div class="col-4">Eerste les</div>
-              <div class="col-8">
-                :
-                {{ $filters.unixToDate(ProCourse.pcsDateFrom, "dddd D MMMM") }}
-              </div>
-            </div>
-
+            <hr />
             <div class="row">
               <div class="col-4">Tijd</div>
               <div class="col-8">
                 :
-                {{
-                  $filters.minuteToTime(ProCourse.pro_lessons[0].lesBlockedFrom)
-                }}
+                {{ $filters.minuteToTime(item.pro_lessons[0].lesBlockedFrom) }}
                 tot
-                {{
-                  $filters.minuteToTime(ProCourse.pro_lessons[0].lesBlockedTo)
-                }}
+                {{ $filters.minuteToTime(item.pro_lessons[0].lesBlockedTo) }}
               </div>
             </div>
             <div class="row">
               <div class="col-4">Aantal lessen</div>
-              <div class="col-8">: {{ ProCourse.pro_lessons.length }}</div>
+              <div class="col-8">: {{ item.pro_lessons.length }}</div>
             </div>
             <div class="row">
               <div class="col-4">Lessen datums</div>
-              <div class="col-8">: {{ lessonsText(ProCourse) }}</div>
+              <div class="col-8">: {{ lessonsText(item) }}</div>
             </div>
             <div class="row">
               <div class="col-4">Beschikbare plaatsen</div>
               <div class="col-8">
                 :
-                {{ ProCourse.available_spots }}
+                {{ item.available_spots }}
               </div>
             </div>
             <div class="row">
               <div class="col-4">Kosten</div>
               <div class="col-8">: € 295,-</div>
             </div>
-            <q-separator
-              v-show="ProCourse.pcsText != null && ProCourse.pcsText.length > 0"
-              class="q-mt-md"
-            />
             <div class="row">
-              <div id="course-text" class="col" v-html="ProCourse.pcsText" />
+              <div class="col">
+                {{ item.pro_lesson_type.pltNotes }}
+              </div>
             </div>
             <hr />
             <div class="row">
               <div class="col text-right">
                 <q-btn
                   color="primary"
-                  flat
-                  label="Terug naar cursussen"
+                  label="Details"
                   size="sm"
-                  v-on:click="ProCourse = null"
+                  v-on:click="ProCourse = item"
                 />
-                <q-btn
-                  v-if="!ProCourse.full"
-                  color="primary"
-                  label="Inschrijven"
-                  size="sm"
-                  v-on:click="onSubscribe"
-                />
-                <div v-else class="q-mr-md text-bold">Vol</div>
               </div>
             </div>
           </div>
         </div>
-      </q-card-section>
-    </q-card>
+      </div>
+    </div>
+
+    <div v-else-if="ProCourse && !subscribe" class="pro-course-card">
+      <div class="row justify-center q-mt-md q-mb-md">
+        <div class="col text-center text-h5">
+          Cursus {{ ProCourse.pcsName }}
+        </div>
+      </div>
+      <q-separator class="q-mb-md" />
+      <div class="row">
+        <div class="col">
+          <div class="row">
+            <div class="col-4">Eerste les</div>
+            <div class="col-8">
+              :
+              {{ $filters.unixToDate(ProCourse.pcsDateFrom, "dddd D MMMM") }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-4">Tijd</div>
+            <div class="col-8">
+              :
+              {{
+                $filters.minuteToTime(ProCourse.pro_lessons[0].lesBlockedFrom)
+              }}
+              tot
+              {{ $filters.minuteToTime(ProCourse.pro_lessons[0].lesBlockedTo) }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">Aantal lessen</div>
+            <div class="col-8">: {{ ProCourse.pro_lessons.length }}</div>
+          </div>
+          <div class="row">
+            <div class="col-4">Lessen datums</div>
+            <div class="col-8">: {{ lessonsText(ProCourse) }}</div>
+          </div>
+          <div class="row">
+            <div class="col-4">Beschikbare plaatsen</div>
+            <div class="col-8">
+              :
+              {{ ProCourse.available_spots }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">Kosten</div>
+            <div class="col-8">: € 295,-</div>
+          </div>
+          <q-separator
+            v-show="ProCourse.pcsText != null && ProCourse.pcsText.length > 0"
+            class="q-mt-md"
+          />
+          <div class="row">
+            <div id="course-text" class="col" v-html="ProCourse.pcsText" />
+          </div>
+          <hr />
+          <div class="row">
+            <div class="col text-right">
+              <q-btn
+                color="primary"
+                flat
+                label="Terug naar cursussen"
+                size="sm"
+                v-on:click="ProCourse = null"
+              />
+              <q-btn
+                v-if="!ProCourse.full"
+                color="primary"
+                label="Inschrijven"
+                size="sm"
+                v-on:click="onSubscribe"
+              />
+              <div v-else class="q-mr-md text-bold">Vol</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <sign-up
       v-else-if="subscribe"

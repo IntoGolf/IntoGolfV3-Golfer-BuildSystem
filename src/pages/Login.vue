@@ -157,8 +157,6 @@ export default {
         });
     },
     async onlogin() {
-      let currentUser = null;
-
       this.$q.loading.show();
 
       if (this.$q.platform.is.desktop) {
@@ -166,25 +164,13 @@ export default {
         this.form.captcha = await this.$recaptcha("login");
       }
 
-      await this.$http
-        .post("golfer/login", this.form)
-        .then((res) => {
-          if (res) {
-            currentUser = res;
-            localStorage.setItem(
-              "golfer__currentUser",
-              JSON.stringify(currentUser)
-            );
-            localStorage.setItem(
-              "golfer__user_token",
-              currentUser.relation_password.apiToken
-            );
-            this.$store.dispatch("settings/clearPublic");
-          }
-        })
-        .catch((e) => {
-          this.$message.error(e);
-        });
+      await this.$store.dispatch("currentUser/login", this.form);
+      const currentUser = this.$store.getters["currentUser/item"];
+      if (currentUser === null) {
+        return;
+      }
+
+      await this.$store.dispatch("settings/clearPublic");
 
       if (currentUser.redirect) {
         return (window.location =
