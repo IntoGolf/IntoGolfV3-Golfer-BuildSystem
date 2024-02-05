@@ -1,7 +1,5 @@
 <template>
   <div>
-    <h5 class="q-mb-sm q-mt-sm">Inschrijven {{ match.name }}</h5>
-
     <div v-if="id.length === 0">
       <q-input
         v-model="player.details.Description"
@@ -37,6 +35,14 @@
           class="q-mb-sm"
         />
       </div>
+
+      <subscribe-flight
+        v-if="match.subscribeToFlight === 1 && match.flights.length > 0"
+        :aSubscription="mySubscription"
+        :match="match"
+        :player="player"
+        v-on:handleSetParty="handleSetParty"
+      />
 
       <q-banner
         v-if="teamCaptainWithTeam"
@@ -118,13 +124,18 @@
 <script>
 import payment from "./payment";
 import authMixin from "../../mixins/auth";
+import SubscribeFlight from "./SubscribeFlight.vue";
 
 export default {
   mixins: [authMixin],
   components: {
     payment,
+    SubscribeFlight,
   },
-  props: ["match", "mySubscription"],
+  props: {
+    match: Object,
+    mySubscription: Object,
+  },
   data() {
     return {
       player: {
@@ -174,7 +185,8 @@ export default {
     } else {
       this.player.details.matchId = this.match.id;
       this.player.details.relNr = this.currentUser.relNr;
-      this.player.details.relNrDoor = this.currentUser.relNr;
+      this.player.details.partyId = null;
+      // this.player.details.relNrDoor = this.currentUser.relNr;
       this.player.details.options = { ...this.match.options };
       this.player.details.exactHandicapAtSubscription =
         this.currentUser.relHandicap;
@@ -231,6 +243,14 @@ export default {
     },
   },
   methods: {
+    handleSetParty(flight) {
+      if (this.player.details.partyId > 0) {
+        this.player.details.partyId = null;
+      } else {
+        this.player.details.partyId = flight.partyId;
+        this.player.details.positionInParty = flight.positionInParty;
+      }
+    },
     handleCloseSubscribe: function () {
       this.$emit("handleCloseSubscribe");
     },

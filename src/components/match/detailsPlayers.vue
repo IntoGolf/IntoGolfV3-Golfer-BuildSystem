@@ -53,11 +53,9 @@
                   Hole {{ player.match_party.match_flight.startingHoleNumber }}
                 </q-item-label>
               </q-item-section>
-
-              <q-item-section v-else-if="player.partyId === 0">
+              <q-item-section v-else-if="player.Status === 1">
                 <q-item-label class="text-right"> Reservelijst</q-item-label>
               </q-item-section>
-
               <q-item-section v-else>
                 <q-item-label class="text-right">
                   Niet<br />ingedeeld
@@ -218,11 +216,13 @@ export default {
       return result;
     },
     reservePlayers: function () {
-      //      return this.match.players.filter(player => player.relation !== null && player.relNrDoor !== this.currentUser.relNr && player.Status === 1);
-      return [];
-      // this.match.players.filter(player =>
-      //     (this.match.InschrijvenInternet === 0 || (player.relation !== null && player.relNrDoor !== this.currentUser.relNr))
-      //     && player.Status === 1);
+      return this.match.players.filter(
+        (player) =>
+          this.match.StartlijstGereed !== 1 &&
+          player.relation !== null &&
+          player.relNrDoor !== this.currentUser.relNr &&
+          player.Status === 1
+      );
     },
     isTeam: function () {
       return this.match.teamSize > 1 && this.match.teammatch === 1;

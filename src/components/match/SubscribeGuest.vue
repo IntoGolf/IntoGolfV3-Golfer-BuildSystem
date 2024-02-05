@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h5 class="q-mb-sm q-mt-sm">Inschrijven {{ match.name }}</h5>
     <template v-if="id.length === 0">
       <q-input
         v-model="player.relation.relCallName"

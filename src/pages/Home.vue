@@ -22,7 +22,6 @@ import { mapGetters } from "vuex";
 export default {
   mixins: [authMixin],
   components: { Match, messages, bookings, lessons, Bills },
-  mounted() {},
   computed: {
     ...mapGetters("settings", ["setHasMessages"]),
     ...mapGetters("currentUser", ["usrHasLessons", "usrHasTeeTimes"]),

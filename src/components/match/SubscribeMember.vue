@@ -1,7 +1,5 @@
 <template>
   <div>
-    <h5 class="q-mb-sm q-mt-sm">Inschrijven {{ match.name }}</h5>
-
     <template v-if="id.length === 0">
       <q-select
         v-if="player.details.id === null"
@@ -42,6 +40,14 @@
         label="Opmerking"
         maxlength="40"
         type="text"
+      />
+
+      <subscribe-flight
+        v-if="match.subscribeToFlight === 1 && match.flights.length > 0"
+        :aSubscription="aSubscription"
+        :match="match"
+        :player="player"
+        v-on:handleSetParty="handleSetParty"
       />
 
       <q-select
@@ -133,15 +139,21 @@
 <script>
 import payment from "./payment";
 import authMixin from "../../mixins/auth";
+import SubscribeFlight from "components/match/SubscribeFlight.vue";
 
 export default {
   mixins: [authMixin],
   components: {
+    SubscribeFlight,
     payment,
   },
-  props: ["match", "aSubscription"],
+  props: {
+    match: Object,
+    aSubscription: Object,
+  },
   data() {
     return {
+      flight: null,
       player: {
         type: 2, //1: me, 2:member, 3:guest
         details: {
@@ -234,6 +246,14 @@ export default {
     },
   },
   methods: {
+    handleSetParty(flight) {
+      if (this.player.details.partyId > 0) {
+        this.player.details.partyId = null;
+      } else {
+        this.player.details.partyId = flight.partyId;
+        this.player.details.positionInParty = flight.positionInParty;
+      }
+    },
     handleCloseSubscribe: function () {
       this.$emit("handleCloseSubscribe");
     },

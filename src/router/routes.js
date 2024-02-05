@@ -89,6 +89,15 @@ const routes = [
     },
   },
   {
+    path: "/Meerronden",
+    name: "Meerronden",
+    component: () => import("pages/Meerronden.vue"),
+    meta: {
+      requiresAuth: true,
+      title: "Meerronden",
+    },
+  },
+  {
     path: "/handicap",
     name: "Handicap",
     component: () => import("pages/Handicap.vue"),

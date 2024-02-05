@@ -17,9 +17,8 @@ axios.interceptors.request.use(
 
     config.url = `${baseURL}api/${config.url}`;
 
-    const user = store.getters["currentUser/item"];
-    if (user !== null) {
-      let token = user.relation_password.apiToken;
+    const token = store.getters["currentUser/token"];
+    if (token) {
       config.headers.common["Authorization"] = "Bearer " + token;
     }
 

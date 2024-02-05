@@ -6,6 +6,11 @@ const state = {
 const mutations = {
   SET_CURRENT_USER(state, item) {
     state.item = item;
+    localStorage.setItem(
+      "golf_token",
+      item.relation_password.apiToken,
+      365 * 24 * 60 * 60 * 1000
+    );
   },
   SET_VALUE(state, newValue) {
     state.matchFilter = newValue;
@@ -13,6 +18,7 @@ const mutations = {
   CLEAR_VALUE(state) {
     state.item = null;
     state.matchFilter = 0;
+    localStorage.removeItem("golf_token");
   },
 };
 
@@ -43,7 +49,21 @@ const actions = {
 };
 
 const getters = {
-  item: (state) => state.item,
+  item: (state) => {
+    return state.item;
+  },
+  token: (state) => {
+    if (
+      state.item !== null &&
+      localStorage.getItem("golf_token") !== undefined
+    ) {
+      return state.item.relation_password.apiToken;
+    } else if (localStorage.getItem("golf_token") !== undefined) {
+      return localStorage.getItem("golf_token");
+    } else {
+      return false;
+    }
+  },
   usrHasLessons: (state) => {
     return (
       state.item &&

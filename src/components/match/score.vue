@@ -1,6 +1,6 @@
 <template>
   <div class="p-0 m-0">
-    <q-list bordered separator>
+    <q-list>
       <q-item class="itg-q-item">
         <q-item-section class="col-1 text-left text-bold"> H</q-item-section>
         <q-item-section class="col-2 text-left text-bold"> Par</q-item-section>

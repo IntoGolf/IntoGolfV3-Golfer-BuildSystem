@@ -1,10 +1,16 @@
 <template>
   <div>
-    <div class="row">
-      <div class="col text-h6">Details {{ match.name }}</div>
+    <div
+      v-if="match.maximumNumberOfPlayers <= match.players.length"
+      class="row q-pb-sm q-pt-sm text-center"
+    >
+      <div
+        class="col text-bold text-center text-red-4"
+        style="font-size: 18px; font-variant-caps: all-small-caps"
+      >
+        wedstrijd is vol
+      </div>
     </div>
-
-    <q-separator />
 
     <div class="row q-pb-sm q-pt-sm">
       <div class="col text-bold">Datum</div>
@@ -23,10 +29,26 @@
     </div>
 
     <div class="row q-pb-sm">
+      <div class="col text-bold">Max. deelnemers</div>
+
+      <div class="col overflow-hidden text-right">
+        {{ match.maximumNumberOfPlayers }}
+      </div>
+    </div>
+
+    <div class="row q-pb-sm">
+      <div class="col text-bold">Aantal deelnemers</div>
+
+      <div class="col overflow-hidden text-right">
+        {{ match.players.length }}
+      </div>
+    </div>
+
+    <div class="row q-pb-sm">
       <div class="col text-bold">Wedstrijdleider 1</div>
 
       <div class="col overflow-hidden text-right">
-        {{ commissionner1 }}
+        {{ commissionner1 ? commissionner1 : "-" }}
       </div>
     </div>
 
@@ -34,7 +56,7 @@
       <div class="col text-bold">Wedstrijdleider 2</div>
 
       <div class="col overflow-hidden text-right">
-        {{ commissionner2 }}
+        {{ commissionner2 ? commissionner2 : "-" }}
       </div>
     </div>
 
@@ -248,6 +270,12 @@ export default {
     return {};
   },
   computed: {
+    playersOnMatch() {
+      return this.match.players.filter((player) => player.status === 0);
+    },
+    playersOnReserve() {
+      return this.match.players.filter((player) => player.status === 2);
+    },
     canSubscribe() {
       return (
         this.openForSubscription &&

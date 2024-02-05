@@ -36,9 +36,7 @@ export default route(function (/* { store, ssrContext } */) {
   });
 
   Router.beforeEach(async (to, from, next) => {
-    const currentUser = store.getters["currentUser/item"];
-    const token =
-      currentUser !== null ? currentUser.relation_password.apiToken : null;
+    const token = store.getters["currentUser/token"];
 
     // Ensure the store is initialized before proceeding
     if (token && store.getters["settings/isItemEmpty"]) {

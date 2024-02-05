@@ -2,8 +2,10 @@
   <q-page class="q-pa-sm">
     <q-card class="q-pa-sm">
       <div class="row">
-        <div class="col-12 text-right">
+        <div class="col-6 text-h6">{{ title }}</div>
+        <div class="col-6 text-right">
           <q-btn
+            v-show="page === 1"
             color="primary"
             flat
             icon="arrow_back"
@@ -12,6 +14,7 @@
           </q-btn>
         </div>
       </div>
+      <q-separator class="q-mt-sm q-mb-sm" />
       <div class="row">
         <div class="col q-pb-md">
           <details-list
@@ -117,6 +120,14 @@ export default {
     };
   },
   computed: {
+    title() {
+      if (this.page === 1) {
+        return this.match.name;
+      } else if ([2, 3, 4].includes(this.page)) {
+        return "Inschrijven " + this.match.name;
+      }
+      return "";
+    },
     mySubscription: function () {
       let that = this;
       let result = null;

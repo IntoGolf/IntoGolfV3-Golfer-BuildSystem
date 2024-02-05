@@ -150,6 +150,11 @@ export default defineComponent({
           visible: this.setHasCalendar,
         },
         {
+          name: "Meerronden",
+          icon: "schedule",
+          visible: true,
+        },
+        {
           name: "chat",
           icon: "chat",
           visible: this.setHasCircles,
