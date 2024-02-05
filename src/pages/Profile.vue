@@ -250,7 +250,7 @@ export default {
       return parseInt(this.settings.app_allow_member_change_contact) === 1;
     },
     canChangeInvoiceByEmail: function () {
-      return parseInt(this.settings.app_allow_member_set_invoice_email === 1);
+      return this.settings.app_allow_member_set_invoice_email === 1;
     },
     relMagazineGolfNL: {
       get: function () {
