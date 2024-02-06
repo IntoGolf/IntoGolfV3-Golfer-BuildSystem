@@ -14,7 +14,12 @@
       <q-separator />
 
       <q-list bordered separator>
-        <q-item v-ripple clickable @click="typePlayer = 1">
+        <q-item
+          v-show="$store.state.settings.item.app_only_book_members !== 1"
+          v-ripple
+          clickable
+          @click="typePlayer = 1"
+        >
           <q-item-section>
             <q-item-label>
               <b>Bekende speler</b>
@@ -40,7 +45,12 @@
             <q-icon name="search" />
           </q-item-section>
         </q-item>
-        <q-item v-ripple clickable @click="typePlayer = 3">
+        <q-item
+          v-show="$store.state.settings.item.app_only_book_members !== 1"
+          v-ripple
+          clickable
+          @click="typePlayer = 3"
+        >
           <q-item-section>
             <q-item-label>
               <b>Gast</b>
@@ -99,7 +109,11 @@
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <q-input v-model="relationSearch" label="Zoek in clubleden">
+        <q-input
+          v-model="relationSearch"
+          label="Zoek in clubleden"
+          @keyup.enter="handleSearch"
+        >
           <template v-slot:append>
             <q-icon
               class="cursor-pointer"
@@ -273,9 +287,15 @@ export default {
 
     handleSave: function () {
       let local_flight = { ...this.flight };
-      let player = local_flight.flight_players.find(
-        (item) => item.flpNr === this.player.flpNr
-      );
+      let player;
+      if (this.player.flpNr === null) {
+        player = this.player;
+        local_flight.flight_players.push(player);
+      } else {
+        player = local_flight.flight_players.find(
+          (item) => item.flpNr === this.player.flpNr
+        );
+      }
 
       if (this.knownPlayer) {
         let selectedPlayer = this.knownPlayerList.find(
@@ -293,6 +313,8 @@ export default {
         player.flpPhone = this.guest.flpPhone;
         player.flpHandicap = this.guest.flpHandicap;
       } else {
+        let rel = this.relations.find((item) => item.relNr === this.relation);
+        player.flpName = rel.full_name2;
         player.flpRelNr = this.relation;
       }
 

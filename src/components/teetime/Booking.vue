@@ -61,7 +61,10 @@
           </q-btn-group>
         </div>
 
-        <div class="col-7">
+        <div
+          v-if="$store.state.settings.item.app_only_book_members === 0"
+          class="col-7"
+        >
           Spelers:
           <q-btn-group class="full-width" spread unelevated>
             <q-btn
@@ -263,6 +266,9 @@ export default {
   },
   mounted() {
     this.form.fltSize = this.settings.planner_default_reservation_count;
+    if (this.$store.state.settings.item.app_only_book_members === 1) {
+      this.form.fltSize = 1;
+    }
     this.form.holes = this.settings.planner_default_holes;
   },
   watch: {
