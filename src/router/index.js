@@ -5,7 +5,7 @@ import {
   createWebHashHistory,
   createWebHistory,
 } from "vue-router";
-import routes from "./routes";
+import { routes } from "./routes";
 import store from "src/store";
 /*
  * If not building with SSR mode, you can

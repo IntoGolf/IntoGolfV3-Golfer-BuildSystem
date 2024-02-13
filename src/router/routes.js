@@ -3,6 +3,7 @@ import app from "../App.vue";
 
 import Home from "pages/Home.vue";
 import HomeWeb from "pages/HomeWeb.vue";
+import { createRouter, createWebHistory } from "vue-router";
 
 let layoutComponent = app;
 
@@ -32,6 +33,24 @@ const routes = [
     name: "teetimes",
     component: () => import("pages/Teetimes.vue"),
     meta: { requiresAuth: false },
+  },
+  {
+    path: "/external_teetimes",
+    name: "external_teetimes",
+    component: () => import("pages/ExtTeeTime.vue"),
+    meta: {
+      requiresAuth: true,
+      title: "Starttijden",
+    },
+  },
+  {
+    path: "/external_course_status",
+    name: "external_course_status",
+    component: () => import("pages/ExtCourse.vue"),
+    meta: {
+      requiresAuth: true,
+      title: "Baanstatus",
+    },
   },
   {
     path: "/chat",
@@ -253,4 +272,9 @@ const routes = [
   },
 ];
 
-export default routes;
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+export { router, routes };

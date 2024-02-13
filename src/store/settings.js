@@ -112,6 +112,22 @@ const getters = {
       state.item.app_display_course_status_tile === 1
     );
   },
+  usrHasExtTeetime: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "EXT_TEETIMES" in state.item &&
+      state.item.EXT_TEETIMES
+    );
+  },
+  usrHasCourseStatus: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "EXT_COURSE_STATUS" in state.item &&
+      state.item.EXT_COURSE_STATUS
+    );
+  },
 };
 
 export default {

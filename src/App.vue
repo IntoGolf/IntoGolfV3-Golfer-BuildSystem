@@ -88,7 +88,7 @@
             <q-icon :name="item.icon" style="color: #edfcff" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>{{ $t(item.name) }}</q-item-label>
+            <q-item-label>{{ $t(item.menuName) }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -126,6 +126,8 @@ export default defineComponent({
       "setHasCourseStatus",
       "setHasGreenFeeCard",
       "setHasMessages",
+      "usrHasExtTeetime",
+      "usrHasCourseStatus",
     ]),
     ...mapGetters("currentUser", [
       "usrHasLessons",
@@ -141,91 +143,121 @@ export default defineComponent({
       return [
         {
           name: "Dashboard",
+          menuName: "Dashboard",
           icon: "home",
           visible: true,
         },
         {
           name: "Baankalender",
+          menuName: "Baankalender",
           icon: "schedule",
           visible: this.setHasCalendar,
         },
         {
           name: "Meerronden",
+          menuName: "Meerronden",
           icon: "schedule",
           visible: true,
         },
         {
-          name: "chat",
+          name: "Chat",
+          menuName: "Chat",
           icon: "chat",
           visible: this.setHasCircles,
         },
         {
+          name: "external_teetimes",
+          menuName: "Starttijden",
+          icon: "schedule",
+          visible: this.usrHasExtTeetime,
+        },
+        {
+          name: "external_course_status",
+          menuName: "Baanstatus",
+          icon: "grass",
+          visible: this.usrHasCourseStatus,
+        },
+        {
           name: "reservations",
+          menuName: "reservations",
           icon: "schedule",
           visible: this.usrHasTeeTimes,
         },
         {
           name: "greenfeecards",
+          menuName: "greenfeecards",
           icon: "schedule",
           visible: this.setHasGreenFeeCard,
         },
         {
           name: "match",
+          menuName: "match",
           icon: "sports_golf",
           visible: this.usrHasMatch,
         },
         {
           name: "messages",
+          menuName: "messages",
           icon: "notes",
           visible: this.setHasMessages,
         },
         {
           name: "Baanstatus",
+          menuName: "Baanstatus",
           icon: "grass",
           visible: this.setHasCourseStatus,
         },
         {
           name: "handicap",
+          menuName: "handicap",
           icon: "grade",
           visible: this.usrHasHandicap,
         },
         {
           name: "NGF",
+          menuName: "NGF",
           icon: "credit_card",
           visible: this.usrHasHandicap,
         },
         {
           name: "members",
+          menuName: "members",
           icon: "groups",
           visible: this.usrHasMembers,
         },
         {
           name: "pos",
+          menuName: "pos",
           icon: "restaurant_enu",
           visible: this.usrHasPos && this.setHasBalance,
         },
         {
           name: "shop",
+          menuName: "shop",
           icon: "shopping_bag",
           visible: this.usrHasShop,
         },
         {
           name: "proCourse",
+          menuName: "proCourse",
           icon: "shop",
           visible: this.usrHasLessons,
         },
         {
           name: "lessons",
+          menuName: "lessons",
           icon: "school",
           visible: this.usrHasLessons,
         },
         {
           name: "lessoncards",
+          menuName: "lessoncards",
           icon: "school",
           visible: this.usrHasLessons,
         },
         {
           name: "profile",
+          menuName: "profile",
           icon: "account_circle",
           visible: true,
         },

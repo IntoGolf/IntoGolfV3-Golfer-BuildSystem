@@ -26,24 +26,28 @@
       row-key="name"
     />
     <q-separator class="q-mb-sm" />
-    <h5 class="q-mt-sm q-mb-sm">Eclectic</h5>
-    <div style="width: 100%; overflow: scroll">
-      <q-table
-        v-if="dataEclectic.rows.length > 0"
-        :columns="columnsEclectic"
-        :rows="dataEclectic.rows"
-        :rows-per-page-options="[0]"
-        bordered
-        class="my-sticky-column-table"
-        flat
-        height="200"
-        hide-pagination
-        row-key="player"
-      />
+    <div v-if="prop_match.meeEclectic === 1">
+      <h5 class="q-mt-sm q-mb-sm">Eclectic</h5>
+      <div style="width: 100%; overflow: scroll">
+        <q-table
+          v-if="dataEclectic.rows.length > 0"
+          :columns="columnsEclectic"
+          :rows="dataEclectic.rows"
+          :rows-per-page-options="[0]"
+          bordered
+          class="my-sticky-column-table"
+          flat
+          height="200"
+          hide-pagination
+          row-key="player"
+        />
+      </div>
     </div>
-    <q-separator class="q-mb-sm" />
-    <h5 class="q-mt-sm q-mb-sm">Birdy klassement</h5>
-    <birdy-result :prop_match="prop_match" />
+    <div v-if="prop_match.meeBirdy === 1">
+      <q-separator class="q-mb-sm" />
+      <h5 class="q-mt-sm q-mb-sm">Birdie klassement</h5>
+      <birdy-result :prop_match="prop_match" />
+    </div>
   </q-page>
 </template>
 
