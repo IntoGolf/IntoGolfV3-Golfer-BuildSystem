@@ -108,7 +108,12 @@
         </q-item-section>
       </q-item>
 
-      <q-item v-if="!inThePast" v-ripple clickable v-on:click="getIcs">
+      <q-item
+        v-if="1 == 2 && !inThePast"
+        v-ripple
+        clickable
+        v-on:click="getIcs"
+      >
         <q-item-section side>
           <q-icon name="event" />
         </q-item-section>
@@ -142,7 +147,9 @@
           $store.state.currentUser.item.tile_teetimes_y_n &&
           $store.state.settings.item.teetime !== null &&
           $store.state.settings.item.teetime !== undefined &&
-          $store.state.settings.item.teetime.flpFltNr === local_flight.fltNr
+          $store.state.settings.item.teetime.flpFltNr === local_flight.fltNr &&
+          ($store.state.settings.item.teetime.flpPrice === 0 ||
+            $store.state.settings.item.teetime.flpPrice === null)
         "
         v-ripple
         clickable

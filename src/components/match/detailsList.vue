@@ -388,12 +388,22 @@ export default {
       }
 
       if (
-        (this.currentUser.relGender === 1 &&
-          (this.currentUser.relHandicap < this.match.handicapMaleMin ||
-            this.currentUser.relHandicap > this.match.handicapMaleMax)) ||
-        (this.currentUser.relGender === 2 &&
-          (this.currentUser.relHandicap < this.match.handicapFemaleMin ||
-            this.currentUser.relHandicap > this.match.handicapFemaleMax))
+        this.currentUser.relGender == 1 &&
+        (this.currentUser.relHandicap < this.match.handicapMaleMin ||
+          this.currentUser.relHandicap > this.match.handicapMaleMax)
+      ) {
+        return (
+          "Voor deze wedstrijd is een restrictie op handicap van kracht, de minimale handicap voor deelname is " +
+          this.match.handicapMaleMin +
+          " en de maximale handicap is " +
+          this.match.handicapMaleMax
+        );
+      }
+
+      if (
+        this.currentUser.relGender == 2 &&
+        (this.currentUser.relHandicap < this.match.handicapFemaleMin ||
+          this.currentUser.relHandicap > this.match.handicapFemaleMax)
       ) {
         return (
           "Voor deze wedstrijd is een restrictie op handicap van kracht, de minimale handicap voor deelname is " +

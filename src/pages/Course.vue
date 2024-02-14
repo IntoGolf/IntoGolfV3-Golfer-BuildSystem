@@ -54,7 +54,7 @@
             <div class="col-4 text-right">Wintergreens</div>
             <div class="col-8">
               <q-icon
-                :color="loop.clsWinterGreensYN == 1 ? 'red' : ''"
+                :color="loop.clsWinterGreensYN == 1 ? 'green' : ''"
                 :name="loop.clsWinterGreensYN == 1 ? 'done' : 'remove'"
                 :size="'sm'"
               />
@@ -65,7 +65,7 @@
             <div class="col-4 text-right">Wintertees</div>
             <div class="col-8">
               <q-icon
-                :color="loop.clsWinterTeesYN == 1 ? 'red' : ''"
+                :color="loop.clsWinterTeesYN == 1 ? 'green' : ''"
                 :name="loop.clsWinterTeesYN == 1 ? 'done' : 'remove'"
                 :size="'sm'"
               />

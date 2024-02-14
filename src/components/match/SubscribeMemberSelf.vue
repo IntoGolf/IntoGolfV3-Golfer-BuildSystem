@@ -36,13 +36,18 @@
         />
       </div>
 
-      <subscribe-flight
-        v-if="match.subscribeToFlight === 1 && match.flights.length > 0"
-        :aSubscription="mySubscription"
-        :match="match"
-        :player="player"
-        v-on:handleSetParty="handleSetParty"
-      />
+      <!--      <subscribe-flight-->
+      <!--        v-if="-->
+      <!--          match.subscribeToFlight === 1 &&-->
+      <!--          match.flights.length > 0 &&-->
+      <!--          player.details.id === 0-->
+      <!--        "-->
+      <!--        :aSubscription="mySubscription"-->
+      <!--        :currentUser="currentUser"-->
+      <!--        :match="match"-->
+      <!--        :player="player"-->
+      <!--        v-on:handleSetParty="handleSetParty"-->
+      <!--      />-->
 
       <q-banner
         v-if="teamCaptainWithTeam"
@@ -124,13 +129,13 @@
 <script>
 import payment from "./payment";
 import authMixin from "../../mixins/auth";
-import SubscribeFlight from "./SubscribeFlight.vue";
+//import SubscribeFlight from "./SubscribeFlight.vue";
 
 export default {
   mixins: [authMixin],
   components: {
     payment,
-    SubscribeFlight,
+    //SubscribeFlight,
   },
   props: {
     match: Object,

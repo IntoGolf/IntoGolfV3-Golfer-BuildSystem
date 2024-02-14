@@ -246,13 +246,8 @@ export default {
     },
   },
   methods: {
-    handleSetParty(flight) {
-      if (this.player.details.partyId > 0) {
-        this.player.details.partyId = null;
-      } else {
-        this.player.details.partyId = flight.partyId;
-        this.player.details.positionInParty = flight.positionInParty;
-      }
+    handleSetParty(player) {
+      this.player = player;
     },
     handleCloseSubscribe: function () {
       this.$emit("handleCloseSubscribe");

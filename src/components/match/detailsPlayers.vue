@@ -37,8 +37,10 @@
                 </q-item-label>
               </q-item-section>
 
+              <q-item-section v-if="match.subscribeToFlight === 1">
+              </q-item-section>
               <q-item-section
-                v-if="match.StartlijstGereed === 1 && player.partyId > 0"
+                v-else-if="match.StartlijstGereed === 1 && player.partyId > 0"
               >
                 <q-item-label class="text-right">
                   {{
