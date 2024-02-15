@@ -43,7 +43,11 @@
       />
 
       <subscribe-flight
-        v-if="match.subscribeToFlight === 1 && match.flights.length > 0"
+        v-if="
+          match.subscribeToFlight === 1 &&
+          match.flights.length > 0 &&
+          player.details.id === null
+        "
         :aSubscription="aSubscription"
         :match="match"
         :player="player"

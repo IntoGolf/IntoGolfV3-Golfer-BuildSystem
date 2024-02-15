@@ -4,7 +4,7 @@
       Voor deze wedstrijd kunt u een flight kiezen waarop u wenst in te
       schrijven:
     </p>
-    <q-list bordered separator style="max-height: 600px; overflow-y: scroll">
+    <q-list bordered separator style="max-height: 400px; overflow-y: scroll">
       <q-item
         v-for="(flight, key) in localMatch.flights"
         :key="key"
@@ -78,14 +78,14 @@ export default {
         oldFlight.free = true;
         oldFlight.playerName = "Vrije plaats";
         flight.free = false;
-        flight.playerName = this.currentUser.full_name2;
+        //flight.playerName = this.currentUser.full_name2;
         this.localPlayer.details.partyId = flight.partyId;
         this.localPlayer.details.positionInParty = flight.positionInParty;
       } else if (this.localPlayer.details.partyId === null) {
         flight.free = false;
         this.localPlayer.details.partyId = flight.partyId;
         this.localPlayer.details.positionInParty = flight.positionInParty;
-        flight.playerName = this.currentUser.full_name2;
+        //flight.playerName = this.currentUser.full_name2;
       }
     },
   },
