@@ -43,7 +43,7 @@ export default {
   },
   data() {
     return {
-      localPlayer: { ...this.player },
+      localPlayer: this.player,
       localMatch: this.match,
     };
   },
@@ -78,7 +78,7 @@ export default {
         oldFlight.free = true;
         oldFlight.playerName = "Vrije plaats";
         flight.free = false;
-        flight.playerName = this.localPlayer.details.relation.full_name2;
+        flight.playerName = this.currentUser.full_name2;
         this.localPlayer.details.partyId = flight.partyId;
         this.localPlayer.details.positionInParty = flight.positionInParty;
       } else if (this.localPlayer.details.partyId === null) {

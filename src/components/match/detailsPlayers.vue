@@ -37,7 +37,22 @@
                 </q-item-label>
               </q-item-section>
 
-              <q-item-section v-if="match.subscribeToFlight === 1">
+              <q-item-section
+                v-if="match.subscribeToFlight === 1 && player.partyId > 0"
+                class="text-right"
+              >
+                <q-item-label class="text-right">
+                  {{
+                    $dayjs(
+                      player.match_party.match_flight.startingTime,
+                      "HH:mm:ss"
+                    ).format("HH:mm")
+                  }}
+                </q-item-label>
+
+                <q-item-label caption class="text-right">
+                  Hole {{ player.match_party.match_flight.startingHoleNumber }}
+                </q-item-label>
               </q-item-section>
               <q-item-section
                 v-else-if="match.StartlijstGereed === 1 && player.partyId > 0"

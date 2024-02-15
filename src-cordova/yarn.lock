@@ -60,9 +60,9 @@
   "version" "1.1.1"
 
 "android-versions@^1.8.1":
-  "integrity" "sha512-2MT/Y/mR3BLSbR9E3ugwvE/aA4k84XtjG2Iusu4pRKt4FwfpEvIEAHzm7ZBhL3/aTVNdx3PzZ+sAiK+Dbc4r9A=="
-  "resolved" "https://registry.npmjs.org/android-versions/-/android-versions-1.8.2.tgz"
-  "version" "1.8.2"
+  "integrity" "sha512-13O2B6PQMEM4ej9n13ePRQeckrCoKbZrvuzlLvK+9s2QmncpHDbYzZxhgapN32sJNoifN6VAHexLnd/6CYrs7Q=="
+  "resolved" "https://registry.npmjs.org/android-versions/-/android-versions-1.9.0.tgz"
+  "version" "1.9.0"
   dependencies:
     "semver" "^7.5.2"
 

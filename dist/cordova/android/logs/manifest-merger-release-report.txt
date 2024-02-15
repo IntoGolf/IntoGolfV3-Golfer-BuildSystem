@@ -107,7 +107,7 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/laurensluder/.gradle
 		ADDED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:5:53-87
 	android:usesCleartextTraffic
 		ADDED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:5:148-183
-activity#nl.intogolf.maasduinen.MainActivity
+activity#nl.intogolf.graafschap.MainActivity
 ADDED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:6:9-11:20
 	android:screenOrientation
 		ADDED from /Users/laurensluder/Sites/IntoGolfV3_Golfer/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:6:257-293
@@ -281,7 +281,7 @@ ADDED from [androidx.core:core:1.9.0] /Users/laurensluder/.gradle/caches/transfo
 		ADDED from [androidx.core:core:1.9.0] /Users/laurensluder/.gradle/caches/transforms-3/00fa6d42e7a8abf6c20b774bd480ebc9/transformed/core-1.9.0/AndroidManifest.xml:24:9-44
 	android:name
 		ADDED from [androidx.core:core:1.9.0] /Users/laurensluder/.gradle/caches/transforms-3/00fa6d42e7a8abf6c20b774bd480ebc9/transformed/core-1.9.0/AndroidManifest.xml:23:9-81
-permission#nl.intogolf.maasduinen.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+permission#nl.intogolf.graafschap.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.9.0] /Users/laurensluder/.gradle/caches/transforms-3/00fa6d42e7a8abf6c20b774bd480ebc9/transformed/core-1.9.0/AndroidManifest.xml:22:5-24:47
 	android:protectionLevel
 		ADDED from [androidx.core:core:1.9.0] /Users/laurensluder/.gradle/caches/transforms-3/00fa6d42e7a8abf6c20b774bd480ebc9/transformed/core-1.9.0/AndroidManifest.xml:24:9-44
@@ -291,7 +291,7 @@ uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.9.0] /Users/laurensluder/.gradle/caches/transforms-3/00fa6d42e7a8abf6c20b774bd480ebc9/transformed/core-1.9.0/AndroidManifest.xml:26:5-97
 	android:name
 		ADDED from [androidx.core:core:1.9.0] /Users/laurensluder/.gradle/caches/transforms-3/00fa6d42e7a8abf6c20b774bd480ebc9/transformed/core-1.9.0/AndroidManifest.xml:26:22-94
-uses-permission#nl.intogolf.maasduinen.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+uses-permission#nl.intogolf.graafschap.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.9.0] /Users/laurensluder/.gradle/caches/transforms-3/00fa6d42e7a8abf6c20b774bd480ebc9/transformed/core-1.9.0/AndroidManifest.xml:26:5-97
 	android:name
 		ADDED from [androidx.core:core:1.9.0] /Users/laurensluder/.gradle/caches/transforms-3/00fa6d42e7a8abf6c20b774bd480ebc9/transformed/core-1.9.0/AndroidManifest.xml:26:22-94
