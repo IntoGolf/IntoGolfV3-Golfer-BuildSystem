@@ -300,6 +300,9 @@ export default {
       if (this.match.teamSize === 1 || this.match.teammatch !== 1) {
         return false;
       }
+      if (this.match.teammatch === 1 && this.mySubscription === null) {
+        return true;
+      }
       return this.myPlayers.length === this.match.teamSize;
     },
     hasTeamMembers: function () {
