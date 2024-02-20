@@ -242,10 +242,9 @@
           <q-btn
             :disable="fullTeam"
             :label="
-              (match.teamSize > 1 && match.teammatch === 1
+              match.teamSize > 1 && match.teammatch === 1
                 ? 'Team inschrijven'
-                : 'Lid inschrijven') +
-              (fullTeam ? ' (uw team is compleet)' : '')
+                : 'Lid inschrijven'
             "
             class="full-width"
             color="primary"
