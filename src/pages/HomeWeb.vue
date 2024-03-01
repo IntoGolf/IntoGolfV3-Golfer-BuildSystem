@@ -38,7 +38,9 @@
         v-if="
           $store.state.currentUser.item.tile_teetimes_y_n &&
           $store.state.settings.item.teetime !== null &&
-          $store.state.settings.item.teetime !== undefined
+          $store.state.settings.item.teetime !== undefined &&
+          $store.state.settings.item.teetime.flpPrice === null &&
+          $store.state.settings.item.teetime.flpScorecard === null
         "
         class="row q-mb-md"
       >

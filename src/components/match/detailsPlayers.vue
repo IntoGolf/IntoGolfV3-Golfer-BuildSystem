@@ -124,7 +124,8 @@
               </q-item-label>
 
               <q-item-label caption class="text-right">
-                Hole {{ player.match_party.match_flight.startingHoleNumber }}
+                Hole
+                {{ player.match_party.match_flight.startingHoleNumber }}
               </q-item-label>
             </q-item-section>
 

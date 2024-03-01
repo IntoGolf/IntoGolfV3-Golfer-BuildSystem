@@ -57,7 +57,7 @@ export default route(function (/* { store, ssrContext } */) {
       }
     } else {
       if (token) {
-        if (to.path === "/login") {
+        if (to.path === "/login" && !to.query.redirect) {
           return next({ path: "/" });
         }
       }

@@ -57,17 +57,23 @@
         >
           <q-item-section>
             <q-item-label class="overflow-hidden">
-              <i class="far fa-trophy-alt mr-2" />
+              <div style="float: left">
+                <i class="far fa-trophy-alt mr-2" />
 
-              {{
-                $filters.capitalizeFirstLetter(match.name) +
-                " " +
-                match.match_type.name +
-                " " +
-                (match.match_type.name !== "MatchPlay"
-                  ? match.match_scoring_type.name
-                  : "")
-              }}
+                {{
+                  $filters.capitalizeFirstLetter(match.name) +
+                  " " +
+                  match.match_type.name +
+                  " " +
+                  (match.match_type.name !== "MatchPlay"
+                    ? match.match_scoring_type.name
+                    : "")
+                }}
+              </div>
+              <div style="float: right">
+                <q-icon class="q-mb-xs" name="group" />
+                {{ match.players.length }}
+              </div>
             </q-item-label>
 
             <q-item-label caption>

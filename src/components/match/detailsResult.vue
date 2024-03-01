@@ -51,6 +51,47 @@
         </div>
       </div>
     </div>
+    <template v-if="birdieArray">
+      <hr />
+      <div class="text-h6">Birdie uitslag</div>
+      <div class="row border q-mb-sm pb-2 font-weight-bold">
+        <div class="col-2 text-left text-bold">Rank</div>
+        <div class="col-5 text-bold">Speler</div>
+        <div class="col-2 text-center text-bold">Pnt</div>
+        <div class="col-1 text-center text-bold">BI</div>
+        <div class="col-1 text-center text-bold">EA</div>
+        <div class="col-1 text-center text-bold">AL</div>
+      </div>
+      <div
+        v-for="(player, index) in birdieArray"
+        v-bind:key="index"
+        class="row border pt-2 pb-2"
+      >
+        <div class="col-2 text-left text-bold">
+          {{ player.rank }}
+        </div>
+        <div class="col-5 text-left">
+          {{ player.playerName }}
+        </div>
+        <div class="col-2 text-center">{{ player.points }}</div>
+        <div class="col-1 d-none text-center d-sm-block">
+          {{ player.BI }}
+        </div>
+        <div class="col-1 d-none text-center d-sm-block">
+          {{ player.EA }}
+        </div>
+        <div class="col-1 d-none text-center d-sm-block">
+          {{ player.AL }}
+        </div>
+      </div>
+      <div class="q-mt-sm">
+        <i
+          >In kolommen BI,EA en AL staan het aantal birdies, eagles en
+          albatrossen. In punten staat het aantal punten naar volgende
+          waardering: BI=1,EA=3,AL=5</i
+        >
+      </div>
+    </template>
   </div>
 </template>
 
@@ -91,10 +132,12 @@ export default {
   data() {
     return {
       resultArray: [],
+      birdieArray: false,
     };
   },
   created() {
     this.loadResults();
+    this.getBirdy();
   },
   methods: {
     loadResults: function () {
@@ -115,6 +158,10 @@ export default {
       } else {
         return value;
       }
+    },
+    async getBirdy() {
+      const res = await this.$http.get(`golfer/testbirdy?id=` + this.match.id);
+      this.birdieArray = res.data;
     },
   },
 };
