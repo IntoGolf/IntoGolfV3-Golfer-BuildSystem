@@ -13,6 +13,8 @@
     "start:delfland": "cross-env ENVIRONMENT=delfland quasar dev",
     "start:engelenburg": "cross-env ENVIRONMENT=engelenburg quasar dev",
     "build:android": "cross-env ENVIRONMENT=staging quasar build -m android && npm run sign && open dist/cordova/android/apk/release",
+    "build:batouwe:ios": "ENVIRONMENT=batouwe quasar build -m ios",
+    "build:batouwe:android": "cross-env ENVIRONMENT=batouwe quasar build -m android",
     "build:delfland:web": "ENVIRONMENT=delfland quasar build",
     "build:delfland:ios": "ENVIRONMENT=delfland quasar build -m ios",
     "build:engelenburg:web": "ENVIRONMENT=engelenburg quasar build",

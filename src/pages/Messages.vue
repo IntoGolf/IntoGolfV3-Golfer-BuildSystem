@@ -7,7 +7,7 @@
             <div class="col">
               <div class="text-h6">{{ item.msgTitle }}</div>
               <div class="text-subtitle2">
-                {{ $dayjs(item.msgFrom).format("DD-MM-YYYY") }}
+                {{ $dayjs(item.msgFrom, "DD-MM-YYYY").format("DD-MM-YYYY") }}
               </div>
             </div>
 

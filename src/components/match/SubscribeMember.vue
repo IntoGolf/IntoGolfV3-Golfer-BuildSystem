@@ -108,14 +108,14 @@
 
       <q-btn-group class="q-mt-md" spread>
         <q-btn
-          v-if="!match.ideal"
+          v-if="!match.ideal || player.details.opmStatus === 'paid'"
           :disabled="player.details.id === null && relation === null"
           color="primary"
           label="Opslaan"
           @click="handleSubscribe"
         />
         <q-btn
-          v-if="match.ideal && match.fee > 0"
+          v-else-if="match.ideal && match.fee > 0"
           :disabled="player.details.id === null && relation === null"
           color="primary"
           label="Betaal"
@@ -218,6 +218,9 @@ export default {
       (time) => time.value === this.player.details.timePref
     );
     this.debouncedFetchData = this.debounce(this.fetchData, 300);
+  },
+  mounted() {
+    console.log(this.aSubscription);
   },
   watch: {
     tee: function (newValue) {

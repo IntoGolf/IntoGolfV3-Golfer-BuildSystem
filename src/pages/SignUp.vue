@@ -202,7 +202,7 @@
                   dense
                   label="Uw GSN"
                   mask="AA########"
-                  maxlength="9"
+                  maxlength="10"
                   placeholder="NL00000000"
                   stack-label
                 />

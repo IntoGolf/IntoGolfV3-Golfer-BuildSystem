@@ -108,7 +108,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-right">
-              {{ local_scorecard.is_qualifying ? "ja" : "nee" }}
+              {{ local_scorecard.is_qualifying == 0 ? "nee" : "ja" }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -349,6 +349,8 @@ export default {
     };
   },
   mounted() {
+    console.log("screcard");
+    console.log(this.scorecard);
     if (this.scorecard.number_of_holes_played > 0) {
       this.showHole = 0;
     }

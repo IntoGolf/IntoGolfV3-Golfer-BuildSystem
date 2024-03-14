@@ -287,14 +287,14 @@ export default {
   },
   computed: {
     defaultTee: function () {
-      if (this.currentUser.relGender === 2) {
+      if (parseInt(this.currentUser.relGender) === 2) {
         return this.teeList.find((tee) => tee.id === 15);
       } else {
         return this.teeList.find((tee) => tee.id === 9);
       }
     },
     teeArray: function () {
-      if (this.currentUser.relGender === 2) {
+      if (parseInt(this.currentUser.relGender) === 2) {
         return this.teeList.filter((tee) => this.feeMaleTees.includes(tee.id));
       } else {
         return this.teeList.filter((tee) => !this.feeMaleTees.includes(tee.id));

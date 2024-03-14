@@ -156,26 +156,19 @@ export default {
       });
     },
     async handleOpen(card) {
-      let that = this;
-      await this.$http
-        .get("golfer/scorecard?id=" + card.ngf_card_id)
-        .then((res) => {
-          if (res.data.is_penalty_score) {
-            return;
-          }
-          that.scorecard = res.data;
-          that.scorecard.handicap = card.handicap_index;
-          that.scorecard.type = 1;
-          that.page = 2;
-        });
+      let res = await this.$http.get("golfer/scorecard?id=" + card.ngf_card_id);
+      if (res.data.is_penalty_score) {
+        return;
+      }
+      this.scorecard = res.data;
+      this.scorecard.handicap = card.handicap_index;
+      this.scorecard.type = 1;
+      this.page = 2;
     },
-    handleSave: function (scorecard, open) {
-      let that = this;
-      this.$http.post("golfer/scorecard", scorecard).then((res) => {
-        that.scorecard = res.response.scorecard;
-        that.scorecard.handicap = res.response.handicap_index;
-        that.scorecard.type = 1;
-        that.page = 2;
+    async handleSave(scorecard) {
+      let res = await this.$http.post("golfer/scorecard", scorecard);
+      await this.handleOpen({
+        ngf_card_id: res.response.scorecard.ngf_card_id,
       });
     },
     handleNew: function (type) {
