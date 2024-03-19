@@ -59,60 +59,63 @@
           </div>
         </div>
 
-        <q-separator v-show="focusedItem.relVisibilityLevel > 1" spaced />
-
-        <div v-show="focusedItem.relVisibilityLevel > 1" class="row">
-          <div class="col-12 text-bold">E-mail</div>
-        </div>
-        <div v-show="focusedItem.relVisibilityLevel > 1" class="row">
-          <div class="col-6">
-            <a :href="'mailto:' + focusedItem.relEmail">
-              {{ email }}
-            </a>
+        <div v-show="focusedItem.relVisibilityLevel > 1">
+          <q-separator spaced />
+          <div class="row">
+            <div class="col-12 text-bold">E-mail</div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <a :href="'mailto:' + focusedItem.relEmail">
+                {{ email }}
+              </a>
+            </div>
           </div>
         </div>
 
-        <q-separator v-show="focusedItem.relVisibilityLevel > 2" spaced />
-
-        <div v-show="focusedItem.relVisibilityLevel > 2" class="row">
-          <div class="col-12 text-bold">Telefoonnummer</div>
-        </div>
-        <div v-show="focusedItem.relVisibilityLevel > 2" class="row">
-          <div class="col-12">
-            <a :href="'tel:' + focusedItem.relPhone">
-              {{ focusedItem.relPhone }}
-            </a>
+        <div v-show="focusedItem.relVisibilityLevel > 2">
+          <q-separator spaced />
+          <div class="row">
+            <div class="col-12 text-bold">Telefoonnummer</div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <a :href="'tel:' + focusedItem.relPhone">
+                {{ focusedItem.relPhone }}
+              </a>
+            </div>
+          </div>
+          <q-separator spaced />
+          <div class="row">
+            <div class="col-12 text-bold">Telefoonnummer mobiel</div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <a
+                v-if="focusedItem.relPhoneMobile"
+                :href="'tel:' + focusedItem.relPhoneMobile"
+              >
+                {{ focusedItem.relPhoneMobile }}
+              </a>
+              <p v-else>-</p>
+            </div>
           </div>
         </div>
 
-        <q-separator v-show="focusedItem.relVisibilityLevel > 2" spaced />
-
-        <div v-show="focusedItem.relVisibilityLevel > 2" class="row">
-          <div class="col-12 text-bold">Telefoonnummer mobiel</div>
-        </div>
-        <div v-show="focusedItem.relVisibilityLevel > 2" class="row">
-          <div class="col-12">
-            <a
-              v-if="focusedItem.relPhoneMobile"
-              :href="'tel:' + focusedItem.relPhoneMobile"
-            >
-              {{ focusedItem.relPhoneMobile }}
-            </a>
-            <p v-else>-</p>
+        <div v-show="focusedItem.relVisibilityLevel > 3">
+          <q-separator spaced />
+          <div class="row">
+            <div class="col-12 text-bold">Adres</div>
           </div>
-        </div>
-
-        <div v-show="focusedItem.relVisibilityLevel > 3" class="row">
-          <div class="col-12 text-bold">Adres</div>
-        </div>
-        <div v-show="focusedItem.relVisibilityLevel > 3" class="row">
-          <div class="col-12">
-            <p>
-              {{ focusedItem.relAddress }}<br />
-              {{ focusedItem.relPostalCode }}<br />
-              {{ focusedItem.relCity }}<br />
-              {{ focusedItem.couName }}<br />
-            </p>
+          <div class="row">
+            <div class="col-12">
+              <p>
+                {{ focusedItem.relAddress }}<br />
+                {{ focusedItem.relPostalCode }}<br />
+                {{ focusedItem.relCity }}<br />
+                {{ focusedItem.couName }}<br />
+              </p>
+            </div>
           </div>
         </div>
 
