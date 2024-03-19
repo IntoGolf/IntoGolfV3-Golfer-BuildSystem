@@ -240,6 +240,10 @@ export default {
           value: 3,
           label: "Naam, speelsterkte, e-mailadres en telefoonnummer",
         },
+        {
+          value: 4,
+          label: "Naam, speelsterkte, e-mailadres, telefoonnummer, adres",
+        },
       ],
       blobUrl: "",
       uploadUrl: "/api/golfer/relation/avatar-upload",

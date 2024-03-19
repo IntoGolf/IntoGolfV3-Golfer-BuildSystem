@@ -90,6 +90,15 @@ const routes = [
     },
   },
   {
+    path: "/nonGolfEvents",
+    name: "nonGolfEvents",
+    component: () => import("pages/NonGolfEvents.vue"),
+    meta: {
+      requiresAuth: true,
+      title: "Activiteiten",
+    },
+  },
+  {
     path: "/match",
     name: "Match",
     component: () => import("pages/Match.vue"),

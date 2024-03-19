@@ -64,6 +64,14 @@ const getters = {
       Object.keys(state.publicItems).length === 0
     );
   },
+  setHasActivities: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "app_display_activities" in state.item &&
+      state.item.app_display_activities
+    );
+  },
   setHasCircles: (state) => {
     return (
       state.item &&

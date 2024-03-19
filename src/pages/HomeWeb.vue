@@ -108,6 +108,16 @@
             ><i class="far fa-calendar-star"></i>Baankalender</span
           >
         </div>
+
+        <div
+          v-show="setHasActivities"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/NonGolfEvents')"
+        >
+          <span class="title"
+            ><i class="far fa-calendar-star"></i>Activiteiten</span
+          >
+        </div>
       </div>
       <div class="row q-pl-md q-pr-md q-gutter-sm">
         <div
@@ -285,6 +295,7 @@ export default {
       return this.weather.forecast.forecastday[0].hour.slice(hour, hour + 4);
     },
     ...mapGetters("settings", [
+      "setHasActivities",
       "setHasCalendar",
       "setHasCircles",
       "setHasBalance",

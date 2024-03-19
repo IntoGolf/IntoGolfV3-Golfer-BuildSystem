@@ -120,6 +120,7 @@ export default defineComponent({
       return this.menuArray.filter((item) => item.visible);
     },
     ...mapGetters("settings", [
+      "setHasActivities",
       "setHasCalendar",
       "setHasCircles",
       "setHasBalance",
@@ -152,6 +153,12 @@ export default defineComponent({
           menuName: "Baankalender",
           icon: "schedule",
           visible: this.setHasCalendar,
+        },
+        {
+          name: "NonGolfEvents",
+          menuName: "Activiteiten",
+          icon: "schedule",
+          visible: this.setHasActivities,
         },
         {
           name: "Meerronden",

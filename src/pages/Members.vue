@@ -102,6 +102,20 @@
           </div>
         </div>
 
+        <div v-show="focusedItem.relVisibilityLevel > 3" class="row">
+          <div class="col-12 text-bold">Adres</div>
+        </div>
+        <div v-show="focusedItem.relVisibilityLevel > 3" class="row">
+          <div class="col-12">
+            <p>
+              {{ focusedItem.relAddress }}<br />
+              {{ focusedItem.relPostalCode }}<br />
+              {{ focusedItem.relCity }}<br />
+              {{ focusedItem.couName }}<br />
+            </p>
+          </div>
+        </div>
+
         <q-separator spaced />
 
         <div class="text-center p-2">
