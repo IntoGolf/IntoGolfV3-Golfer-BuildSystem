@@ -11,7 +11,7 @@ const configFilePath = path.join(__dirname, "..", "config_template.xml");
 const configContent = fs.readFileSync(configFilePath, "utf8");
 const updatedConfigContent = configContent
   .replace("$APP_VERSION$", app_version)
-  .replace(/\$VUE_APP_NAME\$/g, vue_app_name)
+  .replace(/\$APP_NAME\$/g, vue_app_name)
   .replace("$APP_ID$", app_id);
 
 fs.writeFileSync(configPath, updatedConfigContent);

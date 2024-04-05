@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="nl.intogolf.batouwe" version="1.0.01" xmlns="http://www.w3.org/ns/widgets">
+<widget id="nl.intogolf.kroonprins" version="1.0.01" xmlns="http://www.w3.org/ns/widgets">
     <hook src="hooks/appBeforeBuild.js" type="before_build"/>
-    <name>Golfer</name>
+    <name>Golfpark Kroonprins</name>
     <description>IntoGolf Golfer app</description>
     <author email="info@intogolf.nl" href="https://www.intogolf.com">
         IntoGolf Team
