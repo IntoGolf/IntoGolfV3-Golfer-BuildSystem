@@ -132,6 +132,7 @@ export default defineComponent({
     ]),
     ...mapGetters("currentUser", [
       "usrHasLessons",
+      "usrHasCalendar",
       "usrHasShop",
       "usrHasPos",
       "usrHasHandicap",
@@ -152,7 +153,7 @@ export default defineComponent({
           name: "Baankalender",
           menuName: "Baankalender",
           icon: "schedule",
-          visible: this.setHasCalendar,
+          visible: this.usrHasCalendar,
         },
         {
           name: "NonGolfEvents",

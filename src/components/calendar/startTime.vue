@@ -1,5 +1,5 @@
 <template>
-  <div :style="timeSlotStyle" class="row slot">
+  <div :style="timeSlotStyle" class="row slot" @click="showBooking">
     {{ text }}
   </div>
 </template>
@@ -15,8 +15,18 @@ export default {
       type: Number,
       required: true,
     },
+    minTime: {
+      type: Number,
+      required: true,
+    },
   },
   computed: {
+    top() {
+      return (this.start.sttTimeFrom - this.minTime) * this.fact + "px";
+    },
+    showDialog() {
+      return this.$store.getters["currentUser/usrHasCalendar"] === 3;
+    },
     text() {
       let time = this.$filters.minuteToTime(this.start.sttTimeFrom) + " ";
       if (this.start.sttDescr === null) {
@@ -26,7 +36,7 @@ export default {
       } else if (this.start.sttPlayerName1 !== undefined) {
         return time + this.start.sttPlayerName1;
       } else {
-        return "&nbsp";
+        return time + " aantal spelers: " + this.start.sttPlayers;
       }
     },
     timeSlotStyle() {
@@ -44,12 +54,35 @@ export default {
         fontColor = "black";
         color = "lightblue";
       }
+      console.log(this.top);
       return {
         backgroundColor: color,
         height: height,
         color: fontColor,
-        borderBottom: this.start.sttGrpColor1 ? "1px solid white" : "",
+        // borderBottom: this.start.sttGrpColor1 ? "1px solid white" : "",
+        top: this.top,
       };
+    },
+  },
+  methods: {
+    showBooking() {
+      if (this.start.sttRefType !== 1 || !this.showDialog) {
+        return;
+      }
+
+      let trimmedArray = this.start.sttDescr.split("|").map((s) => s.trim());
+      let textWithArray = "- " + trimmedArray.join("<br> - ");
+
+      this.$q
+        .dialog({
+          title: "Speler(s) op flight:",
+          message: textWithArray,
+          html: true,
+          persistent: true,
+        })
+        .onOk(() => {
+          // console.log('>>>> OK')
+        });
     },
   },
 };
@@ -61,5 +94,7 @@ export default {
   font-size: 0.7em;
   overflow: hidden;
   padding: 5px 2px 5px 0;
+  width: 100%;
+  position: absolute;
 }
 </style>

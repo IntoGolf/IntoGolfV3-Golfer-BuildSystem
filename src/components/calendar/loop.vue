@@ -1,10 +1,11 @@
 <template>
   <div class="row">
-    <div :style="loopStyle" class="col">
+    <div :style="loopStyle" class="col loop-col">
       <start-time
         v-for="(start, key) in starts"
         :key="key"
         :fact="fact"
+        :minTime="minTime"
         :start="start"
       />
     </div>
@@ -35,6 +36,7 @@ export default {
     },
     loopStyle() {
       let startHour = Math.floor(this.minTime / 60);
+      console.log(startHour);
       return {
         width: "100%",
         paddingTop: (this.lMinTime - startHour * 60) * this.fact + "px",
@@ -46,4 +48,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.loop-col {
+  position: relative;
+}
+</style>

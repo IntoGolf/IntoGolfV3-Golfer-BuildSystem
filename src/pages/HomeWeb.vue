@@ -97,7 +97,7 @@
       </div>
 
       <div
-        v-show="setHasCalendar"
+        v-show="usrHasCalendar"
         class="row q-pl-md q-pr-md q-pb-sm q-gutter-sm"
       >
         <div
@@ -307,6 +307,7 @@ export default {
     ]),
     ...mapGetters("currentUser", [
       "usrHasLessons",
+      "usrHasCalendar",
       "usrHasShop",
       "usrHasPos",
       "usrHasHandicap",

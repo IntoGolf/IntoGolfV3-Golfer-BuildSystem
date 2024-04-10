@@ -72,6 +72,14 @@ const getters = {
       state.item.tile_lessons_y_n
     );
   },
+  usrHasCalendar: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "tile_calendar" in state.item &&
+      state.item.tile_calendar
+    );
+  },
   usrHasShop: (state) => {
     return (
       state.item &&
