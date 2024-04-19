@@ -96,29 +96,6 @@
         </div>
       </div>
 
-      <div
-        v-show="usrHasCalendar"
-        class="row q-pl-md q-pr-md q-pb-sm q-gutter-sm"
-      >
-        <div
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
-          @click="$router.push('/Baankalender')"
-        >
-          <span class="title"
-            ><i class="far fa-calendar-star"></i>Baankalender</span
-          >
-        </div>
-
-        <div
-          v-show="setHasActivities"
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
-          @click="$router.push('/NonGolfEvents')"
-        >
-          <span class="title"
-            ><i class="far fa-calendar-star"></i>Activiteiten</span
-          >
-        </div>
-      </div>
       <div class="row q-pl-md q-pr-md q-gutter-sm">
         <div
           v-show="usrHasTeeTimes"
@@ -138,6 +115,30 @@
           <span class="title"><i class="far fa-list-alt"></i>Wedstrijden</span>
         </div>
       </div>
+
+      <div
+              v-show="usrHasCalendar"
+              class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
+      >
+          <div
+                  class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+                  @click="$router.push('/Baankalender')"
+          >
+              <span class="title"
+              ><i class="far fa-calendar-star"></i>Baankalender</span
+              >
+          </div>
+
+          <div
+                  class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+                  @click="$router.push('/Meerronden')"
+          >
+              <span class="title"
+              ><i class="far fa-calendar-star"></i>Meerronden</span
+              >
+          </div>
+      </div>
+
 
       <div class="row text-h6 q-pl-md q-pr-md q-pt-sm q-gutter-sm">
         <div
@@ -271,6 +272,7 @@ export default {
   created() {
     this.loadImage();
     this.loadWeather();
+    this.$store.dispatch("settings/fetchSettings");
   },
   computed: {
     cardInMemory: function () {

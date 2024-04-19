@@ -316,6 +316,13 @@ export default {
         let rel = this.relations.find((item) => item.relNr === this.relation);
         player.flpName = rel.full_name2;
         player.flpRelNr = this.relation;
+          player.flpHandicap = this.relation.relHandicap;
+      }
+
+      console.log(player.flpHandicap);
+      console.log(local_flight.crlMaxHandicap);
+      if (player.flpHandicap > local_flight.crlMaxHandicap) {
+          return this.$q.message("Handicap niet toereikend");
       }
 
       this.$q

@@ -58,6 +58,11 @@
           <q-item-section>
             <q-item-label class="overflow-hidden">
               <div style="float: left">
+                  <span
+                      style="font-weight: bold"
+                      :style="{color: match.isQualifying === 1 ? 'green' : 'blue' }">
+                      {{ match.isQualifying === 1 ? 'Q' : 'NQ'}}
+                  </span>
                 <i class="far fa-trophy-alt mr-2" />
 
                 {{

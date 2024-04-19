@@ -28,7 +28,16 @@
       </div>
     </div>
 
-    <div class="row q-pb-sm">
+      <div class="row q-pb-sm">
+          <div class="col text-bold">Qualifying</div>
+
+          <div class="col overflow-hidden text-right">
+              {{ match.isQualifying === 1 ? 'Ja' : 'Nee' }}
+          </div>
+      </div>
+
+
+      <div class="row q-pb-sm">
       <div class="col text-bold">Max. deelnemers</div>
 
       <div class="col overflow-hidden text-right">
@@ -110,7 +119,7 @@
       </div>
 
       <div class="row q-pb-sm">
-        <div class="col text-bold">Start inschrijf</div>
+        <div class="col text-bold">Start inschrijven</div>
 
         <div class="col overflow-hidden text-right">
           {{
@@ -120,7 +129,7 @@
       </div>
 
       <div class="row q-pb-sm">
-        <div class="col text-bold">Eind inschrijf</div>
+        <div class="col text-bold">Eind inschrijven</div>
 
         <div class="col overflow-hidden text-right">
           {{ $dayjs(match.subscriptionDeadline).format("ddd DD MMMM HH:mm") }}

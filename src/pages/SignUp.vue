@@ -90,7 +90,7 @@
               </div>
             </div>
             <div v-if="needsRelationGroup" class="row q-mb-sm">
-              <div class="col">
+              <div class="col-8">
                 <q-select
                   v-model="account_form.relGrpNr1"
                   :options="relationGroupArray"
@@ -99,6 +99,15 @@
                   stack-label
                 />
               </div>
+                <div class="col-4">
+                    <q-input
+                            v-model="account_form.relDateBirth"
+                            type="date"
+                            dense
+                            label="Geboortedatum"
+                            stack-label
+                    />
+                </div>
             </div>
           </q-tab-panel>
           <q-tab-panel name="address">
@@ -342,6 +351,11 @@ export default {
               type: String,
               required: true,
             },
+            {
+              name: "relDateBirth",
+              type: String,
+              required: true,
+            },
           ],
         },
         {
@@ -401,6 +415,7 @@ export default {
         relCity: "",
         relAddressStreetNumber: "",
         relAddress1: "",
+        relDateBirth: "",
         ProCourse: this.ProCourse,
       },
       captchaResponse: null,

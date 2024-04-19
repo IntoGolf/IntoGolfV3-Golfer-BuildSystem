@@ -278,7 +278,8 @@ export default defineComponent({
   methods: {
     onMenu: function (name) {
       if (name === "Dashboard") {
-        name = "";
+          this.$store.dispatch("settings/fetchSettings");
+          name = "";
       }
       this.$router.push("/" + name);
       this.drawer = false;
