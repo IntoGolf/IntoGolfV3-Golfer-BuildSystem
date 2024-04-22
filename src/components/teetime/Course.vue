@@ -5,7 +5,7 @@
       :key="key"
       class="row q-pt-xs"
       v-on:click="
-        this.$emit('setTimeObject', { time: time, price: price(time) })
+        this.$emit('setTimeObject', { time: time, price: price(time), course: course })
       "
     >
       <div

@@ -161,6 +161,11 @@
             </div>
           </div>
 
+            <div
+                    class="row q-mt-sm"
+            >
+                Voor deze flight geldt een maximale totale handicap van: {{maxFlightHandicap}}.
+            </div>
           <div
             v-if="
               $store.state.settings.publicItems.app_display_greenfee_pay == 1
@@ -193,16 +198,31 @@
             lazy-rules
             stack-label
           />
-          <q-input
-            v-model="flight.flpPhone1"
-            :rules="[(val) => !!val || '* Required']"
-            class="q-mb-sm"
-            label="Telefoonummer"
-            lazy-rules
-            mask="###############"
-            maxlength="15"
-            stack-label
-          />
+          <div v-if="flight.fltSize >= 2" class="row">
+              <div class="col-8">
+                  <q-input
+                          v-model="flight.flpPhone1"
+                          :rules="[(val) => !!val || '* Required']"
+                          class="q-mb-sm"
+                          label="Telefoonummer"
+                          lazy-rules
+                          mask="###############"
+                          maxlength="15"
+                          stack-label
+                  />
+              </div>
+              <div class="col-4">
+                  <q-input
+                          v-model="flight.flpHandicap1"
+                          :rules="[(val) => val !== '' && val !== null && val > -9.9 && val <= maxHandicap || '* tussen -9.9 tot ' + maxHandicap,]"
+                          class="q-mb-sm"
+                          label="Handicap"
+                          mask="##.#"
+                          reverse-fill-mask
+                          stack-label
+                  />
+              </div>
+          </div>
 
           <p>Voer hier de gegevens van uw medespelers in:</p>
           <div v-if="flight.fltSize >= 2" class="row">
@@ -218,12 +238,8 @@
             <div class="col-4">
               <q-input
                 v-model="flight.flpHandicap2"
-                :rules="[
-                  (val) =>
-                    (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
-                ]"
+                :rules="[(val) => val !== '' && val !== null && val > -9.9 && val <= maxHandicap || '* tussen -9.9 tot ' + maxHandicap,]"
                 class="q-mb-sm"
-                fill-mask="0"
                 label="Handicap"
                 mask="##.#"
                 reverse-fill-mask
@@ -244,12 +260,8 @@
             <div class="col-4">
               <q-input
                 v-model="flight.flpHandicap3"
-                :rules="[
-                  (val) =>
-                    (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
-                ]"
+                :rules="[(val) => val !== '' && val !== null && val > -9.9 && val <= maxHandicap || '* tussen -9.9 tot ' + maxHandicap,]"
                 class="q-mb-sm"
-                fill-mask="0"
                 label="Handicap"
                 mask="##.#"
                 reverse-fill-mask
@@ -270,12 +282,8 @@
             <div class="col-4">
               <q-input
                 v-model="flight.flpHandicap4"
-                :rules="[
-                  (val) =>
-                    (val > -9.9 && val <= 54) || '* tussen -9.9 tot 54.0',
-                ]"
+                :rules="[(val) => val !== '' && val !== null && val > -9.9 && val <= maxHandicap || '* tussen -9.9 tot ' + maxHandicap,]"
                 class="q-mb-sm"
-                fill-mask="0"
                 label="Handicap"
                 mask="##.#"
                 reverse-fill-mask
@@ -409,25 +417,27 @@ export default {
         flpName1: "",
         flpEmail1: "",
         flpPhone1: "",
-        flpHandicap1: "54.0",
+        flpHandicap1: null,
 
         flpName2: "",
-        flpEmail2: "",
-        flpPhone2: "",
-        flpHandicap2: "54.0",
+        flpEmail2: null,
+        flpPhone2: null,
+        flpHandicap2: null,
 
-        flpName3: null,
+        flpName3: "",
         flpEmail3: null,
         flpPhone3: null,
-        flpHandicap3: "54.0",
+        flpHandicap3: null,
 
-        flpName4: null,
+        flpName4: "",
         flpEmail4: null,
         flpPhone4: null,
-        flpHandicap4: "54.0",
-        agreeConditions: true,
+        flpHandicap4: null,
+        agreeConditions: false,
         agreeCommerce: false,
       },
+      maxHandicap: 54,
+      maxTotalHandicap:108,
       mollie: null,
     };
   },
@@ -449,6 +459,10 @@ export default {
     },
   },
   computed: {
+    maxFlightHandicap() {
+        let maxSizeHcp = this.size * this.maxHandicap;
+        return maxSizeHcp < this.maxTotalHandicap ? maxSizeHcp : this.maxTotalHandicap;
+    },
     dayjs() {
       return dayjs;
     },
@@ -463,7 +477,8 @@ export default {
       return (
         this.flight.flpName1.length > 3 &&
         this.flight.agreeConditions &&
-        emailPattern.test(this.flight.flpEmail1)
+        emailPattern.test(this.flight.flpEmail1) &&
+        this.validHcp
       );
     },
     hasTimes: function () {
@@ -482,6 +497,16 @@ export default {
     flightPrice: function () {
       return Math.round(this.timePrice * this.flight.fltSize * 100) / 100;
     },
+    totalHandicap() {
+      let hcp = parseFloat(this.flight.flpHandicap1);
+      hcp += parseInt(this.size) > 1 ? parseFloat(this.flight.flpHandicap2):0;
+      hcp += parseInt(this.size) > 2 ? parseFloat(this.flight.flpHandicap3):0;
+      hcp += parseInt(this.size) > 3 ? parseFloat(this.flight.flpHandicap4):0;
+      return hcp;
+    },
+    validHcp() {
+      return this.totalHandicap < this.maxTotalHandicap;
+    }
   },
   methods: {
     handleLoadDate: function () {
@@ -508,8 +533,11 @@ export default {
       });
     },
     setTimeObject: function (obj) {
+      console.log(obj);
       this.timeObject = obj.time;
       this.timePrice = obj.price;
+      this.maxHandicap = obj.course.crlMaxHandicap;
+      this.maxTotalHandicap = obj.course.crlMaxTotalHandicap;
     },
     handleClosePayment: function (status) {
       if (status === "paid") {
