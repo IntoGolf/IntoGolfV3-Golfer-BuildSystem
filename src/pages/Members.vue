@@ -35,6 +35,15 @@
           <div class="col text-h5">Relatie</div>
         </div>
 
+        <div v-if="base64Image" class="row q-mt-md">
+          <q-img
+                  :src="base64Image"
+                  height="180px"
+                  spinner-color="red"
+                  :fit="'contain'"
+          />
+        </div>
+
         <q-separator spaced />
 
         <div class="row">
@@ -57,6 +66,18 @@
           <div class="col-12">
             {{ focusedItem.relHandicap.toFixed(1) }}
           </div>
+        </div>
+
+        <q-separator spaced />
+
+        <div class="row">
+            <div class="col text-bold">GSN</div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                {{ focusedItem.relGsn }}
+            </div>
         </div>
 
         <div v-show="focusedItem.relVisibilityLevel > 1">
@@ -129,6 +150,7 @@
             label="Sluiten"
             @click="
               focusedItem = null;
+              base64Image = '';
               searchValue = '';
             "
           />
@@ -152,9 +174,13 @@ export default {
       list: [],
       searchValue: "",
       focusedItem: null,
+
+      base64Image: "",
     };
   },
-  created() {},
+  async mounted() {
+      await this.loadImage();
+  },
   computed: {
     searchCount: function () {
       return this.list.length;
@@ -171,6 +197,11 @@ export default {
       }
       this.loadList();
     },
+      focusedItem: function (newValue) {
+        if (newValue) {
+            this.loadImage(newValue)
+        }
+      }
   },
   methods: {
     loadList() {
@@ -181,6 +212,18 @@ export default {
           that.list = res;
           that.loading = false;
         });
+    },
+    async loadImage(relation) {
+        let name = relation.relImage;
+        name = name === "" ? "empty" : name;
+
+        const url = "golfer/image/" + name;
+        const response = await this.$http({
+            method: "get",
+            url: url,
+        });
+
+        this.base64Image = `data:image/jpeg;base64,${response}`;
     },
   },
 };
