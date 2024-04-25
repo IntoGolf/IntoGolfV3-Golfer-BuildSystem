@@ -233,6 +233,24 @@
         </div>
       </div>
       <div
+              v-show="setHasGreenFeeCard"
+              class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
+      >
+          <div
+                  class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+                  @click="$router.push('/greenfeecards')"
+          >
+              <span class="title"
+              ><i class="far fa-calendar-star"></i>Greenfeekaarten</span
+              >
+          </div>
+          <div
+                  class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          >
+              &nbsp;
+          </div>
+      </div>
+      <div
         v-show="usrHasExtTeetime"
         class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
       >

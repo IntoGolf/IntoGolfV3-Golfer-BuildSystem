@@ -123,13 +123,11 @@
               <div class="col">
                 {{ $filters.minuteToTime(time.sttTimeFrom) }}
                 <q-icon
-                  v-show="time.sttPlayerArray.length > 0"
-                  class="q-ml-sm q-mb-xs q-mr-xs"
+                  v-show="time.sttPlayers > 0"
+                  class="q-ml-sm q-mb-xs"
                   name="group"
                   size="18px"
-                >
-                  {{ time.sttPlayers }}
-                </q-icon>
+                />{{ time.sttPlayers }}
               </div>
             </div>
 
@@ -178,10 +176,15 @@
               </div>
             </div>
 
-            <div class="row q-mt-xs">
+            <div v-if="$store.state.settings.item.app_only_book_members === 0" class="row q-mt-xs">
               <div class="col text-left text-bold">Spelers</div>
               <div class="col text-right">{{ form.fltSize }}</div>
             </div>
+
+              <div v-else class="row q-mt-xs">
+                  <div class="col text-left text-bold">Max. spelers</div>
+                  <div class="col text-right">{{ this.selectedTimeItem.sttPlayers }}</div>
+              </div>
 
             <!--          <div class="row q-mt-xs">-->
             <!--            <div class="col text-left text-bold">Holes</div>-->
