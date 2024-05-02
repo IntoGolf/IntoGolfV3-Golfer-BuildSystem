@@ -543,8 +543,6 @@ export default {
       return hcp;
     },
     validHcp() {
-      console.log(this.totalHandicap);
-      console.log(this.maxTotalHandicap);
       return this.totalHandicap < this.maxTotalHandicap;
     },
   },
@@ -573,7 +571,6 @@ export default {
       });
     },
     setTimeObject: function (obj) {
-      console.log(obj);
       this.timeObject = obj.time;
       this.timePrice = obj.price;
       this.maxHandicap = obj.course.crlMaxHandicap;
