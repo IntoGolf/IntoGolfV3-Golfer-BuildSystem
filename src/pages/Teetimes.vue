@@ -322,9 +322,9 @@
           </div>
 
           <div>
-            <div v-if="mollie !== null" class="row">Leveringsvoorwaarden:</div>
+            <div v-if="pay" class="row">Leveringsvoorwaarden:</div>
             <div
-              v-if="mollie !== null"
+              v-if="pay"
               class="row q-pa-sm"
               style="
                 border: 1px solid lightgrey;
@@ -335,7 +335,7 @@
             >
               {{ conditions }}
             </div>
-            <div v-if="mollie !== null" class="row q-mt-md">
+            <div v-if="pay" class="row q-mt-md">
               <q-checkbox
                 v-model="flight.agreeConditions"
                 :rules="[(val) => !!val || '* Required']"
@@ -344,7 +344,7 @@
                 stack-label
               />
             </div>
-            <div v-if="mollie !== null" class="row">
+            <div v-if="pay" class="row">
               <q-checkbox
                 v-model="flight.agreeCommerce"
                 :rules="[(val) => !!val || '* Required']"
@@ -361,7 +361,7 @@
             v-on:click="step = 1"
           />
           <q-btn
-            v-if="mollie !== null"
+            v-if="pay"
             :disable="!valid"
             color="primary"
             label="Betaal"
@@ -505,7 +505,7 @@ export default {
       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       return (
         this.flight.flpName1.length > 3 &&
-        (this.mollie === null || this.flight.agreeConditions) &&
+        (!this.pay || this.flight.agreeConditions) &&
         emailPattern.test(this.flight.flpEmail1) &&
         this.validHcp
       );
@@ -544,6 +544,11 @@ export default {
     },
     validHcp() {
       return this.totalHandicap < this.maxTotalHandicap;
+    },
+    pay() {
+      return (
+        this.$store.state.settings.publicItems.app_display_greenfee_pay == 1
+      );
     },
   },
   methods: {
