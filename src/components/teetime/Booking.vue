@@ -127,7 +127,8 @@
                   class="q-ml-sm q-mb-xs"
                   name="group"
                   size="18px"
-                />{{ time.sttPlayers }}
+                />
+                {{ time.sttPlayers }}
               </div>
             </div>
 
@@ -176,15 +177,20 @@
               </div>
             </div>
 
-            <div v-if="$store.state.settings.item.app_only_book_members === 0" class="row q-mt-xs">
+            <div
+              v-if="$store.state.settings.item.app_only_book_members === 0"
+              class="row q-mt-xs"
+            >
               <div class="col text-left text-bold">Spelers</div>
               <div class="col text-right">{{ form.fltSize }}</div>
             </div>
 
-              <div v-else class="row q-mt-xs">
-                  <div class="col text-left text-bold">Max. spelers</div>
-                  <div class="col text-right">{{ this.selectedTimeItem.sttPlayers }}</div>
+            <div v-else class="row q-mt-xs">
+              <div class="col text-left text-bold">Max. spelers</div>
+              <div class="col text-right">
+                {{ this.selectedTimeItem.sttPlayers }}
               </div>
+            </div>
 
             <!--          <div class="row q-mt-xs">-->
             <!--            <div class="col text-left text-bold">Holes</div>-->
@@ -304,9 +310,9 @@ export default {
       this.date = this.$dayjs(this.date).add(value, "day").format("YYYY-MM-DD");
     },
 
-    loadTeetimes: function () {
+    async loadTeetimes() {
       this.loading = true;
-      this.$http
+      await this.$http
         .get("golfer/teetimes", {
           params: {
             date: this.$dayjs(this.form.fltDate).format("YYYY-MM-DD"),
@@ -325,7 +331,7 @@ export default {
       this.dialogVisible = true;
     },
 
-    handleReservation: function () {
+    async handleReservation() {
       let flight_players = [];
 
       for (let i = 1; i <= this.form.fltSize; i++) {
@@ -355,17 +361,15 @@ export default {
         flight_players: flight_players,
       };
 
-      let that = this;
-      this.$http
-        .post(`golfer/booking`, info)
-        .then((res) => {
-          that.flight = res.flight;
-          this.$emit("handleOpenFlight", that.flight);
-        })
-        .catch((error) => {
-          this.dialogVisible = false;
-          this.loadTeetimes();
-        });
+      let res = await this.$http.post(`golfer/booking`, info);
+      if (res.flight) {
+        this.flight = res.flight;
+        await this.$store.dispatch("settings/fetchSettings");
+        this.$emit("handleOpenFlight", this.flight);
+      } else {
+        this.dialogVisible = false;
+        this.loadTeetimes();
+      }
     },
 
     handleDialogClose: function () {
