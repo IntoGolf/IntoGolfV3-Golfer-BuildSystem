@@ -322,8 +322,9 @@
           </div>
 
           <div>
-            <div class="row">Leveringsvoorwaarden:</div>
+            <div v-if="mollie !== null" class="row">Leveringsvoorwaarden:</div>
             <div
+              v-if="mollie !== null"
               class="row q-pa-sm"
               style="
                 border: 1px solid lightgrey;
@@ -334,7 +335,7 @@
             >
               {{ conditions }}
             </div>
-            <div class="row q-mt-md">
+            <div v-if="mollie !== null" class="row q-mt-md">
               <q-checkbox
                 v-model="flight.agreeConditions"
                 :rules="[(val) => !!val || '* Required']"
@@ -343,7 +344,7 @@
                 stack-label
               />
             </div>
-            <div class="row">
+            <div v-if="mollie !== null" class="row">
               <q-checkbox
                 v-model="flight.agreeCommerce"
                 :rules="[(val) => !!val || '* Required']"
@@ -360,17 +361,18 @@
             v-on:click="step = 1"
           />
           <q-btn
+            v-if="mollie !== null"
+            :disable="!valid"
+            color="primary"
+            label="Betaal"
+            v-on:click="handleSave"
+          />
+          <q-btn
+            v-else
             :disable="!valid"
             class="q-mr-sm"
             color="primary"
             label="Reserveren"
-            v-on:click="handleSave"
-          />
-          <q-btn
-            v-show="1 == 2"
-            :disable="!valid"
-            color="primary"
-            label="Betaal"
             v-on:click="handleSave"
           />
         </div>
@@ -501,11 +503,9 @@ export default {
     },
     valid: function () {
       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      console.log(this.validHcp);
-      console.log(emailPattern.test(this.flight.flpEmail1));
       return (
         this.flight.flpName1.length > 3 &&
-        this.flight.agreeConditions &&
+        (this.mollie === null || this.flight.agreeConditions) &&
         emailPattern.test(this.flight.flpEmail1) &&
         this.validHcp
       );
