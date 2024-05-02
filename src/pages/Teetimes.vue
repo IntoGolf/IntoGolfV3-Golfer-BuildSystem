@@ -161,11 +161,10 @@
             </div>
           </div>
 
-            <div
-                    class="row q-mt-sm"
-            >
-                Voor deze flight geldt een maximale totale handicap van: {{maxFlightHandicap}}.
-            </div>
+          <div class="row q-mt-sm">
+            Voor deze flight geldt een maximale totale handicap van:
+            {{ maxFlightHandicap }}.
+          </div>
           <div
             v-if="
               $store.state.settings.publicItems.app_display_greenfee_pay == 1
@@ -198,33 +197,42 @@
             lazy-rules
             stack-label
           />
-          <div v-if="flight.fltSize >= 2" class="row">
-              <div class="col-8">
-                  <q-input
-                          v-model="flight.flpPhone1"
-                          :rules="[(val) => !!val || '* Required']"
-                          class="q-mb-sm"
-                          label="Telefoonummer"
-                          lazy-rules
-                          mask="###############"
-                          maxlength="15"
-                          stack-label
-                  />
-              </div>
-              <div class="col-4">
-                  <q-input
-                          v-model="flight.flpHandicap1"
-                          :rules="[(val) => val !== '' && val !== null && val > -9.9 && val <= maxHandicap || '* tussen -9.9 tot ' + maxHandicap,]"
-                          class="q-mb-sm"
-                          label="Handicap"
-                          mask="##.#"
-                          reverse-fill-mask
-                          stack-label
-                  />
-              </div>
+          <div class="row">
+            <div class="col-8">
+              <q-input
+                v-model="flight.flpPhone1"
+                :rules="[(val) => !!val || '* Required']"
+                class="q-mb-sm"
+                label="Telefoonummer"
+                lazy-rules
+                mask="###############"
+                maxlength="15"
+                stack-label
+              />
+            </div>
+            <div class="col-4">
+              <q-input
+                v-model="flight.flpHandicap1"
+                :rules="[
+                  (val) =>
+                    (val !== '' &&
+                      val !== null &&
+                      val > -9.9 &&
+                      val <= maxHandicap) ||
+                    '* tussen -9.9 tot ' + maxHandicap,
+                ]"
+                class="q-mb-sm"
+                label="Handicap"
+                mask="##.#"
+                reverse-fill-mask
+                stack-label
+              />
+            </div>
           </div>
 
-          <p>Voer hier de gegevens van uw medespelers in:</p>
+          <p v-if="flight.fltSize >= 2">
+            Voer hier de gegevens van uw medespelers in:
+          </p>
           <div v-if="flight.fltSize >= 2" class="row">
             <div class="col-8">
               <q-input
@@ -238,7 +246,14 @@
             <div class="col-4">
               <q-input
                 v-model="flight.flpHandicap2"
-                :rules="[(val) => val !== '' && val !== null && val > -9.9 && val <= maxHandicap || '* tussen -9.9 tot ' + maxHandicap,]"
+                :rules="[
+                  (val) =>
+                    (val !== '' &&
+                      val !== null &&
+                      val > -9.9 &&
+                      val <= maxHandicap) ||
+                    '* tussen -9.9 tot ' + maxHandicap,
+                ]"
                 class="q-mb-sm"
                 label="Handicap"
                 mask="##.#"
@@ -260,7 +275,14 @@
             <div class="col-4">
               <q-input
                 v-model="flight.flpHandicap3"
-                :rules="[(val) => val !== '' && val !== null && val > -9.9 && val <= maxHandicap || '* tussen -9.9 tot ' + maxHandicap,]"
+                :rules="[
+                  (val) =>
+                    (val !== '' &&
+                      val !== null &&
+                      val > -9.9 &&
+                      val <= maxHandicap) ||
+                    '* tussen -9.9 tot ' + maxHandicap,
+                ]"
                 class="q-mb-sm"
                 label="Handicap"
                 mask="##.#"
@@ -282,7 +304,14 @@
             <div class="col-4">
               <q-input
                 v-model="flight.flpHandicap4"
-                :rules="[(val) => val !== '' && val !== null && val > -9.9 && val <= maxHandicap || '* tussen -9.9 tot ' + maxHandicap,]"
+                :rules="[
+                  (val) =>
+                    (val !== '' &&
+                      val !== null &&
+                      val > -9.9 &&
+                      val <= maxHandicap) ||
+                    '* tussen -9.9 tot ' + maxHandicap,
+                ]"
                 class="q-mb-sm"
                 label="Handicap"
                 mask="##.#"
@@ -292,11 +321,7 @@
             </div>
           </div>
 
-          <div
-            v-if="
-              $store.state.settings.publicItems.app_display_greenfee_pay == 1
-            "
-          >
+          <div>
             <div class="row">Leveringsvoorwaarden:</div>
             <div
               class="row q-pa-sm"
@@ -437,7 +462,7 @@ export default {
         agreeCommerce: false,
       },
       maxHandicap: 54,
-      maxTotalHandicap:108,
+      maxTotalHandicap: 108,
       mollie: null,
     };
   },
@@ -460,8 +485,10 @@ export default {
   },
   computed: {
     maxFlightHandicap() {
-        let maxSizeHcp = this.size * this.maxHandicap;
-        return maxSizeHcp < this.maxTotalHandicap ? maxSizeHcp : this.maxTotalHandicap;
+      let maxSizeHcp = this.size * this.maxHandicap;
+      return maxSizeHcp < this.maxTotalHandicap
+        ? maxSizeHcp
+        : this.maxTotalHandicap;
     },
     dayjs() {
       return dayjs;
@@ -474,6 +501,8 @@ export default {
     },
     valid: function () {
       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      console.log(this.validHcp);
+      console.log(emailPattern.test(this.flight.flpEmail1));
       return (
         this.flight.flpName1.length > 3 &&
         this.flight.agreeConditions &&
@@ -499,14 +528,25 @@ export default {
     },
     totalHandicap() {
       let hcp = parseFloat(this.flight.flpHandicap1);
-      hcp += parseInt(this.size) > 1 ? parseFloat(this.flight.flpHandicap2):0;
-      hcp += parseInt(this.size) > 2 ? parseFloat(this.flight.flpHandicap3):0;
-      hcp += parseInt(this.size) > 3 ? parseFloat(this.flight.flpHandicap4):0;
+      hcp +=
+        parseInt(this.flight.fltSize) > 1
+          ? parseFloat(this.flight.flpHandicap2)
+          : 0;
+      hcp +=
+        parseInt(this.flight.fltSize) > 2
+          ? parseFloat(this.flight.flpHandicap3)
+          : 0;
+      hcp +=
+        parseInt(this.flight.fltSize) > 3
+          ? parseFloat(this.flight.flpHandicap4)
+          : 0;
       return hcp;
     },
     validHcp() {
+      console.log(this.totalHandicap);
+      console.log(this.maxTotalHandicap);
       return this.totalHandicap < this.maxTotalHandicap;
-    }
+    },
   },
   methods: {
     handleLoadDate: function () {

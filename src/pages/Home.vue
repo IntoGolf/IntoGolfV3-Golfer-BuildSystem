@@ -1,6 +1,12 @@
 <template>
   <q-page-container>
     <q-page class="q-pa-sm">
+      <!--      <div class="row q-mb-md">-->
+      <!--        <q-badge class="q-pa-sm bg-green-4">{{-->
+      <!--          currentUser.relHandicap-->
+      <!--        }}</q-badge>-->
+      <!--      </div>-->
+      <!--      <q-btn class="full-width" color="secondary" label="Boek starttijd" />-->
       <match />
       <bills v-if="usrHasTeeTimes" />
       <bookings v-if="usrHasTeeTimes" />
