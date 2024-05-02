@@ -15,7 +15,7 @@
           <b>Starttijd:</b>
           {{ $filters.unixToDate(item.fltDate, "ddd D MMM") }}
           {{}} -
-                    {{ $filters.minuteToTime(item.fltTime1) }}
+          {{ $filters.minuteToTime(item.fltTime1) }}
         </q-item-label>
 
         <q-item-label caption>
@@ -27,6 +27,13 @@
       <q-item-section avatar> ></q-item-section>
     </q-item>
   </q-list>
+  <!--  <div v-else class="row q-pa-sm">-->
+  <!--    <div class="col-12 q-pa-xs" style="border: 1px solid lightgrey">-->
+  <!--      <p class="text-center q-mt-md" style="font-size: larger">-->
+  <!--        Er zijn geen openstaande starttijdreservering gevonden-->
+  <!--      </p>-->
+  <!--    </div>-->
+  <!--  </div>-->
 </template>
 
 <script>

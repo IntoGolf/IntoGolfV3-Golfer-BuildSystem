@@ -29,6 +29,14 @@
       <q-item-section avatar> ></q-item-section>
     </q-item>
   </q-list>
+  <!--  <div v-else class="row q-pa-sm">-->
+  <!--    <div class="col-12 q-pa-xs text-center" style="border: 1px solid lightgrey">-->
+  <!--      <p class="q-mt-md" style="font-size: larger">-->
+  <!--        Er zijn geen toekomstige wedstrijddeelnames gevonden-->
+  <!--      </p>-->
+  <!--      <q-icon class="q-ml-auto q-mr-auto" name="trophy" />-->
+  <!--    </div>-->
+  <!--  </div>-->
 </template>
 
 <script>
