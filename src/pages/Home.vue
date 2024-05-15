@@ -1,12 +1,21 @@
 <template>
   <q-page-container>
     <q-page>
-      <!--      <div class="row q-mb-md q-pa-sm">-->
-      <!--        <q-badge class="q-pa-sm bg-green-4"-->
-      <!--          >{{ currentUser.relHandicap }}-->
-      <!--        </q-badge>-->
-      <!--        <q-btn class="full-width" color="secondary" label="Boek starttijd" />-->
-      <!--      </div>-->
+      <div class="row q-mb-md q-pa-sm">
+        <q-card v-if="usrHasTeeTimes" class="my-card full-width q-mt-md">
+          <q-card-section class="text-center">
+            <div class="text-h5">Geen starttijden</div>
+            <div class="text-subtitle1">
+              er zijn geen gereserveerde starttijden gevonden
+            </div>
+            <q-btn
+              class="q-mt-md"
+              label="boek een starttijd"
+              v-on:click="$router.push('/reservations')"
+            />
+          </q-card-section>
+        </q-card>
+      </div>
       <match />
       <bills v-if="usrHasTeeTimes" />
       <bookings v-if="usrHasTeeTimes" />

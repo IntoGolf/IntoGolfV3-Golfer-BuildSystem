@@ -4,10 +4,18 @@
       <main v-show="focusedItem === null">
         <div class="row q-mb-md">
           <div class="col">
-            <q-input v-model="searchValue" clearable label="Zoeken" />
+            <q-input
+              v-model="searchValue"
+              clearable
+              hint="voer min. 3 letters is voor het zoeken van een lid"
+              label="Zoeken"
+            />
           </div>
         </div>
 
+        <div v-if="emptySearch">
+          <p>Geen leden gevonden</p>
+        </div>
         <q-list class="full-width" separator>
           <q-item
             v-for="item in list"
@@ -37,10 +45,10 @@
 
         <div v-if="base64Image" class="row q-mt-md">
           <q-img
-                  :src="base64Image"
-                  height="180px"
-                  spinner-color="red"
-                  :fit="'contain'"
+            :fit="'contain'"
+            :src="base64Image"
+            height="180px"
+            spinner-color="red"
           />
         </div>
 
@@ -71,13 +79,13 @@
         <q-separator spaced />
 
         <div class="row">
-            <div class="col text-bold">GSN</div>
+          <div class="col text-bold">GSN</div>
         </div>
 
         <div class="row">
-            <div class="col-12">
-                {{ focusedItem.relGsn }}
-            </div>
+          <div class="col-12">
+            {{ focusedItem.relGsn }}
+          </div>
         </div>
 
         <div v-show="focusedItem.relVisibilityLevel > 1">
@@ -173,13 +181,14 @@ export default {
 
       list: [],
       searchValue: "",
+      emptySearch: false,
       focusedItem: null,
 
       base64Image: "",
     };
   },
   async mounted() {
-      await this.loadImage();
+    await this.loadImage();
   },
   computed: {
     searchCount: function () {
@@ -193,15 +202,16 @@ export default {
     searchValue: function () {
       if (this.searchValue === null || this.searchValue.length < 3) {
         this.list = [];
+        this.emptySearch = false;
         return;
       }
       this.loadList();
     },
-      focusedItem: function (newValue) {
-        if (newValue) {
-            this.loadImage(newValue)
-        }
+    focusedItem: function (newValue) {
+      if (newValue) {
+        this.loadImage(newValue);
       }
+    },
   },
   methods: {
     loadList() {
@@ -210,20 +220,21 @@ export default {
         .get("golfer/relation?search=" + this.searchValue)
         .then((res) => {
           that.list = res;
+          that.emptySearch = res.length === 0;
           that.loading = false;
         });
     },
     async loadImage(relation) {
-        let name = relation.relImage;
-        name = name === "" ? "empty" : name;
+      let name = relation.relImage;
+      name = name === "" ? "empty" : name;
 
-        const url = "golfer/image/" + name;
-        const response = await this.$http({
-            method: "get",
-            url: url,
-        });
+      const url = "golfer/image/" + name;
+      const response = await this.$http({
+        method: "get",
+        url: url,
+      });
 
-        this.base64Image = `data:image/jpeg;base64,${response}`;
+      this.base64Image = `data:image/jpeg;base64,${response}`;
     },
   },
 };

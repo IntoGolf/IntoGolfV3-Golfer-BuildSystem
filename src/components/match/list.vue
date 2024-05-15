@@ -46,6 +46,19 @@
         </div>
       </div>
 
+      <q-card
+        v-if="filterArray.length === 0"
+        class="my-card full-width q-mt-md"
+      >
+        <q-card-section class="text-center">
+          <div class="text-h5">Geen wedstrijden</div>
+          <div class="text-subtitle1">
+            er zijn wedstrijden gevonden er zijn wedstrijden gevonden onder deze
+            selectie criteria
+          </div>
+        </q-card-section>
+      </q-card>
+
       <q-list separator>
         <q-item
           v-for="(match, index) in filterArray"
@@ -58,11 +71,14 @@
           <q-item-section>
             <q-item-label class="overflow-hidden">
               <div style="float: left">
-                  <span
-                      style="font-weight: bold"
-                      :style="{color: match.isQualifying === 1 ? 'green' : 'blue' }">
-                      {{ match.isQualifying === 1 ? 'Q' : 'NQ'}}
-                  </span>
+                <span
+                  :style="{
+                    color: match.isQualifying === 1 ? 'green' : 'blue',
+                  }"
+                  style="font-weight: bold"
+                >
+                  {{ match.isQualifying === 1 ? "Q" : "NQ" }}
+                </span>
                 <i class="far fa-trophy-alt mr-2" />
 
                 {{

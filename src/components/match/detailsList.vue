@@ -28,16 +28,15 @@
       </div>
     </div>
 
-      <div class="row q-pb-sm">
-          <div class="col text-bold">Qualifying</div>
+    <div class="row q-pb-sm">
+      <div class="col text-bold">Qualifying</div>
 
-          <div class="col overflow-hidden text-right">
-              {{ match.isQualifying === 1 ? 'Ja' : 'Nee' }}
-          </div>
+      <div class="col overflow-hidden text-right">
+        {{ match.isQualifying === 1 ? "Ja" : "Nee" }}
       </div>
+    </div>
 
-
-      <div class="row q-pb-sm">
+    <div class="row q-pb-sm">
       <div class="col text-bold">Max. deelnemers</div>
 
       <div class="col overflow-hidden text-right">
@@ -93,7 +92,7 @@
       </div>
     </div>
 
-    <div v-if="match.UitslagenGereed !== 1 && match.StartlijstGereed !== 1">
+    <div v-if="match.UitslagenGereed !== 1">
       <div class="row q-pb-sm">
         <div class="col text-bold">Inschrijfgeld</div>
 
@@ -107,14 +106,6 @@
 
         <div class="col overflow-hidden text-right">
           {{ $filters.money(match.feeGuest) }}
-        </div>
-      </div>
-
-      <div v-if="match.additionalSubscriptionInfo !== null" class="row q-pb-sm">
-        <div class="col text-bold">Extra informatie</div>
-
-        <div class="col overflow-hidden text-right">
-          {{ match.additionalSubscriptionInfo }}
         </div>
       </div>
 
@@ -143,6 +134,11 @@
           </q-banner>
         </div>
       </div>
+    </div>
+
+    <div v-if="match.additionalSubscriptionInfo !== null" class="row q-pb-sm">
+      <div class="col text-bold">Extra informatie:</div>
+      {{ match.additionalSubscriptionInfo }}
     </div>
 
     <q-btn-group

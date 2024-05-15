@@ -20,6 +20,15 @@
         </q-item>
       </q-list>
     </q-pull-to-refresh>
+
+    <q-card v-if="list.length === 0" class="my-card full-width q-mt-md">
+      <q-card-section class="text-center">
+        <div class="text-h5">Geen competities</div>
+        <div class="text-subtitle1">
+          er zijn momenteel geen competities beschikbaar
+        </div>
+      </q-card-section>
+    </q-card>
   </q-page>
 </template>
 

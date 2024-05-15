@@ -152,7 +152,7 @@ export default defineComponent({
         {
           name: "Baankalender",
           menuName: "Baankalender",
-          icon: "schedule",
+          icon: "calendar_month",
           visible: this.usrHasCalendar,
         },
         {
@@ -162,9 +162,15 @@ export default defineComponent({
           visible: this.setHasActivities,
         },
         {
+          name: "match",
+          menuName: "match",
+          icon: "emoji_events",
+          visible: this.usrHasMatch,
+        },
+        {
           name: "Meerronden",
           menuName: "Meerronden",
-          icon: "schedule",
+          icon: "emoji_events",
           visible: true,
         },
         {
@@ -188,7 +194,7 @@ export default defineComponent({
         {
           name: "reservations",
           menuName: "reservations",
-          icon: "schedule",
+          icon: "sports_golf",
           visible: this.usrHasTeeTimes,
         },
         {
@@ -198,15 +204,9 @@ export default defineComponent({
           visible: this.setHasGreenFeeCard,
         },
         {
-          name: "match",
-          menuName: "match",
-          icon: "sports_golf",
-          visible: this.usrHasMatch,
-        },
-        {
           name: "messages",
           menuName: "messages",
-          icon: "notes",
+          icon: "feed",
           visible: this.setHasMessages,
         },
         {
@@ -235,8 +235,8 @@ export default defineComponent({
         },
         {
           name: "pos",
-          menuName: "pos",
-          icon: "restaurant_enu",
+          menuName: "Horeca saldo",
+          icon: "euro",
           visible: this.usrHasPos && this.setHasBalance,
         },
         {
@@ -278,8 +278,8 @@ export default defineComponent({
   methods: {
     onMenu: function (name) {
       if (name === "Dashboard") {
-          this.$store.dispatch("settings/fetchSettings");
-          name = "";
+        this.$store.dispatch("settings/fetchSettings");
+        name = "";
       }
       this.$router.push("/" + name);
       this.drawer = false;

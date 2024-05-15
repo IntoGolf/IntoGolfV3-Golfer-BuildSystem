@@ -1,6 +1,18 @@
 <template>
   <q-page-container>
     <q-page class="q-pa-sm">
+      <q-card
+        v-if="$store.state.greenfeeCards.items.length === 0"
+        class="my-card full-width q-mt-md"
+      >
+        <q-card-section class="text-center">
+          <div class="text-h5">Geen rondekaarten</div>
+          <div class="text-subtitle1">
+            er zijn momenteel geen rondekaarten onder je account gevonden
+          </div>
+        </q-card-section>
+      </q-card>
+
       <div
         v-for="card in $store.state.greenfeeCards.items"
         :key="card.id"

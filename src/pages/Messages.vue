@@ -1,6 +1,14 @@
 <template>
   <q-page-container>
     <q-page class="q-pa-sm">
+      <q-card v-if="items.length === 0" class="my-card full-width q-mt-md">
+        <q-card-section class="text-center">
+          <div class="text-h5">Geen berichten</div>
+          <div class="text-subtitle1">
+            er zijn momenteel geen berichten gevonden
+          </div>
+        </q-card-section>
+      </q-card>
       <q-card v-for="(item, index) in items" :key="index" class="q-mb-md">
         <q-card-section>
           <div class="row">
