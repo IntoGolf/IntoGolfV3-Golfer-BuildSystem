@@ -171,7 +171,7 @@ export default defineComponent({
           name: "Meerronden",
           menuName: "Meerronden",
           icon: "emoji_events",
-          visible: true,
+          visible: this.usrHasMatch,
         },
         {
           name: "Chat",

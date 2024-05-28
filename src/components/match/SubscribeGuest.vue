@@ -33,7 +33,7 @@
 
       <q-input
         v-model="player.relation.relGsn"
-        :rules="gsnIsInvalid"
+        :rules="[(val) => !gsnIsInvalid || 'GSN is vereist']"
         label="GSN"
         mask="AA########"
         type="text"
@@ -178,8 +178,8 @@ export default {
           matchId: 0,
           relNr: null,
           relNrDoor: 0,
-          exactHandicapAtSubscription: 54,
-          exactHandicapForMatch: 54,
+          exactHandicapAtSubscription: null,
+          exactHandicapForMatch: null,
           Description: "",
           startingTeeId: 0,
           Bron: 2,
@@ -194,7 +194,7 @@ export default {
             this.match.restrictionBySex === 1
               ? 1
               : 2,
-          relHandicap: 54,
+          relHandicap: null,
           relGsn: "",
           relEmail: "",
           relPhone: "",
@@ -252,6 +252,7 @@ export default {
         this.player.relation.relName.length === 0 ||
         this.player.relation.relCallName.length === 0 ||
         this.player.relation.relHandicap.length === 0 ||
+        this.player.relation.relGsn.length === 0 ||
         !this.reg.test(this.player.relation.relEmail)
       );
     },
