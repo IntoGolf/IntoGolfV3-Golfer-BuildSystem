@@ -33,7 +33,7 @@ export default {
       let that = this;
       this.$http.get(`golfer/event/` + this.$route.query.id).then((res) => {
         that.match = res;
-        that.page = 5;
+        that.page = 1;
       });
     }
   },

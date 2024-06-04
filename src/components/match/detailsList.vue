@@ -85,6 +85,45 @@
     </div>
 
     <div class="row q-pb-sm">
+      <div class="col text-bold">Geslacht</div>
+
+      <div
+        v-show="match.restrictionBySex === 0"
+        class="col overflow-hidden text-right"
+      >
+        Dames & heren
+      </div>
+      <div
+        v-show="match.restrictionBySex === 1"
+        class="col overflow-hidden text-right"
+      >
+        Heren
+      </div>
+      <div
+        v-show="match.restrictionBySex === 2"
+        class="col overflow-hidden text-right"
+      >
+        Dames
+      </div>
+    </div>
+
+    <div v-show="match.restrictionBySex !== 1" class="row q-pb-sm">
+      <div class="col text-bold">Handicap dames</div>
+
+      <div class="col overflow-hidden text-right">
+        Max. {{ match.handicapFemaleMax }} / Min. {{ match.handicapFemaleMin }}
+      </div>
+    </div>
+
+    <div v-show="match.restrictionBySex !== 2" class="row q-pb-sm">
+      <div class="col text-bold">Handicap heren</div>
+
+      <div class="col overflow-hidden text-right">
+        Max. {{ match.handicapMaleMax }} / Min. {{ match.handicapMaleMin }}
+      </div>
+    </div>
+
+    <div class="row q-pb-sm">
       <div class="col text-bold">Lus</div>
 
       <div class="col overflow-hidden text-right">
@@ -362,10 +401,13 @@ export default {
       let startDate = this.$dayjs(
         this.match.playingDate + " " + this.match.startingTime
       );
+
       return (
         this.mySubscription !== null &&
         this.$dayjs() > startDate &&
         this.$dayjs() < startDate.add(6, "hours") &&
+        (this.mySubscription.positionInParty === 1 ||
+          [10, 11, 12].includes(this.match.matchTypeId)) &&
         this.match.UitslagenGereed !== 1
       );
     },

@@ -505,6 +505,7 @@ export default {
       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       return (
         this.flight.flpName1.length > 3 &&
+        this.flight.flpPhone1.length > 3 &&
         (!this.pay || this.flight.agreeConditions) &&
         emailPattern.test(this.flight.flpEmail1) &&
         this.validHcp
