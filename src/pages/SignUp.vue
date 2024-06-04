@@ -99,15 +99,15 @@
                   stack-label
                 />
               </div>
-                <div class="col-4">
-                    <q-input
-                            v-model="account_form.relDateBirth"
-                            type="date"
-                            dense
-                            label="Geboortedatum"
-                            stack-label
-                    />
-                </div>
+              <div class="col-4">
+                <q-input
+                  v-model="account_form.relDateBirth"
+                  dense
+                  label="Geboortedatum"
+                  stack-label
+                  type="date"
+                />
+              </div>
             </div>
           </q-tab-panel>
           <q-tab-panel name="address">
@@ -126,7 +126,7 @@
                 />
               </div>
 
-              <div class="col-6">
+              <div class="col-3">
                 <q-input
                   v-model="relAddressStreetNumber"
                   :rules="[(val) => !!val || 'Huisnummer is een verplicht']"
@@ -135,6 +135,17 @@
                   dense
                   label="Huisnummer"
                   maxlength="8"
+                  stack-label
+                />
+              </div>
+              <div class="col-3">
+                <q-input
+                  v-model="account_form.relAddressStreetAddition"
+                  bottom-slots
+                  counter
+                  dense
+                  label="Toevoeging"
+                  maxlength="16"
                   stack-label
                 />
               </div>
@@ -414,6 +425,7 @@ export default {
         relPostalCode: "",
         relCity: "",
         relAddressStreetNumber: "",
+        relAddressStreetAddition: "",
         relAddress1: "",
         relDateBirth: "",
         ProCourse: this.ProCourse,
