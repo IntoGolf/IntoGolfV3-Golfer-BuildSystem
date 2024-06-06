@@ -29,7 +29,7 @@ export default {
     },
     text() {
       let time = this.$filters.minuteToTime(this.start.sttTimeFrom) + " ";
-      if (this.start.sttDescr === null) {
+      if (this.start.sttDescr === null || this.start.isEvent) {
         return "";
       } else if (this.start.sttDescr.length > 0) {
         return time + this.start.sttDescr;
