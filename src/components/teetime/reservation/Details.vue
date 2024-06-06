@@ -281,15 +281,15 @@ export default {
     },
     freeSlots() {
       if (this.$store.state.settings.item.app_only_book_members === 1) {
-          console.log('freeSlots');
-          console.log(this.flight);
-          console.log(this.playerArray.filter((item) => item.flpName !== "").length);
         return (
           this.flight.startTime.sttMaxPlayers -
           this.playerArray.filter((item) => item.flpName !== "").length
         );
       }
-      return this.playerArray.filter((item) => item.flpName === "").length;
+      return (
+        this.flight.startTime.sttMaxPlayers -
+        this.playerArray.filter((item) => item.flpName !== "").length
+      );
     },
     inThePast: function () {
       return this.$dayjs(
