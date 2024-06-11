@@ -12,35 +12,12 @@
               spread
               unelevated
             >
-              <!--              <q-btn-->
-              <!--                v-show="-->
-              <!--                  1 === 2 &&-->
-              <!--                  local_scorecard.course !== -1 &&-->
-              <!--                  local_scorecard.course !== 993 &&-->
-              <!--                  local_scorecard.course_country_code === 'NL'-->
-              <!--                "-->
-              <!--                color="primary"-->
-              <!--                label="score"-->
-              <!--                @click="showHole = 9"-->
-              <!--              />-->
-              <!--              <q-btn-->
-              <!--                v-show="canDelete"-->
-              <!--                color="primary"-->
-              <!--                icon="save"-->
-              <!--                @click="handleSave"-->
-              <!--              />-->
               <q-btn
                 color="primary"
                 icon="close"
                 label="Sluiten"
                 @click="onClose"
               />
-              <!--              <q-btn-->
-              <!--                v-if="canDelete"-->
-              <!--                color="negative"-->
-              <!--                icon="delete"-->
-              <!--                @click="handleDelete"-->
-              <!--              />-->
             </q-btn-group>
           </q-item-section>
         </q-item>
@@ -153,45 +130,46 @@
         </q-item>
       </q-list>
 
-      <q-list
+      <div
         v-show="
           local_scorecard.course !== -1 &&
           local_scorecard.course !== 993 &&
           local_scorecard.course_country_code === 'NL'
         "
-        bordered
-        separator
       >
-        <q-item class="itg-q-item">
-          <q-item-section class="col-2 text-bold"> Hole</q-item-section>
+        <div
+          class="row q-pa-sm q-mt-md"
+          style="
+            border-bottom: 2px solid lightgrey;
+            border-top: 1px solid lightgrey;
+          "
+        >
+          <div class="col-2 text-bold">Hole</div>
 
-          <q-item-section class="col-2 text-bold"> Par</q-item-section>
+          <div class="col-2 text-bold">Par</div>
 
-          <q-item-section class="col-5 text-center text-bold">
-            Slagen
-          </q-item-section>
+          <div class="col-5 text-center text-bold">Slagen</div>
 
-          <q-item-section class="col-3 text-bold text-center">
-            Stb
-          </q-item-section>
-        </q-item>
+          <div class="col-3 text-bold text-center">Stb</div>
+        </div>
 
-        <q-item
-          v-for="(hole, index) in local_scorecard.holes"
+        <div
+          v-for="(hole, index) in firstNine"
           v-show="hole.par > 0"
           :key="index"
-          class="itg-q-item"
+          class="row q-pa-sm"
+          style="border-bottom: 1px solid lightgrey"
         >
-          <q-item-section class="col-2 text-bold">
+          <div class="col-2 text-bold score-cv">
             {{ hole.number }}
-          </q-item-section>
+          </div>
 
-          <q-item-section class="col-2">
+          <div class="col-2 score-cv">
             {{ hole.par }}
-          </q-item-section>
+          </div>
 
-          <q-item-section class="col-5">
-            <div class="row">
+          <div class="col-5">
+            <div v-if="canEdit" class="row">
               <div
                 v-show="canEdit"
                 class="col-4"
@@ -209,16 +187,6 @@
               <div
                 v-show="canEdit"
                 class="text-center col-4"
-                style="padding-top: 10px; font-weight: bold"
-              >
-                <q-item-label>
-                  {{ local_scorecard.holes[index].strokes }}
-                </q-item-label>
-              </div>
-
-              <div
-                v-show="!canEdit"
-                class="text-center col-12"
                 style="padding-top: 10px; font-weight: bold"
               >
                 <q-item-label>
@@ -245,25 +213,135 @@
                 />
               </div>
             </div>
-          </q-item-section>
 
-          <q-item-section class="col-3 text-center">
+            <div v-else class="row">
+              <div class="col-12">
+                <q-item-label class="text-center text-bold">
+                  {{ local_scorecard.holes[index].strokes }}
+                </q-item-label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-3 text-center score-cv">
             {{ hole.stableford }}
-          </q-item-section>
-        </q-item>
+          </div>
+        </div>
 
-        <q-item class="itg-q-item">
-          <q-item-section class="col-9">
-            <q-item-label>Totaal punten</q-item-label>
-          </q-item-section>
+        <div class="row q-pa-sm">
+          <div class="col-9 text-bold">
+            <q-item-label>Punten 1ste 9</q-item-label>
+          </div>
 
-          <q-item-section class="col-3 text-center" style="font-size: 24px">
+          <div class="col-3 text-center text-bold">
+            {{ pointsFirstNine }}
+          </div>
+        </div>
+
+        <div
+          v-if="secondNine.length > 0"
+          class="row q-pa-sm q-mt-md"
+          style="
+            border-bottom: 2px solid lightgrey;
+            border-top: 1px solid lightgrey;
+          "
+        >
+          <div class="col-2 text-bold">Hole</div>
+
+          <div class="col-2 text-bold">Par</div>
+
+          <div class="col-5 text-center text-bold">Slagen</div>
+
+          <div class="col-3 text-bold text-center">Stb</div>
+        </div>
+
+        <div
+          v-for="(hole, index) in secondNine"
+          v-show="hole.par > 0"
+          :key="index"
+          class="row q-pa-sm"
+          style="border-bottom: 1px solid lightgrey"
+        >
+          <div class="col-2 text-bold">
+            {{ hole.number }}
+          </div>
+
+          <div class="col-2">
+            {{ hole.par }}
+          </div>
+
+          <div class="col-5">
+            <div v-if="canEdit" class="row">
+              <div class="col-4" style="padding: 0px; text-align: left">
+                <q-btn
+                  color="primary"
+                  label="-"
+                  outline
+                  round
+                  @click="onScoreChangeHandler(hole, -1)"
+                />
+              </div>
+
+              <div
+                class="text-center col-4"
+                style="padding-top: 10px; font-weight: bold"
+              >
+                <q-item-label>
+                  {{ local_scorecard.holes[index].strokes }}
+                </q-item-label>
+              </div>
+
+              <div
+                class="col-4"
+                style="
+                  padding: 0px;
+                  text-align: right;
+                  font-size: 18px;
+                  font-weight: bold;
+                "
+              >
+                <q-btn
+                  color="primary"
+                  label="+"
+                  outline
+                  round
+                  @click="onScoreChangeHandler(hole, 1)"
+                />
+              </div>
+            </div>
+
+            <div v-else class="row">
+              <div class="col-12">
+                <div class="text-center text-bold">
+                  {{ local_scorecard.holes[index].strokes }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-3 text-center">
+            {{ hole.stableford }}
+          </div>
+        </div>
+
+        <div v-if="secondNine.length > 0" class="row q-pa-sm">
+          <div class="col-9 text-bold">Punten 2de 9</div>
+
+          <div class="col-3 text-center text-bold">
+            {{ pointsSecondNine }}
+          </div>
+        </div>
+
+        <div class="row q-pa-sm q-mb-md text-h5">
+          <div class="col-9 text-bold">Totaal punten</div>
+
+          <div class="col-3 text-center text-bold">
             {{ local_scorecard.total_stableford }}
-          </q-item-section>
-        </q-item>
-      </q-list>
+          </div>
+        </div>
+      </div>
 
-      <div class="row q-pa-md">
+      <div v-if="canEdit" class="row q-pa-md">
         <div class="col">
           <q-btn
             class="full-width"
@@ -285,10 +363,9 @@
           />
         </div>
       </div>
-      <div class="row q-pb-md q-pl-md q-pr-md">
+      <div v-show="canDelete" class="row q-pb-md q-pl-md q-pr-md">
         <div class="col">
           <q-btn
-            v-show="canDelete"
             class="full-width"
             color="negative"
             icon="delete"
@@ -346,16 +423,17 @@ export default {
     return {
       local_scorecard: this.scorecard,
       showHole: 0,
+      canEdit: true,
     };
   },
   mounted() {
-    console.log("screcard");
-    console.log(this.scorecard);
     if (this.scorecard.number_of_holes_played > 0) {
       this.showHole = 0;
     }
   },
   created() {
+    this.canEdit = this.getCanEdit();
+    console.log(this.canEdit);
     if (!this.canEdit) {
       return;
     }
@@ -371,6 +449,24 @@ export default {
     }
   },
   computed: {
+    firstNine() {
+      return this.local_scorecard.holes.filter((hole) => hole.number <= 9);
+    },
+    secondNine() {
+      return this.local_scorecard.holes.filter(
+        (hole) => hole.number >= 10 && hole.par > 0
+      );
+    },
+    pointsFirstNine() {
+      return this.scorecard.holes.reduce(function (result, item) {
+        return result + (item.number <= 9 ? item.stableford : 0);
+      }, 0);
+    },
+    pointsSecondNine() {
+      return this.scorecard.holes.reduce(function (result, item) {
+        return result + (item.number >= 10 ? item.stableford : 0);
+      }, 0);
+    },
     title: function () {
       if (this.local_scorecard.course === -1) {
         return "Aanpassing";
@@ -381,18 +477,15 @@ export default {
       }
     },
     canDelete: function () {
+      if (this.settings.app_allow_delete_card === 0) {
+        return false;
+      }
       let max = parseInt(this.settings.handicap_maximum_days_of_score) * -1;
       return (
         this.local_scorecard.ngf_card_id.length > 0 &&
         this.$dayjs(this.local_scorecard.datetime).isAfter(
           this.$dayjs().add(max, "day")
         )
-      );
-    },
-    canEdit: function () {
-      let max = parseInt(this.settings.handicap_maximum_days_of_score) * -1;
-      return this.$dayjs(this.local_scorecard.datetime).isAfter(
-        this.$dayjs().add(max, "day")
       );
     },
     plHcp() {
@@ -425,6 +518,19 @@ export default {
     },
   },
   methods: {
+    getCanEdit() {
+      let strokes = this.scorecard.holes.reduce(function (result, item) {
+        return result + item.strokes;
+      }, 0);
+
+      if (this.settings.app_allow_update_card === 0 && strokes > 0) {
+        return false;
+      }
+      let max = parseInt(this.settings.handicap_maximum_days_of_score) * -1;
+      return this.$dayjs(this.local_scorecard.datetime).isAfter(
+        this.$dayjs().add(max, "day")
+      );
+    },
     onClose: function () {
       this.$emit("handleClose", true);
     },
@@ -565,3 +671,10 @@ export default {
   },
 };
 </script>
+
+<style>
+.score-cv {
+  display: grid;
+  align-items: center;
+}
+</style>

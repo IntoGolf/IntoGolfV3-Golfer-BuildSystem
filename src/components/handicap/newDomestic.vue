@@ -11,19 +11,25 @@
       <div v-if="step === 1">
         <q-input
           v-show="step === 1"
-          ref="date"
           v-model="date"
           :rules="validDate"
-          label="Datum"
+          class="q-mb-md"
+          filled
+          label="*Datum"
           lazy-rules
+          stack-label
           type="date"
         />
 
         <q-input
           v-show="step === 1"
           v-model="time"
+          class="q-mb-md"
+          filled
+          label="*Tijd"
           lazy-rules
           mask="time"
+          stack-label
           type="time"
         />
 
@@ -31,19 +37,25 @@
           v-show="step === 1"
           ref="gsn"
           v-model="local_scorecard.marker"
-          :rules="validGsn"
-          hint="Type hier het GSN (NL00000000) van de marker"
-          label="Marker"
+          :hint="gsnHint"
+          :rules="[validGsn]"
+          class="q-mb-md"
+          filled
+          label="*Marker"
+          lazy-rules
           mask="AA########"
           placeholder="'NL00000000'"
+          stack-label
           type="text"
         />
 
         <q-input
           v-show="step === 1"
           v-model="local_scorecard.remarks"
-          hint="Heeft u een opmerking voer deze hier in"
+          class="q-mb-md"
+          filled
           label="Opmerking"
+          stack-label
           type="text"
         />
 
@@ -54,8 +66,9 @@
             { value: 0, label: 'Nee' },
             { value: 1, label: 'Ja' },
           ]"
+          class="q-mb-md"
           emit-value
-          hint="Wilt u deze kaart als qualifying registreren"
+          filled
           label="Qualifying"
           map-options
         />
@@ -67,8 +80,9 @@
             { value: 0, label: 'Nee' },
             { value: 1, label: 'Ja' },
           ]"
+          class="q-mb-md"
           emit-value
-          hint="Wilt u deze kaart als wedstrijdkaart registreren"
+          filled
           label="Wedstrijdkaart"
           map-options
         />
@@ -257,10 +271,10 @@ export default {
     return {
       step: 1,
 
-      date: this.$dayjs(this.scorecard.datetime).format("YYYY-MM-DD"),
-      time: this.$dayjs(this.scorecard.datetime)
-        .add(-260, "minute")
-        .format("HH:mm"),
+      date: null, //this.$dayjs(this.scorecard.datetime).format("YYYY-MM-DD"),
+      time: null, //this.$dayjs(this.scorecard.datetime)
+      //.add(-260, "minute")
+      //.format("HH:mm"),
 
       local_scorecard: this.scorecard,
 
@@ -273,6 +287,9 @@ export default {
 
       teeList: [],
       tee: null,
+
+      gsnHint: "Type hier het GSN van de marker",
+      gsnIsValid: false,
     };
   },
   created() {
@@ -394,35 +411,30 @@ export default {
 
       return [(val) => true || ""];
     },
-    validGsn: function () {
-      return [
-        (val) =>
-          !this.gsnIsInvalid ||
-          "Voer een geldig GSN nummer in of laat het veld leeg",
-      ];
-    },
     gsnIsInvalid: function () {
-      if (this.local_scorecard.marker.length > 0) {
-        if (this.local_scorecard.marker.length < 10) {
-          return true;
-        } else if (this.local_scorecard.marker.length > 10) {
-          return true;
-        } else if (isNaN(parseInt(this.local_scorecard.marker.substr(2, 8)))) {
-          return true;
-        } else if (!/[A-Z]/.test(this.local_scorecard.marker.substr(0, 1))) {
-          return true;
-        } else if (!/[A-Z]/.test(this.local_scorecard.marker.substr(1, 2))) {
-          return true;
-        } else if (this.local_scorecard.marker === "NL00000000") {
-          return true;
-        }
-      }
-      return false;
+      return !this.gsnIsValid;
     },
   },
   methods: {
     onSetCourseFilterString: function (value) {
       this.locationListFilterString = value;
+    },
+    async validGsn(val) {
+      this.gsnIsValid = false;
+      if (val.length < 10) {
+        return "Voer een geldig GSN nummer in";
+      }
+
+      const response = await this.$http.get("golfer/checkMarker", {
+        params: { gsn: val },
+      });
+
+      if (response.data.value) {
+        this.gsnHint = response.data.name;
+        this.gsnIsValid = true;
+        return true;
+      }
+      return "Gsn gecontroleerd maar geen golfer gevonden!";
     },
   },
 };

@@ -2,7 +2,6 @@
   <div>
     <div class="row justify-between items-center text-h5 q-mb-md">
       <div>Betaalkaart {{ selectedCard.pmtName }}</div>
-
       <q-icon name="arrow_back" v-on:click="$emit('handleCloseCard')" />
     </div>
 

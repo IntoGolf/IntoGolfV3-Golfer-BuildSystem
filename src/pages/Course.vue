@@ -40,7 +40,7 @@
           </div>
 
           <div class="row q-col-gutter-md q-mb-sm">
-            <div class="col-4 text-right">Trollies</div>
+            <div class="col-4 text-right">Troleys</div>
             <div class="col-8">
               <q-icon
                 :color="loop.clsNoTrolleysYN == 0 ? 'green' : 'red'"

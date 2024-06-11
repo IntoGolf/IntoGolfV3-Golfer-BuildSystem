@@ -117,28 +117,28 @@
       </div>
 
       <div
-              v-show="usrHasCalendar"
-              class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
+        v-show="usrHasCalendar"
+        class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
       >
-          <div
-                  class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
-                  @click="$router.push('/Baankalender')"
+        <div
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/Baankalender')"
+        >
+          <span class="title"
+            ><i class="far fa-calendar-star"></i>Baankalender</span
           >
-              <span class="title"
-              ><i class="far fa-calendar-star"></i>Baankalender</span
-              >
-          </div>
+        </div>
 
-          <div
-                  class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
-                  @click="$router.push('/Meerronden')"
+        <div
+          v-if="usrHasMatch"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/Meerronden')"
+        >
+          <span class="title"
+            ><i class="far fa-calendar-star"></i>Meerronden</span
           >
-              <span class="title"
-              ><i class="far fa-calendar-star"></i>Meerronden</span
-              >
-          </div>
+        </div>
       </div>
-
 
       <div class="row text-h6 q-pl-md q-pr-md q-pt-sm q-gutter-sm">
         <div
@@ -233,22 +233,22 @@
         </div>
       </div>
       <div
-              v-show="setHasGreenFeeCard"
-              class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
+        v-show="setHasGreenFeeCard"
+        class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
       >
-          <div
-                  class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
-                  @click="$router.push('/greenfeecards')"
+        <div
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/greenfeecards')"
+        >
+          <span class="title"
+            ><i class="far fa-calendar-star"></i>Greenfeekaarten</span
           >
-              <span class="title"
-              ><i class="far fa-calendar-star"></i>Greenfeekaarten</span
-              >
-          </div>
-          <div
-                  class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
-          >
-              &nbsp;
-          </div>
+        </div>
+        <div
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+        >
+          &nbsp;
+        </div>
       </div>
       <div
         v-show="usrHasExtTeetime"
