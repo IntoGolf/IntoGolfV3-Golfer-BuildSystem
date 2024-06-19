@@ -3,7 +3,7 @@
     <match-list v-if="match === null" v-on:handleOpenMatch="handleOpenMatch" />
 
     <match-details
-      v-if="match !== null"
+      v-else
       :prop_match="match"
       :prop_page="page"
       v-on:handleCloseMatch="handleCloseMatch"
@@ -38,11 +38,8 @@ export default {
     }
   },
   methods: {
-    handleOpenMatch: function (match) {
-      let that = this;
-      this.$http.get(`golfer/event/` + match.id).then((res) => {
-        that.match = res;
-      });
+    async handleOpenMatch(match) {
+      this.match = await this.$http.get(`golfer/event/` + match.id);
     },
     handleCloseMatch: function () {
       this.match = null;

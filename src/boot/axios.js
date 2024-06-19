@@ -16,8 +16,6 @@ axios.interceptors.request.use(
     }
 
     config.url = `${baseURL}api/${config.url}`;
-    console.log(config.url);
-
     const token = store.getters["currentUser/token"];
     if (token) {
       config.headers.common["Authorization"] = "Bearer " + token;

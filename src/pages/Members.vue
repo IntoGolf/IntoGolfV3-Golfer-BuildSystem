@@ -187,9 +187,7 @@ export default {
       base64Image: "",
     };
   },
-  async mounted() {
-    await this.loadImage();
-  },
+  async mounted() {},
   computed: {
     searchCount: function () {
       return this.list.length;

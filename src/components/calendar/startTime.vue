@@ -54,12 +54,10 @@ export default {
         fontColor = "black";
         color = "lightblue";
       }
-      console.log(this.top);
       return {
         backgroundColor: color,
         height: height,
         color: fontColor,
-        // borderBottom: this.start.sttGrpColor1 ? "1px solid white" : "",
         top: this.top,
       };
     },
@@ -80,9 +78,7 @@ export default {
           html: true,
           persistent: true,
         })
-        .onOk(() => {
-          // console.log('>>>> OK')
-        });
+        .onOk(() => {});
     },
   },
 };

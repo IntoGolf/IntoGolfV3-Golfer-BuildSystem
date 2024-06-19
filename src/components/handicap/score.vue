@@ -390,7 +390,6 @@
     <scorecard-holes-table
       v-else-if="showHole === 9"
       :courseArray="courseArray"
-      :currentUser="currentUser"
       :page="page"
       :scorecardData="local_scorecard"
       :teeArray="teeArray"
@@ -411,7 +410,6 @@ export default {
   props: {
     page: String,
     scorecard: Object,
-    currentUser: Object,
     teeArray: Array,
     courseArray: Array,
   },
@@ -433,7 +431,6 @@ export default {
   },
   created() {
     this.canEdit = this.getCanEdit();
-    console.log(this.canEdit);
     if (!this.canEdit) {
       return;
     }

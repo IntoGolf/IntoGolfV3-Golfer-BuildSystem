@@ -143,6 +143,7 @@
 
       <q-item
         v-if="
+          $store.getters['settings/item'].app_display_checkin === 1 &&
           !inThePast &&
           $store.state.currentUser.item.tile_teetimes_y_n &&
           $store.state.settings.item.teetime !== null &&
@@ -247,6 +248,15 @@ export default {
   props: {
     flight: Object,
   },
+  emits: [
+    "handleAddPlayer",
+    "handleAddRent",
+    "handleCheckIn",
+    "handleClose",
+    "handleEditPlayer",
+    "handleRefresh",
+    "handleSave",
+  ],
   data: function () {
     return {
       dialogVisible: false,
@@ -272,6 +282,9 @@ export default {
           item.flpCarNr === null &&
           (this.isMyBooking || item.flpName !== null)
       );
+    },
+    firstNr: function () {
+      return this.local_flight.flight_players[0].flpSide;
     },
     players() {
       return this.playerArray.filter((item) => item.flpName !== "");

@@ -31,15 +31,8 @@
 
 <script>
 export default {
-  data() {
-    return {
-      bookingsArray: [],
-    };
-  },
-  mounted() {
-    this.$http.get("golfer/bookings").then((res) => {
-      this.bookingsArray = res;
-    });
+  props: {
+    bookingsArray: Array,
   },
   methods: {
     handleOpenFlight(item) {

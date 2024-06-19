@@ -1,15 +1,14 @@
 <template>
   <div>
     <div class="row justify-between items-center text-h5 q-mb-md">
-      <div>Betaalkaart {{ selectedCard.pmtName }}</div>
+      <div>Betaalkaart {{ payMethod.pmtName }}</div>
       <q-icon name="arrow_back" v-on:click="$emit('handleCloseCard')" />
     </div>
 
     <Transaction
-      v-for="(payment, key) in payments"
+      v-for="(transaction, key) in payMethod.transactions.slice(-50).reverse()"
       :key="key"
-      :payment="payment"
-      :payments="payments"
+      :transaction="transaction"
     />
   </div>
 </template>
@@ -20,15 +19,7 @@ import Transaction from "components/pos/transaction.vue";
 export default {
   components: { Transaction },
   props: {
-    selectedCard: Object,
-    paymentArray: Array,
-  },
-  computed: {
-    payments: function () {
-      return this.paymentArray.filter(
-        (item) => item.payPmtNr == this.selectedCard.pmtNr
-      );
-    },
+    payMethod: Object,
   },
 };
 </script>

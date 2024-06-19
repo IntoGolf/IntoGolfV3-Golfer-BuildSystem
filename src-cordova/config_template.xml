@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="$APP_ID$" version="$APP_VERSION$" xmlns="http://www.w3.org/ns/widgets">
   <hook src="hooks/appBeforeBuild.js" type="before_build"/>
-  <name>Lochemse Golfclub</name>
-  <description>App Lochemse Golfclub</description>
+  <name>Sallandsche GolfClub</name>
+  <description>App allandsche GolfClub</description>
   <author email="info@intogolf.nl" href="https://www.intogolf.com">
     IntoGolf Team
   </author>

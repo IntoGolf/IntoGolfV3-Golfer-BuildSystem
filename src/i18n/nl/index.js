@@ -10,5 +10,5 @@ export default {
   Chat: "Chat",
   Baanstatus: "Baanstatus",
   NGF: "NGF",
-  "Horeca saldo": "Horeca saldo",
+  "Horeca saldo": "Horeca saldo'",
 };

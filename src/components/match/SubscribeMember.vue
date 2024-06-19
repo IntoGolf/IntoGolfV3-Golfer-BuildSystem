@@ -219,9 +219,6 @@ export default {
     );
     this.debouncedFetchData = this.debounce(this.fetchData, 300);
   },
-  mounted() {
-    console.log(this.aSubscription);
-  },
   watch: {
     tee: function (newValue) {
       this.player.details.startingTeeId = newValue.color;

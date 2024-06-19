@@ -73,6 +73,14 @@ module.exports = configure(function (ctx) {
           .filename("js/[name].[contenthash].js")
           .chunkFilename("js/[name].[contenthash].js");
       },
+
+      extendWebpack(cfg) {
+        cfg.plugins.push(
+          new (require("webpack").DefinePlugin)({
+            __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false), // or true, depending on your needs
+          })
+        );
+      },
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer

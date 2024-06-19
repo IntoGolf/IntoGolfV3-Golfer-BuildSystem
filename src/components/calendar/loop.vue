@@ -36,7 +36,6 @@ export default {
     },
     loopStyle() {
       let startHour = Math.floor(this.minTime / 60);
-      console.log(startHour);
       return {
         width: "100%",
         paddingTop: (this.lMinTime - startHour * 60) * this.fact + "px",

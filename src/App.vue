@@ -51,16 +51,18 @@
           {{ this.$route.meta.title }}
         </q-toolbar-title>
         <q-btn
+          v-if="['/'].includes($route.path)"
           dense
           flat
           icon="account_circle"
           round
           v-on:click="$router.push('/profile')"
-        />
+          >{{ fullName }}
+        </q-btn>
+        <q-btn v-else dense flat round />
       </q-toolbar>
     </q-header>
     <router-view class="bg-white web-width" />
-    <!-- Render this part on non-desktop devices -->
     <q-drawer
       v-if="$q.platform.is.mobile"
       v-model="drawer"
@@ -110,6 +112,12 @@ export default defineComponent({
     };
   },
   computed: {
+    fullName() {
+      if (this.$store.getters["currentUser/item"]) {
+        return this.$store.getters["currentUser/item"].full_name2;
+      }
+      return "";
+    },
     isCordova() {
       return this.$q.platform.is.cordova || this.$q.platform.is.mobile;
     },
@@ -236,7 +244,7 @@ export default defineComponent({
         {
           name: "pos",
           menuName: "Horeca saldo",
-          icon: "euro",
+          icon: "credit_card",
           visible: this.usrHasPos && this.setHasBalance,
         },
         {

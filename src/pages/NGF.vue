@@ -23,6 +23,7 @@ export default {
       this.$http
         .get("golfer/user/NgfMembershipCard")
         .then((res) => {
+          console.log(res);
           that.blobUrl = "data:image/png;base64," + res;
         })
         .catch((error) => {

@@ -19,7 +19,7 @@ const routes = [
     component: homeComponent,
     meta: {
       requiresAuth: true,
-      title: "Dashboard",
+      title: "",
     },
   },
   {
@@ -245,8 +245,7 @@ const routes = [
   {
     path: "/sign-up",
     name: "signUp",
-    component: layoutComponent,
-    children: [{ path: "", component: () => import("pages/SignUp.vue") }],
+    component: () => import("pages/SignUp.vue"),
     meta: {
       requiresAuth: false,
       title: "Inschrijven",

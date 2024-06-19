@@ -28,7 +28,7 @@ const store = createStore({
       await dispatch("currentUser/fetch", null, { root: true });
       await dispatch("messages/fetchMessages", null, { root: true });
       await dispatch("courseStatus/fetch", null, { root: true });
-      await dispatch("chats/fetchChats", null, { root: true });
+      // await dispatch("chats/fetchChats", null, { root: true });
     },
     async initializePublicApp({ dispatch }) {
       await dispatch("settings/fetchPublicSettings", null, { root: true });
@@ -41,7 +41,7 @@ const store = createStore({
       await dispatch("messages/clear");
       await dispatch("scorecards/clear");
       await dispatch("settings/clear");
-      await dispatch("chats/clear");
+      // await dispatch("chats/clear");
     },
   },
 });

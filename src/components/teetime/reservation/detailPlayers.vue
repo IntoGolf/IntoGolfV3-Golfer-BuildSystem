@@ -12,8 +12,10 @@
 
 <script>
 import DetailPlayersPlayer from "components/teetime/reservation/detailPlayersPlayer.vue";
+import authMixin from "src/mixins/auth";
 
 export default {
+  mixins: [authMixin],
   components: { DetailPlayersPlayer },
   props: {
     flight: Object,
@@ -29,6 +31,15 @@ export default {
     },
     players() {
       return this.playerArray.filter((item) => item.flpName !== "");
+    },
+    firstNr: function () {
+      if (!this.flight.flight_players) {
+        return 0;
+      }
+      return this.flight.flight_players[0].flpSide;
+    },
+    isMyBooking: function () {
+      return this.flight.flight_players[0].flpRelNr === this.currentUser.relNr;
     },
   },
   methods: {

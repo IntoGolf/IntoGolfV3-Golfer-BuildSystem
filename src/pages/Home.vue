@@ -1,8 +1,11 @@
 <template>
   <q-page-container>
-    <q-page>
-      <div class="row q-mb-md q-pa-sm">
-        <q-card v-if="usrHasTeeTimes" class="my-card full-width q-mt-md">
+    <q-page class="q-pa-sm">
+      <div class="row q-mb-md">
+        <q-card
+          v-if="usrHasTeeTimes && bookingsArray.length === 0"
+          class="my-card full-width q-mt-md"
+        >
           <q-card-section class="text-center">
             <div class="text-h5">Geen starttijden</div>
             <div class="text-subtitle1">
@@ -18,7 +21,7 @@
       </div>
       <match />
       <bills v-if="usrHasTeeTimes" />
-      <bookings v-if="usrHasTeeTimes" />
+      <bookings v-if="usrHasTeeTimes" :bookingsArray="bookingsArray" />
       <messages v-if="setHasMessages" />
       <lessons v-if="usrHasLessons" />
     </q-page>
@@ -41,7 +44,20 @@ export default {
     ...mapGetters("settings", ["setHasMessages"]),
     ...mapGetters("currentUser", ["usrHasLessons", "usrHasTeeTimes"]),
   },
-  mounted() {},
-  methods: {},
+  data() {
+    return {
+      bookingsArray: [],
+    };
+  },
+  mounted() {
+    this.getBookings();
+  },
+  methods: {
+    async getBookings() {
+      if (this.usrHasTeeTimes) {
+        this.bookingsArray = await this.$http.get("golfer/bookings");
+      }
+    },
+  },
 };
 </script>

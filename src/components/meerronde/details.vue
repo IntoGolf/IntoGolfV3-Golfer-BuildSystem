@@ -186,7 +186,6 @@ export default {
       this.dataResult = await this.$http.get(
         "golfer/meerronde/result?meeNr=" + this.prop_match.meeNr
       );
-      console.log(this.dataResult);
     },
     async loadEclectic() {
       this.dataEclectic = await this.$http.get(

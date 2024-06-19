@@ -1,134 +1,145 @@
 <template>
   <div>
     <template v-if="id.length === 0">
-      <q-input
-        v-model="player.relation.relCallName"
-        :rules="[(val) => !!val || 'Voornaam is vereist']"
-        label="Voornaam"
-        type="text"
-      />
+      <q-form ref="subscribeForm">
+        <q-input
+          v-model="player.relation.relCallName"
+          :rules="[(val) => !!val || 'Voornaam is vereist']"
+          label="*Voornaam"
+          required
+          type="text"
+        />
 
-      <q-input
-        v-model="player.relation.relName"
-        :rules="[(val) => !!val || 'Achternaam is vereist']"
-        label="Achternaam"
-        type="text"
-      />
+        <q-input
+          v-model="player.relation.relName"
+          :rules="[(val) => !!val || 'Achternaam is vereist']"
+          label="*Achternaam"
+          required
+          type="text"
+        />
 
-      <q-select
-        v-model="player.relation.relGender"
-        :options="genderArray"
-        emit-value
-        label="Geslacht"
-        map-options
-        style="height: 76px"
-      />
-
-      <q-input
-        v-model="player.relation.relHandicap"
-        :rules="hcpRules"
-        label="Handicap"
-        type="text"
-      />
-
-      <q-input
-        v-model="player.relation.relGsn"
-        :rules="[(val) => !gsnIsInvalid || 'GSN is vereist']"
-        label="GSN"
-        mask="AA########"
-        type="text"
-      />
-
-      <q-input
-        v-model="player.relation.relEmail"
-        :rules="[
-          (val) =>
-            reg.test(this.player.relation.relEmail) ||
-            'E-mail adres is vereist',
-        ]"
-        label="E-mailadres"
-        type="text"
-      />
-
-      <q-input
-        v-model="player.relation.relPhone"
-        label="Telefoonnummer"
-        mask="###############"
-        maxlength="15"
-        style="height: 76px"
-        type="text"
-      />
-
-      <q-input
-        v-model="player.details.Description"
-        label="Opmerking"
-        maxlength="40"
-        style="height: 76px"
-        type="text"
-      />
-
-      <q-select
-        v-if="match.allow_select_tee == 1"
-        v-model="tee"
-        :options="teesArray"
-        class="q-mb-md"
-        hint="Selecteer de gewenste tee"
-        label="Tee"
-        option-label="name"
-        option-value="color"
-        style="height: 76px"
-      />
-
-      <q-select
-        v-if="match.timePref == 1"
-        v-model="timePref"
-        :options="timeArray"
-        label="Start moment"
-      />
-
-      <div v-for="(pOption, index) in player.details.options" :key="index">
         <q-select
-          v-model="pOption.mpoValue"
-          :label="pOption.label"
-          :options="optionArray"
+          v-model="player.relation.relGender"
+          :options="genderArray"
+          emit-value
+          label="*Geslacht"
+          map-options
+          required
           style="height: 76px"
         />
-      </div>
 
-      <q-banner
-        v-if="match.ideal && aSubscription === null"
-        class="bg-orange text-white q-mt-sm"
-        inline-actions
-        rounded
-      >
-        Voor deze wedstrijd is betaling via iDeal vereist. Na inschrijving word
-        u doorgestuurd naar de betaling. Wanneer de betaling niet wordt afgerond
-        wordt u uitgeschreven.
-      </q-banner>
-
-      <q-btn-group class="q-mt-md" spread>
-        <q-btn
-          v-if="!match.ideal || aSubscription !== null"
-          :disabled="inValid"
-          color="primary"
-          label="Opslaan"
-          @click="handleSubscribe"
+        <q-input
+          v-model="player.relation.relHandicap"
+          :rules="hcpRules"
+          label="+Handicap"
+          required
+          type="text"
         />
-        <q-btn
+
+        <q-input
+          v-model="player.relation.relGsn"
+          :rules="[(val) => gsnIsValid() || 'GSN is vereist']"
+          label="*GSN"
+          mask="AA########"
+          required
+          type="text"
+        />
+
+        <q-input
+          v-model="player.relation.relEmail"
+          :rules="[
+            (val) =>
+              reg.test(this.player.relation.relEmail) ||
+              'E-mail adres is vereist',
+          ]"
+          label="*E-mailadres"
+          required
+          type="text"
+        />
+
+        <q-input
+          v-model="player.relation.relPhone"
+          label="Telefoonnummer"
+          mask="###############"
+          maxlength="15"
+          style="height: 76px"
+          type="text"
+        />
+
+        <q-input
+          v-model="player.details.Description"
+          label="Opmerking"
+          maxlength="40"
+          style="height: 76px"
+          type="text"
+        />
+
+        <q-select
+          v-if="match.allow_select_tee == 1"
+          v-model="tee"
+          :options="teesArray"
+          class="q-mb-md"
+          hint="Selecteer de gewenste tee"
+          label="Tee"
+          option-label="name"
+          option-value="color"
+          style="height: 76px"
+        />
+
+        <q-select
+          v-if="match.timePref == 1"
+          v-model="timePref"
+          :options="timeArray"
+          label="Start moment"
+        />
+
+        <div v-for="(pOption, index) in player.details.options" :key="index">
+          <q-select
+            v-model="pOption.mpoValue"
+            :label="pOption.label"
+            :options="optionArray"
+            style="height: 76px"
+          />
+        </div>
+
+        <q-banner
           v-if="match.ideal && aSubscription === null"
-          :disabled="inValid"
-          color="primary"
-          label="Betaal"
-          @click="handleSubscribe"
-        />
-        <q-btn
-          v-if="aSubscription !== null"
-          color="primary"
-          label="Uitschrijven"
-          @click="handleUnSubscribe"
-        />
-        <q-btn color="primary" label="Sluiten" @click="handleCloseSubscribe" />
-      </q-btn-group>
+          class="bg-orange text-white q-mt-sm"
+          inline-actions
+          rounded
+        >
+          Voor deze wedstrijd is betaling via iDeal vereist. Na inschrijving
+          word u doorgestuurd naar de betaling. Wanneer de betaling niet wordt
+          afgerond wordt u uitgeschreven.
+        </q-banner>
+
+        <q-btn-group class="q-mt-md" spread>
+          <q-btn
+            v-if="!match.ideal || aSubscription === null"
+            color="primary"
+            label="Opslaan"
+            @click="handleSubscribe"
+          />
+          <q-btn
+            v-if="match.ideal && aSubscription === null"
+            :disabled="inValid"
+            color="primary"
+            label="Betaal"
+            @click="handleSubscribe"
+          />
+          <q-btn
+            v-if="aSubscription !== null"
+            color="primary"
+            label="Uitschrijven"
+            @click="handleUnSubscribe"
+          />
+          <q-btn
+            color="primary"
+            label="Sluiten"
+            @click="handleCloseSubscribe"
+          />
+        </q-btn-group>
+      </q-form>
     </template>
 
     <payment
@@ -219,6 +230,7 @@ export default {
     };
   },
   created() {
+    console.log(this.match);
     if (this.aSubscription !== null) {
       this.player.details = this.aSubscription;
       this.player.relation = this.aSubscription.relation;
@@ -251,7 +263,8 @@ export default {
       return (
         this.player.relation.relName.length === 0 ||
         this.player.relation.relCallName.length === 0 ||
-        this.player.relation.relHandicap.length === 0 ||
+        this.player.relation.relHandicap > this.match.handicapFemaleMax ||
+        this.player.relation.relHandicap < this.match.handicapFemaleMin ||
         this.player.relation.relGsn.length === 0 ||
         !this.reg.test(this.player.relation.relEmail)
       );
@@ -275,27 +288,6 @@ export default {
             hcpMax,
       ];
     },
-    gsnIsInvalid: function () {
-      if (
-        this.player.relation.relGsn !== null &&
-        this.player.relation.relGsn.length > 0
-      ) {
-        if (this.player.relation.relGsn.length < 10) {
-          return true;
-        } else if (this.player.relation.relGsn.length > 10) {
-          return true;
-        } else if (isNaN(parseInt(this.player.relation.relGsn.substr(2, 8)))) {
-          return true;
-        } else if (!/[A-Z]/.test(this.player.relation.relGsn.substr(0, 1))) {
-          return true;
-        } else if (!/[A-Z]/.test(this.player.relation.relGsn.substr(1, 2))) {
-          return true;
-        } else if (this.player.relation.relGsn === "NL00000000") {
-          return true;
-        }
-      }
-      return false;
-    },
     genderArray: function () {
       let result = [];
 
@@ -317,31 +309,52 @@ export default {
     },
   },
   methods: {
+    async gsnIsValid() {
+      if (this.player.relation.relGsn.length < 10) {
+        return "GSN is vereist";
+      }
+      let res = await this.$http.get(`golfer/checkMarker`, {
+        params: { gsn: this.player.relation.relGsn },
+      });
+      console.log(res.data.value);
+      return res.data.value;
+    },
     handleCloseSubscribe: function () {
       this.$emit("handleCloseSubscribe");
     },
 
-    handleSubscribe: function () {
-      let that = this;
+    async handleSubscribe() {
+      const check = await this.$refs.subscribeForm.validate();
 
-      if (this.tee) {
-        this.player.details.startingTeeId = this.tee.id;
-      }
+      if (check) {
+        let that = this;
 
-      this.player.is_desktop = this.$q.platform.is.cordova === true ? 0 : 1;
-      this.player.details.Bron = 2;
-      this.$http.post(`golfer/event/player`, this.player).then(function (res) {
-        if (res.data.url.length > 0) {
-          that.id = res.data.id;
-          that.url = res.data.url;
-        } else {
-          that.$q.notify({
-            type: "positive",
-            message: "Inschrijving is verwerkt",
-          });
-          that.handleCloseSubscribe();
+        if (this.tee) {
+          this.player.details.startingTeeId = this.tee.id;
         }
-      });
+
+        this.player.is_desktop = this.$q.platform.is.cordova === true ? 0 : 1;
+        this.player.details.Bron = 2;
+        this.$http
+          .post(`golfer/event/player`, this.player)
+          .then(function (res) {
+            if (res.data.url.length > 0) {
+              that.id = res.data.id;
+              that.url = res.data.url;
+            } else {
+              that.$q.notify({
+                type: "positive",
+                message: "Inschrijving is verwerkt",
+              });
+              that.handleCloseSubscribe();
+            }
+          });
+      } else {
+        this.$q.notify({
+          type: "negative",
+          message: "Vul alle vereiste velden in.",
+        });
+      }
     },
 
     handleUnSubscribe: function () {

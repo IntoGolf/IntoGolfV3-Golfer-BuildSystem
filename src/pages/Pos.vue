@@ -1,24 +1,23 @@
 <template>
   <q-page-container>
     <q-page class="q-pa-sm">
-      <div v-if="!selectedCard">
+      <div v-if="!payMethod">
         <div class="text-h5 q-mb-md">Betaalkaarten</div>
 
         <Card
-          v-for="(card, key) in cardArray"
+          v-for="(item, key) in payMethodArray"
           :key="key"
-          :card="card"
-          :paymentArray="paymentArray"
-          v-on:click="selectedCard = card"
+          :payMethod="item"
+          v-on:click="payMethod = item"
         />
       </div>
 
       <div v-else>
         <CardTransactions
-          v-if="selectedCard"
-          :paymentArray="paymentArray"
-          :selectedCard="selectedCard"
-          v-on:handleCloseCard="selectedCard = null"
+          v-if="payMethod"
+          :payMethod="payMethod"
+          :payMethodArray="payMethodArray"
+          v-on:handleCloseCard="payMethod = null"
         />
       </div>
     </q-page>
@@ -26,7 +25,6 @@
 </template>
 
 <script>
-// import Transaction from "components/pos/transaction.vue";
 import Card from "components/pos/card.vue";
 import CardTransactions from "components/pos/cardTransactions.vue";
 import authMixin from "../mixins/auth";
@@ -36,33 +34,18 @@ export default {
   components: { CardTransactions, Card },
   data: function () {
     return {
-      paymentArray: [],
-      selectedCard: null,
+      payMethodArray: [],
+      payMethod: null,
     };
   },
-  computed: {
-    cardArray: function () {
-      let array = [];
-      this.paymentArray.forEach(function (payment) {
-        if (payment.pay_method.pmtPtpNr !== 4) {
-          return;
-        }
-
-        let payMethod = array.find(
-          (item) => item.pmtNr === payment.payPmtNr && item.pmtPtpNr == 4
-        );
-
-        if (payMethod === undefined) {
-          array.push(payment.pay_method);
-        }
-      });
-      return array;
-    },
+  created() {
+    this.getBalance();
   },
-  mounted() {
-    this.$http.get("golfer/balance").then((res) => {
-      this.paymentArray = res;
-    });
+  methods: {
+    async getBalance() {
+      let res = await this.$http.get("golfer/balance");
+      this.payMethodArray = res.data;
+    },
   },
 };
 </script>

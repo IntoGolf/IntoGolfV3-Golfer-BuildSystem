@@ -197,7 +197,7 @@ import authMixin from "../../mixins/auth";
 export default {
   mixins: [authMixin],
   props: {
-    artificialDate: Date,
+    artificialDate: String,
     scorecard: Object,
     countryArray: Array,
   },
@@ -301,7 +301,7 @@ export default {
       }
     },
     validNone: function () {
-      return true;
+      return [(val) => true || "Tijd is ongeldig"];
     },
     validDate: function () {
       if (this.date === "" || this.date === null) {

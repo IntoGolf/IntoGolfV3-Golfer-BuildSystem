@@ -86,6 +86,9 @@ export default {
       );
     },
     firstNr: function () {
+      if (!this.local_flight.flight_players) {
+        return 0;
+      }
       return this.local_flight.flight_players[0].flpSide;
     },
   },

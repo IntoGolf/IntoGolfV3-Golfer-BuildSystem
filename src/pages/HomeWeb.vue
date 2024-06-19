@@ -1,6 +1,12 @@
 <template>
   <q-page-container class="web-width">
     <q-page>
+      <div class="row cordova-hide">
+        <div class="col text-right text-h6 q-pa-md">
+          <q-icon name="account_circle" style="font-size: 1.4em" />
+          {{ $store.getters["currentUser/item"].full_name2 }}
+        </div>
+      </div>
       <div class="row cordova-hide" style="height: 230px">
         <div class="col text-center q-pt-lg">
           <q-img

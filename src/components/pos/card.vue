@@ -2,8 +2,9 @@
   <q-card class="q-mb-md" style="width: 100%">
     <q-card-section class="bg-light-green-3">
       <div class="text-h6">
-        {{ card.pmtName }}
+        {{ payMethod.pmtName }}
       </div>
+      <div class="text-subtitle1">Klik hier voor details</div>
     </q-card-section>
 
     <q-separator />
@@ -30,52 +31,42 @@
 <script>
 export default {
   props: {
-    card: Object,
-    paymentArray: Array,
-  },
-  data: function () {
-    return {};
+    payMethod: Object,
   },
   computed: {
-    payments: function () {
-      return this.paymentArray.filter(
-        (item) => item.payPmtNr == this.card.pmtNr
-      );
-    },
-    balance: function () {
-      return this.payments
-        .map((item) => item.payAmount * -1)
-        .reduce(function (a, b) {
-          return a + b;
-        });
+    transactions() {
+      return this.payMethod.transactions;
     },
     firstDate: function () {
-      if (this.payments.length === 0) {
+      if (this.transactions.length === 0) {
         return "-";
       }
-      if (this.payments[0].sales_transaction.trnTimestamp === null) {
+      if (this.transactions[0].trnTimestamp === null) {
         return "-";
       }
-      return this.$dayjs(
-        this.payments[0].sales_transaction.trnTimestamp
-      ).format("dddd D MMMM YYYY H:mm");
+      return this.$dayjs(this.transactions[0].trnTimestamp).format(
+        "dddd D MMMM YYYY H:mm"
+      );
     },
     lastDate: function () {
-      if (this.payments.length === 0) {
+      if (this.transactions.length === 0) {
         return "-";
       }
       if (
-        this.payments[this.payments.length - 1].sales_transaction
-          .trnTimestamp === null
+        this.transactions[this.transactions.length - 1].trnTimestamp === null
       ) {
         return "-";
       }
       return this.$dayjs(
-        this.payments[this.payments.length - 1].sales_transaction.trnTimestamp
+        this.transactions[this.transactions.length - 1].trnTimestamp
       ).format("dddd D MMMM YYYY H:mm");
     },
+    balance: function () {
+      if (this.transactions.length === 0) {
+        return 0;
+      }
+      return this.transactions[this.transactions.length - 1].balance;
+    },
   },
-  created() {},
-  methods: {},
 };
 </script>

@@ -138,8 +138,6 @@ export default {
       this.data = await this.$http.get(
         "golfer/birdy?meeNr=" + this.prop_match.meeNr
       );
-      console.log("loadBirdy");
-      console.log(this.data);
     },
   },
 };
