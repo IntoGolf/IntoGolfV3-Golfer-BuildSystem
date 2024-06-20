@@ -516,7 +516,7 @@ export default {
   },
   computed: {
     needsPayment() {
-      return true;
+      return false;
     },
     title: function () {
       return this.ProCourse ? "Cursus inschrijfformulier" : "Creëer account";
@@ -591,7 +591,7 @@ export default {
       return !this.ProCourse;
     },
     needsPassword: function () {
-      return !this.ProCourse && 1 == 2;
+      return !this.ProCourse;
     },
   },
   created: function () {
