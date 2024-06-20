@@ -139,6 +139,7 @@
                     counter
                     dense
                     label="Huisnummer"
+                    mask="#######"
                     maxlength="8"
                     stack-label
                   />
