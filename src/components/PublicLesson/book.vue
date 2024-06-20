@@ -165,9 +165,9 @@ export default {
         lesPrice: null,
         lesItmNr: null,
         ProLessonClient: {
-          plcName: "Laurens",
-          plcPhone: "0172617000",
-          plcEmail: "laurens@intogolf.nl",
+          plcName: "",
+          plcPhone: "",
+          plcEmail: "",
           plcLsfNr: null,
           plcPrice: null,
           plcItmNr: null,
