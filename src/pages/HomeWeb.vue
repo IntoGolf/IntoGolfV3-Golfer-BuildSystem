@@ -255,26 +255,21 @@
             ><i class="far fa-calendar-star"></i>Baanstatus</span
           >
         </div>
+      </div>
+      <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
+        <div
+          v-if="usrHasMembers"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/members')"
+        >
+          <span class="title"><i class="far fa-golf-ball"></i>Ledenlijst</span>
+        </div>
 
-        <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
-          <div
-            v-if="usrHasMembers"
-            class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
-            @click="$router.push('/members')"
-          >
-            <span class="title"
-              ><i class="far fa-golf-ball"></i>Ledenlijst</span
-            >
-          </div>
-
-          <div
-            class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
-            @click="$router.push('/profile')"
-          >
-            <span class="title"
-              ><i class="far fa-calendar-star"></i>Profiel</span
-            >
-          </div>
+        <div
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          @click="$router.push('/profile')"
+        >
+          <span class="title"><i class="far fa-calendar-star"></i>Profiel</span>
         </div>
       </div>
     </q-page>
