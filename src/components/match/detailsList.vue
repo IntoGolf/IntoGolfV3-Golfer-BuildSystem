@@ -462,13 +462,21 @@ export default {
         );
       }
 
+      console.log(this.match.MatchRelationGroups);
+      console.log(this.currentUser.relation_group.grpNr);
+      console.log(
+        this.match.MatchRelationGroups.find(
+          (grp) => grp.mrgGrpNr === this.currentUser.relation_group.grpNr
+        )
+      );
+
       if (
         this.match.MatchRelationGroups.length > 0 &&
         !this.match.MatchRelationGroups.find(
-          (grp) => grp.mgrGrpNr === this.currentUser.relation_group.grpNr
+          (grp) => grp.mrgGrpNr === this.currentUser.relation_group.grpNr
         )
       ) {
-        return "U kunt niet inschrijven op deze wedstrijd.";
+        return "U kunt niet inschrijven op deze wedstrijd..";
       }
 
       return "";
