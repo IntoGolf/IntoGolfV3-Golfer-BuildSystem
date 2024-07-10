@@ -304,14 +304,7 @@
                 v-on:click="onNextTab"
               />
               <q-btn
-                v-show="isLastTab && !needsPayment"
-                color="primary"
-                flat
-                label="Verzenden"
-                v-on:click="onSubmit"
-              />
-              <q-btn
-                v-show="isLastTab && needsPayment"
+                v-show="isLastTab"
                 color="primary"
                 flat
                 label="Bevesting"
@@ -442,54 +435,54 @@ export default {
       passwordShow_2: false,
       relationGroups: [],
       showConfirm: false,
-      account_form: {
-        relFirstName: "",
-        relCallName: "",
-        relPrefix: "",
-        relName: "",
-        relEmail: "",
-        relPhone: "",
-        mobile_empPreferLang: "",
-        phone_empPreferLang: "",
-        relPhoneMobile: "",
-        relGsn: "",
-        relGender: { value: 1, label: "Man" },
-        relHandicap: "36",
-        repPassword: "",
-        confirmRepPassword: "",
-        relGrpNr1: Object,
-        relPostalCode: "",
-        relCity: "",
-        relAddressStreetNumber: "",
-        relAddressStreetAddition: "",
-        relAddress1: "",
-        relDateBirth: "",
-        ProCourse: this.ProCourse,
-      },
       // account_form: {
-      //   relFirstName: "L",
-      //   relCallName: "Laurens",
+      //   relFirstName: "",
+      //   relCallName: "",
       //   relPrefix: "",
-      //   relName: "Luder",
-      //   relEmail: "laurens1234@intogolf.nl",
-      //   relPhone: "0172617000",
+      //   relName: "",
+      //   relEmail: "",
+      //   relPhone: "",
       //   mobile_empPreferLang: "",
       //   phone_empPreferLang: "",
-      //   relPhoneMobile: "0611045770",
-      //   relGsn: "NL12345678",
+      //   relPhoneMobile: "",
+      //   relGsn: "",
       //   relGender: { value: 1, label: "Man" },
-      //   relHandicap: "36",
+      //   relHandicap: "54.0",
       //   repPassword: "",
       //   confirmRepPassword: "",
       //   relGrpNr1: Object,
-      //   relPostalCode: "2411PZ",
-      //   relCity: "Bodegraven",
-      //   relAddressStreetNumber: "7",
+      //   relPostalCode: "",
+      //   relCity: "",
+      //   relAddressStreetNumber: "",
       //   relAddressStreetAddition: "",
-      //   relAddress1: "Griekenlandweg",
-      //   relDateBirth: "2000-01-01",
+      //   relAddress1: "",
+      //   relDateBirth: "",
       //   ProCourse: this.ProCourse,
       // },
+      account_form: {
+        relFirstName: "L",
+        relCallName: "Laurens",
+        relPrefix: "",
+        relName: "Luder",
+        relEmail: "laurens1234@intogolf.nl",
+        relPhone: "0172617000",
+        mobile_empPreferLang: "",
+        phone_empPreferLang: "",
+        relPhoneMobile: "0611045770",
+        relGsn: "NL12345678",
+        relGender: { value: 1, label: "Man" },
+        relHandicap: "54.0",
+        repPassword: "",
+        confirmRepPassword: "",
+        relGrpNr1: Object,
+        relPostalCode: "2411PZ",
+        relCity: "Bodegraven",
+        relAddressStreetNumber: "7",
+        relAddressStreetAddition: "",
+        relAddress1: "Griekenlandweg",
+        relDateBirth: "2000-01-01",
+        ProCourse: this.ProCourse,
+      },
       captchaResponse: null,
       errors: [],
       blobUrl: "",
@@ -521,7 +514,7 @@ export default {
   },
   computed: {
     needsPayment() {
-      return false;
+      return true;
     },
     title: function () {
       return this.ProCourse ? "Cursus inschrijfformulier" : "Creëer account";
@@ -656,11 +649,12 @@ export default {
       this.showConfirm = false;
     },
     async onSignUpPay() {
-      const res = await this.$http.post(
-        `golfer/sign-up-pay`,
-        this.account_form
-      );
-      window.location.href = res.data.url;
+      const res = await this.$http.post(`golfer/sign-up`, this.account_form);
+      if (res.success === 1) {
+        this.status = 2;
+      } else {
+        this.status = 3;
+      }
     },
     async onSubmit() {
       let that = this;

@@ -92,22 +92,27 @@
 
     <hr />
 
-    <div class="row q-mb-sm">
-      <div class="col-12 text-bold">Leveringsvoorwaarden:</div>
-    </div>
-    <div class="row q-mb-sm">
-      <div class="col-12">
-        <q-input :rows="4" readonly type="textarea" />
+    <div v-show="hasConditions">
+      <div class="row q-mb-sm">
+        <div class="col-12 text-bold">Leveringsvoorwaarden:</div>
+      </div>
+      <div class="row q-mb-sm">
+        <div class="col-12">
+          <q-input v-model="conditions" :rows="4" readonly type="textarea" />
+        </div>
+      </div>
+
+      <div class="row q-mb-sm">
+        <div class="col-12">
+          <q-checkbox
+            v-model="agree"
+            label="Ik ga akkoord met de leveringsvoorwaarden"
+          />
+        </div>
       </div>
     </div>
 
-    <div class="row q-mb-sm">
-      <div class="col-12">
-        <q-checkbox v-model="agree" label="Leveringsvoorwaarden" />
-      </div>
-    </div>
-
-    <div class="row q-mb-sm">
+    <div v-if="false" class="row q-mb-sm">
       <div class="col q-pt-md text-center">
         Betaling vindt plaats via ideal, nadat je op "Betalen" klikt wordt je
         doorgestuurd naar de betaalpagina.
@@ -117,9 +122,9 @@
     <div class="row q-mb-sm">
       <div class="col q-pt-md text-center">
         <q-btn
-          :disable="!agree"
+          :disable="!agree && hasConditions"
           color="primary"
-          label="Betalen"
+          label="Inschrijven"
           v-on:click="$emit('onSignUpPay')"
         />
       </div>
@@ -183,6 +188,15 @@ export default {
         ProCourse: this.ProCourse,
       },
     };
+  },
+  computed: {
+    hasConditions() {
+      return this.conditions !== 0 && this.conditions.length > 0;
+    },
+    conditions: function () {
+      return this.$store.state.settings.publicItems
+        .website_membership_conditions;
+    },
   },
 };
 </script>
