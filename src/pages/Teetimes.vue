@@ -201,7 +201,7 @@
             <div class="col-8">
               <q-input
                 v-model="flight.flpPhone1"
-                :rules="[(val) => !!val || '* Required']"
+                :rules="[phoneRule]"
                 class="q-mb-sm"
                 label="Telefoonummer"
                 lazy-rules
@@ -505,7 +505,7 @@ export default {
       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       return (
         this.flight.flpName1.length > 3 &&
-        this.flight.flpPhone1.length > 3 &&
+        this.flight.flpPhone1.length > 7 &&
         (!this.pay || this.flight.agreeConditions) &&
         emailPattern.test(this.flight.flpEmail1) &&
         this.validHcp
@@ -522,6 +522,11 @@ export default {
       return (val) => {
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return emailPattern.test(val) || "onvolledig e-mailadres";
+      };
+    },
+    phoneRule() {
+      return (val) => {
+        return val.length > 8;
       };
     },
     flightPrice: function () {

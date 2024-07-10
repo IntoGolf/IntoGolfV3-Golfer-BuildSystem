@@ -230,7 +230,6 @@ export default {
     };
   },
   created() {
-    console.log(this.match);
     if (this.aSubscription !== null) {
       this.player.details = this.aSubscription;
       this.player.relation = this.aSubscription.relation;
@@ -316,7 +315,6 @@ export default {
       let res = await this.$http.get(`golfer/checkMarker`, {
         params: { gsn: this.player.relation.relGsn },
       });
-      console.log(res.data.value);
       return res.data.value;
     },
     handleCloseSubscribe: function () {

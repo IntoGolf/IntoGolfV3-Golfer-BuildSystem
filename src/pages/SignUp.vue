@@ -258,11 +258,12 @@
                     bottom-slots
                     counter
                     dense
-                    error-message="Please use maximum 3 characters"
-                    hint="Min. 6 karaters bestaande uit cijfers en letters"
+                    error-message="Gebruik minimaal 6 karakters bestaande uit cijfers en letters"
+                    hint="Min. 6 karakters bestaande uit cijfers en letters"
                     label="Wachtwoord*"
                     maxlength="60"
                     stack-label
+                    type="password"
                   />
                 </div>
               </div>
@@ -270,12 +271,15 @@
                 <div class="col">
                   <q-input
                     v-model="account_form.confirmRepPassword"
-                    :rules="[(val) => !!val || 'Voornaam is een verplicht']"
+                    :rules="[
+                      (val) => !!val || 'Wachtwoord validatie is een verplicht',
+                    ]"
                     counter
                     dense
                     label="Bevestig wachtwoord*"
                     maxlength="60"
                     stack-label
+                    type="password"
                   />
                 </div>
               </div>
@@ -406,7 +410,7 @@ export default {
             { name: "relPostalCode", type: String, required: true },
             { name: "relCity", type: String, required: true },
             { name: "relAddressStreetNumber", type: String, required: true },
-            { name: "relCity", type: String, required: true },
+            { name: "relAddress1", type: String, required: true },
           ],
         },
         {
@@ -508,7 +512,7 @@ export default {
           "&number=" +
           this.relAddressStreetNumber
       );
-      if (result) {
+      if (result && result.city !== undefined) {
         this.account_form.relCity = result.city;
         this.account_form.relAddress1 = result.street;
       }

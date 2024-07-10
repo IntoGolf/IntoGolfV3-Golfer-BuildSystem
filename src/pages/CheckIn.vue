@@ -198,11 +198,10 @@ export default {
       NR3: "",
       NR4: "",
       nr: 1,
-      checkCode: "",
       done: false,
+      correct: false,
     };
   },
-  created: function () {},
   computed: {
     code: function () {
       return (
@@ -212,18 +211,9 @@ export default {
         this.NR4.toString()
       );
     },
-    correct: function () {
-      let result = this.code.length === 4 && this.code === this.checkCode;
-
-      if (result) {
-        this.onCheckIn();
-      }
-
-      return result;
-    },
   },
   methods: {
-    onCheckIn: function () {
+    async onCheckIn() {
       let flight = { flpNr: this.$route.query.id };
       if (this.flight) {
         let player = this.flight.flight_players.find(
@@ -231,13 +221,19 @@ export default {
             player.flpRelNr === this.$store.state.currentUser.item.relNr
         );
         if (player) {
-          flight = { flpNr: player.flpNr };
+          flight = { flpNr: player.flpNr, code: this.code };
         }
       }
-      this.$http.post("golfer/booking/checkin", flight).then(() => {
-        this.done = true;
+      const res = await this.$http.post("golfer/booking/checkin", flight);
+      if (res.data === -1) {
+        this.$q.notify({
+          type: "negative",
+          message: "Onjuiste code",
+        });
+      } else {
         setTimeout(this.onGoHome, 2000);
-      });
+      }
+      this.onClear();
     },
 
     onGoHome: function () {
@@ -253,10 +249,6 @@ export default {
     },
 
     pressKey: function (key) {
-      let intTime = this.$filters.timeToMinute(this.$dayjs().format("HH:mm"));
-      intTime = intTime * 5767871726;
-      this.checkCode = intTime.toString().substr(0, 4);
-
       if (this.nr === 1) {
         this.NR1 = key;
       }
@@ -270,13 +262,11 @@ export default {
         this.NR4 = key;
       }
 
-      this.nr = this.nr === 4 ? 1 : this.nr + 1;
-    },
+      if (this.nr === 4) {
+        this.onCheckIn();
+      }
 
-    handleCloseScorecard: function (reload) {
-      // this.$http.get("golfer/handicap/all").then((res) => {
-      //   that.handicapList = res.data;
-      // });
+      this.nr = this.nr === 4 ? 1 : this.nr + 1;
     },
   },
 };

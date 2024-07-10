@@ -79,6 +79,14 @@
         </div>
       </div>
 
+      <div
+        v-if="res && res.dayNote"
+        class="row"
+        style="margin-top: 10px; padding: 5px; border: 3px solid orange"
+      >
+        <p>{{ res.dayNote.tdnContent }}</p>
+      </div>
+
       <div v-if="teetimes.length > 0" class="row">
         <div
           v-for="(course, cKey) of teetimes"
@@ -249,6 +257,7 @@ export default {
     return {
       loading: false,
       flight: null,
+      res: null,
       teetimes: [],
       dialogVisible: false,
       dialogErrors: [],
@@ -319,6 +328,7 @@ export default {
           },
         })
         .then((res) => {
+          this.res = res;
           this.teetimes = res.payload;
           this.loading = false;
         });

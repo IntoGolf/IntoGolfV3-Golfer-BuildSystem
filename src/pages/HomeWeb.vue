@@ -167,16 +167,17 @@
         </div>
       </div>
 
-      <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
+      <div
+        v-if="usrHasHandicap"
+        class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
+      >
         <div
-          v-if="usrHasHandicap"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/handicap')"
         >
           <span class="title"><i class="far fa-golf-ball"></i>Handicap</span>
         </div>
         <div
-          v-if="usrHasHandicap"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/NGF')"
         >
