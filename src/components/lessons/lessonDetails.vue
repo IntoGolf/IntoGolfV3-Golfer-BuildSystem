@@ -107,7 +107,6 @@ export default {
       return this.lesson.pro_lesson;
     },
     date() {
-      console.log(this.pro_lesson);
       return this.$filters.unixToDate(this.pro_lesson.lesDate);
     },
     time() {
