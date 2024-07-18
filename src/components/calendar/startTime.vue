@@ -11,6 +11,10 @@ export default {
       type: Object,
       required: true,
     },
+    starts: {
+      type: Array,
+      required: true,
+    },
     fact: {
       type: Number,
       required: true,
@@ -19,10 +23,47 @@ export default {
       type: Number,
       required: true,
     },
+    aKey: {
+      type: Number,
+      required: true,
+    },
+  },
+  mounted() {
+    console.log(this.sameFlight);
   },
   computed: {
     top() {
       return (this.start.sttTimeFrom - this.minTime) * this.fact + "px";
+    },
+    prevCount() {
+      let players = 0;
+      if (
+        this.starts[this.aKey - 3] !== undefined &&
+        this.starts[this.aKey - 3].sttTimeFrom === this.start.sttTimeFrom
+      ) {
+        players += this.starts[this.aKey - 3].sttMaxPlayers;
+      }
+
+      if (
+        this.starts[this.aKey - 2] !== undefined &&
+        this.starts[this.aKey - 2].sttTimeFrom === this.start.sttTimeFrom
+      ) {
+        players += this.starts[this.aKey - 2].sttMaxPlayers;
+      }
+
+      if (
+        this.starts[this.aKey - 1] !== undefined &&
+        this.starts[this.aKey - 1].sttTimeFrom === this.start.sttTimeFrom
+      ) {
+        players += this.starts[this.aKey - 1].sttMaxPlayers;
+      }
+      return players;
+    },
+    cellMargin() {
+      return this.prevCount * 25 + "%";
+    },
+    cellWidth() {
+      return (100 / 4) * this.start.sttMaxPlayers + "%";
     },
     showDialog() {
       return this.$store.getters["currentUser/usrHasCalendar"] === 3;
@@ -59,6 +100,8 @@ export default {
         height: height,
         color: fontColor,
         top: this.top,
+        width: this.cellWidth,
+        marginLeft: this.cellMargin,
       };
     },
   },
@@ -90,7 +133,6 @@ export default {
   font-size: 0.7em;
   overflow: hidden;
   padding: 5px 2px 5px 0;
-  width: 100%;
   position: absolute;
 }
 </style>

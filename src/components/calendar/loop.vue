@@ -4,9 +4,11 @@
       <start-time
         v-for="(start, key) in starts"
         :key="key"
+        :aKey="key"
         :fact="fact"
         :minTime="minTime"
         :start="start"
+        :starts="starts"
       />
     </div>
   </div>
