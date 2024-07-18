@@ -1,66 +1,53 @@
 <template>
-  <div
-    class="row full-width q-mt-md q-pa-sm"
-    style="border: 1px solid lightgrey; border-radius: 4px"
+  <q-card
+    :key="key"
+    bordered
+    class="my-card"
+    flat
+    style="width: calc(100% - 40px); margin: 20px"
   >
-    <div class="col-12">
-      <div class="row">
-        <div class="col-6">
-          <b>{{ lesson.pro_lesson.pro_lesson_type.pltName }}</b>
-        </div>
-        <div class="col-6 text-right">
-          <b>{{
-            $filters.unixToDate(lesson.pro_lesson.lesDate, "ddd DD MMM")
-          }}</b>
-          {{ $filters.minuteToTime(lesson.pro_lesson.lesTimeFrom) }}
-        </div>
+    <q-img
+      src="https://media.gettyimages.com/id/1543092241/nl/foto/north-berwick-scotland-calum-hill-of-scotland-takes-part-in-a-clinic-on-the-driving-range.jpg?s=612x612&w=0&k=20&c=edW5HI28ISoK8MhMqKXLFwZSvjeuGRAZ000i_FBOTW8="
+      style="height: 175px"
+    >
+      <div class="absolute-top-right text-subtitle2 text-center">
+        <div class="text-h5">€ 120</div>
       </div>
-      <div class="row">
-        <div class="col-6">
-          <i>pro: {{ lesson.pro_lesson.relation.full_name2 }}</i>
-        </div>
-        <div class="col-6 text-right">
-          <q-btn
-            color="primary"
-            size="xs"
-            v-on:click="handleCancel(lesson.pro_lesson)"
-            >Annuleer
-          </q-btn>
-        </div>
+    </q-img>
+
+    <q-card-section>
+      <div class="text-overline text-orange-9">
+        {{ $filters.unixToDate(clinic.lesDate, "ddd DD MMM") }}
+        {{ $filters.minuteToTime(clinic.lesTimeFrom) }}
       </div>
-    </div>
-  </div>
+      <div class="text-h5 q-mt-sm q-mb-xs">
+        {{ clinic.pro_lesson_type.pltName }}
+      </div>
+      <div class="text-caption text-grey">pro: {{ clinic.pro.full_name }}</div>
+    </q-card-section>
+
+    <q-card-actions class="justify-end">
+      <q-btn
+        color="primary"
+        flat
+        label="Inschrijven"
+        @click="$store.dispatch('ProCourse/setItem', item)"
+      />
+
+      <q-space />
+    </q-card-actions>
+  </q-card>
 </template>
 
 <script>
 export default {
   props: {
-    lesson: Object,
+    clinic: Object,
   },
   data: function () {
     return {};
   },
-  methods: {
-    handleCancel: function (lesson) {
-      this.$q
-        .dialog({
-          title: "Annuleer les",
-          message: "Deze les wordt geannuleerd, wilt u doorgaan?",
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(() => {
-          lesson.lesCarNr = 1;
-          this.$http.post("golfer/lesson", lesson).then(() => {
-            this.$q.notify({
-              type: "positive",
-              message: "uw les is geannuleerd",
-            });
-            this.newLesson = false;
-            this.$emit("handleLoadClientLessons");
-          });
-        });
-    },
-  },
+  mounted() {},
+  methods: {},
 };
 </script>

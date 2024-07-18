@@ -253,24 +253,24 @@ export default defineComponent({
           icon: "shopping_bag",
           visible: this.usrHasShop,
         },
-        {
-          name: "proCourse",
-          menuName: "proCourse",
-          icon: "shop",
-          visible: this.usrHasLessons,
-        },
+        // {
+        //   name: "proCourse",
+        //   menuName: "proCourse",
+        //   icon: "shop",
+        //   visible: this.usrHasLessons,
+        // },
         {
           name: "lessons",
           menuName: "lessons",
           icon: "school",
           visible: this.usrHasLessons,
         },
-        {
-          name: "lessoncards",
-          menuName: "lessoncards",
-          icon: "school",
-          visible: this.usrHasLessons,
-        },
+        // {
+        //   name: "lessoncards",
+        //   menuName: "lessoncards",
+        //   icon: "school",
+        //   visible: this.usrHasLessons,
+        // },
         {
           name: "profile",
           menuName: "profile",

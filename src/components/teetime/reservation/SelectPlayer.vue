@@ -263,7 +263,9 @@ export default {
       return this.guest.flpName.length > 2 && this.handicapGuestValid;
     },
     currentPlayers() {
-      return this.flight.flight_players.map((player) => player.flpName);
+      return this.flight.flight_players
+        .filter((player) => player.flpName !== "" && player.flpCarNr === null)
+        .map((player) => player.flpName);
     },
     knownPlayers() {
       let currentPlayers = this.currentPlayers;

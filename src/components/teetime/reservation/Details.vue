@@ -301,7 +301,8 @@ export default {
       }
       return (
         this.flight.startTime.sttMaxPlayers -
-        this.playerArray.filter((item) => item.flpName !== "").length
+        this.local_flight.flight_players.filter((item) => item.flpName !== "")
+          .length
       );
     },
     inThePast: function () {
@@ -457,34 +458,28 @@ export default {
     },
     handleAddPlayer() {
       let player;
-      if (this.$store.state.settings.item.app_only_book_members === 1) {
-        const flpSide = this.flight.flight_players.reduce(
-          (max, obj) => (obj.flpSide > max ? obj.flpSide : max),
-          this.flight.flight_players[0].flpSide
-        );
+      const flpSide = this.flight.flight_players.reduce(
+        (max, obj) => (obj.flpSide > max ? obj.flpSide : max),
+        this.flight.flight_players[0].flpSide
+      );
 
-        player = {
-          flpNr: null,
-          flpFltNr: this.flight.fltNr,
-          flpBilNr: null,
-          flpCarNr: null,
-          flpEmail: "",
-          flpGrfNr: null,
-          flpGsn: null,
-          flpHandicap: null,
-          flpIntro: null,
-          flpName: "",
-          flpPhone: "",
-          flpPrice: null,
-          flpRelNr: null,
-          flpScorecard: null,
-          flpSide: flpSide + 1,
-        };
-      } else {
-        player = this.playerArray.find(
-          (item) => item.flpRelNr === null && item.flpName === ""
-        );
-      }
+      player = {
+        flpNr: null,
+        flpFltNr: this.flight.fltNr,
+        flpBilNr: null,
+        flpCarNr: null,
+        flpEmail: "",
+        flpGrfNr: null,
+        flpGsn: null,
+        flpHandicap: null,
+        flpIntro: null,
+        flpName: "",
+        flpPhone: "",
+        flpPrice: null,
+        flpRelNr: null,
+        flpScorecard: null,
+        flpSide: flpSide + 1,
+      };
 
       this.$emit("handleAddPlayer", player);
     },

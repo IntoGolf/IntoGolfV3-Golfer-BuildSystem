@@ -209,18 +209,18 @@
       >
         <div
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
-          @click="$router.push('/proCourse')"
-        >
-          <span class="title"
-            ><i class="far fa-calendar-star"></i>Cursussen</span
-          >
-        </div>
-        <div
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
           @click="$router.push('/lessons')"
         >
           <span class="title"><i class="far fa-calendar-star"></i>Lessen</span>
         </div>
+        <!--        <div-->
+        <!--          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"-->
+        <!--          @click="$router.push('/proCourse')"-->
+        <!--        >-->
+        <!--          <span class="title"-->
+        <!--          ><i class="far fa-calendar-star"></i>Cursussen</span-->
+        <!--          >-->
+        <!--        </div>-->
       </div>
       <div
         v-show="setHasGreenFeeCard"

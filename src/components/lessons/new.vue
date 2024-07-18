@@ -1,5 +1,19 @@
 <template>
   <div>
+    <div class="row q-mt-sm">
+      <div class="col-6">
+        <h5 class="q-mt-none q-mb-none">Reserver een les</h5>
+      </div>
+      <div class="col-6 text-right">
+        <q-btn
+          color="primary"
+          flat
+          icon="arrow_back"
+          v-on:click="$emit('handleCloseNew')"
+          >Sluiten
+        </q-btn>
+      </div>
+    </div>
     <div class="row q-mt-md q-gutter-sm">
       <div class="col">
         <q-input
@@ -14,7 +28,7 @@
       <div class="col">
         <q-select
           v-model="pltNr"
-          :options="lessonType1Array"
+          :options="lessonTypeArray"
           behavior="menu"
           dense
           emit-value
@@ -81,9 +95,6 @@ export default {
     this.handleLoadLessonTypes();
   },
   computed: {
-    lessonType1Array: function () {
-      return this.lessonTypeArray.filter((item) => item.pltLtcNr == 1);
-    },
     pro: function () {
       return this.proArray.find((pro) => pro.relNr === this.relNr);
     },
@@ -137,6 +148,7 @@ export default {
           let data = {
             lesNr: null,
             lesRelNrPro: lesson.pro.relNr,
+            lesProNr: lesson.pro.relNr,
             lesPltNr: lesson.pro_lesson_type.pltNr,
             lesDate: this.$filters.dateToUnix(this.date, "YYYY-MM-DD"),
             lesTimeFrom: lesson.pagTimeFrom,

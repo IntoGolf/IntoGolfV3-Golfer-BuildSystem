@@ -2,6 +2,7 @@
   <div
     class="row full-width q-mt-md q-pa-sm"
     style="border: 1px solid lightgrey; border-radius: 4px"
+    v-on:click="$emit('onSelectLesson', lesson)"
   >
     <div class="col-12">
       <div class="row">
@@ -19,14 +20,7 @@
         <div class="col-6">
           <i>pro: {{ lesson.pro_lesson.relation.full_name2 }}</i>
         </div>
-        <div class="col-6 text-right">
-          <q-btn
-            color="primary"
-            size="xs"
-            v-on:click="handleCancel(lesson.pro_lesson)"
-            >Annuleer
-          </q-btn>
-        </div>
+        <div class="col-6 text-right"></div>
       </div>
     </div>
   </div>

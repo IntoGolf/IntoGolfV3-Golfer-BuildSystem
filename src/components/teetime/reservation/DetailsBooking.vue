@@ -31,7 +31,11 @@
     <div class="row q-mb-sm">
       <div class="col text-bold">Spelers</div>
       <div class="col-8 text-right">
-        {{ flight.fltSize }}
+        {{
+          flight.flight_players.filter(
+            (item) => item.flpCarNr === null && item.flpName !== ""
+          ).length
+        }}
       </div>
     </div>
 

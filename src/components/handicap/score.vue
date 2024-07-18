@@ -287,7 +287,7 @@
                 style="padding-top: 10px; font-weight: bold"
               >
                 <q-item-label>
-                  {{ local_scorecard.holes[index].strokes }}
+                  {{ local_scorecard.holes[index + 9].strokes }}
                 </q-item-label>
               </div>
 
@@ -313,7 +313,7 @@
             <div v-else class="row">
               <div class="col-12">
                 <div class="text-center text-bold">
-                  {{ local_scorecard.holes[index].strokes }}
+                  {{ local_scorecard.holes[index + 9].strokes }}
                 </div>
               </div>
             </div>

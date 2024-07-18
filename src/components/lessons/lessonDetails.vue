@@ -1,35 +1,97 @@
 <template>
-  <div
-    class="row full-width q-mt-md q-pa-sm"
-    style="border: 1px solid lightgrey; border-radius: 4px"
-  >
-    <div class="col-12">
-      <div class="row">
-        <div class="col-6">
-          <b>{{ lesson.pro_lesson.pro_lesson_type.pltName }}</b>
-        </div>
-        <div class="col-6 text-right">
-          <b>{{
-            $filters.unixToDate(lesson.pro_lesson.lesDate, "ddd DD MMM")
-          }}</b>
-          {{ $filters.minuteToTime(lesson.pro_lesson.lesTimeFrom) }}
+  <q-page class="q-pa-sm">
+    <q-card class="q-pa-sm">
+      <div class="row q-pb-sm q-pt-sm">
+        <div class="col"><h5 class="q-mt-sm q-mb-sm">Lesinformatie</h5></div>
+      </div>
+      <div class="row q-pb-sm q-pt-sm">
+        <div class="col text-bold">Datum</div>
+        <div class="col overflow-hidden text-right">
+          {{ $dayjs(date, "DD-MM-YYYY").format("dddd D MMM") }}
         </div>
       </div>
-      <div class="row">
-        <div class="col-6">
-          <i>pro: {{ lesson.pro_lesson.relation.full_name2 }}</i>
-        </div>
-        <div class="col-6 text-right">
-          <q-btn
-            color="primary"
-            size="xs"
-            v-on:click="handleCancel(lesson.pro_lesson)"
-            >Annuleer
-          </q-btn>
+      <div class="row q-pb-sm q-pt-sm">
+        <div class="col text-bold">Tijd</div>
+        <div class="col overflow-hidden text-right">
+          {{ time }}
         </div>
       </div>
-    </div>
-  </div>
+      <div class="row q-pb-sm q-pt-sm">
+        <div class="col text-bold">Pro</div>
+        <div class="col overflow-hidden text-right">
+          {{ pro }}
+        </div>
+      </div>
+      <div class="row q-pb-sm q-pt-sm">
+        <div class="col text-bold">Soort les</div>
+        <div class="col overflow-hidden text-right">
+          {{ soortLes }}
+        </div>
+      </div>
+      <div class="row q-pb-sm q-pt-sm">
+        <div class="col text-bold">Max. aantal deelnemers</div>
+        <div class="col overflow-hidden text-right">
+          {{ pro_lesson.pro_lesson_type.pltMaxPers }}
+        </div>
+      </div>
+      <q-separator class="q-mt-sm q-mb-sm" />
+      <div class="col"><h6 class="q-mt-sm q-mb-sm">Deelnemer(s)</h6></div>
+      <q-list separator>
+        <q-item
+          v-for="(client, key) in pro_lesson.clients"
+          :key="key"
+          v-ripple
+          class="full-width bg-white shadow-1 q-mb-sm"
+          clickable
+          style="border-radius: 4px"
+        >
+          <q-item-section>
+            <q-item-label class="itg-text-overflow">
+              {{ client.plcName }}
+            </q-item-label>
+          </q-item-section>
+          <q-item-section avatar>
+            <q-icon v-if="client.canCancel === 1" name="delete" />
+          </q-item-section>
+        </q-item>
+      </q-list>
+      <q-separator class="q-mt-sm q-mb-sm" />
+      <div class="col"><h6 class="q-mt-sm q-mb-sm">Acties</h6></div>
+      <q-list separator>
+        <q-item
+          v-if="pro_lesson.canCancel === 1"
+          v-ripple
+          class="full-width bg-white shadow-1 q-mb-sm"
+          clickable
+          style="border-radius: 4px"
+          v-on:click="handleCancel"
+        >
+          <q-item-section>
+            <q-item-label class="itg-text-overflow">
+              Annuleer les
+            </q-item-label>
+          </q-item-section>
+          <q-item-section avatar>
+            <q-icon name="delete" />
+          </q-item-section>
+        </q-item>
+        <q-item
+          v-ripple
+          class="full-width bg-white shadow-1 q-mb-sm"
+          clickable
+          style="border-radius: 4px"
+          v-on:click="$emit('onCloseLesson')"
+        >
+          <q-item-section>
+            <q-item-label class="itg-text-overflow"> Sluit les</q-item-label>
+          </q-item-section>
+          <q-item-section avatar>
+            <q-icon name="arrow_back_ios" />
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-card>
+  </q-page>
 </template>
 
 <script>
@@ -40,8 +102,26 @@ export default {
   data: function () {
     return {};
   },
+  computed: {
+    pro_lesson() {
+      return this.lesson.pro_lesson;
+    },
+    date() {
+      console.log(this.pro_lesson);
+      return this.$filters.unixToDate(this.pro_lesson.lesDate);
+    },
+    time() {
+      return this.$filters.minuteToTime(this.pro_lesson.lesTimeFrom);
+    },
+    pro() {
+      return this.pro_lesson.relation.full_name2;
+    },
+    soortLes() {
+      return this.pro_lesson.pro_lesson_type.pltName;
+    },
+  },
   methods: {
-    handleCancel: function (lesson) {
+    handleCancel: function () {
       this.$q
         .dialog({
           title: "Annuleer les",
@@ -50,14 +130,14 @@ export default {
           persistent: true,
         })
         .onOk(() => {
-          lesson.lesCarNr = 1;
-          this.$http.post("golfer/lesson", lesson).then(() => {
+          this.pro_lesson.lesCarNr = 1;
+          this.$http.post("golfer/lesson", this.pro_lesson).then(() => {
             this.$q.notify({
               type: "positive",
               message: "uw les is geannuleerd",
             });
             this.newLesson = false;
-            this.$emit("handleLoadClientLessons");
+            this.$emit("onCloseLesson");
           });
         });
     },
