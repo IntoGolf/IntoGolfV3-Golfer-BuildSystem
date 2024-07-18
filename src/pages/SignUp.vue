@@ -538,7 +538,9 @@ export default {
       }
       return this.relationGroups.map((item) => ({
         value: item.grpNr,
-        label: item.grpName,
+        label: item.grpName + " (" + this.$filters.money(item.price) + ")",
+        price: item.price,
+        grpName: item.grpName,
       }));
     },
     currentTabIndex: function () {

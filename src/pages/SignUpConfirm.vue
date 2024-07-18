@@ -6,11 +6,6 @@
     </div>
 
     <div class="row q-mb-sm">
-      <div class="col-3 text-bold">Voorletters</div>
-      <div class="col-9">{{ data.relFirstName }}</div>
-    </div>
-
-    <div class="row q-mb-sm">
       <div class="col-3 text-bold">Voornaam</div>
       <div class="col-9">{{ data.relCallName }}</div>
     </div>
@@ -27,7 +22,9 @@
 
     <div class="row q-mb-sm">
       <div class="col-3 text-bold">Geboortedatum</div>
-      <div class="col-9">{{ data.relDateBirth }}</div>
+      <div class="col-9">
+        {{ $dayjs(data.relDateBirth).format("DD-MM-YYYY") }}
+      </div>
     </div>
 
     <hr />
@@ -39,7 +36,7 @@
 
     <div class="row q-mb-sm">
       <div class="col-3 text-bold">Telefoonnummer</div>
-      <div class="col-9">{{ data.relPhone }}</div>
+      <div class="col-9">{{ data.relPhoneMobile }}</div>
     </div>
 
     <hr />
@@ -82,12 +79,12 @@
 
     <div class="row q-mb-sm">
       <div class="col-3 text-bold">Lidmaatschap</div>
-      <div class="col-9">{{ data.relGrpNr1.label }}</div>
+      <div class="col-9">{{ data.relGrpNr1.grpName }}</div>
     </div>
 
     <div class="row q-mb-sm">
-      <div class="col-3 text-bold">Lidmaatschap</div>
-      <div class="col-9">€ 45,- per jaar</div>
+      <div class="col-3 text-bold">Bedrag</div>
+      <div class="col-9">{{ $filters.money(data.relGrpNr1.price) }}</div>
     </div>
 
     <hr />
@@ -98,7 +95,7 @@
       </div>
       <div class="row q-mb-sm">
         <div class="col-12">
-          <q-input v-model="conditions" :rows="4" readonly type="textarea" />
+          <q-input v-model="conditions" :rows="8" readonly type="textarea" />
         </div>
       </div>
 
