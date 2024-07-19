@@ -447,7 +447,7 @@ export default {
         relPhoneMobile: "",
         relGsn: "",
         relGender: { value: 1, label: "Man" },
-        relHandicap: "54.0",
+        relHandicap: "90.0",
         repPassword: "",
         confirmRepPassword: "",
         relGrpNr1: Object,
@@ -565,7 +565,7 @@ export default {
             inValid ||
             !(
               this.account_form[item.name] >= -9.9 &&
-              this.account_form[item.name] <= 54.0
+              this.account_form[item.name] <= 90.0
             );
         } else if (item.type === "gsn") {
           const re = /^[NL][0-9]{6}B[0-9]{2}$/;
