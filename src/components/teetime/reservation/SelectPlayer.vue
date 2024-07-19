@@ -75,7 +75,7 @@
         />
       </q-card-section>
       <q-separator />
-      <q-list bordered separator>
+      <q-list v-if="knownPlayers.length > 0" bordered separator>
         <q-item
           v-for="(player, key) in knownPlayers"
           :key="key"
@@ -96,7 +96,15 @@
           </q-item-section>
         </q-item>
       </q-list>
+      <div v-else class="q-pa-md">
+        <div class="text-h6">Geen golfers gevonden!</div>
+        <p>
+          Er zijn nog geen golfers in je <i>"bekende spelers"</i> lijst. In deze
+          lijst zie je golfers met wie je eerder een ronde hebt gespeeld.
+        </p>
+      </div>
     </q-card>
+
     <q-card v-else-if="typePlayer === 2">
       <q-card-section class="text-h6">
         Relatie
@@ -111,6 +119,7 @@
       <q-card-section>
         <q-input
           v-model="relationSearch"
+          hint="Minimale lengte van naam is 2 karakters"
           label="Zoek in clubleden"
           @keyup.enter="handleSearch"
         >
@@ -123,7 +132,7 @@
           </template>
         </q-input>
       </q-card-section>
-      <q-list bordered separator>
+      <q-list v-if="relations.length > 0" bordered separator>
         <q-item
           v-for="(rel, key) in relations"
           :key="key"
@@ -144,7 +153,12 @@
           </q-item-section>
         </q-item>
       </q-list>
+      <div v-else-if="showEmptySearch" class="q-pa-md">
+        <div class="text-h6">Geen golfers gevonden!</div>
+        <p>Er zijn nog geen golfers gevonden met deze zoekcriteria.</p>
+      </div>
     </q-card>
+
     <q-card v-else-if="typePlayer === 3">
       <q-card-section class="text-h6">
         Gast
@@ -162,29 +176,41 @@
           <q-input
             v-model="guest.flpName"
             clearable
+            counter
             dense
+            hint="Voer de naam van je gast in"
             label="Naam*"
+            maxlength="32"
             outlined
           />
           <q-input
             v-model="guest.flpEmail"
+            :rules="[emailRule]"
             clearable
             dense
+            hint="Voer het e-mailadres van je gast in"
             label="E-mail"
+            lazy-rules
             outlined
           />
           <q-input
             v-model="guest.flpPhone"
             clearable
+            counter
             dense
+            hint="Telefoonnummer is niet verplicht"
             label="Telefoon"
+            maxlength="12"
             outlined
           />
           <q-input
             v-model="guest.flpHandicap"
+            :rules="[numberRule]"
             clearable
             dense
+            hint="Voer de handicap van je gast in"
             label="Handicap*"
+            lazy-rules
             outlined
           />
         </div>
@@ -218,6 +244,16 @@ export default {
       knownPlayer: "",
       relation: "",
       relationSearch: "",
+      showEmptySearch: false,
+      emailRule: (val) =>
+        /.+@.+\..+/.test(val) || "Voer een geldig e-mailadres in",
+      numberRule: (val) => {
+        const num = parseFloat(val.replace(",", "."));
+        return (
+          (!isNaN(num) && num >= -9.9 && num <= 54) ||
+          "Voer een geldig nummer in tussen -9,9 en 54"
+        );
+      },
       guest: {
         flpName: "",
         flpEmail: "",
@@ -243,6 +279,17 @@ export default {
     },
     guest: function (newValue) {
       this.guest = newValue === null ? "" : newValue;
+    },
+    typePlayer() {
+      this.relations = [];
+      this.showEmptySearch = false;
+      this.relationSearch = "";
+      this.guest = {
+        flpName: "",
+        flpEmail: "",
+        flpPhone: "",
+        flpHandicap: "",
+      };
     },
   },
   created() {
@@ -339,16 +386,15 @@ export default {
         });
     },
     async handleSearch() {
+      this.relations = [];
       if (this.relationSearch.length < 2) {
         return;
       }
-
-      let fltNr = this.flight.fltNr;
-      await this.$http
-        .get(`golfer/relation?search=${this.relationSearch}&fltNr=${fltNr}`)
-        .then((response) => {
-          this.relations = response;
-        });
+      let data = {
+        params: { fltNt: this.flight.fltNr, search: this.relationSearch },
+      };
+      this.relations = await this.$http.get(`golfer/relation`, data);
+      this.showEmptySearch = this.relations.length === 0;
     },
   },
 };

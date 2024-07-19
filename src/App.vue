@@ -9,6 +9,7 @@
           '/login',
           '/teetimes',
           '/sign-up',
+          '/verify-code',
           '/public_lessons',
           '/classes',
         ].includes($route.path)
@@ -18,7 +19,10 @@
       flat
     >
       <q-toolbar
-        v-if="!['/', '/login'].includes($route.path) || $q.platform.is.mobile"
+        v-if="
+          !['/', '/login', 'verify-code'].includes($route.path) ||
+          $q.platform.is.mobile
+        "
       >
         <q-btn
           v-if="!$q.platform.is.desktop"

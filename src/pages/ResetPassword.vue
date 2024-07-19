@@ -42,6 +42,7 @@
                 ]"
                 label="Nieuw wachtwoord"
                 lazy-rules
+                type="password"
               />
 
               <q-input
@@ -52,6 +53,7 @@
                 ]"
                 label="Bevestig wachtwoord"
                 lazy-rules
+                type="password"
               />
 
               <div class="text-center">
