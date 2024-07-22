@@ -1,12 +1,15 @@
-import { route } from "quasar/wrappers";
-import {
-  createMemoryHistory,
-  createRouter,
-  createWebHashHistory,
-  createWebHistory,
-} from "vue-router";
-import { routes } from "./routes";
+import {route} from "quasar/wrappers";
+import {createMemoryHistory, createRouter, createWebHashHistory, createWebHistory,} from "vue-router";
+import {routes} from "./routes";
 import store from "src/store";
+/*
+ * If not building with SSR mode, you can
+ * directly export the Router instantiation;
+ *
+ * The function below can be async too; either use
+ * async/await or return a Promise which resolves
+ * with the Router instance.
+ */
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation;
@@ -65,6 +68,20 @@ export default route(function (/* { store, ssrContext } */) {
 
     next();
   });
+
+  // Handle incoming links
+  document.addEventListener(
+    "deviceready",
+    () => {
+      universalLinks.subscribe(null, (eventData) => {
+        const url = new URL(eventData.url);
+        // Extract the path from the URL
+        let path = url.hash.substring(1);
+        Router.push({ path: path });
+      });
+    },
+    false
+  );
 
   return Router;
 });

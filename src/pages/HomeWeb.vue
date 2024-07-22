@@ -3,8 +3,12 @@
     <q-page>
       <div class="row cordova-hide">
         <div class="col text-right text-h6 q-pa-md">
-          <q-icon name="account_circle" style="font-size: 1.4em" />
-          {{ $store.getters["currentUser/item"].full_name2 }}
+          <q-btn
+            :label="$store.getters['currentUser/item'].full_name2"
+            flat
+            icon="account_circle"
+            @click="$router.push('/profile')"
+          />
         </div>
       </div>
       <div class="row cordova-hide" style="height: 230px">
@@ -105,7 +109,7 @@
       <div class="row q-pl-md q-pr-md q-gutter-sm">
         <div
           v-show="usrHasTeeTimes"
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/reservations')"
         >
           <span class="title"
@@ -115,7 +119,7 @@
 
         <div
           v-if="usrHasMatch"
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/match')"
         >
           <span class="title"><i class="far fa-list-alt"></i>Wedstrijden</span>
@@ -127,7 +131,7 @@
         class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
       >
         <div
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/Baankalender')"
         >
           <span class="title"
@@ -137,7 +141,7 @@
 
         <div
           v-if="usrHasMatch"
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/Meerronden')"
         >
           <span class="title"
@@ -149,7 +153,7 @@
       <div class="row text-h6 q-pl-md q-pr-md q-pt-sm q-gutter-sm">
         <div
           v-if="setHasMessages"
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/messages')"
         >
           <span class="title">
@@ -160,7 +164,7 @@
 
         <div
           v-if="setHasCourseStatus"
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/Baanstatus')"
         >
           <span class="title"><i class="far fa-golf-ball"></i>Baanstatus</span>
@@ -172,13 +176,13 @@
         class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
       >
         <div
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/handicap')"
         >
           <span class="title"><i class="far fa-golf-ball"></i>Handicap</span>
         </div>
         <div
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/NGF')"
         >
           <span class="title"><i class="far fa-calendar-star"></i>NGF-Pas</span>
@@ -188,7 +192,7 @@
       <div v-show="usrHasPos" class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
         <div
           v-show="usrHasPos && setHasBalance"
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/pos')"
         >
           <span class="title"><i class="far fa-calendar-star"></i>Horeca</span>
@@ -196,7 +200,7 @@
 
         <div
           v-if="usrHasShop"
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/shop')"
         >
           <span class="title"><i class="far fa-golf-ball"></i>Shop</span>
@@ -208,7 +212,7 @@
         class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
       >
         <div
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/lessons')"
         >
           <span class="title"><i class="far fa-calendar-star"></i>Lessen</span>
@@ -227,7 +231,7 @@
         class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
       >
         <div
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/greenfeecards')"
         >
           <span class="title"
@@ -241,7 +245,7 @@
         class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
       >
         <div
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/external_teetimes')"
         >
           <span class="title"
@@ -249,7 +253,7 @@
           >
         </div>
         <div
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/external_course_status')"
         >
           <span class="title"
@@ -260,14 +264,14 @@
       <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
         <div
           v-if="usrHasMembers"
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/members')"
         >
           <span class="title"><i class="far fa-golf-ball"></i>Ledenlijst</span>
         </div>
 
         <div
-          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md"
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/profile')"
         >
           <span class="title"><i class="far fa-calendar-star"></i>Profiel</span>

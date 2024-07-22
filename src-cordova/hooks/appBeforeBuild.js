@@ -3,7 +3,7 @@ const path = require("path");
 const { execSync } = require("child_process");
 
 // Get the environment from an environment variable or command-line argument
-const app_id = process.env.APP_ID || "none";
+const app_id = process.env.APP_ID || "nl.intogolf.dev";
 const app_version = process.env.APP_VERSION || "0.1";
 const vue_app_name = process.env.VUE_APP_NAME || "none";
 const configPath = path.join(__dirname, "..", "config.xml");

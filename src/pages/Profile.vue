@@ -166,6 +166,22 @@
               :disable="!canChangeInvoiceByEmail"
               label="Factuur per e-mail ontvangen"
             />
+            <div v-if="1 == 2">
+              <q-separator class="q-mt-sm q-mb-sm" />
+              <div class="text-h6">Wachtwoord aanpassen</div>
+              <q-input
+                v-model="form.password"
+                :label="$t('Wachtwoord')"
+                lazy-rules
+                type="password"
+              />
+              <q-input
+                v-model="form.passwordCheck"
+                :label="$t('Wachtwoord check')"
+                lazy-rules
+                type="password"
+              />
+            </div>
           </q-tab-panel>
         </q-tab-panels>
 
@@ -225,6 +241,8 @@ export default {
         relPhoneMobile: "",
         relEmail: "",
         relHandicap: "",
+        password: "",
+        passwordCheck: "",
         relNr: "",
         relImage: "",
         relMagazineGolfNL: false,

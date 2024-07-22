@@ -337,9 +337,10 @@ export default {
     handleSave: function () {
       let local_flight = { ...this.flight };
       let player;
+      let newPlayer = false;
       if (this.player.flpNr === null) {
         player = this.player;
-        local_flight.flight_players.push(player);
+        newPlayer = true;
       } else {
         player = local_flight.flight_players.find(
           (item) => item.flpNr === this.player.flpNr
@@ -382,6 +383,20 @@ export default {
           cancel: true,
         })
         .onOk(() => {
+          if (newPlayer) {
+            let key = local_flight.flight_players.findIndex(
+              (item) => item.flpName === ""
+            );
+            if (key > 0) {
+              player.flpNr = local_flight.flight_players[key].flpNr;
+              local_flight.flight_players[key] = player;
+            } else if (
+              local_flight.startTime.sttMaxPlayers >
+              local_flight.flight_players.length
+            ) {
+              local_flight.flight_players.push(player);
+            }
+          }
           this.$emit("handleSave", local_flight);
         });
     },

@@ -77,10 +77,22 @@
             </template>
           </q-input>
 
-          <div class="text-center">
+          <div class="text-center q-mt-sm">
             <q-btn color="primary" label="Inloggen" v-on:click="onlogin" />
+            <br />
+
             <q-btn
-              class="q-mt-md"
+              v-if="1 == 2 && !this.$q.platform.is.cordova"
+              :disable="!validEmail"
+              class="q-mt-sm"
+              color="primary"
+              flat
+              label="Login via maillink"
+              v-on:click="sendOneTimePassword"
+            />
+
+            <q-btn
+              class="q-mt-sm"
               color="primary"
               flat
               label="Wachtwoord vergeten"
@@ -116,8 +128,9 @@ export default {
   },
   mounted() {
     this.loadImage();
-    if (this.$route.query.key) {
+    if (this.$route.query.key || this.$route.query.oneTimeKey) {
       this.form.repKey = this.$route.query.key;
+      this.form.oneTimeKey = this.$route.query.oneTimeKey;
       this.onlogin();
     }
     this.form.redirect = this.$route.query.redirect;
@@ -144,6 +157,10 @@ export default {
           this.$store.state.settings.publicItems.website_display_lessons_public
         ) === 1
       );
+    },
+    validEmail() {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(this.form.relEmail);
     },
   },
   methods: {
@@ -181,6 +198,36 @@ export default {
         this.$q.loading.hide();
         this.$router.push("/");
       }
+    },
+    async sendOneTimePassword() {
+      const res = await this.$http.post("public/sendOneTimePassword", {
+        email: this.form.relEmail,
+      });
+      if (res && res.data && res.data === "notfound") {
+        this.$q
+          .dialog({
+            title: "Verzenden mislukt!",
+            html: true,
+            message:
+              "E-mailadres is <i>" + this.form.relEmail + "</i> niet gevonden!",
+          })
+          .onOk(() => {
+            // console.log('OK')
+          });
+      }
+    },
+    showHelp() {
+      let text =
+        "Voor het inloggen is een, bij de baan geregistreerd, emailadres en een wachtwoord vereist. ";
+      this.$q
+        .dialog({
+          title: "Uitleg",
+          html: true,
+          message: text,
+        })
+        .onOk(() => {
+          // console.log('OK')
+        });
     },
   },
 };

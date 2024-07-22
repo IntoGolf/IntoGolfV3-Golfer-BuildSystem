@@ -90,7 +90,7 @@ module.exports = configure(function (ctx) {
       open: true, // opens browser window automatically
     },
 
-    // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
+    // https://quasar.dev/uasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
       config: {
         loading: {
