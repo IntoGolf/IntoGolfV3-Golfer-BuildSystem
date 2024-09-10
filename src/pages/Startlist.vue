@@ -14,11 +14,15 @@
             </div>
             <div class="row q-mt-md">
               <div class="col-2 text-bold">Wedstrijdleiding</div>
-              <div class="col-10">: {{ wedstrijdleiding1 }}</div>
+              <div class="col-10">
+                : {{ wedstrijdleiding1 }} ({{ wedstrijdleiding1Phone }})
+              </div>
             </div>
             <div class="row q-mt-md">
               <div class="col-2 text-bold">Wedstrijdleiding</div>
-              <div class="col-10">: {{ wedstrijdleiding2 }}</div>
+              <div class="col-10">
+                : {{ wedstrijdleiding2 }} ({{ wedstrijdleiding2Phone }})
+              </div>
             </div>
             <div class="row q-mt-md">
               <div class="col-2 text-bold">Aantal deelnemers</div>
@@ -127,11 +131,23 @@ export default {
       }
       return this.list[0].commissioner1Name;
     },
+    wedstrijdleiding1Phone: function () {
+      if (this.list.length === 0) {
+        return "";
+      }
+      return this.list[0].commissioner1Phone;
+    },
     wedstrijdleiding2: function () {
       if (this.list.length === 0) {
         return "";
       }
       return this.list[0].commissioner2Name;
+    },
+    wedstrijdleiding2Phone: function () {
+      if (this.list.length === 0) {
+        return "";
+      }
+      return this.list[0].commissioner2Phone;
     },
     deelnemers: function () {
       if (this.list.length === 0) {

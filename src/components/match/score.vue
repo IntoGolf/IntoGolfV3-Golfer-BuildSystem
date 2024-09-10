@@ -14,7 +14,7 @@
           :class="match.scoringTypeId === 3 ? 'col-1' : 'col-2'"
           class="text-center text-bold"
         >
-          Pnt
+          Score
         </q-item-section>
         <q-item-section
           v-if="match.scoringTypeId === 3"

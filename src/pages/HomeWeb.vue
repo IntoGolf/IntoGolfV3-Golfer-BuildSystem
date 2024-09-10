@@ -126,11 +126,9 @@
         </div>
       </div>
 
-      <div
-        v-show="usrHasCalendar"
-        class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
-      >
+      <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
         <div
+          v-show="usrHasCalendar"
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/Baankalender')"
         >
@@ -275,6 +273,17 @@
           @click="$router.push('/profile')"
         >
           <span class="title"><i class="far fa-calendar-star"></i>Profiel</span>
+        </div>
+      </div>
+
+      <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
+        <div
+          class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
+          @click="$router.push('/history')"
+        >
+          <span class="title"
+            ><i class="far fa-calendar-star"></i>Speelhistorie</span
+          >
         </div>
       </div>
     </q-page>

@@ -228,6 +228,12 @@ export default defineComponent({
           visible: this.setHasCourseStatus,
         },
         {
+          name: "history",
+          menuName: "Speelhistorie",
+          icon: "grass",
+          visible: true,
+        },
+        {
           name: "handicap",
           menuName: "handicap",
           icon: "grade",

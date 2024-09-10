@@ -26,7 +26,7 @@
       row-key="name"
     />
     <q-separator class="q-mb-sm" />
-    <div v-if="prop_match.meeEclectic === 1">
+    <div v-if="prop_match.meeEclectic >= 1">
       <h5 class="q-mt-sm q-mb-sm">Eclectic</h5>
       <div style="width: 100%; overflow: scroll">
         <q-table

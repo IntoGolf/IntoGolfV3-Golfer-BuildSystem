@@ -311,7 +311,7 @@ export default {
     optionsFn(date) {
       return (
         this.$dayjs(date) >= this.$dayjs().add(-1, "day") &&
-        this.$dayjs(date) <= this.$dayjs().add(21, "day")
+        this.$dayjs(date) <= this.$dayjs().add(360, "day")
       );
     },
 

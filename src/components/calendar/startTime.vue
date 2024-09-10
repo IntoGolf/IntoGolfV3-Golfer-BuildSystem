@@ -28,12 +28,12 @@ export default {
       required: true,
     },
   },
-  mounted() {
-    console.log(this.sameFlight);
-  },
   computed: {
     top() {
-      return (this.start.sttTimeFrom - this.minTime) * this.fact + "px";
+      let startHour = Math.floor(this.minTime / 60);
+      let startMinute = startHour * 60;
+      let comp = this.minTime - startMinute;
+      return (this.start.sttTimeFrom - this.minTime + comp) * this.fact + "px";
     },
     prevCount() {
       let players = 0;
@@ -63,6 +63,9 @@ export default {
       return this.prevCount * 25 + "%";
     },
     cellWidth() {
+      if (this.start.sttRefType !== 1) {
+        return "100%";
+      }
       return (100 / 4) * this.start.sttMaxPlayers + "%";
     },
     showDialog() {

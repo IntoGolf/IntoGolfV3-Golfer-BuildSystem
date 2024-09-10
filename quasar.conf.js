@@ -85,7 +85,7 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
-      // host: "192.168.201.224",
+      host: "localhost",
       port: 8080,
       open: true, // opens browser window automatically
     },
@@ -156,8 +156,8 @@ module.exports = configure(function (ctx) {
 
       manifest: {
         name: `IntoGolfApp`,
-        short_name: `ITG`,
-        description: `ITG`,
+        short_name: `ITGa`,
+        description: `ITGb`,
         display: "standalone",
         orientation: "portrait",
         background_color: "#ffffff",

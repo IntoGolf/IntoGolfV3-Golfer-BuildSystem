@@ -351,4 +351,14 @@ export const message = {
   Emailadres: "Emailadres",
   Golfservicenummer: "Golfservicenummer",
   Speelsterkte: "Speelsterkte",
+  Password: "Wachtwoord",
+  PasswordCheck: "Wachtwoord controle",
+  PasswordComplexityText0:
+    "We adviseren je een sterk wachtwoord te gebruiken dat bestaat uit 8 letters en " +
+    "cijfers en minimaal 1 leesteken.",
+  PasswordComplexityText1:
+    "Een wachtwoord moet minimaal 6 karakters lang zijn, 1 hoofdletter, 1 kleine letter en een cijfer bevatten",
+  PasswordComplexityText2:
+    "Een wachtwoord moet minimaal 8 karakters lang zijn, 1 hoofdletter, 1 kleine letter, " +
+    "een cijfer en een leesteken bevatten",
 };

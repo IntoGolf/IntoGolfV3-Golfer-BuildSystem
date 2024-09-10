@@ -57,7 +57,7 @@
       <div class="row border q-mb-sm pb-2 font-weight-bold">
         <div class="col-2 text-left text-bold">Rank</div>
         <div class="col-5 text-bold">Speler</div>
-        <div class="col-2 text-center text-bold">Pnt</div>
+        <div class="col-2 text-center text-bold">Score</div>
         <div class="col-1 text-center text-bold">BI</div>
         <div class="col-1 text-center text-bold">EA</div>
         <div class="col-1 text-center text-bold">AL</div>

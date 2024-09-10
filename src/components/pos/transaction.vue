@@ -34,7 +34,7 @@
           </div>
 
           <div class="col-3 text-right">
-            {{ $filters.money(transaction.payAmount) }}
+            {{ $filters.money(sale.salAmount) }}
           </div>
         </div>
         <div class="row justify-between text-bold text-right">

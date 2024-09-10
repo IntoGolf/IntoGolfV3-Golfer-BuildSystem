@@ -61,12 +61,17 @@ const routes = [
       title: "Chats",
     },
   },
-
+  {
+    path: "/history",
+    name: "history",
+    component: () => import("pages/StartTimeHistory.vue"),
+    meta: { requiresAuth: false, title: "Speelhistorie" },
+  },
   {
     path: "/public_lessons",
     name: "publicLesson",
     component: () => import("pages/PublicLessons.vue"),
-    meta: { requiresAuth: false },
+    meta: { requiresAuth: true },
   },
   {
     path: "/classes",

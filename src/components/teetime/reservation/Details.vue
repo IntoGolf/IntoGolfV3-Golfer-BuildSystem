@@ -83,7 +83,7 @@
           <q-item-label>
             <b>Voeg verhuur toe</b>
           </q-item-label>
-          <q-item-label caption> reserveer een handicap of buggy</q-item-label>
+          <q-item-label caption> reserveer een handicar of buggy</q-item-label>
         </q-item-section>
       </q-item>
 

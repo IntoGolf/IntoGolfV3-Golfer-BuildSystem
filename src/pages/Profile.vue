@@ -18,11 +18,18 @@
           />
         </div>
 
-        <q-tabs v-model="tab" class="text-teal">
+        <q-tabs
+          v-model="tab"
+          class="text-teal"
+          dense
+          mobile-arrows
+          outside-arrows
+        >
           <q-tab class="pl-0" label="Naam" name="adres" />
           <q-tab class="pl-0" label="Contact" name="contact" />
           <q-tab class="pl-0" label="Golf" name="golf" />
           <q-tab class="pl-0" label="Voorkeuren" name="preference" />
+          <q-tab class="pl-0" label="Wachtwoord" name="password" />
         </q-tabs>
 
         <q-tab-panels v-model="tab">
@@ -156,7 +163,7 @@
             <q-toggle
               v-model="relEmailnewsletterNGF"
               :disable="!canChange"
-              label="E-mail nieuwsbrief NGF ontvangen"
+              label="E-mail nieuwsbrief ontvangen"
             />
 
             <br />
@@ -166,26 +173,36 @@
               :disable="!canChangeInvoiceByEmail"
               label="Factuur per e-mail ontvangen"
             />
-            <div v-if="1 == 2">
-              <q-separator class="q-mt-sm q-mb-sm" />
-              <div class="text-h6">Wachtwoord aanpassen</div>
-              <q-input
-                v-model="form.password"
-                :label="$t('Wachtwoord')"
-                lazy-rules
-                type="password"
-              />
-              <q-input
-                v-model="form.passwordCheck"
-                :label="$t('Wachtwoord check')"
-                lazy-rules
-                type="password"
+          </q-tab-panel>
+          <q-tab-panel class="q-pa-none" name="password">
+            <p class="q-mt-md">{{ passwordComplexityTest }}</p>
+            <q-input
+              ref="passwordInput"
+              v-model="password"
+              :autocomplete="false"
+              :label="$t('Password')"
+              :rules="[validatePasswordRule]"
+              type="password"
+            />
+            <password-meter :password="password" />
+            <q-input
+              v-model="passwordCheck"
+              :autocomplete="false"
+              :label="$t('PasswordCheck')"
+              :rules="[checkPassword]"
+              type="password"
+            />
+            <div class="text-center q-mt-md q-pb-md">
+              <q-btn
+                :disable="disablePassword"
+                color="primary"
+                label="Wachtwoord opslaan"
+                @click="savePassword"
               />
             </div>
           </q-tab-panel>
         </q-tab-panels>
-
-        <div class="text-center q-mt-md q-pb-md">
+        <div v-show="tab !== 'password'" class="text-center q-mt-md q-pb-md">
           <q-btn color="primary" label="Opslaan" type="submit" />
 
           <q-btn
@@ -203,8 +220,12 @@
 
 <script>
 import authMixin from "../mixins/auth";
+import PasswordMeter from "vue-simple-password-meter";
 
 export default {
+  components: {
+    PasswordMeter,
+  },
   mixins: [authMixin],
   data: function () {
     return {
@@ -241,8 +262,6 @@ export default {
         relPhoneMobile: "",
         relEmail: "",
         relHandicap: "",
-        password: "",
-        passwordCheck: "",
         relNr: "",
         relImage: "",
         relMagazineGolfNL: false,
@@ -250,6 +269,8 @@ export default {
         relEmailnewsletterNGF: false,
         relVisibilityLevel: 0,
       },
+      password: "",
+      passwordCheck: "",
       visibilityArray: [
         { value: 0, label: "Niet zichtbaar" },
         { value: 1, label: "Naam en speelsterkte" },
@@ -268,11 +289,47 @@ export default {
     };
   },
   computed: {
-    canChange: function () {
+    canChange() {
       return parseInt(this.settings.app_allow_member_change_contact) === 1;
     },
-    canChangeInvoiceByEmail: function () {
+    canChangeInvoiceByEmail() {
       return this.settings.app_allow_member_set_invoice_email === 1;
+    },
+    disablePassword() {
+      return this.password !== this.passwordCheck || !this.validatePassword;
+    },
+    passwordComplexity() {
+      return parseInt(this.$store.state.settings.item.app_password_complexity);
+    },
+    passwordComplexityTest() {
+      if (this.passwordComplexity === 1) {
+        return this.$t("PasswordComplexityText1");
+      } else if (this.passwordComplexity === 2) {
+        return this.$t("PasswordComplexityText2");
+      }
+      return this.$t("PasswordComplexityText0");
+    },
+    validatePassword() {
+      const minLength = this.passwordComplexity === 2 ? 8 : 6;
+      const lengthCheck = this.password.length >= minLength;
+      const uppercaseCheck = /[A-Z]/.test(this.password);
+      const lowercaseCheck = /[a-z]/.test(this.password);
+      const numberCheck = /[0-9]/.test(this.password);
+      const specialCharCheck = /[!@#$%^&*(),.?":{}|<>]/.test(this.password);
+
+      if (this.passwordComplexity === 1) {
+        return lengthCheck && uppercaseCheck && lowercaseCheck && numberCheck;
+      } else if (this.passwordComplexity === 2) {
+        return (
+          lengthCheck &&
+          uppercaseCheck &&
+          lowercaseCheck &&
+          numberCheck &&
+          specialCharCheck
+        );
+      }
+
+      return true;
     },
     relMagazineGolfNL: {
       get: function () {
@@ -337,6 +394,18 @@ export default {
       await this.$http.post(`golfer/user`, this.form);
       await this.update();
     },
+    async savePassword() {
+      this.form.password = this.password;
+      this.form.passwordCheck = this.passwordCheck;
+      let res = await this.$http.post(`golfer/user`, this.form);
+      if (res.message === "success") {
+        this.$q.notify({
+          type: "positive",
+          message: "Je wachtwoord js aangepast",
+        });
+      }
+      await this.update();
+    },
     logout() {
       this.$http.post(`golfer/logout`).then(() => {
         this.$store.dispatch("clearState");
@@ -380,6 +449,21 @@ export default {
 
       // Reset the file input after upload
       this.$refs.fileInput.value = null;
+    },
+    async checkPassword(val) {
+      if (val !== this.password) {
+        return "Wachtwoorden zijn niet gelijk";
+      }
+      return true;
+    },
+    async validatePasswordRule() {
+      if (this.passwordComplexity === 0) {
+        return true;
+      }
+      if (!this.validatePassword) {
+        return "Wachtwoord voldoet nog niet aan eisen";
+      }
+      return true;
     },
   },
   created() {

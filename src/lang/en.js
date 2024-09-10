@@ -55,4 +55,13 @@ export const message = {
   "Traffic Channels": "Traffic Channels",
   "Course Occupation Overview": "Course Occupation Overview",
   CancelPlayer: "Annuleer speler",
+  Password: "Password",
+  PasswordCheck: "Password check",
+  PasswordComplexityText0:
+    "We advise you to use a strong password consisting of 8 letters and numbers and at least 1 special character.",
+  PasswordComplexityText1:
+    "A password must be at least 6 characters long, contain 1 uppercase letter, 1 lowercase letter, and a number.",
+  PasswordComplexityText2:
+    "A password must be at least 8 characters long, contain 1 uppercase letter, 1 lowercase letter, a number " +
+    "and at least 1 special character.",
 };

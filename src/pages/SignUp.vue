@@ -57,7 +57,20 @@
                   />
                 </div>
 
-                <div class="col-4">
+                <div class="col-2">
+                  <q-input
+                    v-model="account_form.relFirstName"
+                    :rules="[(val) => !!val || 'Voorletters is een verplicht']"
+                    bottom-slots
+                    counter
+                    dense
+                    label="Voorletters*"
+                    maxlength="20"
+                    stack-label
+                  />
+                </div>
+
+                <div class="col-2">
                   <q-input
                     v-model="account_form.relPrefix"
                     bottom-slots
@@ -377,6 +390,11 @@ export default {
           fields: [
             {
               name: "relCallName",
+              type: String,
+              required: true,
+            },
+            {
+              name: "relFirstName",
               type: String,
               required: true,
             },
