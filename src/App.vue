@@ -231,7 +231,7 @@ export default defineComponent({
           name: "history",
           menuName: "Speelhistorie",
           icon: "grass",
-          visible: true,
+          visible: this.usrHasTeeTimes,
         },
         {
           name: "handicap",

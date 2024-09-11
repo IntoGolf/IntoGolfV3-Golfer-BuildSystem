@@ -76,7 +76,7 @@
                     bottom-slots
                     counter
                     dense
-                    label="Voorvoegsel"
+                    label="Tussenvoegsel"
                     maxlength="15"
                     stack-label
                   />
@@ -320,7 +320,7 @@
                 v-show="isLastTab"
                 color="primary"
                 flat
-                label="Bevesting"
+                label="Bevestig"
                 v-on:click="onShowConfirm"
               />
             </div>

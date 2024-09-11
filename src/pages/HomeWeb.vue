@@ -276,7 +276,10 @@
         </div>
       </div>
 
-      <div class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm">
+      <div
+        v-show="usrHasTeeTimes"
+        class="row q-pl-md q-pr-md q-pt-sm q-gutter-sm"
+      >
         <div
           class="col text-h6 text-center text-white bg-primary shadow-3 text-bold q-pa-md cursor-pointer"
           @click="$router.push('/history')"

@@ -103,8 +103,8 @@
               border: 1px solid darkgray;
             "
           >
-            Helaas we geen starttijden kunnen vinden voor de door u gekozen
-            datum en holes.
+            Helaas we hebben geen starttijden kunnen vinden voor de door u
+            gekozen datum en holes.
           </div>
         </div>
       </div>
