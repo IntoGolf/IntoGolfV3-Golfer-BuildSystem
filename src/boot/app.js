@@ -18,4 +18,33 @@ dayjs.extend(isToday);
 
 export default boot(({ app }) => {
   app.config.globalProperties.$dayjs = dayjs;
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register("/service-worker.js")
+        .then((registration) => {
+          registration.onupdatefound = () => {
+            const installingWorker = registration.installing;
+            installingWorker.onstatechange = () => {
+              if (installingWorker.state === "installed") {
+                if (navigator.serviceWorker.controller) {
+                  // Notify user of the new version
+                  if (
+                    confirm(
+                      "A new version is available. Would you like to update?"
+                    )
+                  ) {
+                    window.location.reload();
+                  }
+                }
+              }
+            };
+          };
+        })
+        .catch((error) => {
+          console.error("Service Worker registration failed:", error);
+        });
+    });
+  }
 });
