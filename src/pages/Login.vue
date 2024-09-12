@@ -87,7 +87,7 @@
               class="q-mt-sm"
               color="primary"
               flat
-              label="Login via maillink"
+              label="Login via easy login"
               v-on:click="sendOneTimePassword"
             />
 
@@ -200,6 +200,19 @@ export default {
       }
     },
     async sendOneTimePassword() {
+      this.$q
+        .dialog({
+          title: "Easy login",
+          html: true,
+          message:
+            "Met easy login sturen we je een e-mailbericht met een login link. Door op de login link te klikken log " +
+            "je direct in en heb je geen wachtwoord nodig.",
+        })
+        .onOk(() => {
+          this.handleSend();
+        });
+    },
+    async handleSend() {
       const res = await this.$http.post("public/sendOneTimePassword", {
         email: this.form.relEmail,
       });
