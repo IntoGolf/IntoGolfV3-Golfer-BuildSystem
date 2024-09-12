@@ -45,7 +45,7 @@
     "build:sallandsche:android": "cross-env ENVIRONMENT=sallandsche quasar build -m android",
     "build:sallandsche:ios": "ENVIRONMENT=sallandsche quasar build -m ios",
     "build:web": "ENVIRONMENT=demo quasar build",
-    "build:web_live": "quasar build",
+    "build:web_live": "quasar build -m pwa",
     "build:wilnis:ios": "ENVIRONMENT=wilnis quasar build -m ios",
     "build:wilnis:android": "RUN_PRE_BUILD_HOOK=true ENVIRONMENT=wilnisgolf quasar build -m android",
     "sign": "jarsigner -storepass 123456 -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore dist/cordova/android/apk/release/app-release-unsigned.apk radar",
