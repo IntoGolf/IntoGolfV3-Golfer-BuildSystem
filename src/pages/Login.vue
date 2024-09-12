@@ -82,7 +82,7 @@
             <br />
 
             <q-btn
-              v-if="!this.$q.platform.is.cordova"
+              v-if="1 == 2 && !this.$q.platform.is.cordova"
               :disable="!validEmail"
               class="q-mt-sm"
               color="primary"
