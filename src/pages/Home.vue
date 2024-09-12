@@ -9,7 +9,7 @@
           <q-card-section class="text-center">
             <div class="text-h5">Geen starttijden</div>
             <div class="text-subtitle1">
-              er zijn geen gereserveerde starttijden gevonden...
+              er zijn geen gereserveerde starttijden gevonden
             </div>
             <q-btn
               class="q-mt-md"
