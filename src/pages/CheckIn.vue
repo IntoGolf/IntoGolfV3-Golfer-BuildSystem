@@ -214,7 +214,7 @@ export default {
   },
   methods: {
     async onCheckIn() {
-      let flight = { flpNr: this.$route.query.id };
+      let flight = { flpNr: this.$route.query.id, code: this.code };
       if (this.flight) {
         let player = this.flight.flight_players.find(
           (player) =>
