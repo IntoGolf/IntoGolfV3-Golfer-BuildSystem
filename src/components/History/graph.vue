@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loaded">
+  <div v-if="loaded" :style="{ marginTop: $q.platform.is.ios ? '60px' : '' }">
     <div class="text-center text-h6">
       Klik op een van de onderstaande knoppen om de details te bekijken.
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :style="{ marginTop: $q.platform.is.ios ? '60px' : '' }">
     <q-btn
       class="full-width"
       color="primary"

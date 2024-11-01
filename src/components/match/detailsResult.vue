@@ -11,6 +11,62 @@
       </div>
     </div>
 
+    <div v-show="match.Longest > 0 && match.Neary > 0" class="row">
+      <div class="col">
+        <div v-show="[0, 2].includes(match.restrictionBySex)" class="row">
+          <div class="col">
+            <div class="row">
+              <div class="col-4">
+                <div class="text-bold">Longest dames</div>
+              </div>
+              <div class="col-8 text-right">
+                <div>
+                  {{ match.longest_female.full_name2 }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <div class="text-bold">Neary dames</div>
+              </div>
+              <div class="col-8 text-right">
+                <div>
+                  {{ match.neary_female.full_name2 }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-show="[0, 1].includes(match.restrictionBySex)" class="row">
+          <div class="col">
+            <div class="row">
+              <div class="col-4">
+                <div class="text-bold">Longest heren</div>
+              </div>
+              <div class="col-8 text-right">
+                <div>
+                  {{ match.longest_male.full_name2 }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <div class="text-bold">Neary heren</div>
+              </div>
+              <div class="col-8 text-right">
+                <div>
+                  {{ match.neary_male.full_name2 }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-show="match.longestNearyText !== null" class="row">
+      <div class="col itg-html" v-html="match.longestNearyText" />
+    </div>
+
     <div v-for="(result, index) in resultArray" :key="index">
       <div
         class="text-bold q-mb-sm q-mt-sm"
@@ -128,7 +184,9 @@ import authMixin from "../../mixins/auth";
 
 export default {
   mixins: [authMixin],
-  props: ["match"],
+  props: {
+    match: Object,
+  },
   data() {
     return {
       resultArray: [],
@@ -166,3 +224,12 @@ export default {
   },
 };
 </script>
+
+<style>
+.itg-html {
+  p {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+</style>

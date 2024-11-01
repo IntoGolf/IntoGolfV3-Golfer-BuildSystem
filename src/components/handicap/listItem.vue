@@ -1,6 +1,7 @@
 <template>
   <q-item
     v-ripple
+    :style="{ borderBottom: index === 19 ? '2px solid #409eff' : '' }"
     class="w-100 bg-white border rounded shadow-1 q-mb-sm"
     clickable
     @click="$emit('handleOpen', card)"
@@ -70,6 +71,7 @@
 export default {
   props: {
     card: Object,
+    index: Number,
   },
   computed: {
     subtext: function () {

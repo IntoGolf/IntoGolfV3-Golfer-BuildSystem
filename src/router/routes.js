@@ -62,6 +62,15 @@ const routes = [
     },
   },
   {
+    path: "/whs",
+    name: "whs",
+    component: () => import("pages/WHS.vue"),
+    meta: {
+      requiresAuth: true,
+      title: "whs",
+    },
+  },
+  {
     path: "/history",
     name: "history",
     component: () => import("pages/StartTimeHistory.vue"),

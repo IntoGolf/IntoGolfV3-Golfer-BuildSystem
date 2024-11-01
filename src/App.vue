@@ -15,6 +15,10 @@
         ].includes($route.path)
       "
       ref="layoutHeader"
+      :style="{
+        color: $store.state.settings.item.app_primary_font_color,
+        backgroundColor: $store.state.settings.item.app_primary_color,
+      }"
       class="web-width q-header"
       flat
     >
@@ -70,7 +74,10 @@
     <q-drawer
       v-if="$q.platform.is.mobile"
       v-model="drawer"
-      :style="{ marginTop: isCordova ? '0' : '42px' }"
+      :style="{
+        marginTop: isCordova ? '0' : '42px',
+        backgroundColor: $store.state.settings.item.app_primary_color,
+      }"
       class="q-drawer"
       show-if-above
     >
@@ -274,6 +281,12 @@ export default defineComponent({
           menuName: "lessons",
           icon: "school",
           visible: this.usrHasLessons,
+        },
+        {
+          name: "whs",
+          menuName: "whs",
+          icon: "school",
+          visible: true,
         },
         // {
         //   name: "lessoncards",

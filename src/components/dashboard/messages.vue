@@ -13,7 +13,13 @@
           <div class="float-left">
             <b>Bericht: {{ item.msgTitle }}</b>
           </div>
-          <div class="float-right" v-on:click="handleSetMessage(item)">X</div>
+          <div
+            v-if="item.msgType !== 1"
+            class="float-right"
+            v-on:click="handleSetMessage(item)"
+          >
+            X
+          </div>
         </q-item-label>
         <q-separator class="q-mt-sm q-mb-sm" />
         <q-item-label v-html="item.msgText" />
@@ -32,7 +38,7 @@ export default {
   computed: {
     unreadMessages: function () {
       return this.$store.state.messages.items.filter(
-        (message) => message.message_opened === null
+        (message) => message.message_opened === null || message.msgType === 1
       );
     },
   },

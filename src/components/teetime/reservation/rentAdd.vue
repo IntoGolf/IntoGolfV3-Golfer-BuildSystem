@@ -13,7 +13,7 @@
 
       <q-separator />
 
-      <q-list bordered separator>
+      <q-list v-if="list.length > 0" bordered separator>
         <q-item
           v-for="(item, key) in list"
           :key="key"
@@ -34,6 +34,8 @@
           </q-item-section>
         </q-item>
       </q-list>
+
+      <div v-else class="q-pa-md">Geen verhuur beschikbaar</div>
     </q-card>
   </div>
 </template>

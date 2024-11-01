@@ -162,7 +162,7 @@
           </div>
 
           <div class="row q-mt-sm">
-            Voor deze flight geldt een maximale totale handicap van:
+            Voor deze flight geldt een maximale totale WHS handicap van:
             {{ maxFlightHandicap }}.
           </div>
           <div
@@ -576,6 +576,8 @@ export default {
         if (res.data.mollie) {
           this.mollie = res.data.mollie;
           this.step = 3;
+        } else if (res.data.redirect.length > 0) {
+          window.location = res.data.redirect;
         } else {
           this.step = 4;
         }

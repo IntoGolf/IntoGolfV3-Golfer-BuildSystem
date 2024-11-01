@@ -5,6 +5,7 @@
         v-for="(card, index) in handicapList"
         v-bind:key="index"
         :card="card"
+        :index="index"
         v-on:handleOpen="handleOpen"
       />
     </q-list>

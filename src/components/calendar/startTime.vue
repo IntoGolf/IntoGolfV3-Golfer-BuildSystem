@@ -63,7 +63,7 @@ export default {
       return this.prevCount * 25 + "%";
     },
     cellWidth() {
-      if (this.start.sttRefType !== 1) {
+      if (![0, 1].includes(this.start.sttRefType)) {
         return "100%";
       }
       return (100 / 4) * this.start.sttMaxPlayers + "%";
@@ -80,7 +80,9 @@ export default {
       } else if (this.start.sttPlayerName1 !== undefined) {
         return time + this.start.sttPlayerName1;
       } else {
-        return time + " aantal spelers: " + this.start.sttPlayers;
+        let playersCount =
+          this.start.sttPlayers === null ? 0 : this.start.sttPlayers;
+        return time + " spelers: " + playersCount;
       }
     },
     timeSlotStyle() {
@@ -137,5 +139,8 @@ export default {
   overflow: hidden;
   padding: 5px 2px 5px 0;
   position: absolute;
+  white-space: nowrap; /* Prevent text from breaking to the next line */
+  text-overflow: ellipsis; /* Hide overflow text with an ellipsis */
+  width: 100%; /* Ensure the slot takes up the full width of its container */
 }
 </style>

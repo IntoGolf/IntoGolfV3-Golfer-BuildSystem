@@ -157,7 +157,7 @@ export default {
 
       return this.list[0].maximumNumberOfPlayers;
     },
-    longest: function () {
+    longest() {
       if (this.list.length === 0) {
         return "";
       }

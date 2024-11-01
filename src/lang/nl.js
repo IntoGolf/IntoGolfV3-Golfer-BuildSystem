@@ -361,4 +361,5 @@ export const message = {
   PasswordComplexityText2:
     "Een wachtwoord moet minimaal 8 karakters lang zijn, 1 hoofdletter, 1 kleine letter, " +
     "een cijfer en een leesteken bevatten",
+  Speelhistorie: "Speelhistorie",
 };

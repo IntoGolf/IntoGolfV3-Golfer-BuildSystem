@@ -44,6 +44,14 @@
       </div>
     </div>
 
+    <div v-show="match.Longest > 0 && match.Neary > 0" class="row q-pb-sm">
+      <div class="col text-bold">Longest/Neary</div>
+
+      <div class="col overflow-hidden text-right">
+        {{ match.Longest }} / {{ match.Neary }}
+      </div>
+    </div>
+
     <div class="row q-pb-sm">
       <div class="col text-bold">Aantal deelnemers</div>
 

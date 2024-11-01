@@ -33,6 +33,12 @@
           type="time"
         />
 
+        <select-relation
+          v-if="local_scorecard.marker === ''"
+          v-model:markerGsn="markerGsn"
+          class="q-mb-md"
+        />
+
         <q-input
           v-show="step === 1"
           ref="gsn"
@@ -40,6 +46,7 @@
           :hint="gsnHint"
           :rules="[validGsn]"
           class="q-mb-md"
+          clearable
           filled
           label="*Marker"
           lazy-rules
@@ -259,8 +266,10 @@
 
 <script>
 import authMixin from "../../mixins/auth";
+import SelectRelation from "components/SelectRelation.vue";
 
 export default {
+  components: { SelectRelation },
   mixins: [authMixin],
   props: {
     artificialDate: Date,
@@ -275,6 +284,8 @@ export default {
       time: null, //this.$dayjs(this.scorecard.datetime)
       //.add(-260, "minute")
       //.format("HH:mm"),
+
+      markerGsn: null,
 
       local_scorecard: this.scorecard,
 
@@ -307,6 +318,16 @@ export default {
     );
   },
   watch: {
+    markerGsn(newValue) {
+      this.local_scorecard.marker = newValue.relGsn;
+      this.gsnHint = "Marker: " + newValue.full_name2;
+      this.validGsn(newValue.relGsn);
+    },
+    "local_scorecard.marker"(newValue) {
+      if (newValue === "") {
+        this.gsnHint = "Type hier het GSN van de marker";
+      }
+    },
     date: function (newValue) {
       this.local_scorecard.datetime = newValue + " " + this.time;
     },
