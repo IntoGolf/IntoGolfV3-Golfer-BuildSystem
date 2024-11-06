@@ -21,7 +21,9 @@
               </div>
               <div class="col-8 text-right">
                 <div>
-                  {{ match.longest_female.full_name2 }}
+                  {{
+                    match.longest_female ? match.longest_female.full_name2 : ""
+                  }}
                 </div>
               </div>
             </div>
@@ -31,7 +33,7 @@
               </div>
               <div class="col-8 text-right">
                 <div>
-                  {{ match.neary_female.full_name2 }}
+                  {{ match.neary_female ? match.neary_female.full_name2 : "" }}
                 </div>
               </div>
             </div>
@@ -45,7 +47,7 @@
               </div>
               <div class="col-8 text-right">
                 <div>
-                  {{ match.longest_male.full_name2 }}
+                  {{ match.longest_male ? match.longest_male.full_name2 : "" }}
                 </div>
               </div>
             </div>
@@ -55,7 +57,7 @@
               </div>
               <div class="col-8 text-right">
                 <div>
-                  {{ match.neary_male.full_name2 }}
+                  {{ match.neary_male ? match.neary_male.full_name2 : "" }}
                 </div>
               </div>
             </div>
