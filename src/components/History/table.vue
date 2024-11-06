@@ -18,9 +18,9 @@
     <div v-else class="row">
       <div class="col">
         <div class="row q-mt-md text-bold">
-          <div class="col-4 q-pa-sm">Datum</div>
-          <div class="col-4 q-pa-sm">Holes</div>
-          <div class="col-8 q-pa-sm">
+          <div class="col-3 q-pa-sm">Datum</div>
+          <div class="col-2 q-pa-sm">Holes</div>
+          <div class="col-7 q-pa-sm">
             {{ col2Header }}
           </div>
         </div>
