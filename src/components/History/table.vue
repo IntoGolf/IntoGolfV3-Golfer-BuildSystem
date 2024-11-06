@@ -19,6 +19,7 @@
       <div class="col">
         <div class="row q-mt-md text-bold">
           <div class="col-4 q-pa-sm">Datum</div>
+          <div class="col-4 q-pa-sm">Holes</div>
           <div class="col-8 q-pa-sm">
             {{ col2Header }}
           </div>
@@ -35,11 +36,14 @@
               :style="{ backgroundColor: key % 2 === 1 ? 'lightgray' : '' }"
               class="row"
             >
-              <div class="col-4 q-pa-sm">
+              <div class="col-3 q-pa-sm">
                 {{ item.date }}<br />
                 {{ extra(item) }}
               </div>
-              <div class="col-8 q-pa-sm">
+              <div class="col-2 q-pa-sm">
+                {{ item.holes }}
+              </div>
+              <div class="col-7 q-pa-sm">
                 {{ item.name }}
               </div>
             </div>
