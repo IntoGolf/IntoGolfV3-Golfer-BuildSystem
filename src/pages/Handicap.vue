@@ -140,7 +140,7 @@ export default {
       return result;
     },
     handicap: function () {
-      if (!this.scorecards) {
+      if (!this.scorecards || this.scorecards.length === 0) {
         return 54;
       }
       return this.scorecards[0].handicap_index;
