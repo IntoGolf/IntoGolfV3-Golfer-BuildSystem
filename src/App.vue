@@ -140,6 +140,7 @@ export default defineComponent({
     },
     ...mapGetters("settings", [
       "setHasActivities",
+      "setHasInvoices",
       "setHasCalendar",
       "setHasCircles",
       "setHasBalance",
@@ -152,6 +153,7 @@ export default defineComponent({
     ...mapGetters("currentUser", [
       "usrHasLessons",
       "usrHasCalendar",
+      "usrHasInvoices",
       "usrHasShop",
       "usrHasPos",
       "usrHasHandicap",
@@ -191,6 +193,12 @@ export default defineComponent({
           menuName: "Meerronden",
           icon: "emoji_events",
           visible: this.usrHasMatch,
+        },
+        {
+          name: "invoice",
+          menuName: "Facturen",
+          icon: "euro",
+          visible: this.usrHasInvoices,
         },
         {
           name: "Chat",
@@ -284,7 +292,7 @@ export default defineComponent({
         },
         {
           name: "whs",
-          menuName: "whs",
+          menuName: "WHS",
           icon: "school",
           visible: true,
         },

@@ -82,7 +82,10 @@
       <div class="col-9">{{ data.relGrpNr1.grpName }}</div>
     </div>
 
-    <div class="row q-mb-sm">
+    <div
+      v-show="$store.state.settings.publicItems.grpSignUpShowPrice == 1"
+      class="row q-mb-sm"
+    >
       <div class="col-3 text-bold">Bedrag</div>
       <div class="col-9">{{ $filters.money(data.relGrpNr1.price) }}</div>
     </div>

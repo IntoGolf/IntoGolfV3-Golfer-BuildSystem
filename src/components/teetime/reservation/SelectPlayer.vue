@@ -137,6 +137,7 @@
           v-for="(rel, key) in relations"
           :key="key"
           v-ripple
+          :disable="rel.disabled.length > 0"
           clickable
           @click="relation = rel.relNr"
         >
@@ -144,7 +145,10 @@
             <q-item-label>
               <b>{{ rel.full_name2 }}</b>
             </q-item-label>
-            <q-item-label caption>
+            <q-item-label v-if="rel.disabled.length > 0" caption>
+              {{ rel.disabled }}
+            </q-item-label>
+            <q-item-label v-else caption>
               handicap: {{ rel.relHandicap }}
             </q-item-label>
           </q-item-section>
@@ -409,6 +413,7 @@ export default {
         params: { fltNt: this.flight.fltNr, search: this.relationSearch },
       };
       this.relations = await this.$http.get(`golfer/relation`, data);
+      console.log(this.relations);
       this.showEmptySearch = this.relations.length === 0;
     },
   },

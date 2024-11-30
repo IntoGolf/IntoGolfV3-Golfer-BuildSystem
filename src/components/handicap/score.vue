@@ -540,17 +540,31 @@ export default {
     handleSwitchHoles: function () {
       this.showHole = this.showHole === 9 ? 1 : 9;
     },
-    handleDelete: function () {
+    async handleDelete() {
       if (!this.canDelete) {
         return;
       }
-      this.$http
-        .delete("golfer/scorecard", {
-          data: { id: this.local_scorecard.ngf_card_id },
-        })
-        .then((res) => {
-          this.$emit("handleClose", true);
+      let res = await this.$http.delete("golfer/scorecard", {
+        data: { id: this.local_scorecard.ngf_card_id },
+      });
+
+      res.data.error.forEach((item) => {
+        this.$q.notify({
+          message: item.message,
+          type: "negative",
+          icon: "announcement",
+          position: "center",
+          actions: [
+            {
+              label: "Sluiten",
+              color: "white",
+              handler: () => {
+                this.$emit("handleClose", true);
+              },
+            },
+          ],
         });
+      });
     },
     nextHole: function () {
       let maxHoles =

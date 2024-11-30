@@ -24,7 +24,7 @@
               v-bind:key="index"
               v-ripple
               :clickable="!hasTeamMembers(player.relNr)"
-              class="full-width shadow-1 q-mb-sm bg-green-1"
+              class="full-width shadow-1 q-mb-sm bg-green-1 q-pr-sm"
               v-on:click="handleSubscribeGuest(player)"
             >
               <q-item-section>
@@ -33,12 +33,13 @@
                 </q-item-label>
 
                 <q-item-label caption>
-                  Hcp: {{ player.exactHandicapForMatch }}
+                  Hcp: {{ player.exactHandicapForMatch }} /
+                  {{ player.Description }}
                 </q-item-label>
               </q-item-section>
-
               <q-item-section
                 v-if="match.subscribeToFlight === 1 && player.partyId > 0"
+                avatar
                 class="text-right"
               >
                 <q-item-label class="text-right">
@@ -49,13 +50,20 @@
                     ).format("HH:mm")
                   }}
                 </q-item-label>
-
-                <q-item-label caption class="text-right">
+                <q-item-label
+                  :style="{
+                    backgroundColor: getBackgroundColor(player),
+                    color: getColor(player),
+                  }"
+                  caption
+                  class="text-right"
+                >
                   Hole {{ player.match_party.match_flight.startingHoleNumber }}
                 </q-item-label>
               </q-item-section>
               <q-item-section
                 v-else-if="match.StartlijstGereed === 1 && player.partyId > 0"
+                avatar
               >
                 <q-item-label class="text-right">
                   {{
@@ -66,14 +74,30 @@
                   }}
                 </q-item-label>
 
-                <q-item-label caption class="text-right">
+                <q-item-label
+                  :style="{
+                    backgroundColor: getBackgroundColor(player),
+                    color: getColor(player),
+                  }"
+                  caption
+                  class="text-right"
+                  style="border-radius: 2px; padding: 2px 8px 2px 8px"
+                >
                   Hole {{ player.match_party.match_flight.startingHoleNumber }}
                 </q-item-label>
               </q-item-section>
-              <q-item-section v-else-if="player.Status === 1">
+              <q-item-section v-else-if="player.Status === 1" avatar>
                 <q-item-label class="text-right"> Reservelijst</q-item-label>
               </q-item-section>
-              <q-item-section v-else>
+              <q-item-section
+                v-else
+                :style="{
+                  backgroundColor: getBackgroundColor(player),
+                  color: getColor(player),
+                }"
+                avatar
+                style="border-radius: 2px; padding: 2px 8px 2px 8px"
+              >
                 <q-item-label class="text-right">
                   Niet<br />ingedeeld
                 </q-item-label>
@@ -97,7 +121,7 @@
             v-for="(player, index) in players"
             v-bind:key="index"
             v-ripple
-            class="full-width shadow-1 q-mb-sm bg-blue-1"
+            class="full-width shadow-1 q-mb-sm bg-blue-1 q-pr-sm"
             clickable
             v-on:click="handleSubscribeGuest(player)"
           >
@@ -107,12 +131,14 @@
               </q-item-label>
 
               <q-item-label caption>
-                Hcp: {{ player.exactHandicapForMatch }}
+                Hcp: {{ player.exactHandicapForMatch }} /
+                {{ player.Description }}
               </q-item-label>
             </q-item-section>
 
             <q-item-section
               v-if="match.StartlijstGereed === 1 && player.partyId > 0"
+              avatar
             >
               <q-item-label class="text-right">
                 {{
@@ -123,14 +149,29 @@
                 }}
               </q-item-label>
 
-              <q-item-label caption class="text-right">
+              <q-item-label
+                :style="{
+                  backgroundColor: getBackgroundColor(player),
+                  color: getColor(player),
+                }"
+                caption
+                class="text-right"
+                style="border-radius: 2px; padding: 2px 8px 2px 8px"
+              >
                 Hole
                 {{ player.match_party.match_flight.startingHoleNumber }}
               </q-item-label>
             </q-item-section>
 
-            <q-item-section v-else>
-              <q-item-label class="text-right">
+            <q-item-section v-else avatar>
+              <q-item-label
+                :style="{
+                  backgroundColor: getBackgroundColor(player),
+                  color: getColor(player),
+                }"
+                class="text-right"
+                style="border-radius: 2px; padding: 2px 8px 2px 8px"
+              >
                 Niet<br />ingedeeld
               </q-item-label>
             </q-item-section>
@@ -163,7 +204,8 @@
                 </q-item-label>
 
                 <q-item-label caption>
-                  Hcp: {{ player.exactHandicapForMatch }}
+                  Hcp: {{ player.exactHandicapForMatch }} /
+                  {{ player.Description }}
                 </q-item-label>
               </q-item-section>
 
@@ -247,6 +289,27 @@ export default {
     },
   },
   methods: {
+    getTee(teeId) {
+      const tee = this.match.baan_lus.tees.find((item) => item.color === teeId);
+      if (tee !== undefined) {
+        return tee;
+      }
+      return null;
+    },
+    getBackgroundColor(player) {
+      const tee = this.getTee(player.startingTeeId);
+      if (tee !== null) {
+        return tee.backgroundColor;
+      }
+      return "";
+    },
+    getColor(player) {
+      const tee = this.getTee(player.startingTeeId);
+      if (tee !== null) {
+        return tee.fontColor;
+      }
+      return "";
+    },
     hasTeamMembers: function (relNr) {
       if (!this.isTeam) {
         return false;

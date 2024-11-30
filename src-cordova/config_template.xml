@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="$APP_ID$" version="$APP_VERSION$" xmlns="http://www.w3.org/ns/widgets">
   <hook src="hooks/appBeforeBuild.js" type="before_build"/>
-  <name>Amelisweerd</name>
-  <description>App UGC Amelisweerd</description>
+  <name>Noordwijkse</name>
+  <description>App Noordwijkse Golfclub</description>
   <author email="info@intogolf.nl" href="https://www.intogolf.com">
     IntoGolf Team
   </author>
@@ -100,13 +100,13 @@
   </platform>
   <allow-navigation href="about:*"/>
   <universal-links>
-    <host name="graafschap.golfer.intogolf.nl" scheme="myapp">
+    <host name="noordwijkse.golfer.intogolf.nl" scheme="myapp">
       <path url="/*"/>
     </host>
   </universal-links>
   <plugin name="cordova-plugin-deeplinks" spec="1.1.1">
     <variable name="URL_SCHEME" value="/*"/>
-    <variable name="DEEPLINK_HOST" value="wilnis.golfer.intogolf.nl"/>
+    <variable name="DEEPLINK_HOST" value="noordwijkse.golfer.intogolf.nl"/>
     <variable name="DEEPLINK_SCHEME" value="myapp"/>
   </plugin>
 </widget>

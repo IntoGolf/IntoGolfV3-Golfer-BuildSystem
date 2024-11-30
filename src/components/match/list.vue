@@ -22,7 +22,7 @@
                   : 'primary'
               "
               label="Ingeschreven"
-              v-on:click="$store.dispatch('currentUser/updateMatchFilter', 1)"
+              v-on:click="setFilter(1)"
             />
             <q-btn
               :color="
@@ -31,7 +31,7 @@
                   : 'primary'
               "
               label="Inschrijven"
-              v-on:click="$store.dispatch('currentUser/updateMatchFilter', 2)"
+              v-on:click="setFilter(2)"
             />
             <q-btn
               :color="
@@ -40,7 +40,7 @@
                   : 'primary'
               "
               label="Alles"
-              v-on:click="$store.dispatch('currentUser/updateMatchFilter', 0)"
+              v-on:click="setFilter(0)"
             />
           </q-btn-group>
         </div>
@@ -149,6 +149,13 @@ export default {
     };
   },
   created() {
+    const defaultFilter = parseInt(
+      localStorage.getItem("golfer_match_default_filter")
+    );
+    console.log(defaultFilter);
+    if (defaultFilter) {
+      this.$store.dispatch("currentUser/updateMatchFilter", defaultFilter);
+    }
     this.loadList();
   },
   computed: {
@@ -265,6 +272,10 @@ export default {
 
     handleOpenMatch: function (match) {
       this.$emit("handleOpenMatch", match);
+    },
+    setFilter(value) {
+      localStorage.setItem("golfer_match_default_filter", value);
+      this.$store.dispatch("currentUser/updateMatchFilter", value);
     },
   },
 };

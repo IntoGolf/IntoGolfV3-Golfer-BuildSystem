@@ -67,6 +67,18 @@
         <q-separator spaced />
 
         <div class="row">
+          <div class="col text-bold">Relatiecode</div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            {{ focusedItem.relMemberCode }}
+          </div>
+        </div>
+
+        <q-separator spaced />
+
+        <div class="row">
           <div class="col text-bold">Speelsterkte</div>
         </div>
 

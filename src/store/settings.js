@@ -112,6 +112,14 @@ const getters = {
       state.item.app_display_message_tile === 1
     );
   },
+  setHasInvoices: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "app_display_invoices_tile" in state.item &&
+      state.item.app_display_invoices_tile === 1
+    );
+  },
   setHasCourseStatus: (state) => {
     return (
       state.item &&

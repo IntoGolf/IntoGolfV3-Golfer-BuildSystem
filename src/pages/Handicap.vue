@@ -166,10 +166,48 @@ export default {
       this.page = 2;
     },
     async handleSave(scorecard) {
+      let that = this;
       let res = await this.$http.post("golfer/scorecard", scorecard);
-      await this.handleOpen({
-        ngf_card_id: res.response.scorecard.ngf_card_id,
-      });
+      if (res.response.error.length > 0) {
+        res.response.error.forEach((item) => {
+          this.$q.notify({
+            message: item.message,
+            type: "negative",
+            icon: "announcement",
+            position: "center",
+            timeout: 1000,
+            actions: [
+              {
+                label: "Sluiten",
+                color: "white",
+                handler: () => {
+                  /* ... */
+                },
+              },
+            ],
+          });
+        });
+      } else {
+        this.$q.notify({
+          message: "Scorekaart opgeslagen",
+          type: "positive",
+          icon: "announcement",
+          position: "center",
+          timeout: 2000,
+          actions: [
+            {
+              label: "Sluiten",
+              color: "white",
+              handler: () => {
+                console.log(res);
+                that.handleOpen({
+                  ngf_card_id: res.response.scorecard.ngf_card_id,
+                });
+              },
+            },
+          ],
+        });
+      }
     },
     handleNew: function (type) {
       this.scorecard = { ...this.scorecard_template };

@@ -48,6 +48,17 @@
       <h5 class="q-mt-sm q-mb-sm">Birdie klassement</h5>
       <birdy-result :prop_match="prop_match" />
     </div>
+    <div
+      v-if="prop_match.meeBirdy === 1 || prop_match.meeEclectic >= 1"
+      class="row q-mt-sm q-mb-xl"
+    >
+      <div class="col-12">
+        rood= bogey<br />
+        geel= par<br />
+        oranje= birdie<br />
+        groen= eagle<br />
+      </div>
+    </div>
   </q-page>
 </template>
 
@@ -176,6 +187,9 @@ export default {
             }
             return "-";
           },
+          classes: (row) => {
+            return this.getCellClass(row[i_str]);
+          },
         });
       }
       return result;
@@ -191,6 +205,25 @@ export default {
       this.dataEclectic = await this.$http.get(
         "golfer/meerronde/eclectic?meeNr=" + this.prop_match.meeNr
       );
+    },
+    getCellClass(value) {
+      if (value !== undefined) {
+        const stab = value["score"]["stab"];
+        return this.getBgColor(stab);
+      }
+      return "";
+    },
+    getBgColor(stab) {
+      if (stab === 1) {
+        return "bg-red text-white";
+      } else if (stab === 2) {
+        return "bg-yellow";
+      } else if (stab === 3) {
+        return "bg-orange text-white";
+      } else if (stab === 4) {
+        return "bg-green text-white";
+      }
+      return "";
     },
   },
 };

@@ -19,15 +19,6 @@
     highlight the sticky column on any browser window */
   max-width: 600px
 
-  thead tr:first-child th:first-child
-    /* bg color is important for th; just specify one */
-    background-color: #00b4ff
-
-  th:nth-child(2),
-  td:nth-child(2),
-  td:first-child
-    background-color: #00b4ff
-
   th:first-child,
   th:nth-child(2),
   td:nth-child(2),
@@ -92,6 +83,8 @@ export default {
         field: (row) => {
           return row.scores.EA;
         },
+        headerClasses: "bg-green text-white",
+        classes: "bg-green text-white",
       });
 
       result.push({
@@ -101,6 +94,8 @@ export default {
         field: (row) => {
           return row.scores.BI;
         },
+        headerClasses: "bg-orange text-white",
+        classes: "bg-orange text-white",
       });
 
       result.push({
@@ -110,6 +105,8 @@ export default {
         field: (row) => {
           return row.scores.PA;
         },
+        headerClasses: "bg-yellow",
+        classes: "bg-yellow",
       });
 
       result.push({
@@ -119,6 +116,8 @@ export default {
         field: (row) => {
           return row.scores.BO;
         },
+        headerClasses: "bg-red text-white",
+        classes: "bg-red text-white",
       });
 
       result.push({

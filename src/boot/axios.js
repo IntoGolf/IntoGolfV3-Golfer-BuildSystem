@@ -51,6 +51,8 @@ axios.interceptors.response.use(
     if (response.data && response.data.code >= 400) {
       this.$message.error(response.data.message);
       return Promise.reject(response);
+    } else if (response.headers["content-type"] == "application/pdf") {
+      return response;
     }
     return response.data;
   },

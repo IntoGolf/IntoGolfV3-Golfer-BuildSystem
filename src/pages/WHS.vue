@@ -2,7 +2,7 @@
   <q-page-container>
     <q-page v-if="selectedTee === null" class="q-pa-sm">
       <div class="row justify-between">
-        <div class="text-h5">Whs naar baan hcp</div>
+        <div class="text-h5">WHS naar baan hcp</div>
         <p>
           Voer de WHS handicap in voor het berekenen van de baan handicap. In
           het tee overzicht wordt de door de NGF geadviseerde tee vet

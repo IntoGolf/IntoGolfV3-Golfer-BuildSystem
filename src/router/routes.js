@@ -67,7 +67,7 @@ const routes = [
     component: () => import("pages/WHS.vue"),
     meta: {
       requiresAuth: true,
-      title: "whs",
+      title: "WHS",
     },
   },
   {
@@ -75,6 +75,12 @@ const routes = [
     name: "history",
     component: () => import("pages/StartTimeHistory.vue"),
     meta: { requiresAuth: false, title: "Speelhistorie" },
+  },
+  {
+    path: "/invoice",
+    name: "invoice",
+    component: () => import("../components/invoice/index.vue"),
+    meta: { requiresAuth: false, title: "Facturen" },
   },
   {
     path: "/public_lessons",

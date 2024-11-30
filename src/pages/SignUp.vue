@@ -44,7 +44,7 @@
           <q-tab-panels v-model="tab" animated>
             <q-tab-panel name="name">
               <div class="row q-col-gutter-sm q-mb-sm">
-                <div class="col-8">
+                <div class="col-6">
                   <q-input
                     v-model="account_form.relCallName"
                     :rules="[(val) => !!val || 'Voornaam is een verplicht']"
@@ -60,7 +60,7 @@
                 <div class="col-2">
                   <q-input
                     v-model="account_form.relFirstName"
-                    :rules="[(val) => !!val || 'Voorletters is een verplicht']"
+                    :rules="[(val) => !!val || 'Voorletters zijn verplicht']"
                     bottom-slots
                     counter
                     dense
@@ -81,20 +81,7 @@
                     stack-label
                   />
                 </div>
-              </div>
-              <div class="row q-mb-sm">
-                <div class="col-8">
-                  <q-input
-                    v-model="account_form.relName"
-                    :rules="[(val) => !!val || 'Achternaam is een verplicht']"
-                    counter
-                    dense
-                    label="Achternaam*"
-                    maxlength="40"
-                    stack-label
-                  />
-                </div>
-                <div class="col-4">
+                <div class="col-2">
                   <q-select
                     v-model="account_form.relGender"
                     :options="[
@@ -107,13 +94,40 @@
                   />
                 </div>
               </div>
+              <div class="row q-col-gutter-sm q-mb-sm">
+                <div class="col-6">
+                  <q-input
+                    v-model="account_form.relName"
+                    :rules="[(val) => !!val || 'Achternaam is een verplicht']"
+                    counter
+                    dense
+                    label="Achternaam*"
+                    maxlength="40"
+                    stack-label
+                  />
+                </div>
+                <div class="col-6">
+                  <q-input
+                    v-model="account_form.relMaidenName"
+                    :disable="account_form.relGender.value == 1"
+                    counter
+                    dense
+                    label="Meisjesnaam*"
+                    maxlength="40"
+                    stack-label
+                  />
+                </div>
+              </div>
               <div v-if="needsRelationGroup" class="row q-mb-sm">
                 <div class="col-8">
                   <q-select
                     v-model="account_form.relGrpNr1"
+                    :label="
+                      $store.state.settings.publicItems
+                        .app_subscription_product_label
+                    "
                     :options="relationGroupArray"
                     dense
-                    label="Gewenste groep"
                     stack-label
                   />
                 </div>
@@ -238,6 +252,10 @@
                 <div class="col-12">
                   <q-input
                     v-model="account_form.relGsn"
+                    :rules="[
+                      (val) =>
+                        (!!val && val.length === 10) || 'GSN is verplicht',
+                    ]"
                     bottom-slots
                     counter
                     dense
@@ -251,6 +269,7 @@
                 <div class="col-12">
                   <q-input
                     v-model="account_form.relHandicap"
+                    :rules="[(val) => !!val || 'Handicap is verplicht']"
                     bottom-slots
                     dense
                     input-class="text-right"
@@ -372,6 +391,7 @@
 
 <script>
 import SignUpConfirm from "pages/SignUpConfirm.vue";
+import settings from "src/store/settings";
 
 export default {
   components: { SignUpConfirm },
@@ -458,6 +478,7 @@ export default {
         relCallName: "",
         relPrefix: "",
         relName: "",
+        relMaidenName: "",
         relEmail: "",
         relPhone: "",
         mobile_empPreferLang: "",
@@ -531,11 +552,17 @@ export default {
     },
   },
   computed: {
+    settings() {
+      return settings;
+    },
     needsPayment() {
       return true;
     },
     title: function () {
-      return this.ProCourse ? "Cursus inschrijfformulier" : "Creëer account";
+      return this.ProCourse
+        ? "Cursus inschrijfformulier"
+        : this.$store.state.settings.publicItems
+            .app_subscription_form_sub_title;
     },
     subtitle: function () {
       if (this.ProCourse) {
@@ -556,7 +583,7 @@ export default {
       }
       return this.relationGroups.map((item) => ({
         value: item.grpNr,
-        label: item.grpName + " (" + this.$filters.money(item.price) + ")",
+        label: item.grpName,
         price: item.price,
         grpName: item.grpName,
       }));
@@ -678,7 +705,12 @@ export default {
       const res = await this.$http.post(`golfer/sign-up`, this.account_form);
       this.onHideConfirm();
       if (res.success === 1) {
-        this.status = 2;
+        if (this.$store.state.settings.publicItems.app_subscription_redirect) {
+          window.location =
+            this.$store.state.settings.publicItems.app_subscription_redirect;
+        } else {
+          this.status = 2;
+        }
       } else {
         this.status = 3;
       }

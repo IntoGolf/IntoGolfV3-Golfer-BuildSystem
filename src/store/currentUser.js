@@ -120,6 +120,14 @@ const getters = {
       state.item.tile_match_y_n
     );
   },
+  usrHasInvoices: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "tile_invoices_y_n" in state.item &&
+      state.item.tile_invoices_y_n
+    );
+  },
   usrHasTeeTimes: (state) => {
     return (
       state.item &&

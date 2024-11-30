@@ -139,6 +139,15 @@
       </div>
     </div>
 
+    <div class="row q-pb-sm">
+      <div class="col text-bold">Tee heren / dames</div>
+
+      <div class="col overflow-hidden text-right">
+        {{ this.tee(match.startingTeeId) }} /
+        {{ this.tee(match.startingTeeForWomenId) }}
+      </div>
+    </div>
+
     <div v-if="match.UitslagenGereed !== 1">
       <div class="row q-pb-sm">
         <div class="col text-bold">Inschrijfgeld</div>
@@ -413,7 +422,7 @@ export default {
       return (
         this.mySubscription !== null &&
         this.$dayjs() > startDate &&
-        this.$dayjs() < startDate.add(6, "hours") &&
+        this.$dayjs() < startDate.add(9, "hours") &&
         (this.mySubscription.positionInParty === 1 ||
           [10, 11, 12].includes(this.match.matchTypeId)) &&
         this.match.UitslagenGereed !== 1
@@ -483,6 +492,13 @@ export default {
     },
   },
   methods: {
+    tee(teeId) {
+      const tee = this.match.baan_lus.tees.find((item) => item.color === teeId);
+      if (tee !== undefined) {
+        return tee.name;
+      }
+      return "-";
+    },
     async finishPayment() {
       const res = await this.$http.get(`golfer/event/payment/` + this.match.id);
       this.$emit("handlePayment", res.data);
