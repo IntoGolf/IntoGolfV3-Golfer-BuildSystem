@@ -1,0 +1,15 @@
+{
+  "appId": "nl.intogolf.dev",
+  "appName": "dev",
+  "webDir": "dist/spa",
+  "ios": {
+    "buildOptions": {
+      "developmentTeam": "IntoGolf B.V.",
+      "codeSignIdentity": "IntoGolf B.V.",
+      "provisioningProfile": "IntoGolf B.V.",
+      "deviceFamily": "1",
+      "device": "iPhone",
+      "scheme": "hildenberg"
+    }
+  }
+}

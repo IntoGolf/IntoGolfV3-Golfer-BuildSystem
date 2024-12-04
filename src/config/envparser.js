@@ -5,7 +5,9 @@ argsEnv = {};
 //if (process.env.ENVIRONMENT && process.env.ENVIRONMENT !== "live") {
 if (process.env.ENVIRONMENT) {
   console.log("use env file: .env." + process.env.ENVIRONMENT);
-  argsEnv = DotEnv.config({ path: ".env." + process.env.ENVIRONMENT }).parsed;
+  argsEnv = DotEnv.config({
+    path: "env/.env." + process.env.ENVIRONMENT,
+  }).parsed;
 }
 // } else if (process.env.ENVIRONMENT && process.env.ENVIRONMENT === "live") {
 //   console.log("use env live file: dist/.env");
@@ -13,8 +15,6 @@ if (process.env.ENVIRONMENT) {
 // }
 
 let parsedEnv = DotEnv.config().parsed;
-console.log("next");
-console.log(parsedEnv);
 
 module.exports = function () {
   return Object.assign(parsedEnvCommon, argsEnv, parsedEnv);

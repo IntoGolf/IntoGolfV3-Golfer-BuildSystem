@@ -124,9 +124,7 @@ export default {
     });
   },
   watch: {
-    selectedTee(newValue) {
-      console.log(newValue);
-    },
+    selectedTee(newValue) {},
   },
   computed: {
     teeLetterMale() {

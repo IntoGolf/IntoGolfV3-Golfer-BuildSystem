@@ -199,7 +199,6 @@ export default {
               label: "Sluiten",
               color: "white",
               handler: () => {
-                console.log(res);
                 that.handleOpen({
                   ngf_card_id: res.response.scorecard.ngf_card_id,
                 });

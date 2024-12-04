@@ -413,7 +413,6 @@ export default {
         params: { fltNt: this.flight.fltNr, search: this.relationSearch },
       };
       this.relations = await this.$http.get(`golfer/relation`, data);
-      console.log(this.relations);
       this.showEmptySearch = this.relations.length === 0;
     },
   },

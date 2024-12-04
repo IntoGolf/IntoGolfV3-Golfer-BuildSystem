@@ -152,7 +152,6 @@ export default {
     const defaultFilter = parseInt(
       localStorage.getItem("golfer_match_default_filter")
     );
-    console.log(defaultFilter);
     if (defaultFilter) {
       this.$store.dispatch("currentUser/updateMatchFilter", defaultFilter);
     }

@@ -4,32 +4,23 @@
   </q-layout>
   <q-layout v-else id="layoutParent" ref="layoutParent" view="lHh Lpr lFf">
     <q-header
-      v-if="
-        ![
-          '/login',
-          '/teetimes',
-          '/sign-up',
-          '/verify-code',
-          '/public_lessons',
-          '/classes',
-        ].includes($route.path)
-      "
+      v-if="showHeader"
       ref="layoutHeader"
       :style="{
         color: $store.state.settings.item.app_primary_font_color,
         backgroundColor: $store.state.settings.item.app_primary_color,
+        paddingTop: this.paddingTop,
       }"
       class="web-width q-header"
       flat
     >
       <q-toolbar
         v-if="
-          !['/', '/login', 'verify-code'].includes($route.path) ||
-          $q.platform.is.mobile
+          !['/', '/login', 'verify-code'].includes($route.path) || this.isApp
         "
       >
         <q-btn
-          v-if="!$q.platform.is.desktop"
+          v-if="this.isApp"
           :style="{
             color: $store.state.settings.item.app_primary_font_color,
           }"
@@ -38,7 +29,8 @@
           icon="menu"
           round
           @click="drawer = !drawer"
-        />
+          >test
+        </q-btn>
         <q-btn
           v-else
           :style="{
@@ -71,21 +63,12 @@
       </q-toolbar>
     </q-header>
     <router-view class="bg-white web-width" />
-    <q-drawer
-      v-if="$q.platform.is.mobile"
-      v-model="drawer"
-      :style="{
-        marginTop: isCordova ? '0' : '42px',
-        backgroundColor: $store.state.settings.item.app_primary_color,
-      }"
-      class="q-drawer"
-      show-if-above
-    >
+    <q-drawer v-if="isApp" v-model="drawer" class="q-drawer" show-if-above>
       <div
         style="
           width: 100%;
           text-align: center;
-          padding-top: 10px;
+          padding-top: 42px;
           padding-bottom: 5px;
         "
       />
@@ -129,8 +112,35 @@ export default defineComponent({
       }
       return "";
     },
-    isCordova() {
-      return this.$q.platform.is.cordova || this.$q.platform.is.mobile;
+    isApp() {
+      return this.$q.platform.is.capacitor || this.$q.platform.is.mobile;
+    },
+    showHeader() {
+      if (
+        [
+          "/login",
+          "/teetimes",
+          "/sign-up",
+          "/verify-code",
+          "/public_lessons",
+          "/classes",
+        ].includes(this.$route.path)
+      ) {
+        return false;
+      }
+
+      if (this.isApp) {
+        return true;
+      }
+
+      return true;
+    },
+    paddingTop() {
+      return "0";
+      if (this.$q.platform.is.capacitor) {
+        return "42px";
+      }
+      return "0";
     },
     headerColor() {
       return this.$store.state.settings.item.app_primary_color;
@@ -312,6 +322,8 @@ export default defineComponent({
     },
   },
   mounted() {
+    console.log("mounted");
+    console.log(this.isApp);
     this.drawer = false;
   },
   methods: {

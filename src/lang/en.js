@@ -65,4 +65,5 @@ export const message = {
     "A password must be at least 8 characters long, contain 1 uppercase letter, 1 lowercase letter, a number " +
     "and at least 1 special character.",
   Speelhistorie: "PLayer history",
+  WHS: "WHS",
 };

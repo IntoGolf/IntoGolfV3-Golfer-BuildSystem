@@ -69,19 +69,5 @@ export default route(function (/* { store, ssrContext } */) {
     next();
   });
 
-  // Handle incoming links
-  document.addEventListener(
-    "deviceready",
-    () => {
-      universalLinks.subscribe(null, (eventData) => {
-        const url = new URL(eventData.url);
-        // Extract the path from the URL
-        let path = url.hash.substring(1);
-        Router.push({ path: path });
-      });
-    },
-    false
-  );
-
   return Router;
 });
