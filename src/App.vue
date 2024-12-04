@@ -1,5 +1,8 @@
 <template>
-  <q-layout v-if="['/login'].includes($route.path)">
+  <q-layout
+    v-if="['/login'].includes($route.path)"
+    :style="{ paddingTop: !hasNotch ? '50px' : '0' }"
+  >
     <login />
   </q-layout>
   <q-layout v-else id="layoutParent" ref="layoutParent" view="lHh Lpr lFf">
@@ -9,7 +12,7 @@
       :style="{
         color: $store.state.settings.item.app_primary_font_color,
         backgroundColor: $store.state.settings.item.app_primary_color,
-        paddingTop: this.paddingTop,
+        paddingTop: !hasNotch ? '50px' : '0',
       }"
       class="web-width q-header"
       flat
@@ -106,6 +109,21 @@ export default defineComponent({
     };
   },
   computed: {
+    hasNotch() {
+      const devicesWithNotches = [
+        "iPhone X",
+        "iPhone XR",
+        "iPhone XS",
+        "iPhone 11",
+        "iPhone 12",
+        "iPhone 13",
+        "iPhone 14",
+        "iPhone 15",
+      ];
+      return devicesWithNotches.some((device) =>
+        navigator.userAgent.includes(device)
+      );
+    },
     fullName() {
       if (this.$store.getters["currentUser/item"]) {
         return this.$store.getters["currentUser/item"].full_name2;
@@ -322,8 +340,6 @@ export default defineComponent({
     },
   },
   mounted() {
-    console.log("mounted");
-    console.log(this.isApp);
     this.drawer = false;
   },
   methods: {

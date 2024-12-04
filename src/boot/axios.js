@@ -15,7 +15,7 @@ let hideLoadingTimeout = null;
 
 axios.interceptors.request.use(
   (config) => {
-    if (Platform.is.mobile) {
+    if (Platform.is.capacitor) {
       axios.defaults.headers.common["X-App-Identifier"] = appId;
     }
 

@@ -41,6 +41,9 @@ export default {
   mixins: [authMixin],
   components: { Match, messages, bookings, lessons, Bills },
   computed: {
+    nav() {
+      return navigator.userAgent.toString();
+    },
     ...mapGetters("settings", ["setHasMessages"]),
     ...mapGetters("currentUser", ["usrHasLessons", "usrHasTeeTimes"]),
   },

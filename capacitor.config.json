@@ -1,6 +1,6 @@
 {
-  "appId": "nl.intogolf.dev",
-  "appName": "dev",
+  "appId": "nl.intogolf.test",
+  "appName": "test",
   "webDir": "dist/spa",
   "ios": {
     "buildOptions": {

@@ -50,7 +50,7 @@
               {{ tee.slopeRating }}
             </div>
             <div class="col-2 text-right">
-              {{ getBaanHcp(tee) }}
+              {{ getBaanHcp(tee, item) }}
             </div>
           </div>
           <q-separator class="q-mb-sm q-mt-sm" />
@@ -151,7 +151,7 @@ export default {
     teeLetter(gender) {
       let hcp = this.whs;
       let tee = this.teeAdvise.find(
-        (item) => this.gender === gender && hcp <= item.max && hcp > item.min
+        (item) => item.gender === gender && hcp <= item.max && hcp > item.min
       );
       if (tee === undefined) {
         return "B";
@@ -165,9 +165,9 @@ export default {
       }
       return result;
     },
-    getBaanHcp(tee) {
+    getBaanHcp(tee, item) {
       let result = 0;
-      if (tee.courseType === 18) {
+      if (item.courseType === 18) {
         result = Math.round(
           this.whs * (tee.slopeRating / 113) +
             (tee.courseRating - tee.totalPar),

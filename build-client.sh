@@ -25,6 +25,10 @@ npm run build:${CLIENT}:app || {
   echo "[error] Failed to build quasar"; exit 1;
 }
 
+# Ensure the assets directory exists
+echo "Creating keystore directory..."
+mkdir -p "res/${KEYSTORE_DIR}"
+
 # Generate a keystore if it doesn't already exist
 if [ ! -f "$KEYSTORE_PATH" ]; then
   echo "Generating keystore for $CLIENT..."
