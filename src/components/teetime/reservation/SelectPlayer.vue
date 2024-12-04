@@ -410,7 +410,7 @@ export default {
         return;
       }
       let data = {
-        params: { fltNt: this.flight.fltNr, search: this.relationSearch },
+        params: { fltNr: this.flight.fltNr, search: this.relationSearch },
       };
       this.relations = await this.$http.get(`golfer/relation`, data);
       this.showEmptySearch = this.relations.length === 0;
