@@ -121,6 +121,8 @@ const getters = {
     );
   },
   usrHasInvoices: (state) => {
+    console.log("usrHasInvoices");
+    console.log(state);
     return (
       state.item &&
       typeof state.item === "object" &&
