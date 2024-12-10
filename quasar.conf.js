@@ -10,6 +10,7 @@
 const ESLintPlugin = require("eslint-webpack-plugin");
 const { configure } = require("quasar/wrappers");
 const envParser = require("./src/config/envparser.js");
+const path = require("path");
 
 module.exports = configure(function (ctx) {
   return {
@@ -22,7 +23,7 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
-    boot: ["app", "axios", "i18n", "filters", "platformCheck"],
+    boot: ["app", "axios", "i18n", "filters", "platformCheck", "store"],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ["app.scss"],
@@ -82,7 +83,15 @@ module.exports = configure(function (ctx) {
             __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false), // or true, depending on your needs
           })
         );
+        cfg.module.rules.push({
+          test: /\.js$/,
+          include: path.resolve(__dirname, "runners"),
+          loader: "babel-loader",
+        });
       },
+      copy: [
+        { from: "src/runners/background.js", to: "runners/background.js" },
+      ],
     },
 
     devServer: {
@@ -93,7 +102,13 @@ module.exports = configure(function (ctx) {
 
     capacitor: {
       hideSplashscreen: true,
+      appName: "DemoApp",
+      minVersion: 13,
+      version: 13,
       ios: {
+        appName: "DemoApp",
+        minVersion: 13,
+        version: 13,
         // Additional iOS-specific configurations
       },
     },

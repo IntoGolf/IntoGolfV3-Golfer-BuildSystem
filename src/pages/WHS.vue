@@ -73,24 +73,191 @@
           />
         </div>
       </div>
-      <div class="row text-bold q-mt-md">
-        <div class="col-2">Hole</div>
-        <div class="col-2">Afstand</div>
-        <div class="col-2">Par</div>
-        <div class="col-2">SI</div>
-        <div class="col-2">P.Hcp</div>
+
+      <div v-if="selectedItem.courseType === 9">
+        <div class="row text-bold q-mt-md">
+          <div class="col-2">Hole</div>
+          <div class="col-4">Afstand</div>
+          <div class="col-2 text-center">Par</div>
+          <div class="col-2 text-center">SI</div>
+          <div class="col-2 text-center">P.Hcp</div>
+        </div>
+        <q-separator class="q-mt-sm q-mb-sm" />
+        <div
+          v-for="(hole, key) in selectedItem.courseType"
+          :key="key"
+          class="row"
+        >
+          <div class="col-2">{{ hole }}</div>
+          <div class="col-4">{{ selectedTee["distanceHole" + hole] }}</div>
+          <div class="col-2 text-center">
+            {{ selectedTee["parHole" + hole] }}
+          </div>
+          <div class="col-2 text-center">
+            {{ selectedTee["strokeIndexHole" + hole] }}
+          </div>
+          <div class="col-2 text-center">
+            {{
+              calculateHoleStrokes(
+                getBaanHcp(selectedTee, selectedItem),
+                selectedTee["strokeIndexHole" + hole],
+                selectedItem
+              )
+            }}
+          </div>
+        </div>
+        <q-separator class="q-mt-sm q-mb-sm" />
+        <div class="row text-bold">
+          <div class="col-2">&nbsp;</div>
+          <div class="col-4">{{ selectedTee.totalDistance }}</div>
+          <div class="col-2 text-center">{{ selectedTee.totalPar }}</div>
+          <div class="col-2 text-center">&nbsp;</div>
+          <div class="col-2 text-center">
+            {{ getBaanHcp(selectedTee, selectedItem) }}
+          </div>
+        </div>
       </div>
-      <q-separator class="q-mt-sm q-mb-sm" />
-      <div
-        v-for="(hole, key) in selectedItem.courseType"
-        :key="key"
-        class="row"
-      >
-        <div class="col-2">{{ hole }}</div>
-        <div class="col-2">{{ selectedTee["distanceHole" + hole] }}</div>
-        <div class="col-2">{{ selectedTee["parHole" + hole] }}</div>
-        <div class="col-2">{{ selectedTee["strokeIndexHole" + hole] }}</div>
-        <div class="col-2"></div>
+
+      <div v-if="selectedItem.courseType === 18">
+        <div
+          class="row text-bold q-mt-md"
+          style="border-bottom: 1px solid gray"
+        >
+          <div class="col-6">
+            <div class="row">
+              <div class="col-2 text-bold">Hl</div>
+              <div class="col-3">Afst.</div>
+              <div class="col-2 text-center">Par</div>
+              <div class="col-2 text-center">Si</div>
+              <div class="col-3 text-center">Sl</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="row">
+              <div class="col-2 text-bold">Hl</div>
+              <div class="col-3">Afst.</div>
+              <div class="col-2 text-center">Par</div>
+              <div class="col-2 text-center">Si</div>
+              <div class="col-3 text-center">Sl</div>
+            </div>
+          </div>
+        </div>
+        <div v-for="(hole, key) in 9" :key="key" class="row">
+          <div class="col-6">
+            <div class="row">
+              <div class="col-2 text-bold">{{ hole }}</div>
+              <div class="col-3">{{ selectedTee["distanceHole" + hole] }}</div>
+              <div class="col-2 text-center">
+                {{ selectedTee["parHole" + hole] }}
+              </div>
+              <div class="col-2 text-center">
+                {{ selectedTee["strokeIndexHole" + hole] }}
+              </div>
+              <div class="col-3 text-center">
+                {{
+                  calculateHoleStrokes(
+                    getBaanHcp(selectedTee, selectedItem),
+                    selectedTee["strokeIndexHole" + hole],
+                    selectedItem
+                  )
+                }}
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="row">
+              <div class="col-2 text-bold">{{ hole + 9 }}</div>
+              <div class="col-3">
+                {{ selectedTee["distanceHole" + (hole + 9)] }}
+              </div>
+              <div class="col-2 text-center">
+                {{ selectedTee["parHole" + (hole + 9)] }}
+              </div>
+              <div class="col-2 text-center">
+                {{ selectedTee["strokeIndexHole" + (hole + 9)] }}
+              </div>
+              <div class="col-3 text-center">
+                {{
+                  calculateHoleStrokes(
+                    getBaanHcp(selectedTee, selectedItem),
+                    selectedTee["strokeIndexHole" + (hole + 9)],
+                    selectedItem
+                  )
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row text-bold">
+          <div class="col-6" style="border-top: 1px solid gray">
+            <div class="row">
+              <div class="col-2">Uit</div>
+              <div class="col-3">{{ getDistance(1, 9) }}</div>
+              <div class="col-2 text-center">{{ getPar(1, 9) }}</div>
+              <div class="col-2 text-center">&nbsp;</div>
+              <div class="col-3 text-center">
+                {{ getHcp(1, 9) }}
+              </div>
+            </div>
+          </div>
+          <div class="col-6" style="border-top: 1px solid gray">
+            <div class="row">
+              <div class="col-2">In</div>
+              <div class="col-3">{{ getDistance(10, 18) }}</div>
+              <div class="col-2 text-center">{{ getPar(10, 18) }}</div>
+              <div class="col-2 text-center">&nbsp;</div>
+              <div class="col-3 text-center">
+                {{ getHcp(10, 18) }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row text-bold">
+          <div class="col-6">
+            <div class="row">
+              <div class="col-2">&nbsp;</div>
+              <div class="col-3">&nbsp;</div>
+              <div class="col-2 text-center">&nbsp;</div>
+              <div class="col-2 text-center">&nbsp;</div>
+              <div class="col-3 text-center">&nbsp;</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="row">
+              <div class="col-2">Uit</div>
+              <div class="col-3">{{ getDistance(1, 9) }}</div>
+              <div class="col-2 text-center">{{ getPar(1, 9) }}</div>
+              <div class="col-2 text-center">&nbsp;</div>
+              <div class="col-3 text-center">
+                {{ getHcp(1, 9) }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row text-bold">
+          <div class="col-6">
+            <div class="row">
+              <div class="col-2">&nbsp;</div>
+              <div class="col-3">&nbsp;</div>
+              <div class="col-2 text-center">&nbsp;</div>
+              <div class="col-2 text-center">&nbsp;</div>
+              <div class="col-3 text-center">&nbsp;</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="row">
+              <div class="col-2">&nbsp;</div>
+              <div class="col-3">{{ selectedTee.totalDistance }}</div>
+              <div class="col-2 text-center">{{ selectedTee.totalPar }}</div>
+              <div class="col-2 text-center">&nbsp;</div>
+              <div class="col-3 text-center">
+                {{ getBaanHcp(selectedTee, selectedItem) }}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </q-page>
   </q-page-container>
@@ -187,6 +354,58 @@ export default {
     setSelected(item, tee) {
       this.selectedTee = tee;
       this.selectedItem = item;
+    },
+    getPar(start, end) {
+      let result = 0;
+      for (let hole = 1; hole <= 18; hole++) {
+        if (hole >= start && hole <= end) {
+          result += this.selectedTee["parHole" + hole];
+        }
+      }
+      return result;
+    },
+    getHcp(start, end) {
+      let result = 0;
+      for (let hole = 1; hole <= 18; hole++) {
+        if (hole >= start && hole <= end) {
+          result += this.calculateHoleStrokes(
+            this.getBaanHcp(this.selectedTee, this.selectedItem),
+            this.selectedTee["strokeIndexHole" + hole],
+            this.selectedItem
+          );
+        }
+      }
+      return result;
+    },
+    getDistance(start, end) {
+      let result = 0;
+      for (let hole = 1; hole <= 18; hole++) {
+        if (hole >= start && hole <= end) {
+          result += this.selectedTee["distanceHole" + hole];
+        }
+      }
+      return result;
+    },
+    calculateHoleStrokes(playingHandicap, strokeIndex, selectedItem) {
+      const totalHoles = parseInt(selectedItem.courseType);
+      if (![9, 18].includes(totalHoles)) {
+        throw new Error(
+          "Invalid total holes. Only 9 or 18 holes are supported."
+        );
+      }
+
+      const baseStrokes = Math.floor(playingHandicap / totalHoles);
+      const extraStrokes = playingHandicap % totalHoles;
+
+      const siArray = selectedItem.tees
+        .map(
+          (_, index) => selectedItem.tees[index][`strokeIndexHole${index + 1}`]
+        )
+        .sort((a, b) => a - b);
+
+      const siIndex = siArray.indexOf(strokeIndex);
+
+      return baseStrokes + (siIndex < extraStrokes ? 1 : 0);
     },
   },
 };

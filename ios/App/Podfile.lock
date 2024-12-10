@@ -1,22 +1,49 @@
 PODS:
+  - Alamofire (5.10.2)
   - Capacitor (6.2.0):
     - CapacitorCordova
   - CapacitorCordova (6.2.0)
+  - CapacitorSplashScreen (6.0.3):
+    - Capacitor
+  - CapgoCapacitorUpdater (6.7.4):
+    - Alamofire
+    - Capacitor
+    - SSZipArchive
+    - Version
+  - SSZipArchive (2.4.3)
+  - Version (0.8.0)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
+  - "CapgoCapacitorUpdater (from `../../node_modules/@capgo/capacitor-updater`)"
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - SSZipArchive
+    - Version
 
 EXTERNAL SOURCES:
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorSplashScreen:
+    :path: "../../node_modules/@capacitor/splash-screen"
+  CapgoCapacitorUpdater:
+    :path: "../../node_modules/@capgo/capacitor-updater"
 
 SPEC CHECKSUMS:
+  Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
   Capacitor: 1f3c7b9802d958cd8c4eb63895fff85dff2e1eea
   CapacitorCordova: b33e7f4aa4ed105dd43283acdd940964374a87d9
+  CapacitorSplashScreen: 68893659d77b5f82d753b3a70475082845e3039c
+  CapgoCapacitorUpdater: fb0ee1a02a4f5c0844f1aba71dd576a9c0df0222
+  SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
+  Version: de5907f2c5d0f3cf21708db7801d1d5401139486
 
-PODFILE CHECKSUM: 8ab55909c5de2b217f9841e5e5b329f5ec901553
+PODFILE CHECKSUM: a29287201712d28ecf182cc79391bce913bbd5ca
 
 COCOAPODS: 1.16.2

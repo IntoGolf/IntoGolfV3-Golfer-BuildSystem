@@ -24,6 +24,7 @@
       <bookings v-if="usrHasTeeTimes" :bookingsArray="bookingsArray" />
       <messages v-if="setHasMessages" />
       <lessons v-if="usrHasLessons" />
+      <div></div>
     </q-page>
   </q-page-container>
 </template>

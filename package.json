@@ -1,11 +1,12 @@
 {
   "name": "intogolf-app-golfer",
-  "version": "0.1.41",
-  "description": "IntoGolfV3 Golfer app",
-  "productName": "IntoGolfV3 Golfer app",
+  "version": "1.3.2",
+  "description": "IntoGolfV3 Golfer app1",
+  "productName": "IntoGolfV3 Golfer app2",
   "author": "IntoGolf <info@intogolf.nl>",
   "private": true,
   "scripts": {
+    "build": "quasar build",
     "start": "cross-env quasar dev",
     "start:demo": "cross-env ENVIRONMENT=demo quasar dev",
     "start:dev": "cross-env ENVIRONMENT=dev quasar dev",
@@ -26,9 +27,9 @@
     "build:engelenburg:android": "ENVIRONMENT=engelenburg quasar build -m android && npm run sign_eng",
     "build:demo:android": "cross-env ENVIRONMENT=demo quasar build -m android && npm run sign && open dist/cordova/android/apk/release",
     "build:demo:ios": "cross-env ENVIRONMENT=demo quasar build -m ios",
-    "build:dev": "ENVIRONMENT=dev quasar build",
+    "build:dev": "ENVIRONMENT=dev quasar -m capacitor build",
     "build:dev:app": "ENVIRONMENT=dev quasar build",
-    "build:test:app": "ENVIRONMENT=test quasar build",
+    "build:test:app": "ENVIRONMENT=test quasar build ",
     "build:overloon:app": "ENVIRONMENT=overloon quasar build",
     "build:hildenberg:app": "ENVIRONMENT=hildenberg quasar build",
     "build:scherpenberg:app": "ENVIRONMENT=scherpenberg quasar build",
@@ -64,9 +65,11 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@capacitor/android": "^6.2.0",
-    "@capacitor/core": "^6.2.0",
-    "@capacitor/ios": "^6.2.0",
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/ios": "^6.0.0",
+    "@capacitor/splash-screen": "^6.0.0",
+    "@capgo/capacitor-updater": "^6.7.4",
     "@quasar/extras": "^1.13.5",
     "axios": "^0.21.1",
     "chart.js": "^4.0.1",
@@ -80,7 +83,8 @@
     "mkcert": "^3.1.0",
     "next-vue-storage-watcher": "^0.0.7",
     "pusher-js": "^8.4.0-rc2",
-    "quasar": "2.11.4",
+    "quasar": "2.13.1",
+    "storybook": "^8.4.7",
     "three": "^0.152.2",
     "vue": "^3.2.33",
     "vue-chartjs": "^5.0.1",
@@ -99,7 +103,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
     "@capacitor/assets": "^3.0.5",
-    "@capacitor/cli": "^6.2.0",
+    "@capacitor/cli": "^6.0.0",
     "@quasar/app": "^3.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "dotenv": "^16.3.1",
@@ -110,6 +114,7 @@
     "eslint-webpack-plugin": "^2.4.0",
     "http-proxy-middleware": "^2.0.6",
     "prettier": "^2.6.2",
+    "process": "^0.11.10",
     "workbox-webpack-plugin": "^7.1.0"
   },
   "browserslist": [
@@ -127,5 +132,6 @@
     "node": ">= 12.22.1",
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
-  }
+  },
+  "packageManager": "yarn@4.5.3"
 }

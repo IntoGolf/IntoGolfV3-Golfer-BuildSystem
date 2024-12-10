@@ -45,7 +45,7 @@
           </div>
 
           <div class="row q-mt-md q-mb-md">
-            <div class="col text-center text-h5">Login met uw account</div>
+            <div class="col text-center text-h5">Login met bb account</div>
           </div>
 
           <q-input

@@ -14,7 +14,7 @@
           </div>
 
           <div class="row q-mt-md">
-            <div class="col text-center text-h5">Wachtwoord reset</div>
+            <div class="col text-center text-h5">Wachtwoord resettt</div>
           </div>
 
           <div class="row q-mt-md">

@@ -1,7 +1,7 @@
 <template>
   <q-layout
     v-if="['/login'].includes($route.path)"
-    :style="{ paddingTop: !hasNotch ? '50px' : '0' }"
+    :style="{ paddingTop: hasNotch ? '50px' : '0' }"
   >
     <login />
   </q-layout>
@@ -12,7 +12,7 @@
       :style="{
         color: $store.state.settings.item.app_primary_font_color,
         backgroundColor: $store.state.settings.item.app_primary_color,
-        paddingTop: !hasNotch ? '50px' : '0',
+        paddingTop: hasNotch ? '50px' : '0',
       }"
       class="web-width q-header"
       flat
@@ -120,6 +120,7 @@ export default defineComponent({
         "iPhone 14",
         "iPhone 15",
       ];
+      //console.log(this.$q.);
       return devicesWithNotches.some((device) =>
         navigator.userAgent.includes(device)
       );
@@ -146,19 +147,7 @@ export default defineComponent({
       ) {
         return false;
       }
-
-      if (this.isApp) {
-        return true;
-      }
-
-      return true;
-    },
-    paddingTop() {
-      return "0";
-      if (this.$q.platform.is.capacitor) {
-        return "42px";
-      }
-      return "0";
+      return !(this.$q.platform.is.desktop && this.$route.path === "/");
     },
     headerColor() {
       return this.$store.state.settings.item.app_primary_color;
