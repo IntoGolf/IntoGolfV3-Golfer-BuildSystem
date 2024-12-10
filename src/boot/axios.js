@@ -2,7 +2,7 @@ import { boot } from "quasar/wrappers";
 import axios from "axios";
 import store from "../store";
 import router from "../router";
-import { Loading, Notify, Platform } from "quasar";
+import { Loading, Notify } from "quasar";
 
 const isAndroidEmulator = /android/i.test(navigator.userAgent);
 
@@ -15,9 +15,9 @@ let hideLoadingTimeout = null;
 
 axios.interceptors.request.use(
   (config) => {
-    if (Platform.is.capacitor) {
-      axios.defaults.headers.common["X-App-Identifier"] = appId;
-    }
+    //if (Platform.is.capacitor || Platform.is.mobile) {
+    axios.defaults.headers.common["X-App-Identifier"] = appId;
+    //}
 
     config.url = `${baseURL}api/${config.url}`;
 
