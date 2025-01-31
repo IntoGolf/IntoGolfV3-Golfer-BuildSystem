@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">test</string>
-    <string name="title_activity_main">test</string>
-    <string name="package_name">nl.intogolf.test</string>
-    <string name="custom_url_scheme">nl.intogolf.test</string>
+    <string name="app_name">maasduinen</string>
+    <string name="title_activity_main">maasduinen</string>
+    <string name="package_name">nl.intogolf.maasduinen</string>
+    <string name="custom_url_scheme">nl.intogolf.maasduinen</string>
 </resources>

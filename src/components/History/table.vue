@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ marginTop: $q.platform.is.ios ? '60px' : '' }">
+  <q-page>
     <q-btn
       class="full-width"
       color="primary"
@@ -51,7 +51,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </q-page>
 </template>
 <script>
 export default {

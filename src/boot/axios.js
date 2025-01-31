@@ -2,22 +2,18 @@ import { boot } from "quasar/wrappers";
 import axios from "axios";
 import store from "../store";
 import router from "../router";
-import { Loading, Notify } from "quasar";
-
-const isAndroidEmulator = /android/i.test(navigator.userAgent);
+import { Loading, Notify, Platform } from "quasar";
 
 const baseURL = process.env.VUE_APP_BASE_URL;
-
-const appId = process.env.APP_ID;
 
 let loadingRequests = 0;
 let hideLoadingTimeout = null;
 
 axios.interceptors.request.use(
   (config) => {
-    //if (Platform.is.capacitor || Platform.is.mobile) {
-    axios.defaults.headers.common["X-App-Identifier"] = appId;
-    //}
+    if (Platform.is.ios || Platform.is.android) {
+      axios.defaults.headers.common["X-App-Identifier"] = process.env.APP_ID;
+    }
 
     config.url = `${baseURL}api/${config.url}`;
 

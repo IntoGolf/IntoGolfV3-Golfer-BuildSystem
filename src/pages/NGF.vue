@@ -1,9 +1,7 @@
 <template>
-  <q-page-container>
-    <q-page class="q-pa-sm">
-      <q-img :src="blobUrl" />
-    </q-page>
-  </q-page-container>
+  <q-page class="q-pa-sm">
+    <q-img :src="blobUrl" />
+  </q-page>
 </template>
 
 <script>

@@ -145,34 +145,36 @@ export default {
           persistent: true,
         })
         .onOk(() => {
-          let data = {
-            lesNr: null,
-            lesRelNrPro: lesson.pro.relNr,
-            lesProNr: lesson.pro.relNr,
-            lesPltNr: lesson.pro_lesson_type.pltNr,
-            lesDate: this.$filters.dateToUnix(this.date, "YYYY-MM-DD"),
-            lesTimeFrom: lesson.pagTimeFrom,
-            lesTimeTo:
-              lesson.pagTimeFrom +
-              this.proLessonType.pltBefore +
-              this.proLessonType.pltAfter +
-              this.proLessonType.pltDuration,
-            lesBlockedFrom: lesson.pagTimeFrom,
-            lesBlockedTo:
-              lesson.pagTimeFrom +
-              this.proLessonType.pltBefore +
-              this.proLessonType.pltAfter +
-              this.proLessonType.pltDuration,
-            lesCarNr: 0,
-          };
-          this.$http.post("golfer/lesson", data).then(() => {
-            this.$q.notify({
-              type: "positive",
-              message: "Uw les is geboekt",
-            });
-            this.$emit("handleCloseNew");
-          });
+          this.onBooking(lesson);
         });
+    },
+    async onBooking(lesson) {
+      let data = {
+        lesNr: null,
+        lesRelNrPro: lesson.pro.relNr,
+        lesProNr: lesson.pro.relNr,
+        lesPltNr: lesson.pro_lesson_type.pltNr,
+        lesDate: this.$filters.dateToUnix(this.date, "YYYY-MM-DD"),
+        lesTimeFrom: lesson.pagTimeFrom,
+        lesTimeTo:
+          lesson.pagTimeFrom +
+          this.proLessonType.pltBefore +
+          this.proLessonType.pltAfter +
+          this.proLessonType.pltDuration,
+        lesBlockedFrom: lesson.pagTimeFrom,
+        lesBlockedTo:
+          lesson.pagTimeFrom +
+          this.proLessonType.pltBefore +
+          this.proLessonType.pltAfter +
+          this.proLessonType.pltDuration,
+        lesCarNr: 0,
+      };
+      await this.$http.post("golfer/lesson", data);
+      this.$q.notify({
+        type: "positive",
+        message: "Uw les is geboekt",
+      });
+      this.$emit("handleCloseNew");
     },
   },
 };

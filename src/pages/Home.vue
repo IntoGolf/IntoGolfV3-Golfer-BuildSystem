@@ -1,32 +1,35 @@
 <template>
-  <q-page-container>
-    <q-page class="q-pa-sm">
-      <div class="row q-mb-md">
-        <q-card
-          v-if="usrHasTeeTimes && bookingsArray.length === 0"
-          class="my-card full-width q-mt-md"
-        >
-          <q-card-section class="text-center">
-            <div class="text-h5">Geen starttijden</div>
-            <div class="text-subtitle1">
-              er zijn geen gereserveerde starttijden gevonden...
-            </div>
-            <q-btn
-              class="q-mt-md"
-              label="boek een starttijd"
-              v-on:click="$router.push('/reservations')"
-            />
-          </q-card-section>
-        </q-card>
-      </div>
-      <match />
-      <bills v-if="usrHasTeeTimes" />
-      <bookings v-if="usrHasTeeTimes" :bookingsArray="bookingsArray" />
-      <messages v-if="setHasMessages" />
-      <lessons v-if="usrHasLessons" />
-      <div></div>
-    </q-page>
-  </q-page-container>
+  <q-page class="q-pa-sm">
+    <dashboard-whs-status />
+    <dashboard-course-status />
+    <q-card
+      v-if="usrHasTeeTimes && bookingsArray.length === 0"
+      bordered
+      class="full-width q-mt-md"
+      flat
+    >
+      <q-card-section>
+        <div class="text-h6">Geen starttijden</div>
+        <q-separator />
+        <div class="text-subtitle1">
+          er zijn geen gereserveerde starttijden gevonden...
+        </div>
+        <q-btn
+          class="q-mt-md full-width"
+          color="primary"
+          flat
+          label="boek een starttijd"
+          size="small"
+          to="reservations"
+        />
+      </q-card-section>
+    </q-card>
+    <match />
+    <bills v-if="usrHasTeeTimes" />
+    <bookings v-if="usrHasTeeTimes" :bookingsArray="bookingsArray" />
+    <messages v-if="setHasMessages" />
+    <lessons v-if="usrHasLessons" />
+  </q-page>
 </template>
 
 <script>
@@ -37,16 +40,26 @@ import Match from "../components/dashboard/match.vue";
 import Bills from "../components/dashboard/bills.vue";
 import authMixin from "src/mixins/auth";
 import { mapGetters } from "vuex";
+import DashboardCourseStatus from "components/dashboard/status.vue";
+import DashboardWhsStatus from "components/dashboard/whs.vue";
 
 export default {
   mixins: [authMixin],
-  components: { Match, messages, bookings, lessons, Bills },
+  components: {
+    DashboardWhsStatus,
+    DashboardCourseStatus,
+    Match,
+    messages,
+    bookings,
+    lessons,
+    Bills,
+  },
   computed: {
     nav() {
       return navigator.userAgent.toString();
     },
     ...mapGetters("settings", ["setHasMessages"]),
-    ...mapGetters("currentUser", ["usrHasLessons", "usrHasTeeTimes"]),
+    ...mapGetters("currentUser", ["usrHasLessons", "usrHasTeeTimes", "item"]),
   },
   data() {
     return {
@@ -54,6 +67,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this.item);
     this.getBookings();
   },
   methods: {

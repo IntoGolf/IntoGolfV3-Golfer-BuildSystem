@@ -1,0 +1,7 @@
+{
+  "appId": "nl.intogolf.test",
+  "appName": "IntoGolfV3 Golfer app2",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www"
+}

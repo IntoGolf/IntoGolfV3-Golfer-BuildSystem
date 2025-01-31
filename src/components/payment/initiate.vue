@@ -42,12 +42,11 @@ export default {
   },
   methods: {
     handleStatusLoop: function () {
-      let that = this;
       if (this.counter < this.maxCount && this.status === "open") {
         this.counter++;
-        that.handleStatusCheck();
+        this.handleStatusCheck();
         window.setTimeout(function () {
-          that.handleStatusLoop();
+          this.handleStatusLoop();
         }, 2000);
       } else {
         this.handlePaymentDone();
@@ -55,8 +54,6 @@ export default {
     },
 
     handlePaymentDone: function () {
-      let that = this;
-
       if (this.status === "expired") {
         this.emotion = "text-warning";
         this.text = "Het betaalverzoek is verlopen!";
@@ -71,16 +68,14 @@ export default {
       }
 
       window.setTimeout(function () {
-        that.$emit("handleClosePayment", that.status);
+        this.$emit("handleClosePayment", this.status);
       }, 2000);
     },
 
-    handleStatusCheck: function () {
-      let that = this;
-      this.$http.get(`golfer/payment/status/${this.id}`).then((res) => {
-        that.status = res.opmStatus;
-        that.isDesktop = res.opmIsDesktop;
-      });
+    async handleStatusCheck() {
+      const id = this.id;
+      let res = await this.$http.get(`golfer/payment/status/${id}`);
+      this.status = res.opmStatus;
     },
   },
 };

@@ -66,4 +66,5 @@ export const message = {
     "and at least 1 special character.",
   Speelhistorie: "PLayer history",
   WHS: "WHS",
+  Facturen: "Invoices",
 };

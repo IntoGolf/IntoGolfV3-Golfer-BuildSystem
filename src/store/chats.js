@@ -2,7 +2,7 @@ import Pusher from "pusher-js";
 
 // Initialize Pusher
 let pusher;
-if (typeof process !== "undefined" && process.env.PUSHER_APP_KEY) {
+if (process.env.PUSHER_APP_KEY) {
   // Initialize Pusher only if PUSHER_APP_KEY is set
   pusher = new Pusher(process.env.PUSHER_APP_KEY, {
     cluster: process.env.PUSHER_APP_CLUSTER,
@@ -95,7 +95,7 @@ const actions = {
       }
     }
 
-    //if (!pusher) return;
+    if (!pusher) return;
 
     try {
       const settings = await dispatch("settings/fetchSettings", null, {
@@ -221,11 +221,14 @@ const actions = {
     commit("SET_EDIT", value);
   },
   subscribeToChatChannel({ dispatch, commit, state }, chtNr) {
+    console.log("subscribeToChatChannel");
     if (!pusher) return;
 
     const channelName = `chat-${chtNr}`;
+    console.log(channelName);
     const channel = pusher.subscribe(channelName);
     channel.bind("App\\Events\\TestEvent", (data) => {
+      console.log("TestEvent");
       if (data.data.crmFltNr > 0) {
         dispatch("getMessages", data.data.crmChtNr);
       } else {

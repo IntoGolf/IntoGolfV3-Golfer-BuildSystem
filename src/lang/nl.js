@@ -363,4 +363,5 @@ export const message = {
     "een cijfer en een leesteken bevatten",
   Speelhistorie: "Speelhistorie",
   WHS: "WHS",
+  Facturen: "Facturen",
 };

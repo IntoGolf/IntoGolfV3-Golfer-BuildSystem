@@ -1,9 +1,10 @@
 <template>
   <q-page class="q-pa-sm">
-    <q-card class="q-pa-sm">
+    <q-card bordered class="q-pa-sm q-mt-md" flat>
       <div class="row q-pb-sm q-pt-sm">
         <div class="col"><h5 class="q-mt-sm q-mb-sm">Lesinformatie</h5></div>
       </div>
+      <q-separator />
       <div class="row q-pb-sm q-pt-sm">
         <div class="col text-bold">Datum</div>
         <div class="col overflow-hidden text-right">
@@ -41,7 +42,7 @@
           v-for="(client, key) in pro_lesson.clients"
           :key="key"
           v-ripple
-          class="full-width bg-white shadow-1 q-mb-sm"
+          class="full-width q-mb-sm"
           clickable
           style="border-radius: 4px"
         >
@@ -57,39 +58,23 @@
       </q-list>
       <q-separator class="q-mt-sm q-mb-sm" />
       <div class="col"><h6 class="q-mt-sm q-mb-sm">Acties</h6></div>
-      <q-list separator>
-        <q-item
-          v-if="pro_lesson.canCancel === 1"
-          v-ripple
-          class="full-width bg-white shadow-1 q-mb-sm"
-          clickable
-          style="border-radius: 4px"
-          v-on:click="handleCancel"
-        >
-          <q-item-section>
-            <q-item-label class="itg-text-overflow">
-              Annuleer les
-            </q-item-label>
-          </q-item-section>
-          <q-item-section avatar>
-            <q-icon name="delete" />
-          </q-item-section>
-        </q-item>
-        <q-item
-          v-ripple
-          class="full-width bg-white shadow-1 q-mb-sm"
-          clickable
-          style="border-radius: 4px"
-          v-on:click="$emit('onCloseLesson')"
-        >
-          <q-item-section>
-            <q-item-label class="itg-text-overflow"> Sluit les</q-item-label>
-          </q-item-section>
-          <q-item-section avatar>
-            <q-icon name="arrow_back_ios" />
-          </q-item-section>
-        </q-item>
-      </q-list>
+      <q-btn
+        v-if="pro_lesson.canCancel === 1"
+        class="full-width q-mb-md"
+        color="primary"
+        icon="delete"
+        v-on:click="handleCancel"
+      >
+        Annuleer les
+      </q-btn>
+      <q-btn
+        class="full-width q-mb-md"
+        color="primary"
+        icon="arrow_back_ios"
+        v-on:click="$emit('onCloseLesson')"
+      >
+        Sluit les
+      </q-btn>
     </q-card>
   </q-page>
 </template>

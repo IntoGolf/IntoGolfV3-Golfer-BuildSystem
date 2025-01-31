@@ -32,7 +32,7 @@
           icon="menu"
           round
           @click="drawer = !drawer"
-          >test
+        >
         </q-btn>
         <q-btn
           v-else
@@ -65,7 +65,9 @@
         <q-btn v-else dense flat round />
       </q-toolbar>
     </q-header>
-    <router-view class="bg-white web-width" />
+    <q-page-container>
+      <router-view class="bg-white web-width" />
+    </q-page-container>
     <q-drawer v-if="isApp" v-model="drawer" class="q-drawer" show-if-above>
       <div
         style="
@@ -120,7 +122,6 @@ export default defineComponent({
         "iPhone 14",
         "iPhone 15",
       ];
-      //console.log(this.$q.);
       return devicesWithNotches.some((device) =>
         navigator.userAgent.includes(device)
       );
@@ -262,7 +263,7 @@ export default defineComponent({
         {
           name: "history",
           menuName: "Speelhistorie",
-          icon: "grass",
+          icon: "calendar_month",
           visible: this.usrHasTeeTimes,
         },
         {
@@ -311,7 +312,7 @@ export default defineComponent({
           name: "whs",
           menuName: "WHS",
           icon: "school",
-          visible: true,
+          visible: this.usrHasHandicap,
         },
         // {
         //   name: "lessoncards",

@@ -1,13 +1,11 @@
 <template>
-  <q-page-container>
-    <chat-messages
-      v-if="$store.state.chats.chat !== null && !$store.state.chats.edit"
-    />
-    <chat-form
-      v-else-if="$store.state.chats.chat !== null && $store.state.chats.edit"
-    />
-    <chat-list v-else v-on:handleNew="handleNew" />
-  </q-page-container>
+  <chat-messages
+    v-if="$store.state.chats.chat !== null && !$store.state.chats.edit"
+  />
+  <chat-form
+    v-else-if="$store.state.chats.chat !== null && $store.state.chats.edit"
+  />
+  <chat-list v-else v-on:handleNew="handleNew" />
 </template>
 
 <script>

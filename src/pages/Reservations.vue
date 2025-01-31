@@ -1,5 +1,5 @@
 <template>
-  <q-page-container>
+  <q-page>
     <List
       v-if="page === LIST"
       :array="array"
@@ -21,7 +21,7 @@
       v-on:handleOpenFlight="handleOpenFlight"
       v-on:loadReservationList="loadReservationList"
     />
-  </q-page-container>
+  </q-page>
 </template>
 
 <script>

@@ -1,47 +1,45 @@
 <template>
-  <q-page-container>
-    <q-page class="q-pa-sm">
-      <div v-show="!newLesson && !lesson">
-        <q-btn
-          color="primary"
-          label="Nieuwe les"
-          size="small"
-          v-on:click="newLesson = true"
-        />
-
-        <q-separator class="q-mt-md" />
-
-        <div v-show="clientLessonArray.length === 0" class="text-center">
-          <h5>Geen toekomstige lessen gevonden</h5>
-        </div>
-
-        <comp-lesson
-          v-for="(lesson, key) in clientLessonArray"
-          :key="key"
-          :lesson="lesson"
-          v-on:handleLoadClientLessons="handleLoadClientLessons"
-          v-on:onSelectLesson="onSelectLesson"
-        />
-
-        <comp-clinic
-          v-for="(clinic, key) in clinicsArray"
-          :key="key"
-          :clinic="clinic"
-          v-on:handleLoadClientLessons="handleLoadClientLessons"
-        />
-      </div>
-
-      <div v-show="newLesson">
-        <comp-new v-on:handleCloseNew="handleCloseNew" />
-      </div>
-
-      <lesson-details
-        v-if="lesson"
-        :lesson="lesson"
-        v-on:onCloseLesson="onCloseLesson"
+  <q-page class="q-pa-sm">
+    <div v-if="!newLesson && !lesson">
+      <q-btn
+        color="primary"
+        label="Nieuwe les"
+        size="small"
+        v-on:click="newLesson = true"
       />
-    </q-page>
-  </q-page-container>
+
+      <q-separator class="q-mt-md" />
+
+      <div v-show="clientLessonArray.length === 0" class="text-center">
+        <h5>Geen toekomstige lessen gevonden</h5>
+      </div>
+
+      <comp-lesson
+        v-for="(lesson, key) in clientLessonArray"
+        :key="key"
+        :lesson="lesson"
+        v-on:handleLoadClientLessons="handleLoadClientLessons"
+        v-on:onSelectLesson="onSelectLesson"
+      />
+
+      <comp-clinic
+        v-for="(clinic, key) in clinicsArray"
+        :key="key"
+        :clinic="clinic"
+        v-on:handleLoadClientLessons="handleLoadClientLessons"
+      />
+    </div>
+
+    <lesson-details
+      v-else-if="lesson"
+      :lesson="lesson"
+      v-on:onCloseLesson="onCloseLesson"
+    />
+
+    <div v-else>
+      <comp-new v-on:handleCloseNew="handleCloseNew" />
+    </div>
+  </q-page>
 </template>
 
 <script>

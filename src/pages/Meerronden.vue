@@ -1,16 +1,13 @@
 <template>
-  <q-page-container>
-    <meerronde-list
-      v-if="match === null"
-      v-on:handleOpenMatch="handleOpenMatch"
-    />
-
-    <meerronde-details
-      v-else
-      :prop_match="match"
-      v-on:handleCloseMatch="handleCloseMatch"
-    />
-  </q-page-container>
+  <meerronde-list
+    v-if="match === null"
+    v-on:handleOpenMatch="handleOpenMatch"
+  />
+  <meerronde-details
+    v-else
+    :prop_match="match"
+    v-on:handleCloseMatch="handleCloseMatch"
+  />
 </template>
 
 <script>

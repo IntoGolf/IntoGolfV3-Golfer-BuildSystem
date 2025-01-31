@@ -1,49 +1,47 @@
 <template>
-  <q-page-container>
-    <q-page class="q-pa-sm">
-      <div v-if="page === 1">
-        <handicap-menu v-on:handleNew="handleNew" />
+  <q-page class="q-pa-sm">
+    <div v-if="page === 1">
+      <handicap-menu v-on:handleNew="handleNew" />
 
-        <q-pull-to-refresh @refresh="refreshScoreCards">
-          <handicap-list
-            :handicapList="scorecards"
-            v-on:handleOpen="handleOpen"
-          />
-        </q-pull-to-refresh>
-      </div>
+      <q-pull-to-refresh @refresh="refreshScoreCards">
+        <handicap-list
+          :handicapList="scorecards"
+          v-on:handleOpen="handleOpen"
+        />
+      </q-pull-to-refresh>
+    </div>
 
-      <handicap-score
-        v-else-if="page === 2"
-        :courseArray="courseArray"
-        :scorecard="scorecard"
-        :teeArray="teeArray"
-        v-on:handleClose="handleClose"
-        v-on:handleSave="handleSave"
-      />
+    <handicap-score
+      v-else-if="page === 2"
+      :courseArray="courseArray"
+      :scorecard="scorecard"
+      :teeArray="teeArray"
+      v-on:handleClose="handleClose"
+      v-on:handleSave="handleSave"
+    />
 
-      <handicap-new-domestic
-        v-else-if="page === 3 && type === 1"
-        :artificialDate="artificialDate"
-        :courseArray="courseArray"
-        :handicap="handicap"
-        :scorecard="scorecard"
-        :teeArray="teeArray"
-        :type="type"
-        v-on:handleClose="handleClose"
-        v-on:handleSave="handleSave"
-      />
+    <handicap-new-domestic
+      v-else-if="page === 3 && type === 1"
+      :artificialDate="artificialDate"
+      :courseArray="courseArray"
+      :handicap="handicap"
+      :scorecard="scorecard"
+      :teeArray="teeArray"
+      :type="type"
+      v-on:handleClose="handleClose"
+      v-on:handleSave="handleSave"
+    />
 
-      <handicap-new-foreign
-        v-else-if="page === 3 && type === 2"
-        :artificialDate="artificialDate"
-        :countryArray="countries"
-        :scorecard="scorecard"
-        :type="type"
-        v-on:handleClose="handleClose"
-        v-on:handleSave="handleSave"
-      />
-    </q-page>
-  </q-page-container>
+    <handicap-new-foreign
+      v-else-if="page === 3 && type === 2"
+      :artificialDate="artificialDate"
+      :countryArray="countries"
+      :scorecard="scorecard"
+      :type="type"
+      v-on:handleClose="handleClose"
+      v-on:handleSave="handleSave"
+    />
+  </q-page>
 </template>
 
 <script>

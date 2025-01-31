@@ -1,11 +1,9 @@
 <template>
-  <q-page-container>
-    <q-page class="q-pa-sm">
-      <div class="text-h6">Overzicht</div>
-      <div>Klik op de factuur on deze de downloaden</div>
-      <invoice-list :list="list" />
-    </q-page>
-  </q-page-container>
+  <q-page class="q-pa-sm">
+    <div class="text-h6">Overzicht</div>
+    <div>Klik op de factuur on deze de downloaden</div>
+    <invoice-list :list="list" />
+  </q-page>
 </template>
 
 <script>
@@ -16,7 +14,7 @@ export default {
   components: { InvoiceList },
   data() {
     return {
-      list: Array,
+      list: [],
     };
   },
   created() {

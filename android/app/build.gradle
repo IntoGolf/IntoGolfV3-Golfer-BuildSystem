@@ -3,17 +3,17 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         release {
-            keyAlias "test-key-alias"
-            keyPassword "aDitIsEenTestPassword"
-            storeFile file("../../res/test/test.keystore")
-            storePassword "bDitIsEenTestPassword"
+            keyAlias "keyMaasduinen"
+            keyPassword "oQRdEb9D8s6tAQeEaXgs"
+            storeFile file("../../res/maasduinen/maasduinen.keystore")
+            storePassword "oQRdEb9D8s6tAQeEaXgs"
             storeType "JKS"
         }
     }
-    namespace "nl.intogolf.test"
+    namespace "nl.intogolf.maasduinen"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "nl.intogolf.test"
+        applicationId "nl.intogolf.maasduinen"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

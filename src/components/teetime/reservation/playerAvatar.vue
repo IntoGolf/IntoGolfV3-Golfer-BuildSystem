@@ -25,7 +25,9 @@ export default {
   methods: {
     async loadImage() {
       let name = this.player.avatar;
-      name = name === "" ? "empty" : name;
+      if (!name) {
+        return null;
+      }
 
       const url = "golfer/image/" + name;
       const response = await this.$http({

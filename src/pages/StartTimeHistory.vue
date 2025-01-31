@@ -1,5 +1,5 @@
 <template>
-  <q-card style="height: 100vh; padding: 70px 10px 10px 10px; overflow: scroll">
+  <q-card style="height: 100vh; padding: 20px 10px 10px 10px; overflow: scroll">
     <graph
       v-if="typeId === 0"
       :chartData="chartData"

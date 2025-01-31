@@ -1,41 +1,10 @@
 <template>
-  <q-page-container class="fixed-top">
+  <q-page-container>
     <q-page>
-      <div v-if="!$q.platform.is.mobile" class="row fixed-bottom">
-        <q-btn
-          v-if="canSignIn"
-          color="primary"
-          flat
-          label="Inschrijven"
-          v-on:click="$router.push('sign-up')"
-        />
-        <q-btn
-          v-if="canBookPublic"
-          color="primary"
-          flat
-          label="Starttijd"
-          v-on:click="$router.push('teetimes')"
-        />
-        <q-btn
-          v-if="canBookCourse"
-          color="primary"
-          flat
-          label="Les"
-          v-on:click="$router.push('public_lessons')"
-        />
-        <q-btn
-          v-if="canBookCourse"
-          color="primary"
-          flat
-          label="Cursus"
-          v-on:click="$router.push('classes')"
-        />
-      </div>
-
-      <q-card class="login_card q-ml-auto q-mr-auto q-mt-xl">
+      <q-card class="login_card q-ml-auto q-mr-auto" style="margin-top: 120px">
         <q-card-section>
           <div class="row q-mt-sm">
-            <div class="col text-center">
+            <div class="col text-center q-pa-md">
               <q-img
                 :fit="'scale-down'"
                 :src="blobUrl"
@@ -45,8 +14,14 @@
           </div>
 
           <div class="row q-mt-md q-mb-md">
-            <div class="col text-center text-h5">Login met bb account</div>
+            <div class="col text-center text-h5">
+              Welkom<br />
+              login met je account
+            </div>
           </div>
+          <!--          <div class="row q-mb-md">-->
+          <!--            <div class="col text-center sub-title">{{ getAppVersion }}</div>-->
+          <!--          </div>-->
 
           <q-input
             v-model="form.relEmail"
@@ -78,7 +53,7 @@
           </q-input>
 
           <div class="text-center q-mt-sm">
-            <q-btn color="primary" label="Inloggen" v-on:click="onlogin" />
+            <q-btn color="primary" label="Login" v-on:click="onlogin" />
             <br />
 
             <q-btn
@@ -101,6 +76,36 @@
           </div>
         </q-card-section>
       </q-card>
+      <div v-if="!$q.platform.is.mobile" class="row fixed-bottom">
+        <q-btn
+          v-if="canSignIn"
+          color="primary"
+          flat
+          label="Inschrijven"
+          v-on:click="$router.push('sign-up')"
+        />
+        <q-btn
+          v-if="canBookPublic"
+          color="primary"
+          flat
+          label="Starttijd"
+          v-on:click="$router.push('teetimes')"
+        />
+        <q-btn
+          v-if="canBookCourse"
+          color="primary"
+          flat
+          label="Les"
+          v-on:click="$router.push('public_lessons')"
+        />
+        <q-btn
+          v-if="canBookCourse"
+          color="primary"
+          flat
+          label="Cursus"
+          v-on:click="$router.push('classes')"
+        />
+      </div>
     </q-page>
   </q-page-container>
 </template>
@@ -112,6 +117,9 @@
 </style>
 
 <script>
+import { Platform } from "quasar";
+import packageJson from "../../package.json";
+
 export default {
   name: "Login",
   data: function () {
@@ -162,6 +170,14 @@ export default {
       const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return re.test(this.form.relEmail);
     },
+    getAppVersion() {
+      try {
+        return packageJson.version;
+      } catch (error) {
+        console.error("Error fetching app version:", error);
+        return 0;
+      }
+    },
   },
   methods: {
     loadImage() {
@@ -176,7 +192,7 @@ export default {
     async onlogin() {
       this.$q.loading.show();
 
-      if (this.$q.platform.is.desktop) {
+      if (!Platform.is.ios && !Platform.is.android) {
         await this.$recaptchaLoaded();
         this.form.captcha = await this.$recaptcha("login");
       }
@@ -224,9 +240,7 @@ export default {
             message:
               "E-mailadres is <i>" + this.form.relEmail + "</i> niet gevonden!",
           })
-          .onOk(() => {
-            // console.log('OK')
-          });
+          .onOk(() => {});
       }
     },
     showHelp() {
@@ -238,9 +252,7 @@ export default {
           html: true,
           message: text,
         })
-        .onOk(() => {
-          // console.log('OK')
-        });
+        .onOk(() => {});
     },
   },
 };

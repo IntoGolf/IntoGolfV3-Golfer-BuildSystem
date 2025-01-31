@@ -1,6 +1,6 @@
 {
-  "appId": "nl.intogolf.test",
-  "appName": "test",
+  "appId": "nl.intogolf.maasduinen",
+  "appName": "maasduinen",
   "webDir": "dist/spa",
   "ios": {
     "buildOptions": {
@@ -10,13 +10,6 @@
       "deviceFamily": "1",
       "device": "iPhone",
       "scheme": "hildenberg"
-    }
-  },
-  "plugins": {
-    "extConfig": {},
-    "CapacitorUpdater": {
-      "debug": true,
-      "publicKey": "-----BEGIN RSA PUBLIC KEY-----\nMIIBCgKCAQEAssS3rNHQdWHSI0mWN1psVLl25sKHb3a2m4iobkE2ATixDrptEO+v\nIKmUeimpMMTAlfEPEQqDwdTgzGteN3/kvdh0Wg07aUxNo7w0NKljE6x9WPe2kelU\n8uUcPn3xW9nVVGN88t9UZPK207TsZSKJ77ujJ9ETqGxfoQ4U0pGr3MfpxbKYgEBm\nFldql8JCIO8YfDtSCuNWMIlLDMpkcVjbbsTZzORIRSleYksxppWhxYOxWSG1r/Qf\nEM4qpsQuJl406CLgYL8AOsoU1GkGveKDPitYe+JAatRhq4ux9PdApennYinT/sbe\n0fbacRgv2G6fjwaPwZbTS0PmPBEpDTJz4wIDAQAB\n-----END RSA PUBLIC KEY-----\n"
     }
   }
 }

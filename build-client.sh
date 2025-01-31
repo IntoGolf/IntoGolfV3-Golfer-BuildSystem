@@ -13,23 +13,45 @@ PACKAGE_NAME="nl.intogolf.${CLIENT}"
 # Keystore configuration
 KEYSTORE_DIR="${CLIENT}"
 KEYSTORE_NAME="${CLIENT}.keystore"
-KEY_ALIAS="${CLIENT}-key-alias"
-KEY_PASSWORD="aDitIsEenTestPassword"
-KEYSTORE_PASSWORD="bDitIsEenTestPassword"
 KEYSTORE_PATH="res/${KEYSTORE_DIR}/${KEYSTORE_NAME}"
 KEYSTORE_TYPE="JKS" # Default to JKS, update if needed
 
-# Build quasar
-echo "Build quasar"
-npm run build:${CLIENT}:app || {
-  echo "[error] Failed to build quasar"; exit 1;
-}
+# Path to store generated passwords
+CREDENTIALS_FILE="res/${CLIENT}/keystore_credentials.env"
 
-# Ensure the assets directory exists
-echo "Creating keystore directory..."
-mkdir -p "res/${KEYSTORE_DIR}"
+# Ensure the keystore directory exists
+if [ ! -d "res/${KEYSTORE_DIR}" ]; then
+  echo "Creating directory res/${KEYSTORE_DIR}..."
+  mkdir -p "res/${KEYSTORE_DIR}" || {
+    echo "[error] Failed to create directory res/${KEYSTORE_DIR}"; exit 1;
+  }
+fi
 
-# Generate a keystore if it doesn't already exist
+# Check if credentials file exists; if not, generate new passwords
+if [ ! -f "$CREDENTIALS_FILE" ]; then
+  echo "Generating new keystore passwords and saving them to $CREDENTIALS_FILE..."
+  KEY_PASSWORD=$(openssl rand -base64 16 | tr -d /=+ | cut -c1-16)
+  KEYSTORE_PASSWORD=$(openssl rand -base64 16 | tr -d /=+ | cut -c1-16)
+  KEY_ALIAS="${CLIENT}-key-alias"
+  echo "KEY_PASSWORD=$KEY_PASSWORD" > "$CREDENTIALS_FILE"
+  echo "KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD" >> "$CREDENTIALS_FILE"
+  echo "KEY_ALIAS=$KEY_ALIAS" >> "$KEY_ALIAS"
+else
+  echo "Loading existing keystore passwords from $CREDENTIALS_FILE..."
+  source "$CREDENTIALS_FILE"
+fi
+
+# Check if keystore exists and matches credentials
+if [ -f "$KEYSTORE_PATH" ]; then
+  echo "Keystore already exists: $KEYSTORE_PATH"
+  echo "Verifying keystore with existing credentials..."
+  keytool -list -keystore "$KEYSTORE_PATH" -storepass "$KEYSTORE_PASSWORD" > /dev/null 2>&1 || {
+    echo "[warning] Keystore passwords do not match or keystore is corrupted. Recreating keystore..."
+    rm -f "$KEYSTORE_PATH"
+  }
+fi
+
+# Generate a new keystore if it does not exist
 if [ ! -f "$KEYSTORE_PATH" ]; then
   echo "Generating keystore for $CLIENT..."
   keytool -genkeypair -v \
@@ -44,9 +66,29 @@ if [ ! -f "$KEYSTORE_PATH" ]; then
     -storetype "$KEYSTORE_TYPE" || {
     echo "[error] Failed to generate keystore"; exit 1;
   }
-else
-  echo "Keystore already exists: $KEYSTORE_PATH"
 fi
+
+# Build quasar
+echo "Build quasar"
+ENVIRONMENT=${CLIENT} quasar build || {
+  echo "[error] Failed to build quasar"; exit 1;
+}
+
+# Ensure the assets directory exists
+echo "Creating keystore directory..."
+if [ ! -d "res/${KEYSTORE_DIR}" ]; then
+  echo "Directory res/${KEYSTORE_DIR} does not exist. Copying res/template to res/${KEYSTORE_DIR}..."
+  mkdir -p "res/${KEYSTORE_DIR}"
+  cp -r "res/template/"* "res/${KEYSTORE_DIR}/"
+else
+  echo "Directory res/${KEYSTORE_DIR} already exists."
+fi
+
+# Build quasar
+echo "Build quasar"
+ENVIRONMENT=${CLIENT} quasar build || {
+  echo "[error] Failed to build quasar"; exit 1;
+}
 
 # Remove existing Android folder
 echo "Removing existing Android platform..."
@@ -246,3 +288,6 @@ cd -
 
 echo "Android app for $CLIENT configured, signed, and built successfully!"
 
+npx @capgo/cli app add ${PACKAGE_NAME}
+
+npx @capgo/cli bundle upload ${PACKAGE_NAME}

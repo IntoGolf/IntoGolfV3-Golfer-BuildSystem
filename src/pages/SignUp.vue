@@ -392,6 +392,7 @@
 <script>
 import SignUpConfirm from "pages/SignUpConfirm.vue";
 import settings from "src/store/settings";
+import { Platform } from "quasar";
 
 export default {
   components: { SignUpConfirm },
@@ -697,7 +698,7 @@ export default {
     },
     async onSignUpPay() {
       let that = this;
-      if (!this.$q.platform.is.cordova) {
+      if (!Platform.is.ios && !Platform.is.android) {
         await this.$recaptchaLoaded();
         that.account_form.captcha = await this.$recaptcha("login");
       }
@@ -718,7 +719,7 @@ export default {
     async onSubmit() {
       let that = this;
 
-      if (!this.$q.platform.is.cordova) {
+      if (this.$q.platform.is.desktop) {
         await this.$recaptchaLoaded();
         that.account_form.captcha = await this.$recaptcha("login");
       }

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loaded" :style="{ marginTop: $q.platform.is.ios ? '60px' : '' }">
+  <q-page v-if="loaded">
     <div class="text-center text-h6">
       Klik op een van de onderstaande knoppen om de details te bekijken.
     </div>
@@ -60,7 +60,7 @@
         />
       </div>
     </div>
-  </div>
+  </q-page>
   <div v-else class="text-center text-h5">Data wordt geladen</div>
 </template>
 <script>

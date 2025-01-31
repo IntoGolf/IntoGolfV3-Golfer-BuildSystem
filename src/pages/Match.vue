@@ -1,14 +1,11 @@
 <template>
-  <q-page-container>
-    <match-list v-if="match === null" v-on:handleOpenMatch="handleOpenMatch" />
-
-    <match-details
-      v-else
-      :prop_match="match"
-      :prop_page="page"
-      v-on:handleCloseMatch="handleCloseMatch"
-    />
-  </q-page-container>
+  <match-list v-if="match === null" v-on:handleOpenMatch="handleOpenMatch" />
+  <match-details
+    v-else
+    :prop_match="match"
+    :prop_page="page"
+    v-on:handleCloseMatch="handleCloseMatch"
+  />
 </template>
 
 <script>

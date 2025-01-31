@@ -1,221 +1,219 @@
 <template>
-  <q-page-container>
-    <q-page class="q-pa-sm">
-      <q-form @submit="saveProfile">
-        <div class="ml-auto mr-auto text-center">
-          <q-img
-            :src="blobUrl"
-            style="max-width: 240px; max-height: 240px"
-            @click="triggerUpload"
+  <q-page class="q-pa-sm">
+    <q-form @submit="saveProfile">
+      <div class="ml-auto mr-auto text-center">
+        <q-img
+          :src="blobUrl"
+          style="max-width: 240px; max-height: 240px"
+          @click="triggerUpload"
+        />
+
+        <input
+          ref="fileInput"
+          accept="image/*"
+          hidden
+          type="file"
+          @change="onFileChange"
+        />
+      </div>
+
+      <q-tabs
+        v-model="tab"
+        class="text-teal"
+        dense
+        mobile-arrows
+        outside-arrows
+      >
+        <q-tab class="pl-0" label="Naam" name="adres" />
+        <q-tab class="pl-0" label="Contact" name="contact" />
+        <q-tab class="pl-0" label="Golf" name="golf" />
+        <q-tab class="pl-0" label="Voorkeuren" name="preference" />
+        <q-tab class="pl-0" label="Wachtwoord" name="password" />
+      </q-tabs>
+
+      <q-tab-panels v-model="tab">
+        <q-tab-panel class="q-pa-none" name="adres">
+          <q-input
+            v-model="form.relFirstName"
+            :disable="!canChange"
+            :label="$t('Initialen')"
+            lazy-rules
           />
 
-          <input
-            ref="fileInput"
-            accept="image/*"
-            hidden
-            type="file"
-            @change="onFileChange"
+          <q-input
+            v-model="form.relCallName"
+            :disable="!canChange"
+            :label="$t('Voornaam')"
+            lazy-rules
           />
-        </div>
 
-        <q-tabs
-          v-model="tab"
-          class="text-teal"
-          dense
-          mobile-arrows
-          outside-arrows
-        >
-          <q-tab class="pl-0" label="Naam" name="adres" />
-          <q-tab class="pl-0" label="Contact" name="contact" />
-          <q-tab class="pl-0" label="Golf" name="golf" />
-          <q-tab class="pl-0" label="Voorkeuren" name="preference" />
-          <q-tab class="pl-0" label="Wachtwoord" name="password" />
-        </q-tabs>
-
-        <q-tab-panels v-model="tab">
-          <q-tab-panel class="q-pa-none" name="adres">
-            <q-input
-              v-model="form.relFirstName"
-              :disable="!canChange"
-              :label="$t('Initialen')"
-              lazy-rules
-            />
-
-            <q-input
-              v-model="form.relCallName"
-              :disable="!canChange"
-              :label="$t('Voornaam')"
-              lazy-rules
-            />
-
-            <q-input
-              v-model="form.relPrefix"
-              :disable="!canChange"
-              :label="$t('Tussenvoegsel')"
-              lazy-rules
-            />
-
-            <q-input
-              v-model="form.relName"
-              :disable="!canChange"
-              :label="$t('Achternaam')"
-              lazy-rules
-            />
-
-            <q-input
-              v-model="form.relAddress1"
-              :disable="!canChange"
-              :label="$t('Straat')"
-              lazy-rules
-            />
-
-            <div class="row q-col-gutter-md">
-              <q-input
-                v-model="form.relAddressStreetNumber"
-                :disable="!canChange"
-                :label="$t('Huisnummer')"
-                lazy-rules
-              />
-
-              <q-input
-                v-model="form.relAddressStreetAddition"
-                :disable="!canChange"
-                :label="$t('Toevoeging')"
-                lazy-rules
-              />
-            </div>
-
-            <q-input
-              v-model="form.relPostalCode"
-              :disable="!canChange"
-              :label="$t('Postcode')"
-              lazy-rules
-            />
-
-            <q-input
-              v-model="form.relCity"
-              :disable="!canChange"
-              :label="$t('Woonplaats')"
-              lazy-rules
-            />
-          </q-tab-panel>
-          <q-tab-panel class="q-pa-none" name="contact">
-            <q-input
-              v-model="form.relPhone"
-              :disable="!canChange"
-              :label="$t('Phone number')"
-              lazy-rules
-              mask="###############"
-              maxlength="15"
-            />
-
-            <q-input
-              v-model="form.relPhoneMobile"
-              :disable="!canChange"
-              :label="$t('Mobiel telefoonnummer')"
-              lazy-rules
-              mask="###############"
-              maxlength="15"
-            />
-
-            <q-input
-              v-model="form.relEmail"
-              :disable="!canChange"
-              :label="$t('Emailadres')"
-              lazy-rules
-            />
-          </q-tab-panel>
-          <q-tab-panel class="q-pa-none" name="golf">
-            <q-input
-              v-model="form.relGsn"
-              :label="$t('Golfservicenummer')"
-              lazy-rules
-              readonly
-            />
-
-            <q-input
-              v-model="form.relHandicap"
-              :label="$t('Speelsterkte')"
-              lazy-rules
-              readonly
-            />
-          </q-tab-panel>
-          <q-tab-panel class="q-pa-none" name="preference">
-            <q-select
-              v-model="relVisibilityLevel"
-              :options="visibilityArray"
-              behavior="menu"
-              emit-value
-              label="Zichtbaarheid in ledenboekje"
-              map-options
-            />
-
-            <br />
-
-            <q-toggle
-              v-model="relMagazineGolfNL"
-              :disable="!canChange"
-              label="Golfers magazine ontvangen"
-            />
-
-            <br />
-
-            <q-toggle
-              v-model="relEmailnewsletterNGF"
-              :disable="!canChange"
-              label="E-mail nieuwsbrief ontvangen"
-            />
-
-            <br />
-
-            <q-toggle
-              v-model="relInvoiceByEmail"
-              :disable="!canChangeInvoiceByEmail"
-              label="Factuur per e-mail ontvangen"
-            />
-          </q-tab-panel>
-          <q-tab-panel class="q-pa-none" name="password">
-            <p class="q-mt-md">{{ passwordComplexityTest }}</p>
-            <q-input
-              ref="passwordInput"
-              v-model="password"
-              :autocomplete="false"
-              :label="$t('Password')"
-              :rules="[validatePasswordRule]"
-              type="password"
-            />
-            <password-meter :password="password" />
-            <q-input
-              v-model="passwordCheck"
-              :autocomplete="false"
-              :label="$t('PasswordCheck')"
-              :rules="[checkPassword]"
-              type="password"
-            />
-            <div class="text-center q-mt-md q-pb-md">
-              <q-btn
-                :disable="disablePassword"
-                color="primary"
-                label="Wachtwoord opslaan"
-                @click="savePassword"
-              />
-            </div>
-          </q-tab-panel>
-        </q-tab-panels>
-        <div v-show="tab !== 'password'" class="text-center q-mt-md q-pb-md">
-          <q-btn color="primary" label="Opslaan" type="submit" />
-
-          <q-btn
-            class="q-ml-md"
-            color="primary"
-            label="Uitloggen"
-            outline
-            v-on:click="logout"
+          <q-input
+            v-model="form.relPrefix"
+            :disable="!canChange"
+            :label="$t('Tussenvoegsel')"
+            lazy-rules
           />
-        </div>
-      </q-form>
-    </q-page>
-  </q-page-container>
+
+          <q-input
+            v-model="form.relName"
+            :disable="!canChange"
+            :label="$t('Achternaam')"
+            lazy-rules
+          />
+
+          <q-input
+            v-model="form.relAddress1"
+            :disable="!canChange"
+            :label="$t('Straat')"
+            lazy-rules
+          />
+
+          <div class="row q-col-gutter-md">
+            <q-input
+              v-model="form.relAddressStreetNumber"
+              :disable="!canChange"
+              :label="$t('Huisnummer')"
+              lazy-rules
+            />
+
+            <q-input
+              v-model="form.relAddressStreetAddition"
+              :disable="!canChange"
+              :label="$t('Toevoeging')"
+              lazy-rules
+            />
+          </div>
+
+          <q-input
+            v-model="form.relPostalCode"
+            :disable="!canChange"
+            :label="$t('Postcode')"
+            lazy-rules
+          />
+
+          <q-input
+            v-model="form.relCity"
+            :disable="!canChange"
+            :label="$t('Woonplaats')"
+            lazy-rules
+          />
+        </q-tab-panel>
+        <q-tab-panel class="q-pa-none" name="contact">
+          <q-input
+            v-model="form.relPhone"
+            :disable="!canChange"
+            :label="$t('Phone number')"
+            lazy-rules
+            mask="###############"
+            maxlength="15"
+          />
+
+          <q-input
+            v-model="form.relPhoneMobile"
+            :disable="!canChange"
+            :label="$t('Mobiel telefoonnummer')"
+            lazy-rules
+            mask="###############"
+            maxlength="15"
+          />
+
+          <q-input
+            v-model="form.relEmail"
+            :disable="!canChange"
+            :label="$t('Emailadres')"
+            lazy-rules
+          />
+        </q-tab-panel>
+        <q-tab-panel class="q-pa-none" name="golf">
+          <q-input
+            v-model="form.relGsn"
+            :label="$t('Golfservicenummer')"
+            lazy-rules
+            readonly
+          />
+
+          <q-input
+            v-model="form.relHandicap"
+            :label="$t('Speelsterkte')"
+            lazy-rules
+            readonly
+          />
+        </q-tab-panel>
+        <q-tab-panel class="q-pa-none" name="preference">
+          <q-select
+            v-model="relVisibilityLevel"
+            :options="visibilityArray"
+            behavior="menu"
+            emit-value
+            label="Zichtbaarheid in ledenboekje"
+            map-options
+          />
+
+          <br />
+
+          <q-toggle
+            v-model="relMagazineGolfNL"
+            :disable="!canChange"
+            label="Golfers magazine ontvangen"
+          />
+
+          <br />
+
+          <q-toggle
+            v-model="relEmailnewsletterNGF"
+            :disable="!canChange"
+            label="E-mail nieuwsbrief ontvangen"
+          />
+
+          <br />
+
+          <q-toggle
+            v-model="relInvoiceByEmail"
+            :disable="!canChangeInvoiceByEmail"
+            label="Factuur per e-mail ontvangen"
+          />
+        </q-tab-panel>
+        <q-tab-panel class="q-pa-none" name="password">
+          <p class="q-mt-md">{{ passwordComplexityTest }}</p>
+          <q-input
+            ref="passwordInput"
+            v-model="password"
+            :autocomplete="false"
+            :label="$t('Password')"
+            :rules="[validatePasswordRule]"
+            type="password"
+          />
+          <password-meter :password="password" />
+          <q-input
+            v-model="passwordCheck"
+            :autocomplete="false"
+            :label="$t('PasswordCheck')"
+            :rules="[checkPassword]"
+            type="password"
+          />
+          <div class="text-center q-mt-md q-pb-md">
+            <q-btn
+              :disable="disablePassword"
+              color="primary"
+              label="Wachtwoord opslaan"
+              @click="savePassword"
+            />
+          </div>
+        </q-tab-panel>
+      </q-tab-panels>
+      <div v-show="tab !== 'password'" class="text-center q-mt-md q-pb-md">
+        <q-btn color="primary" label="Opslaan" type="submit" />
+
+        <q-btn
+          class="q-ml-md"
+          color="primary"
+          label="Uitloggen"
+          outline
+          v-on:click="logout"
+        />
+      </div>
+    </q-form>
+  </q-page>
 </template>
 
 <script>

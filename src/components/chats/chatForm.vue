@@ -1,6 +1,6 @@
 <template>
-  <q-page>
-    <div class="row q-pa-sm chat-form">
+  <q-page class="flex q-pa-md">
+    <div class="row q-pa-sm">
       <div class="col-2" @click="$store.dispatch('chats/edit', false)">
         <q-icon name="arrow_back_ios" size="sm" />
       </div>
@@ -10,78 +10,56 @@
       <div class="col-2">&nbsp;</div>
     </div>
 
-    <div class="row q-pa-sm">
-      <div class="col-12">
-        <q-input v-model="form.chtName" class="q-mb-md" label="Naam">
-          <template v-slot:append>
-            <q-icon
-              name="save"
-              @click="$store.dispatch('chats/setChat', form)"
-            />
-          </template>
-        </q-input>
-      </div>
-    </div>
+    <q-input v-model="form.chtName" class="full-width" dense label="Naam">
+      <template v-slot:append>
+        <q-icon name="save" @click="$store.dispatch('chats/setChat', form)" />
+      </template>
+    </q-input>
 
-    <div class="row q-pa-sm" style="font-size: 14px; font-weight: bold">
-      <div class="col-12">
-        U kunt vrienden uitnodigen voor uw clubjes. Geef een e-mailadres op en
-        wij controleren of uw vriend in ons relatiebestand aanwezig is.
-      </div>
-    </div>
+    U kunt vrienden uitnodigen voor uw clubjes. Geef een e-mailadres op en wij
+    controleren of uw vriend in ons relatiebestand aanwezig is.
 
-    <div class="row q-pa-sm">
-      <div class="col-12">
-        <q-input
-          v-model="email"
+    <q-input
+      v-model="email"
+      :disable="this.$store.state.chats.chat.chtNr === null"
+      class="full-width"
+      label="Nodig uit voor groep"
+    >
+      <template v-slot:append>
+        <q-icon
           :disable="this.$store.state.chats.chat.chtNr === null"
-          label="Nodig uit voor groep"
-        >
-          <template v-slot:append>
-            <q-icon
-              :disable="this.$store.state.chats.chat.chtNr === null"
-              name="send"
-              @click="handleInvite"
-            />
-          </template>
-        </q-input>
-      </div>
-    </div>
-
-    <div class="row q-pa-sm">
-      <div class="col-12">
-        <q-list bordered class="q-mt-md" separator>
-          <chat-relation-item
-            v-for="(item, key) in relations"
-            :key="key"
-            :item="item"
-            :relation="item.relation"
-          />
-        </q-list>
-      </div>
-    </div>
-
-    <div class="row q-pa-sm">
-      <div class="col-12">
-        <q-btn
-          :disable="this.$store.state.chats.chat.chtNr === null"
-          class="full-width q-mt-md"
-          color="red"
-          label="Delete groep"
-          outline
-          v-on:click="handleDeleteChat"
+          name="send"
+          @click="handleInvite"
         />
+      </template>
+    </q-input>
 
-        <q-btn
-          :disable="this.$store.state.chats.chat.chtNr === null"
-          class="full-width q-mt-md"
-          color="red"
-          label="Verlaat groep"
-          outline
-          v-on:click="handleLeaveGroup"
-        />
-      </div>
-    </div>
+    <q-list bordered class="q-mt-md" separator>
+      <chat-relation-item
+        v-for="(item, key) in relations"
+        :key="key"
+        :item="item"
+        :relation="item.relation"
+      />
+    </q-list>
+
+    <q-btn
+      :disable="this.$store.state.chats.chat.chtNr === null"
+      class="full-width q-mt-md"
+      color="red"
+      label="Delete groep"
+      outline
+      v-on:click="handleDeleteChat"
+    />
+
+    <q-btn
+      :disable="this.$store.state.chats.chat.chtNr === null"
+      class="full-width q-mt-md"
+      color="red"
+      label="Verlaat groep"
+      outline
+      v-on:click="handleLeaveGroup"
+    />
 
     <q-dialog v-model="showConfirm" persistent>
       <q-card>
