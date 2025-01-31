@@ -36,17 +36,18 @@ export default {
       emotion: "text-positive",
     };
   },
-  created: function () {
+  mounted: function () {
     window.open(this.url, "_blank");
     this.handleStatusLoop();
   },
   methods: {
-    handleStatusLoop: function () {
+    handleStatusLoop() {
+      let that = this;
       if (this.counter < this.maxCount && this.status === "open") {
         this.counter++;
         this.handleStatusCheck();
         window.setTimeout(function () {
-          this.handleStatusLoop();
+          that.handleStatusLoop();
         }, 2000);
       } else {
         this.handlePaymentDone();
