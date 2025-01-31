@@ -55,6 +55,7 @@ export default {
     },
 
     handlePaymentDone: function () {
+      let that = this;
       if (this.status === "expired") {
         this.emotion = "text-warning";
         this.text = "Het betaalverzoek is verlopen!";
@@ -69,7 +70,7 @@ export default {
       }
 
       window.setTimeout(function () {
-        this.$emit("handleClosePayment", this.status);
+        this.$emit("handleClosePayment", that.status);
       }, 2000);
     },
 
