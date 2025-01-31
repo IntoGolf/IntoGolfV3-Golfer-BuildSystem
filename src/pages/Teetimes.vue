@@ -574,8 +574,7 @@ export default {
     handleSave: function () {
       this.$http.post("igg/guest", this.flight).then((res) => {
         if (res.data.mollie) {
-          window.open(res.data.mollie.url, "_blank");
-          this.step = 3;
+          window.open(res.data.mollie.url);
         } else if (res.data.redirect.length > 0) {
           window.location = res.data.redirect;
         } else {
