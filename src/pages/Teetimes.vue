@@ -4,7 +4,7 @@
       <div v-show="step == 1" class="row q-mb-sm">
         <div class="col">
           <div class="row">
-            <div class="col-8 text-h5">Boek een starttijd</div>
+            <div class="col-8 text-h5">Boek je starttijd</div>
             <div class="col-4 text-right">
               <q-btn-group>
                 <q-btn
@@ -574,7 +574,7 @@ export default {
     handleSave: function () {
       this.$http.post("igg/guest", this.flight).then((res) => {
         if (res.data.mollie) {
-          this.mollie = res.data.mollie;
+          window.open(res.data.mollie.url, "_blank");
           this.step = 3;
         } else if (res.data.redirect.length > 0) {
           window.location = res.data.redirect;
