@@ -441,10 +441,10 @@ export default {
         fltCrlNr2: null,
         fltSize: 3,
 
-        flpName1: "",
-        flpEmail1: "",
-        flpPhone1: "",
-        flpHandicap1: null,
+        flpName1: "laurens",
+        flpEmail1: "laurenssssa@intogolf.nl",
+        flpPhone1: "0172617000",
+        flpHandicap1: 12.2,
 
         flpName2: "",
         flpEmail2: null,
@@ -558,13 +558,15 @@ export default {
     },
   },
   methods: {
-    handleLoadDate: function () {
+    async handleLoadDate() {
       this.courses = [];
       this.loading = true;
-      this.$http.get("igg?date=" + this.date).then((res) => {
-        this.loading = false;
-        this.courses = res.payload;
-      });
+      let res = await this.$http.get("igg?date=" + this.date);
+      this.loading = false;
+      this.courses = res.payload;
+      if (!this.hasTimes) {
+        this.date = this.$dayjs(this.date).add(1, "day").format("YYYY-MM-DD");
+      }
     },
     setDay: function (value) {
       this.date = this.$dayjs(this.date)
@@ -574,7 +576,7 @@ export default {
     handleSave: function () {
       this.$http.post("igg/guest", this.flight).then((res) => {
         if (res.data.mollie) {
-          window.open(res.data.mollie.url);
+          window.location.href = res.data.mollie.url;
         } else if (res.data.redirect.length > 0) {
           window.location = res.data.redirect;
         } else {
