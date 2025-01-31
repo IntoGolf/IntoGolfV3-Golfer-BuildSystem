@@ -68,10 +68,6 @@ export default {
         this.emotion = "text-warning";
         this.text = "Het betaalverzoek is gestoped!";
       }
-
-      window.setTimeout(function () {
-        that.$emit("handleClosePayment", that.status);
-      }, 2000);
     },
 
     async handleStatusCheck() {
