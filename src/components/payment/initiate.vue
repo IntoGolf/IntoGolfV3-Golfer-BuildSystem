@@ -70,7 +70,7 @@ export default {
       }
 
       window.setTimeout(function () {
-        this.$emit("handleClosePayment", that.status);
+        that.$emit("handleClosePayment", that.status);
       }, 2000);
     },
 
