@@ -184,11 +184,12 @@ export default {
       les.ProLessonClient.plcItmNr = this.lesson.pro_lesson_fee_les[0].lfpItmNr;
 
       let res = await this.$http.post("public/lesson", les);
-      if (les.payMethod === "iDeal") {
-        window.location.href = res.data.url;
-      } else {
-        this.step = 4;
-      }
+      console.log(res);
+      // if (les.payMethod === "iDeal") {
+      //   window.location.href = res.data.url;
+      // } else {
+      //   this.step = 4;
+      // }
     },
     handleBack: function () {
       this.$emit("handleBack");
