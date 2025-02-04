@@ -1,9 +1,15 @@
 <template>
   <div class="row q-mb-md">
-    <div class="col-md-3 col-xs-6 q-pr-md">
-      <q-input v-model="localDate" label="Datum" size="sm" type="date" />
+    <div class="col-6 q-pr-md">
+      <q-input v-model="localDate" label="Datum" type="date" />
     </div>
-    <div class="col-md-6 col-xs-6 q-pr-md">
+    <div class="col-6 q-mt-md">
+      <q-btn-group flat outline spread>
+        <q-btn label="dag -" v-on:click="setDay(-1)" />
+        <q-btn label="dag +" v-on:click="setDay(1)" />
+      </q-btn-group>
+    </div>
+    <div class="col-6 q-pr-md">
       <q-select
         v-model="localLessonType"
         :options="typeArray"
@@ -14,7 +20,7 @@
         toggle-color="primary"
       />
     </div>
-    <div class="col-md-3 col-xs-6 q-pr-md">
+    <div class="col-6 q-pr-md">
       <q-select
         v-model="per"
         :options="perArray"
@@ -57,6 +63,14 @@ export default {
     },
     per: function (newPer) {
       this.$emit("updatePer", newPer);
+    },
+  },
+  methods: {
+    setDay: function (value) {
+      this.localDate = this.$dayjs(this.localDate)
+        .add(value, "days")
+        .format("YYYY-MM-DD");
+      this.$emit("updateDate", this.localDate);
     },
   },
   created() {

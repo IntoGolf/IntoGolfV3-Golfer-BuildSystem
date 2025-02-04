@@ -96,7 +96,7 @@
           color="primary"
           flat
           label="Les"
-          v-on:click="$router.push('public_lessons')"
+          v-on:click="onOpenLessons"
         />
         <q-btn
           v-if="canBookCourse"
@@ -253,6 +253,10 @@ export default {
           message: text,
         })
         .onOk(() => {});
+    },
+    onOpenLessons() {
+      console.log("onOpenLessons");
+      this.$router.push("publicLesson");
     },
   },
 };

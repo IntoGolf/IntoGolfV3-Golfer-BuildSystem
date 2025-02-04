@@ -5,7 +5,22 @@
   >
     <login />
   </q-layout>
-  <q-layout v-else id="layoutParent" ref="layoutParent" view="lHh Lpr lFf">
+  <q-layout
+    v-else
+    id="layoutParent"
+    ref="layoutParent"
+    :style="{ maxWidth: showFullHeader ? '480px' : '800px' }"
+    style="margin-left: auto; margin-right: auto"
+    view="lHh Lpr lFf"
+  >
+    <q-header v-if="showFullHeader" class="shadow-2">
+      <div
+        class="text-h5 q-pa-md"
+        style="max-width: 480px; margin-left: auto; margin-right: auto"
+      >
+        {{ this.$route.meta.title }}
+      </div>
+    </q-header>
     <q-header
       v-if="showHeader"
       ref="layoutHeader"
@@ -135,6 +150,12 @@ export default defineComponent({
     isApp() {
       return this.$q.platform.is.capacitor || this.$q.platform.is.mobile;
     },
+    showFullHeader() {
+      if (["/publicLesson"].includes(this.$route.path)) {
+        return true;
+      }
+      return false;
+    },
     showHeader() {
       if (
         [
@@ -142,7 +163,7 @@ export default defineComponent({
           "/teetimes",
           "/sign-up",
           "/verify-code",
-          "/public_lessons",
+          "/publicLesson",
           "/classes",
         ].includes(this.$route.path)
       ) {

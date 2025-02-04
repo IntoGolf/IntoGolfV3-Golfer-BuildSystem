@@ -1,152 +1,97 @@
 <template>
   <div>
-    <div v-if="mollie === null" class="row q-mt-md">
-      <div class="col">
-        <div class="row text-center q-mb-lg">
-          <div class="col text-h5 q-ml-auto q-mr-auto">Reservering les</div>
-        </div>
+    <public-lesson-details :ProLesson="ProLesson" :step="step" />
 
-        <q-separator class="q-mb-md" />
+    <public-lesson-pricing
+      v-if="step === 1"
+      :fee="ProLesson.fee"
+      :lesson="lesson"
+      v-on:setFee="setFee"
+    />
 
-        <div class="row q-pa-sm bg-green-1">
-          <div class="col-4 text-bold">Datum:</div>
-          <div class="col-8">
-            {{ $dayjs(date).format("dddd DD MMMM") }}
-          </div>
-        </div>
+    <public-lesson-register
+      v-else-if="step === 2"
+      ref="lessonRegister"
+      :lesson="lesson"
+      :proLesson="ProLesson"
+      :tab="personTab"
+      v-on:setTab="setTab"
+    />
 
-        <div class="row q-pa-sm">
-          <div class="col-4 text-bold">Tijd:</div>
-          <div class="col-8">
-            {{ $filters.minuteToTime(lesson.pagTime) }}
-          </div>
-        </div>
+    <public-lesson-confirm
+      v-else-if="step === 3"
+      :lesson="lesson"
+      :paymentOptions="paymentOptions"
+      :proLesson="ProLesson"
+    />
 
-        <div class="row q-pa-sm bg-green-1">
-          <div class="col-4 text-bold">Les soort:</div>
-          <div class="col-8">
-            {{ lesson.pro_lesson_type.pltName }}
-          </div>
-        </div>
+    <div v-else-if="step === 4" class="text-h5 text-center q-mb-lg q-mt-lg">
+      Je les is gereserveerd.
+    </div>
 
-        <div class="row q-pa-sm">
-          <div class="col-4 text-bold">Pro:</div>
-          <div class="col-8">
-            {{ lesson.pro.full_name2 }}
-          </div>
-        </div>
-
-        <div
-          v-if="lesson.pro_lesson_fee_player !== null"
-          class="row q-pa-sm bg-green-1"
-        >
-          <div class="col-4 text-bold">Prijs deelname les:</div>
-          <div class="col-8">
-            {{ $filters.money(lesson.pro_lesson_fee_player.lfpPrice) }}
-          </div>
-        </div>
-
-        <div
-          v-if="1 === 2 && lesson.pro_lesson_fee_les !== null"
-          class="row p-2"
-        >
-          <div class="col-4 text-bold">Prijs per les</div>
-          <div class="col-8">
-            {{ $filters.money(lesson.pro_lesson_fee_les.lfpPrice) }}
-          </div>
-        </div>
-
-        <div class="row q-mt-sm">
-          Nadat je de les hebt betaald ontvang je een e-mail ter bevestiging van
-          je reservering. In deze e-mail vindt je een link waarmee je je les kan
-          aanvullen.
-        </div>
-
-        <q-separator class="q-mb-md q-mt-md" />
-
-        <div class="text-h6">Uw contact gegevens</div>
-        <q-input
-          v-model="ProLesson.ProLessonClient.plcName"
-          :rules="[(val) => !!val || '* Required']"
-          class="q-mb-sm"
-          label="Naam"
-          lazy-rules
-        />
-        <q-input
-          v-model="ProLesson.ProLessonClient.plcEmail"
-          :rules="[emailRule]"
-          class="q-mb-sm"
-          label="E-mailadres"
-          lazy-rules
-        />
-        <q-input
-          v-model="ProLesson.ProLessonClient.plcPhone"
-          :rules="[(val) => !!val || '* Required']"
-          class="q-mb-sm"
-          label="Telefoonummer"
-          lazy-rules
-          mask="###############"
-        />
-
-        <div class="row text-h6">Leveringsvoorwaarden:</div>
-        <div
-          class="row q-pa-sm"
-          style="
-            border: 1px solid lightgrey;
-            height: 150px;
-            font-size: 10px;
-            overflow-y: scroll;
-          "
-        >
-          {{ conditions }}
-        </div>
-        <div class="row q-mt-md">
-          <q-checkbox
-            v-model="ProLesson.ProLessonClient.agreeConditions"
-            :rules="[(val) => !!val || '* Required']"
-            class="q-mb-sm"
-            label="Ik ga akkoord met de leveringsvoorvaarden"
-            stack-label
-          />
-        </div>
-        <div class="row">
-          <q-checkbox
-            v-model="ProLesson.ProLessonClient.agreeCommerce"
-            :rules="[(val) => !!val || '* Required']"
-            class="q-mb-sm"
-            label="Stuur mij aanbiedingen"
-            stack-label
-          />
-        </div>
+    <div class="row text-center q-mb-lg">
+      <div class="col q-ml-auto q-mr-auto">
         <q-btn
+          v-show="step === 1"
+          class="q-mr-sm"
+          color="primary"
+          label="Andere datum"
+          v-on:click="onReload"
+        />
+
+        <q-btn
+          v-show="[2, 3].includes(step)"
           class="q-mr-sm"
           color="primary"
           label="Terug"
-          v-on:click="handleBack"
+          v-on:click="step--"
         />
         <q-btn
-          :disable="!valid"
-          color="secondary"
-          label="Betalen"
+          v-show="step === 1"
+          class="q-mr-sm"
+          color="primary"
+          label="Deelnemers"
+          v-on:click="onDeelnemers"
+        />
+        <q-btn
+          v-show="step === 2"
+          :label="labelRegister"
+          class="q-mr-sm"
+          color="primary"
+          v-on:click="onRegisterRelation"
+        />
+        <q-btn
+          v-show="step === 3"
+          :label="confirmButtonLabel"
+          class="q-mr-sm"
+          color="primary"
           v-on:click="handleSave"
         />
+        <q-btn
+          v-show="step === 4"
+          class="q-mr-sm"
+          color="primary"
+          label="Boek nog een les"
+          v-on:click="onReload"
+        />
       </div>
-    </div>
-    <div v-else>
-      <payment
-        :id="mollie.id"
-        :url="mollie.url"
-        v-on:handleClosePayment="handleClosePayment"
-      />
     </div>
   </div>
 </template>
 
 <script>
-import Payment from "components/payment/initiate.vue";
+import PublicLessonRegister from "components/PublicLesson/book/register.vue";
+import PublicLessonPricing from "components/PublicLesson/book/pricing.vue";
+import PublicLessonConfirm from "components/PublicLesson/book/confirm.vue";
+import PublicLessonDetails from "components/PublicLesson/book/details.vue";
 
 export default {
-  components: { Payment },
+  components: {
+    PublicLessonDetails,
+    PublicLessonConfirm,
+    PublicLessonPricing,
+    PublicLessonRegister,
+  },
   props: {
     date: String,
     lesson: Array,
@@ -154,9 +99,14 @@ export default {
   data() {
     return {
       step: 1,
+      personTab: "person0",
+      paymentOptions: [
+        { label: "Op de baan", value: "onCourse" },
+        { label: "via iDeal met 10% korting", value: "iDeal" },
+      ],
       ProLesson: {
-        lesDate: null,
-        lesBlockedFrom: null,
+        lesDate: this.date,
+        lesBlockedFrom: this.lesson.pagTimeFrom,
         lesBlockedTo: null,
         lesPltNr: null,
         lesRelNrPro: null,
@@ -164,24 +114,41 @@ export default {
         lesLsfNr: null,
         lesPrice: null,
         lesItmNr: null,
+        fee: null,
+        agreeConditions: true,
+        agreeCommerce: false,
+        pro_lesson_type: this.lesson.pro_lesson_type,
+        pro: this.lesson.pro,
+        relation: null,
+        payMethod: "onCourse",
         ProLessonClient: {
-          plcName: "",
-          plcPhone: "",
-          plcEmail: "",
-          plcLsfNr: null,
-          plcPrice: null,
-          plcItmNr: null,
-          agreeConditions: true,
-          agreeCommerce: false,
+          plcName: "laurens",
+          plcPhone: "0172617000",
+          plcEmail: "laurens+331@intogolf.nl",
         },
       },
-      mollie: null,
     };
   },
-  watch: {
-    lesson: {},
+  mounted() {
+    this.ProLesson.fee = this.feeOptions[0].value;
   },
   computed: {
+    confirmButtonLabel() {
+      return this.ProLesson.payMethod === "onCourse" ? "Reseveren" : "Betalen";
+    },
+    feeOptions() {
+      return this.lesson.pro_lesson_fee_les.map((price) => {
+        let personText = price.lfpSizeTo === 1 ? " persoon " : " personen ";
+        let numberText = price.lfpSizeFrom;
+        if (price.lfpSizeFrom !== price.lfpSizeTo) {
+          numberText += " tot " + price.lfpSizeTo;
+        }
+        return {
+          label: numberText + personText + this.$filters.money(price.lfpPrice),
+          value: price,
+        };
+      });
+    },
     conditions: function () {
       if (this.settings === null) {
         return "";
@@ -196,30 +163,95 @@ export default {
         emailPattern.test(this.ProLesson.ProLessonClient.plcEmail)
       );
     },
+    labelRegister() {
+      const lastPerson = "person" + (this.ProLesson.ProLessonClient.length - 1);
+      if (lastPerson !== this.personTab) {
+        return "Volgende";
+      }
+      return "Bevestig";
+    },
   },
   methods: {
-    handleSave: function () {
+    async handleSave() {
       let les = this.ProLesson;
       les.lesDate = this.$filters.dateToUnix(this.date, "YYYY-MM-DD");
       les.lesBlockedFrom = this.lesson.pagTimeFrom;
       les.lesPltNr = this.lesson.pro_lesson_type.pltNr;
       les.lesRelNrPro = this.lesson.pro.relNr;
-      les.lesRelNrPro = this.lesson.pro.relNr;
 
-      les.ProLessonClient.plcLsfNr = this.lesson.pro_lesson_fee_player.lfpNr;
-      les.ProLessonClient.plcPrice = this.lesson.pro_lesson_fee_player.lfpPrice;
-      les.ProLessonClient.plcItmNr = this.lesson.pro_lesson_fee_player.lfpItmNr;
+      les.ProLessonClient.plcLsfNr = this.lesson.pro_lesson_fee_les[0].lfpNr;
+      les.ProLessonClient.plcPrice = this.lesson.pro_lesson_fee_les[0].lfpPrice;
+      les.ProLessonClient.plcItmNr = this.lesson.pro_lesson_fee_les[0].lfpItmNr;
 
-      this.$http.post("public/lesson", les).then((res) => {
-        this.mollie = res.data;
-      });
+      let res = await this.$http.post("public/lesson", les);
+      if (les.payMethod === "iDeal") {
+        window.location.href = res.data.url;
+      } else {
+        this.step = 4;
+      }
     },
     handleBack: function () {
       this.$emit("handleBack");
     },
     handleClosePayment: function () {
-      this.mollie = null;
       this.$emit("handleClose");
+    },
+    async onSaveRelation() {
+      let res = await this.$http.post(
+        "/api/publicLesson/relation",
+        this.relation
+      );
+    },
+    async onRegisterRelation() {
+      if (this.labelRegister === "Volgende") {
+        const personIndex = parseInt(this.personTab.substring(6, 7));
+        this.personTab = "person" + (personIndex + 1);
+        return;
+      }
+
+      const formValid = await this.onCheckRelationForm();
+      const relValid = await this.onSetRelation();
+      if (formValid && relValid) {
+        this.step++;
+      }
+    },
+    async onCheckRelationForm() {
+      const form = this.$refs.lessonRegister.$refs.formRelation;
+
+      if (!form) {
+        return false;
+      }
+      return await form.validate();
+    },
+    async onSetRelation() {
+      let res = await this.$http.post(
+        "public/lesson/relation",
+        this.$refs.lessonRegister.relation
+      );
+      this.ProLesson.relation = this.$refs.lessonRegister.relation;
+      return res.data === "ok";
+    },
+    setFee(fee) {
+      this.ProLesson.ProLessonClient = [];
+      for (let i = 0; i < fee.lfpSizeTo; i++) {
+        this.ProLesson.ProLessonClient.push({
+          plcName: "test",
+          plcPhone: "",
+          plcEmail: "test@intogolf.nl",
+          plcHandicap: "10",
+        });
+      }
+      this.ProLesson.fee = fee;
+    },
+    onReload() {
+      window.location.reload();
+    },
+    setTab(value) {
+      this.personTab = value;
+    },
+    onDeelnemers() {
+      this.personTab = "person0";
+      this.step++;
     },
   },
 };

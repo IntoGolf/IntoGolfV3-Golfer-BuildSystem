@@ -83,10 +83,10 @@ const routes = [
     meta: { requiresAuth: false, title: "Facturen" },
   },
   {
-    path: "/public_lessons",
+    path: "/publicLesson",
     name: "publicLesson",
     component: () => import("pages/PublicLessons.vue"),
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: false, title: "Boek een les" },
   },
   {
     path: "/classes",

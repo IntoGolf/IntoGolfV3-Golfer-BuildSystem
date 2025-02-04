@@ -6,7 +6,7 @@
           <b class="float-left">{{
             $filters.minuteToTime(lesson.pagTimeFrom)
           }}</b>
-          <i class="float-right">{{ slots }} deelnemers</i>
+          <i class="float-right">v.a. {{ price }}</i>
         </div>
       </div>
     </div>
@@ -30,6 +30,10 @@ export default {
     },
     slots: function () {
       return this.max - this.lesson.pagGolfers;
+    },
+    price: function () {
+      console.log(this.lesson.pro_lesson_fee_les[0].lfpPrice);
+      return this.$filters.money(this.lesson.pro_lesson_fee_les[0].lfpPrice);
     },
     bg: function () {
       if (this.players / this.max > 0.5) {

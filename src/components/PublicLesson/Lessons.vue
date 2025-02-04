@@ -2,8 +2,7 @@
   <div
     v-for="(lesson, key) in lessonFilter"
     :key="key"
-    align="left"
-    class="full-width"
+    class="full-width text-left"
     v-on:click="handleBook(lesson)"
   >
     <lesson :lesson="lesson" />

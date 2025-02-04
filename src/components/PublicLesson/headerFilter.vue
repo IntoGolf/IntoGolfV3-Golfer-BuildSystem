@@ -1,12 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-8 text-h5">Boek een les</div>
-    <div class="col-4 text-right">
-      <q-btn-group>
-        <q-btn color="primary" label="<" size="sm" v-on:click="setDay(-1)" />
-        <q-btn color="primary" label=">" size="sm" v-on:click="setDay(1)" />
-      </q-btn-group>
-    </div>
+    <div class="col-4 text-right"></div>
   </div>
 </template>
 
