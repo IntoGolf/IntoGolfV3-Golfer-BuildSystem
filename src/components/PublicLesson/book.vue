@@ -185,11 +185,11 @@ export default {
 
       let res = await this.$http.post("public/lesson", les);
       console.log(res);
-      // if (les.payMethod === "iDeal") {
-      //   window.location.href = res.data.url;
-      // } else {
-      //   this.step = 4;
-      // }
+      if (les.payMethod === "iDeal") {
+        window.location.href = res.data.url;
+      } else {
+        this.step = 4;
+      }
     },
     handleBack: function () {
       this.$emit("handleBack");
