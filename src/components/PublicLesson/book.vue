@@ -1,6 +1,10 @@
 <template>
   <div>
-    <public-lesson-details :ProLesson="ProLesson" :step="step" />
+    <public-lesson-details
+      v-if="[1, 2, 3].includes(step)"
+      :ProLesson="ProLesson"
+      :step="step"
+    />
 
     <public-lesson-pricing
       v-if="step === 1"
@@ -25,9 +29,12 @@
       :proLesson="ProLesson"
     />
 
-    <div v-else-if="step === 4" class="text-h5 text-center q-mb-lg q-mt-lg">
-      Je les is gereserveerd.
-    </div>
+    <payment
+      v-if="mollie !== null"
+      :id="mollie.opmKey"
+      :url="mollie.url"
+      v-on:handleCloseSubscribe="onCloseMollie"
+    />
 
     <div class="row text-center q-mb-lg">
       <div class="col q-ml-auto q-mr-auto">
@@ -67,13 +74,13 @@
           color="primary"
           v-on:click="handleSave"
         />
-        <q-btn
-          v-show="step === 4"
-          class="q-mr-sm"
-          color="primary"
-          label="Boek nog een les"
-          v-on:click="onReload"
-        />
+        <!--        <q-btn-->
+        <!--          v-show="step === 4"-->
+        <!--          class="q-mr-sm"-->
+        <!--          color="primary"-->
+        <!--          label="Boek nog een les"-->
+        <!--          v-on:click="onReload"-->
+        <!--        />-->
       </div>
     </div>
   </div>
@@ -84,9 +91,11 @@ import PublicLessonRegister from "components/PublicLesson/book/register.vue";
 import PublicLessonPricing from "components/PublicLesson/book/pricing.vue";
 import PublicLessonConfirm from "components/PublicLesson/book/confirm.vue";
 import PublicLessonDetails from "components/PublicLesson/book/details.vue";
+import Payment from "components/match/payment.vue";
 
 export default {
   components: {
+    Payment,
     PublicLessonDetails,
     PublicLessonConfirm,
     PublicLessonPricing,
@@ -104,6 +113,7 @@ export default {
         { label: "Op de baan", value: "onCourse" },
         { label: "via iDeal met 10% korting", value: "iDeal" },
       ],
+      mollie: null,
       ProLesson: {
         lesDate: this.date,
         lesBlockedFrom: this.lesson.pagTimeFrom,
@@ -184,12 +194,10 @@ export default {
       les.ProLessonClient.plcItmNr = this.lesson.pro_lesson_fee_les[0].lfpItmNr;
 
       let res = await this.$http.post("public/lesson", les);
-      console.log(res);
       if (les.payMethod === "iDeal") {
-        window.location.href = res.data.url;
-      } else {
-        this.step = 4;
+        this.mollie = res.data;
       }
+      this.step = 4;
     },
     handleBack: function () {
       this.$emit("handleBack");
@@ -253,6 +261,14 @@ export default {
     onDeelnemers() {
       this.personTab = "person0";
       this.step++;
+    },
+    onCloseMollie(status) {
+      this.mollie = null;
+      if (status === "paid") {
+        this.onReload();
+      } else {
+        this.step = 3;
+      }
     },
   },
 };

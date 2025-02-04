@@ -60,7 +60,7 @@ export default {
       }
 
       window.setTimeout(function () {
-        that.$emit("handleCloseSubscribe")();
+        that.$emit("handleCloseSubscribe", that.status);
       }, 5000);
     },
 
