@@ -92,7 +92,7 @@ const routes = [
     path: "/classes",
     name: "classes",
     component: () => import("pages/GolfClasses.vue"),
-    meta: { requiresAuth: false },
+    meta: { requiresAuth: false, title: "Boek een cursus" },
   },
   {
     path: "/startlist",

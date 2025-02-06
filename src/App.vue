@@ -151,7 +151,7 @@ export default defineComponent({
       return this.$q.platform.is.capacitor || this.$q.platform.is.mobile;
     },
     showFullHeader() {
-      if (["/publicLesson"].includes(this.$route.path)) {
+      if (["/publicLesson", "/classes"].includes(this.$route.path)) {
         return true;
       }
       return false;

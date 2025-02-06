@@ -160,7 +160,7 @@ export default {
       });
     },
     conditions: function () {
-      if (this.settings === null) {
+      if (this.$store.state.settings === null) {
         return "";
       }
       return this.$store.state.settings.item.website_payment_conditions;
