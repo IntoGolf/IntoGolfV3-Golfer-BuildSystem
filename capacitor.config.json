@@ -1,6 +1,7 @@
 {
-  "appId": "nl.intogolf.maasduinen",
-  "appName": "maasduinen",
+  "appId": "nl.intogolf.engelenburg",
+  "appName": "engelenburg",
+  "version": "1.4.8",
   "webDir": "dist/spa",
   "ios": {
     "buildOptions": {

@@ -9,6 +9,7 @@ fi
 CLIENT=$1
 APP_NAME="${CLIENT}"
 PACKAGE_NAME="nl.intogolf.${CLIENT}"
+VERSION_CODE=3
 
 # Keystore configuration
 KEYSTORE_DIR="${CLIENT}"
@@ -108,6 +109,7 @@ cat > capacitor.config.json <<EOL
 {
   "appId": "$PACKAGE_NAME",
   "appName": "$APP_NAME",
+  "version": "1.4.8",
   "webDir": "dist/spa",
   "ios": {
     "buildOptions": {
@@ -245,6 +247,23 @@ fi
 # Clean the project
 echo "Cleaning the project..."
 ./gradlew clean
+
+# Pad naar build.gradle
+GRADLE_FILE="app/build.gradle"
+
+# Controleer of het bestand bestaat
+if [[ ! -f "$GRADLE_FILE" ]]; then
+  echo "Error: $GRADLE_FILE niet gevonden!"
+  exit 1
+fi
+
+# Huidige versionCode ophalen (compatibel met macOS en Linux)
+CURRENT_VERSION_CODE=$(grep 'versionCode' "$GRADLE_FILE" | awk '{print $2}')
+
+# build.gradle aanpassen met nieuwe versionCode (compatibel met macOS & Linux)
+sed -i '' "s/versionCode $CURRENT_VERSION_CODE/versionCode $VERSION_CODE/" "$GRADLE_FILE"
+
+echo "✅ VersionCode bijgewerkt: $CURRENT_VERSION_CODE → $VERSION_CODE"
 
 # Build the signed APK
 echo "Building the signed APK..."
