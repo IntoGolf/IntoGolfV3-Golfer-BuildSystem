@@ -23,11 +23,11 @@ export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
     : process.env.VUE_ROUTER_MODE === "history"
-    ? createWebHistory
-    : createWebHashHistory;
+      ? createWebHistory
+      : createWebHashHistory;
 
   const Router = createRouter({
-    scrollBehavior: () => ({ left: 0, top: 0 }),
+    scrollBehavior: () => ({left: 0, top: 0}),
     routes,
 
     // Leave this as is and make changes in quasar.conf.js instead!
@@ -41,6 +41,16 @@ export default route(function (/* { store, ssrContext } */) {
   Router.beforeEach(async (to, from, next) => {
     const token = store.getters["currentUser/token"];
 
+    const response = await fetch('/version.json');
+    const data = await response.json();
+    const version = localStorage.getItem('version');
+
+    if (data.version != version) {
+      console.log('reload');
+      localStorage.setItem('version', data.version);
+      window.location.reload();
+    }
+
     // Ensure the store is initialized before proceeding
     if (token && store.getters["settings/isItemEmpty"]) {
       await store.dispatch("initializeApp");
@@ -53,15 +63,15 @@ export default route(function (/* { store, ssrContext } */) {
     if (to.matched.some((r) => r.meta.requiresAuth)) {
       if (token) {
         if (to.path === "/login") {
-          return next({ path: "/" });
+          return next({path: "/"});
         }
       } else {
-        return next(to.path !== "/login" ? { path: "/login" } : true);
+        return next(to.path !== "/login" ? {path: "/login"} : true);
       }
     } else {
       if (token) {
         if (to.path === "/login" && !to.query.redirect) {
-          return next({ path: "/" });
+          return next({path: "/"});
         }
       }
     }

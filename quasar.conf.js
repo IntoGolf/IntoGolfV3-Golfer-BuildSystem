@@ -8,9 +8,10 @@
 
 /* eslint-env node */
 const ESLintPlugin = require("eslint-webpack-plugin");
-const { configure } = require("quasar/wrappers");
+const {configure} = require("quasar/wrappers");
 const envParser = require("./src/config/envparser.js");
 const path = require("path");
+const fs = require("fs");
 
 module.exports = configure(function (ctx) {
   return {
@@ -78,7 +79,7 @@ module.exports = configure(function (ctx) {
       chainWebpack(chain) {
         chain
           .plugin("eslint-webpack-plugin")
-          .use(ESLintPlugin, [{ extensions: ["js", "vue"] }]);
+          .use(ESLintPlugin, [{extensions: ["js", "vue"]}]);
 
         chain.output
           .filename("js/[name].[contenthash].js")
@@ -96,9 +97,25 @@ module.exports = configure(function (ctx) {
           include: path.resolve(__dirname, "runners"),
           loader: "babel-loader",
         });
+        cfg.plugins.push({
+          apply: (compiler) => {
+            compiler.hooks.done.tap("GenerateVersion", () => {
+              const version = Date.now();
+              const outputPath = path.resolve(__dirname, "dist/spa/version.json");
+
+              // Zorg ervoor dat de dist/spa map bestaat
+              if (!fs.existsSync("dist/spa")) {
+                fs.mkdirSync("dist/spa", {recursive: true});
+              }
+
+              fs.writeFileSync(outputPath, JSON.stringify({version}));
+              console.log("✅ Version file generated:", version);
+            });
+          },
+        });
       },
       copy: [
-        { from: "src/runners/background.js", to: "runners/background.js" },
+        {from: "src/runners/background.js", to: "runners/background.js"},
       ],
     },
 
@@ -160,7 +177,7 @@ module.exports = configure(function (ctx) {
       chainWebpackWebserver(chain) {
         chain
           .plugin("eslint-webpack-plugin")
-          .use(ESLintPlugin, [{ extensions: ["js"] }]);
+          .use(ESLintPlugin, [{extensions: ["js"]}]);
       },
 
       middlewares: [
