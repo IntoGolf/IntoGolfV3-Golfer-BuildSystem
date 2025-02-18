@@ -71,7 +71,7 @@
               color="primary"
               flat
               label="Wachtwoord vergeten"
-              v-on:click="$router.push('verify-code')"
+              to="verifyCode"
             />
           </div>
         </q-card-section>
@@ -82,7 +82,7 @@
           color="primary"
           flat
           label="Inschrijven"
-          to="sign-up"
+          to="signUp"
         />
         <q-btn
           v-if="canBookPublic"

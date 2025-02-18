@@ -163,8 +163,8 @@ export default defineComponent({
         [
           "/login",
           "/teetimes",
-          "/sign-up",
-          "/verify-code",
+          "/signUp",
+          "/verifyCode",
           "/publicLesson",
           "/classes",
           "/publicWalkins",

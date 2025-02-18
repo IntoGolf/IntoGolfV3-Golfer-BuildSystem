@@ -19,32 +19,31 @@
 
           <div class="row q-mt-md">
             <div class="col">
-              <q-input
-                v-model="form.email"
-                :rules="[
-                  (val) =>
-                    (val && val.length > 0) || 'Voer aub uw e-mailadres in',
-                ]"
-                filled
-                label="Uw e-mailadres"
-                lazy-rules
-              />
-
-              <div class="text-center">
-                <q-btn
-                  color="primary"
-                  label="Verstuur"
-                  v-on:click="onSendCode"
+              <q-form ref="verifyForm">
+                <q-input
+                  v-model="form.email"
+                  :rules="[emailRule]"
+                  filled
+                  label="Uw e-mailadres"
+                  lazy-rules
                 />
 
-                <q-btn
-                  class="q-mt-md"
-                  color="primary"
-                  flat
-                  label="Terug naar inloggen"
-                  v-on:click="$router.push('/')"
-                />
-              </div>
+                <div class="text-center q-mt-md">
+                  <q-btn
+                    color="primary"
+                    label="Verstuur"
+                    v-on:click="onSendCode"
+                  />
+
+                  <q-btn
+                    class="q-mt-md"
+                    color="primary"
+                    flat
+                    label="Terug naar inloggen"
+                    v-on:click="$router.push('/')"
+                  />
+                </div>
+              </q-form>
             </div>
           </div>
         </q-card-section>
@@ -119,6 +118,8 @@ export default {
       blobUrl: "",
       verifyCodeDialogVisible: false,
       receiveCodeVisible: false,
+      emailRule: (val) =>
+        /.+@.+\..+/.test(val) || "Voer een geldig e-mailadres in",
     };
   },
   mounted() {
@@ -143,7 +144,14 @@ export default {
     onReceiveCode() {
       this.$message("TODO");
     },
-    onSendCode() {
+    async validateForm() {
+      return await this.$refs.verifyForm.validate();
+    },
+    async onSendCode() {
+      let isvalid = await this.validateForm();
+      if (!isvalid) {
+        return;
+      }
       this.$http.post("golfer/send-code", this.form).then(() => {
         this.verifyCodeDialogVisible = true;
       });
