@@ -95,7 +95,7 @@
           v-if="canBookCourse"
           color="primary"
           flat
-          label="Less"
+          label="Les"
           v-on:click="onOpenLessons"
         />
         <q-btn
