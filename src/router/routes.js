@@ -1,9 +1,9 @@
-import { Platform } from "quasar";
+import {Platform} from "quasar";
 import app from "../App.vue";
 
 import Home from "pages/Home.vue";
 import HomeWeb from "pages/HomeWeb.vue";
-import { createRouter, createWebHistory } from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 
 let layoutComponent = app;
 
@@ -15,7 +15,7 @@ if (Platform.is.desktop) {
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "home",
     component: homeComponent,
     meta: {
       requiresAuth: true,
@@ -24,15 +24,15 @@ const routes = [
   },
   {
     path: "/login",
-    name: "Login",
+    name: "login",
     component: () => import("pages/Login.vue"),
-    meta: { requiresAuth: false },
+    meta: {requiresAuth: false},
   },
   {
     path: "/teetimes",
     name: "teetimes",
     component: () => import("pages/Teetimes.vue"),
-    meta: { requiresAuth: false },
+    meta: {requiresAuth: false},
   },
   {
     path: "/external_teetimes",
@@ -71,34 +71,49 @@ const routes = [
     },
   },
   {
+    path: "/reload",
+    name: "reload",
+    component: () => import("pages/reload.vue"),
+    meta: {
+      requiresAuth: true,
+      title: "reload",
+    },
+  },
+  {
     path: "/history",
     name: "history",
     component: () => import("pages/StartTimeHistory.vue"),
-    meta: { requiresAuth: false, title: "Speelhistorie" },
+    meta: {requiresAuth: false, title: "Speelhistorie"},
   },
   {
     path: "/invoice",
     name: "invoice",
     component: () => import("../components/invoice/index.vue"),
-    meta: { requiresAuth: false, title: "Facturen" },
+    meta: {requiresAuth: false, title: "Facturen"},
   },
   {
     path: "/publicLesson",
     name: "publicLesson",
     component: () => import("pages/PublicLessons.vue"),
-    meta: { requiresAuth: false, title: "Boek een les" },
+    meta: {requiresAuth: false, title: "Boek een les"},
+  },
+  {
+    path: "/publicWalkins",
+    name: "publicWalkins",
+    component: () => import("pages/PublicWalkins.vue"),
+    meta: {requiresAuth: false, title: "Boek een inlooples"},
   },
   {
     path: "/classes",
     name: "classes",
-    component: () => import("pages/GolfClasses.vue"),
-    meta: { requiresAuth: false, title: "Boek een cursus" },
+    component: () => import("pages/PublicClasses.vue"),
+    meta: {requiresAuth: false, title: "Boek een cursus"},
   },
   {
     path: "/startlist",
     name: "startlist",
     component: () => import("pages/Startlist.vue"),
-    meta: { requiresAuth: false },
+    meta: {requiresAuth: false},
   },
   {
     path: "/proCourse",
@@ -120,7 +135,7 @@ const routes = [
   },
   {
     path: "/match",
-    name: "Match",
+    name: "match",
     component: () => import("pages/Match.vue"),
     meta: {
       requiresAuth: true,
@@ -128,8 +143,8 @@ const routes = [
     },
   },
   {
-    path: "/Baanstatus",
-    name: "Baanstatus",
+    path: "/baanstatus",
+    name: "baanstatus",
     component: () => import("pages/Course.vue"),
     meta: {
       requiresAuth: true,
@@ -137,8 +152,8 @@ const routes = [
     },
   },
   {
-    path: "/Meerronden",
-    name: "Meerronden",
+    path: "/meerronden",
+    name: "meerronden",
     component: () => import("pages/Meerronden.vue"),
     meta: {
       requiresAuth: true,
@@ -147,7 +162,7 @@ const routes = [
   },
   {
     path: "/handicap",
-    name: "Handicap",
+    name: "handicap",
     component: () => import("pages/Handicap.vue"),
     meta: {
       requiresAuth: true,
@@ -156,7 +171,7 @@ const routes = [
   },
   {
     path: "/checkin",
-    name: "CheckIn",
+    name: "checkin",
     component: () => import("pages/CheckIn.vue"),
     meta: {
       requiresAuth: true,
@@ -165,7 +180,7 @@ const routes = [
   },
   {
     path: "/messages",
-    name: "Berichten",
+    name: "messages",
     component: () => import("pages/Messages.vue"),
     meta: {
       requiresAuth: true,
@@ -174,7 +189,7 @@ const routes = [
   },
   {
     path: "/pos",
-    name: "Horeca",
+    name: "pos",
     component: () => import("pages/Pos.vue"),
     meta: {
       requiresAuth: true,
@@ -183,7 +198,7 @@ const routes = [
   },
   {
     path: "/lessons",
-    name: "Lessen",
+    name: "lessons",
     component: () => import("pages/Lessons.vue"),
     meta: {
       requiresAuth: true,
@@ -210,7 +225,7 @@ const routes = [
   },
   {
     path: "/shop",
-    name: "Shop",
+    name: "shop",
     component: () => import("pages/Shop.vue"),
     meta: {
       requiresAuth: true,
@@ -237,7 +252,7 @@ const routes = [
   },
   {
     path: "/ngf",
-    name: "NGF",
+    name: "ngf",
     component: () => import("pages/NGF.vue"),
     meta: {
       requiresAuth: true,
@@ -246,7 +261,7 @@ const routes = [
   },
   {
     path: "/members",
-    name: "Ledenlijst",
+    name: "members",
     component: () => import("pages/Members.vue"),
     meta: {
       requiresAuth: true,
@@ -254,8 +269,8 @@ const routes = [
     },
   },
   {
-    path: "/Baankalender",
-    name: "Baankalender",
+    path: "/baankalender",
+    name: "baankalender",
     component: () => import("pages/Calendar.vue"),
     meta: {
       requiresAuth: true,
@@ -263,7 +278,7 @@ const routes = [
     },
   },
   {
-    path: "/sign-up",
+    path: "/signUp",
     name: "signUp",
     component: () => import("pages/SignUp.vue"),
     meta: {
@@ -277,7 +292,7 @@ const routes = [
     component: () => import("../pages/404"),
   },
   {
-    path: "/verify-code",
+    path: "/verifyCode",
     name: "verifyCode",
     component: () => import("../pages/SendVerifyCode"),
     meta: {
@@ -287,7 +302,7 @@ const routes = [
   },
   {
     path: "/reset/password",
-    name: "resetPassword",
+    name: "password",
     component: () => import("../pages/ResetPassword"),
     meta: {
       requiresAuth: false,
@@ -301,8 +316,9 @@ const routes = [
 ];
 
 const router = createRouter({
+  linkActiveClass: 'active',
   history: createWebHistory(),
   routes,
 });
 
-export { router, routes };
+export {router, routes};

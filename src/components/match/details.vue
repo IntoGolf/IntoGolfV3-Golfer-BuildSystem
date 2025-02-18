@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-sm">
+  <q-page class="q-pa-sm q-mb-xl">
     <q-card class="q-pa-sm">
       <div class="row">
         <div class="col-6 text-h6">{{ title }}</div>
@@ -10,11 +10,11 @@
             flat
             icon="arrow_back"
             v-on:click="handleCloseMatch"
-            >Wedstrijden
+          >Wedstrijden
           </q-btn>
         </div>
       </div>
-      <q-separator class="q-mt-sm q-mb-sm" />
+      <q-separator class="q-mt-sm q-mb-sm"/>
       <div class="row">
         <div class="col q-pb-md">
           <details-list

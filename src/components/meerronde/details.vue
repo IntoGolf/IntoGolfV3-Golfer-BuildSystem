@@ -13,7 +13,7 @@
         />
       </div>
     </div>
-    <q-separator class="q-mt-sm q-mb-sm" />
+    <q-separator class="q-mt-sm q-mb-sm"/>
     <q-table
       v-if="dataResult.length > 0"
       :columns="columnsResult"
@@ -25,7 +25,7 @@
       hide-pagination
       row-key="name"
     />
-    <q-separator class="q-mb-sm" />
+    <q-separator class="q-mb-sm"/>
     <div v-if="prop_match.meeEclectic >= 1">
       <h5 class="q-mt-sm q-mb-sm">Eclectic</h5>
       <div style="width: 100%; overflow: scroll">
@@ -44,19 +44,19 @@
       </div>
     </div>
     <div v-if="prop_match.meeBirdy === 1">
-      <q-separator class="q-mb-sm" />
+      <q-separator class="q-mb-sm"/>
       <h5 class="q-mt-sm q-mb-sm">Birdie klassement</h5>
-      <birdy-result :prop_match="prop_match" />
+      <birdy-result :prop_match="prop_match"/>
     </div>
     <div
       v-if="prop_match.meeBirdy === 1 || prop_match.meeEclectic >= 1"
       class="row q-mt-sm q-mb-xl"
     >
       <div class="col-12">
-        rood= bogey<br />
-        geel= par<br />
-        oranje= birdie<br />
-        groen= eagle<br />
+        rood= bogey<br/>
+        geel= par<br/>
+        oranje= birdie<br/>
+        groen= eagle<br/>
       </div>
     </div>
   </q-page>
@@ -70,11 +70,15 @@
 
   thead tr:first-child th:first-child
     /* bg color is important for th; just specify one */
+    font-weight: bold
+    color: white
     background-color: #00b4ff
 
   th:nth-child(2),
   td:nth-child(2),
   td:first-child
+    font-weight: bold
+    color: white
     background-color: #00b4ff
 
   th:first-child,
@@ -90,7 +94,7 @@
 import BirdyResult from "components/meerronde/birdyResult.vue";
 
 export default {
-  components: { BirdyResult },
+  components: {BirdyResult},
   props: {
     prop_match: Object,
   },

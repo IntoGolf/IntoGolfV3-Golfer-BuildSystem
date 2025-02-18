@@ -15,7 +15,7 @@
 
           <div class="row q-mt-md q-mb-md">
             <div class="col text-center text-h5">
-              Welkom<br />
+              Welkom<br/>
               login met je account
             </div>
           </div>
@@ -53,8 +53,8 @@
           </q-input>
 
           <div class="text-center q-mt-sm">
-            <q-btn color="primary" label="Login" v-on:click="onlogin" />
-            <br />
+            <q-btn color="primary" label="Login" v-on:click="onlogin"/>
+            <br/>
 
             <q-btn
               v-if="1 == 2 && !this.$q.platform.is.cordova"
@@ -82,14 +82,14 @@
           color="primary"
           flat
           label="Inschrijven"
-          v-on:click="$router.push('sign-up')"
+          to="sign-up"
         />
         <q-btn
           v-if="canBookPublic"
           color="primary"
           flat
           label="Starttijd"
-          v-on:click="$router.push('teetimes')"
+          to="teetimes"
         />
         <q-btn
           v-if="canBookCourse"
@@ -103,7 +103,14 @@
           color="primary"
           flat
           label="Cursus"
-          v-on:click="$router.push('classes')"
+          to="classes"
+        />
+        <q-btn
+          v-if="canBookCourse"
+          color="primary"
+          flat
+          label="Inloop"
+          to="publicWalkins"
         />
       </div>
     </q-page>
@@ -117,7 +124,7 @@
 </style>
 
 <script>
-import { Platform } from "quasar";
+import {Platform} from "quasar";
 import packageJson from "../../package.json";
 
 export default {
@@ -240,7 +247,8 @@ export default {
             message:
               "E-mailadres is <i>" + this.form.relEmail + "</i> niet gevonden!",
           })
-          .onOk(() => {});
+          .onOk(() => {
+          });
       }
     },
     showHelp() {
@@ -252,10 +260,10 @@ export default {
           html: true,
           message: text,
         })
-        .onOk(() => {});
+        .onOk(() => {
+        });
     },
     onOpenLessons() {
-      console.log("onOpenLessons");
       this.$router.push("publicLesson");
     },
   },

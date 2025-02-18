@@ -24,6 +24,12 @@ export default {
       match: null,
     };
   },
+  watch: {
+    $route() {
+      console.log('reload');
+      window.location.reload();
+    }
+  },
   methods: {
     handleOpenMatch(match) {
       this.match = match;

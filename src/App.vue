@@ -3,7 +3,7 @@
     v-if="['/login'].includes($route.path)"
     :style="{ paddingTop: hasNotch ? '50px' : '0' }"
   >
-    <login />
+    <login/>
   </q-layout>
   <q-layout
     v-else
@@ -75,13 +75,13 @@
           icon="account_circle"
           round
           v-on:click="$router.push('/profile')"
-          >{{ fullName }}
+        >{{ fullName }}
         </q-btn>
-        <q-btn v-else dense flat round />
+        <q-btn v-else dense flat round/>
       </q-toolbar>
     </q-header>
     <q-page-container>
-      <router-view class="bg-white web-width" />
+      <router-view :key="$route.fullPath" :style="{backgroundColor: getVeryLightPastel()}" class="web-width"/>
     </q-page-container>
     <q-drawer v-if="isApp" v-model="drawer" class="q-drawer" show-if-above>
       <div
@@ -97,11 +97,13 @@
           v-for="(item, key) in menuVisibleArray"
           :key="key"
           v-ripple
+          :style="qItemActiveStyle(item.name)"
+          active-class="qItemActiveClass"
           clickable
-          @click="onMenu(item.name)"
+          v-on:click="onMenu(item.name)"
         >
           <q-item-section side>
-            <q-icon :name="item.icon" style="color: #edfcff" />
+            <q-icon :name="item.icon" style="color: #edfcff"/>
           </q-item-section>
           <q-item-section>
             <q-item-label>{{ $t(item.menuName) }}</q-item-label>
@@ -113,13 +115,13 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import { mapGetters } from "vuex";
+import {defineComponent} from "vue";
+import {mapGetters} from "vuex";
 import Login from "pages/Login.vue";
 
 export default defineComponent({
   name: "PageLayout",
-  components: { Login },
+  components: {Login},
   data() {
     return {
       drawer: false,
@@ -151,7 +153,7 @@ export default defineComponent({
       return this.$q.platform.is.capacitor || this.$q.platform.is.mobile;
     },
     showFullHeader() {
-      if (["/publicLesson", "/classes"].includes(this.$route.path)) {
+      if (["/publicLesson", "/classes", "/publicWalkins"].includes(this.$route.path)) {
         return true;
       }
       return false;
@@ -165,6 +167,7 @@ export default defineComponent({
           "/verify-code",
           "/publicLesson",
           "/classes",
+          "/publicWalkins",
         ].includes(this.$route.path)
       ) {
         return false;
@@ -188,6 +191,8 @@ export default defineComponent({
       "setHasMessages",
       "usrHasExtTeetime",
       "usrHasCourseStatus",
+      "showWhs",
+      "showHistory",
     ]),
     ...mapGetters("currentUser", [
       "usrHasLessons",
@@ -204,19 +209,19 @@ export default defineComponent({
     menuArray() {
       return [
         {
-          name: "Dashboard",
-          menuName: "Dashboard",
+          name: "/",
+          menuName: "Home",
           icon: "home",
           visible: true,
         },
         {
-          name: "Baankalender",
+          name: "baankalender",
           menuName: "Baankalender",
           icon: "calendar_month",
           visible: this.usrHasCalendar,
         },
         {
-          name: "NonGolfEvents",
+          name: "nonGolfEvents",
           menuName: "Activiteiten",
           icon: "schedule",
           visible: this.setHasActivities,
@@ -228,7 +233,7 @@ export default defineComponent({
           visible: this.usrHasMatch,
         },
         {
-          name: "Meerronden",
+          name: "meerronden",
           menuName: "Meerronden",
           icon: "emoji_events",
           visible: this.usrHasMatch,
@@ -240,7 +245,7 @@ export default defineComponent({
           visible: this.usrHasInvoices,
         },
         {
-          name: "Chat",
+          name: "chat",
           menuName: "Chat",
           icon: "chat",
           visible: this.setHasCircles,
@@ -276,7 +281,7 @@ export default defineComponent({
           visible: this.setHasMessages,
         },
         {
-          name: "Baanstatus",
+          name: "baanstatus",
           menuName: "Baanstatus",
           icon: "grass",
           visible: this.setHasCourseStatus,
@@ -285,7 +290,7 @@ export default defineComponent({
           name: "history",
           menuName: "Speelhistorie",
           icon: "calendar_month",
-          visible: this.usrHasTeeTimes,
+          visible: this.showHistory,
         },
         {
           name: "handicap",
@@ -294,7 +299,7 @@ export default defineComponent({
           visible: this.usrHasHandicap,
         },
         {
-          name: "NGF",
+          name: "ngf",
           menuName: "NGF",
           icon: "credit_card",
           visible: this.usrHasHandicap,
@@ -333,7 +338,7 @@ export default defineComponent({
           name: "whs",
           menuName: "WHS",
           icon: "school",
-          visible: this.usrHasHandicap,
+          visible: this.showWhs,
         },
         // {
         //   name: "lessoncards",
@@ -354,14 +359,52 @@ export default defineComponent({
     this.drawer = false;
   },
   methods: {
-    onMenu: function (name) {
-      if (name === "Dashboard") {
-        this.$store.dispatch("settings/fetchSettings");
-        name = "";
+    qItemActiveStyle(name) {
+      return {
+        fontWeight: this.$route.name === name ? 'bold' : ''
       }
-      this.$router.push("/" + name);
-      this.drawer = false;
     },
-  },
-});
+    onMenu(name) {
+      if (name === this.$route.name) {
+        this.$router.replace({path: '/reload', query: {page: this.$route.name}});
+      } else {
+        this.$router.replace({path: '/' + name});
+      }
+    },
+    hexToRgb(hex) {
+      hex = hex.replace("#", "");
+      if (hex.length === 3) {
+        hex = hex.split("").map(c => c + c).join("");
+      }
+      let r = parseInt(hex.substring(0, 2), 16);
+      let g = parseInt(hex.substring(2, 4), 16);
+      let b = parseInt(hex.substring(4, 6), 16);
+      return {r, g, b};
+    },
+    rgbToHex(r, g, b) {
+      return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+    },
+    getVeryLightPastel() {
+      return 'white';
+      const hexColor = this.$store.state.settings.publicItems.app_secondary_color;
+      if (!hexColor) {
+        return ''
+      }
+      const mixRatio = 0.95;
+      let {r, g, b} = this.hexToRgb(hexColor);
+      // Meng de kleur met wit (95% wit en 5% originele kleur)
+      let lightR = Math.round(255 * mixRatio + r * (1 - mixRatio));
+      let lightG = Math.round(255 * mixRatio + g * (1 - mixRatio));
+      let lightB = Math.round(255 * mixRatio + b * (1 - mixRatio));
+      return this.rgbToHex(lightR, lightG, lightB);
+    },
+  }
+})
 </script>
+
+<style>
+.qItemActiveClass {
+  color: white;
+  font-weight: bold;
+}
+</style>

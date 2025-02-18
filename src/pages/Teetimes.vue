@@ -24,7 +24,7 @@
           </div>
           <div class="row q-mb-md">
             <div class="col-md-3 col-xs-6 q-pr-md">
-              <q-input v-model="date" label="Datum" size="sm" type="date" />
+              <q-input v-model="date" label="Datum" size="sm" type="date"/>
             </div>
             <div class="col-md-3 col-xs-6 q-pr-md">
               <q-select
@@ -155,7 +155,7 @@
             "
             class="row q-mb-lg"
           >
-            <div class="col-4 text-bold">Te betalen bedrag:</div>
+            <div class="col-4 text-bold">Te betalen:</div>
             <div class="col-8">
               {{ $filters.money(flightPrice) }}
             </div>
@@ -322,9 +322,18 @@
           </div>
 
           <div>
-            <div v-if="pay" class="row">Leveringsvoorwaarden:</div>
+            <div class="row">Betaalwijze:</div>
+            <div class="row q-mt-md">
+              <q-option-group
+                v-model="flight.payMethod"
+                :options="paymentOptions"
+              />
+            </div>
+          </div>
+
+          <div v-if="hasPayOption">
+            <div class="row">Leveringsvoorwaarden:</div>
             <div
-              v-if="pay"
               class="row q-pa-sm"
               style="
                 border: 1px solid lightgrey;
@@ -335,7 +344,7 @@
             >
               {{ conditions }}
             </div>
-            <div v-if="pay" class="row q-mt-md">
+            <div class="row q-mt-md">
               <q-checkbox
                 v-model="flight.agreeConditions"
                 :rules="[(val) => !!val || '* Required']"
@@ -344,7 +353,7 @@
                 stack-label
               />
             </div>
-            <div v-if="pay" class="row">
+            <div class="row">
               <q-checkbox
                 v-model="flight.agreeCommerce"
                 :rules="[(val) => !!val || '* Required']"
@@ -386,7 +395,7 @@
         v-on:handleClosePayment="handleClosePayment"
       />
 
-      <confirmation v-if="step === 4" />
+      <confirmation v-if="step === 4"/>
     </q-page>
   </q-page-container>
 </template>
@@ -410,28 +419,28 @@ export default {
       courses: [],
       loading: false,
       holesArray: [
-        { label: "9 Holes", value: 9 },
-        { label: "18 Holes", value: 18 },
+        {label: "9 Holes", value: 9},
+        {label: "18 Holes", value: 18},
       ],
       perArray: [
-        { label: "Dag", value: 1 },
-        { label: "Ochtend", value: 2 },
-        { label: "Middag", value: 3 },
-        { label: "Avond", value: 4 },
+        {label: "Dag", value: 1},
+        {label: "Ochtend", value: 2},
+        {label: "Middag", value: 3},
+        {label: "Avond", value: 4},
       ],
       sizeArray: [
-        { label: "1", value: 1 },
-        { label: "2", value: 2 },
-        { label: "3", value: 3 },
-        { label: "4", value: 4 },
+        {label: "1", value: 1},
+        {label: "2", value: 2},
+        {label: "3", value: 3},
+        {label: "4", value: 4},
       ],
 
       date: this.$dayjs().format("DD-MM-YYYY"),
       timeObject: null,
       timePrice: 0,
       size: 3,
-      holes: { label: "9 Holes", value: 9 },
-      per: { label: "Dag", value: 1 },
+      holes: {label: "9 Holes", value: 9},
+      per: {label: "Dag", value: 1},
 
       flight: {
         fltDate: null,
@@ -462,10 +471,15 @@ export default {
         flpHandicap4: null,
         agreeConditions: false,
         agreeCommerce: false,
+        payMethod: 'onCourse'
       },
       maxHandicap: 54,
       maxTotalHandicap: 108,
       mollie: null,
+      paymentOptions: [
+        {label: "op de baan", value: "onCourse"},
+        {label: "via iDeal", value: "iDeal"},
+      ],
     };
   },
   mounted() {
@@ -506,7 +520,7 @@ export default {
       return (
         this.flight.flpName1.length > 3 &&
         this.flight.flpPhone1.length > 7 &&
-        (!this.pay || this.flight.agreeConditions) &&
+        (!this.hasPayOption || this.flight.agreeConditions) &&
         emailPattern.test(this.flight.flpEmail1) &&
         this.validHcp
       );
@@ -553,9 +567,12 @@ export default {
     },
     pay() {
       return (
-        this.$store.state.settings.publicItems.app_display_greenfee_pay == 1
+        this.hasPayOption && this.flight.payMethod === 'iDeal'
       );
     },
+    hasPayOption() {
+      return this.$store.state.settings.publicItems.app_display_greenfee_pay == 1;
+    }
   },
   methods: {
     async handleLoadDate() {

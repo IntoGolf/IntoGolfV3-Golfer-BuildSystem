@@ -24,15 +24,15 @@
         mobile-arrows
         outside-arrows
       >
-        <q-tab class="pl-0" label="Naam" name="adres" />
-        <q-tab class="pl-0" label="Contact" name="contact" />
-        <q-tab class="pl-0" label="Golf" name="golf" />
-        <q-tab class="pl-0" label="Voorkeuren" name="preference" />
-        <q-tab class="pl-0" label="Wachtwoord" name="password" />
+        <q-tab class="pl-0" label="Naam" name="adres"/>
+        <q-tab class="pl-0" label="Contact" name="contact"/>
+        <q-tab class="pl-0" label="Golf" name="golf"/>
+        <q-tab class="pl-0" label="Voorkeuren" name="preference"/>
+        <q-tab class="pl-0" label="Wachtwoord" name="password"/>
       </q-tabs>
 
       <q-tab-panels v-model="tab">
-        <q-tab-panel class="q-pa-none" name="adres">
+        <q-tab-panel class="q-pa-sm" name="adres">
           <q-input
             v-model="form.relFirstName"
             :disable="!canChange"
@@ -98,7 +98,7 @@
             lazy-rules
           />
         </q-tab-panel>
-        <q-tab-panel class="q-pa-none" name="contact">
+        <q-tab-panel class="q-pa-sm" name="contact">
           <q-input
             v-model="form.relPhone"
             :disable="!canChange"
@@ -124,7 +124,7 @@
             lazy-rules
           />
         </q-tab-panel>
-        <q-tab-panel class="q-pa-none" name="golf">
+        <q-tab-panel class="q-pa-sm" name="golf">
           <q-input
             v-model="form.relGsn"
             :label="$t('Golfservicenummer')"
@@ -139,7 +139,7 @@
             readonly
           />
         </q-tab-panel>
-        <q-tab-panel class="q-pa-none" name="preference">
+        <q-tab-panel class="q-pa-sm" name="preference">
           <q-select
             v-model="relVisibilityLevel"
             :options="visibilityArray"
@@ -149,7 +149,7 @@
             map-options
           />
 
-          <br />
+          <br/>
 
           <q-toggle
             v-model="relMagazineGolfNL"
@@ -157,7 +157,7 @@
             label="Golfers magazine ontvangen"
           />
 
-          <br />
+          <br/>
 
           <q-toggle
             v-model="relEmailnewsletterNGF"
@@ -165,7 +165,7 @@
             label="E-mail nieuwsbrief ontvangen"
           />
 
-          <br />
+          <br/>
 
           <q-toggle
             v-model="relInvoiceByEmail"
@@ -173,7 +173,7 @@
             label="Factuur per e-mail ontvangen"
           />
         </q-tab-panel>
-        <q-tab-panel class="q-pa-none" name="password">
+        <q-tab-panel class="q-pa-sm" name="password">
           <p class="q-mt-md">{{ passwordComplexityTest }}</p>
           <q-input
             ref="passwordInput"
@@ -183,7 +183,7 @@
             :rules="[validatePasswordRule]"
             type="password"
           />
-          <password-meter :password="password" />
+          <password-meter :password="password"/>
           <q-input
             v-model="passwordCheck"
             :autocomplete="false"
@@ -202,7 +202,7 @@
         </q-tab-panel>
       </q-tab-panels>
       <div v-show="tab !== 'password'" class="text-center q-mt-md q-pb-md">
-        <q-btn color="primary" label="Opslaan" type="submit" />
+        <q-btn v-show="canChange" color="primary" label="Opslaan" type="submit"/>
 
         <q-btn
           class="q-ml-md"
@@ -270,9 +270,9 @@ export default {
       password: "",
       passwordCheck: "",
       visibilityArray: [
-        { value: 0, label: "Niet zichtbaar" },
-        { value: 1, label: "Naam en speelsterkte" },
-        { value: 2, label: "Naam, speelsterkte en e-mailadres" },
+        {value: 0, label: "Niet zichtbaar"},
+        {value: 1, label: "Naam en speelsterkte"},
+        {value: 2, label: "Naam, speelsterkte en e-mailadres"},
         {
           value: 3,
           label: "Naam, speelsterkte, e-mailadres en telefoonnummer",
@@ -365,7 +365,7 @@ export default {
     relVisibilityLevel: {
       get: function () {
         return this.form.relVisibilityLevel !== null &&
-          this.form.relVisibilityLevel > 0
+        this.form.relVisibilityLevel > 0
           ? this.form.relVisibilityLevel
           : 0;
       },

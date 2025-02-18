@@ -1,6 +1,6 @@
 {
-  "appId": "nl.intogolf.engelenburg",
-  "appName": "engelenburg",
+  "appId": "nl.intogolf.graafschap",
+  "appName": "graafschap",
   "version": "1.4.8",
   "webDir": "dist/spa",
   "ios": {
@@ -9,8 +9,7 @@
       "codeSignIdentity": "IntoGolf B.V.",
       "provisioningProfile": "IntoGolf B.V.",
       "deviceFamily": "1",
-      "device": "iPhone",
-      "scheme": "hildenberg"
+      "device": "iPhone"
     }
   }
 }

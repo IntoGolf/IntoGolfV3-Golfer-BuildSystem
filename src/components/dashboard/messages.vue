@@ -1,5 +1,5 @@
 <template>
-  <q-list v-if="unreadMessages.length > 0" separator>
+  <q-list v-if="unreadMessages.length > 0" class="q-mb-md" separator>
     <q-item
       v-for="(item, index) in unreadMessages"
       v-bind:key="index"
@@ -21,15 +21,15 @@
             X
           </div>
         </q-item-label>
-        <q-separator class="q-mt-sm q-mb-sm" />
-        <q-item-label v-html="item.msgText" />
+        <q-separator class="q-mt-sm q-mb-sm"/>
+        <q-item-label v-html="item.msgText"/>
       </q-item-section>
     </q-item>
   </q-list>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import {mapActions} from "vuex";
 
 export default {
   created() {

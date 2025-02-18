@@ -117,8 +117,7 @@ cat > capacitor.config.json <<EOL
       "codeSignIdentity": "IntoGolf B.V.",
       "provisioningProfile": "IntoGolf B.V.",
       "deviceFamily": "1",
-      "device": "iPhone",
-      "scheme": "hildenberg"
+      "device": "iPhone"
     }
   }
 }

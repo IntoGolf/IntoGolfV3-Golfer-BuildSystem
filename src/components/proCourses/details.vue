@@ -81,7 +81,6 @@ export default {
       return result;
     },
     price() {
-      console.log(this.item)
       const fee = this.item.pro_lesson_type.pro_course_fees[0];
       if (fee === undefined) {
         return "onbekend";

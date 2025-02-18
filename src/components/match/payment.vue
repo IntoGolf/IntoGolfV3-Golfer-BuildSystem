@@ -7,12 +7,13 @@
       {{ subText }}
     </div>
     <div v-show="status !== 'open'" class="q-mt-xl text-center">
-      <q-btn label="Sluiten" v-on:click="onClose" />
+      <q-btn label="Sluiten" v-on:click="onClose"/>
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
   props: {
     id: {

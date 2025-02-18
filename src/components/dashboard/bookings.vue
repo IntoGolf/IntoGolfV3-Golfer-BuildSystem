@@ -1,5 +1,5 @@
 <template>
-  <q-list v-if="bookingsArray.length > 0" separator>
+  <q-list v-if="bookingsArray.length > 0" class=q-mb-md separator>
     <q-item
       v-for="(item, index) in bookingsArray"
       v-bind:key="index"
@@ -11,7 +11,7 @@
     >
       <q-item-section>
         <q-item-label class="itg-text-overflow">
-          <i class="far fa-calendar-alt mr-2" />
+          <i class="far fa-calendar-alt mr-2"/>
           <b>Starttijd:</b>
           {{ $filters.unixToDate(item.fltDate, "ddd D MMM") }}
           {{}} -
@@ -19,7 +19,7 @@
         </q-item-label>
 
         <q-item-label caption>
-          <i class="far fa-golf-club mr-2" />
+          <i class="far fa-golf-club mr-2"/>
           {{ item.fltSize }} spelers. Start van:
           {{ item.loop1.crlName }}
         </q-item-label>

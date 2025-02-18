@@ -7,7 +7,7 @@
         </div>
       </div>
 
-      <q-separator />
+      <q-separator/>
 
       <div class="row q-mt-sm q-mb-xs">
         <div class="col">
@@ -16,167 +16,200 @@
         </div>
       </div>
 
-      <div class="row q-pt-md">
-        <div class="col">
-          <q-list class="full-width" separator>
-            <q-item
-              v-for="(player, index) in myPlayers"
-              v-bind:key="index"
-              v-ripple
-              :clickable="!hasTeamMembers(player.relNr)"
-              class="full-width shadow-1 q-mb-sm bg-green-1 q-pr-sm"
-              v-on:click="handleSubscribeGuest(player)"
-            >
-              <q-item-section>
-                <q-item-label>
-                  {{ player.relation.full_name2 }}
-                </q-item-label>
+      <div v-if="match.StartlijstGereed === 1">
+        <div v-for="(flight, fKey) in myFlights"
+             :key="fKey"
+             class="row shadow-1 bg-green-1 q-mb-md">
 
-                <q-item-label caption>
-                  Hcp: {{ player.exactHandicapForMatch }} /
-                  {{ player.Description }}
-                </q-item-label>
-              </q-item-section>
-              <q-item-section
-                v-if="match.subscribeToFlight === 1 && player.partyId > 0"
-                avatar
-                class="text-right"
-              >
-                <q-item-label class="text-right">
-                  {{
-                    $dayjs(
-                      player.match_party.match_flight.startingTime,
-                      "HH:mm:ss"
-                    ).format("HH:mm")
-                  }}
-                </q-item-label>
-                <q-item-label
-                  :style="{
-                    backgroundColor: getBackgroundColor(player),
-                    color: getColor(player),
-                  }"
-                  caption
-                  class="text-right"
-                >
-                  Hole {{ player.match_party.match_flight.startingHoleNumber }}
-                </q-item-label>
-              </q-item-section>
-              <q-item-section
-                v-else-if="match.StartlijstGereed === 1 && player.partyId > 0"
-                avatar
-              >
-                <q-item-label class="text-right">
-                  {{
-                    $dayjs(
-                      player.match_party.match_flight.startingTime,
-                      "HH:mm:ss"
-                    ).format("HH:mm")
-                  }}
-                </q-item-label>
+          <div class="col q-pa-none">
 
-                <q-item-label
-                  :style="{
-                    backgroundColor: getBackgroundColor(player),
-                    color: getColor(player),
-                  }"
-                  caption
-                  class="text-right"
-                  style="border-radius: 2px; padding: 2px 8px 2px 8px"
-                >
-                  Hole {{ player.match_party.match_flight.startingHoleNumber }}
-                </q-item-label>
-              </q-item-section>
-              <q-item-section v-else-if="player.Status === 1" avatar>
-                <q-item-label class="text-right"> Reservelijst</q-item-label>
-              </q-item-section>
-              <q-item-section
-                v-else
-                :style="{
+            <div class="row text-bold q-pa-sm">
+              <div class="col-6 ">
+                Start {{ flight.startingTime }}
+              </div>
+              <div class="col-6 text-right">
+                hole {{ flight.startingHoleNumber }}
+              </div>
+            </div>
+
+            <q-separator class="q-ml-none q-mr-none" inset size="2px"/>
+
+            <div v-for="(party, pKey) in flight.parties"
+                 :key="pKey"
+                 class="row">
+              <div class="col">
+
+                <div v-for="(player, key) in party.players"
+                     :key="key"
+                     class="row">
+                  <div class="col-9 q-pa-sm">
+                    {{ player.name }}
+                  </div>
+                  <div class="col-3 q-pa-sm text-right">
+                    <span :style="{
                   backgroundColor: getBackgroundColor(player),
                   color: getColor(player),
-                }"
-                avatar
-                style="border-radius: 2px; padding: 2px 8px 2px 8px"
-              >
-                <q-item-label class="text-right">
-                  Niet<br />ingedeeld
-                </q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
+                  borderRadius: '4px'
+                }" class="q-pa-xs">
+                      {{ player.exactHandicapForMatch }}
+                    </span>
+                  </div>
+                </div>
+                <q-separator class="q-ml-sm q-mr-sm"/>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      <div v-else>
+        <div v-for="(player, index) in myPlayers"
+             :key="index"
+             class="row shadow-1 bg-green-1 q-mb-sm"
+             v-on:click="handleSubscribeGuest(player)">
+
+          <div class="col">
+
+            <div v-if="showFlightHeader(index)" class="row q-pa-sm">
+              <div class="col-6">
+                Start: {{
+                  $dayjs(
+                    player.match_party.match_flight.startingTime,
+                    "HH:mm:ss"
+                  ).format("HH:mm")
+                }}
+              </div>
+              <div class="col-6 text-right">
+                Hole
+                {{ player.match_party.match_flight.startingHoleNumber }}
+              </div>
+            </div>
+
+            <q-separator v-show="showFlightHeader(index)"/>
+
+            <div class="row q-pa-sm">
+              <div class="col-9">
+                {{ player.relation.full_name2 }}
+                <span v-show="player.Description" class="text-italic"><br>{{ player.Description }} &nbsp;</span>
+              </div>
+              <div class="col-3 text-right">
+                <span :style="{
+                  backgroundColor: getBackgroundColor(player),
+                  color: getColor(player),
+                  borderRadius: '4px'
+                }" class="q-pa-xs">
+                  {{ player.exactHandicapForMatch }}
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+
     </div>
 
     <div class="row q-mt-md">
       <div class="col text-h6">Deelnemers</div>
     </div>
 
-    <q-separator />
+    <q-separator/>
 
-    <div class="row q-pt-md">
-      <div class="col">
-        <q-list class="full-width" separator>
-          <q-item
-            v-for="(player, index) in players"
-            v-bind:key="index"
-            v-ripple
-            class="full-width shadow-1 q-mb-sm bg-blue-1 q-pr-sm"
-            clickable
-            v-on:click="handleSubscribeGuest(player)"
-          >
-            <q-item-section>
-              <q-item-label>
-                {{ player.relation.full_name2 }}
-              </q-item-label>
+    <div v-if="match.StartlijstGereed === 1">
 
-              <q-item-label caption>
-                Hcp: {{ player.exactHandicapForMatch }} /
-                {{ player.Description }}
-              </q-item-label>
-            </q-item-section>
+      <div v-for="(flight, fKey) in match.flights"
+           :key="fKey"
+           class="row shadow-1 bg-blue-1 q-mb-md">
 
-            <q-item-section
-              v-if="match.StartlijstGereed === 1 && player.partyId > 0"
-              avatar
-            >
-              <q-item-label class="text-right">
-                {{
-                  $dayjs(
-                    player.match_party.match_flight.startingTime,
-                    "HH:mm:ss"
-                  ).format("HH:mm")
-                }}
-              </q-item-label>
+        <div class="col q-pa-none">
 
-              <q-item-label
-                :style="{
+          <div class="row text-bold q-pa-sm">
+            <div class="col-6 ">
+              Start {{ flight.startingTime }}
+            </div>
+            <div class="col-6 text-right">
+              hole {{ flight.startingHoleNumber }}
+            </div>
+          </div>
+
+          <q-separator class="q-ml-none q-mr-none" inset size="2px"/>
+
+          <div v-for="(party, pKey) in flight.parties"
+               :key="pKey"
+               class="row bg-blue-1">
+            <div class="col">
+
+              <div v-for="(player, key) in party.players"
+                   :key="key"
+                   class="row bg-blue-1 ">
+                <div class="col-9 q-pa-sm">
+                  {{ player.name }}
+                </div>
+                <div class="col-3 q-pa-sm text-right">
+                  <span :style="{
                   backgroundColor: getBackgroundColor(player),
                   color: getColor(player),
-                }"
-                caption
-                class="text-right"
-                style="border-radius: 2px; padding: 2px 8px 2px 8px"
-              >
-                Hole
-                {{ player.match_party.match_flight.startingHoleNumber }}
-              </q-item-label>
-            </q-item-section>
+                  borderRadius: '4px'
+                }" class="q-pa-xs">
+                    {{ player.exactHandicapForMatch }}
+                  </span>
+                </div>
+              </div>
+              <q-separator class="q-ml-sm q-mr-sm"/>
 
-            <q-item-section v-else avatar>
-              <q-item-label
-                :style="{
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div v-else>
+      <div v-for="(player, index) in players"
+           :key="index"
+           :class="getPlayerClass(index)"
+           class="row shadow-1 bg-blue-1 q-mb-sm"
+           v-on:click="handleSubscribeGuest(player)">
+
+        <div class="col">
+
+          <div v-if="showFlightHeader(index)" class="row q-pa-sm">
+            <div class="col-6">
+              Start: {{
+                $dayjs(
+                  player.match_party.match_flight.startingTime,
+                  "HH:mm:ss"
+                ).format("HH:mm")
+              }}
+            </div>
+            <div class="col-6 text-right">
+              Hole
+              {{ player.match_party.match_flight.startingHoleNumber }}
+            </div>
+          </div>
+
+          <q-separator v-show="showFlightHeader(index)"/>
+
+          <div class="row q-pa-sm">
+            <div class="col-9">
+              {{ player.relation.full_name2 }}
+              <span v-show="player.Description" class="text-italic"><br>{{ player.Description }} &nbsp;</span>
+            </div>
+            <div class="col-3 text-right">
+              <span :style="{
                   backgroundColor: getBackgroundColor(player),
                   color: getColor(player),
-                }"
-                class="text-right"
-                style="border-radius: 2px; padding: 2px 8px 2px 8px"
-              >
-                Niet<br />ingedeeld
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
+                  borderRadius: '4px'
+                }" class="q-pa-xs">
+                {{ player.exactHandicapForMatch }}
+              </span>
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </div>
 
@@ -185,11 +218,11 @@
         <div class="col text-h6">Reservelijst</div>
       </div>
 
-      <q-separator />
+      <q-separator/>
 
       <div class="row q-pt-md">
         <div class="col">
-          <q-list class="full-width" separator>
+          <q-list class="full-width">
             <q-item
               v-for="(player, index) in reservePlayers"
               v-bind:key="index"
@@ -204,14 +237,13 @@
                 </q-item-label>
 
                 <q-item-label caption>
-                  Hcp: {{ player.exactHandicapForMatch }} /
                   {{ player.Description }}
                 </q-item-label>
               </q-item-section>
 
               <q-item-section>
                 <q-item-label class="text-right">
-                  Niet<br />ingedeeld
+                  {{ player.exactHandicapForMatch }} /
                 </q-item-label>
               </q-item-section>
             </q-item>
@@ -232,6 +264,14 @@ export default {
     return {};
   },
   computed: {
+    myFlights: function () {
+      const relNrArray = this.myPlayers.map((player) => player.relNr);
+      return this.match.flights.filter((flight) => {
+        return flight.parties.some((party) => {
+          return party.players.some((player) => relNrArray.includes(player.relNr));
+        });
+      });
+    },
     myPlayers: function () {
       return this.match.players.filter(
         (player) =>
@@ -253,24 +293,15 @@ export default {
         result = this.match.players.filter((player) => player.partyId > 0);
 
         result.sort(function (a, b) {
-          const timeA = new Date(
-            "1970/01/01 " + a.match_party.match_flight.startingTime
+          return (
+            a.match_party.match_flight.flightNumber -
+            b.match_party.match_flight.flightNumber
           );
-          const timeB = new Date(
-            "1970/01/01 " + b.match_party.match_flight.startingTime
-          );
-
-          if (timeA < timeB) {
-            return -1;
-          } else if (timeA > timeB) {
-            return 1;
-          } else {
-            return (
-              a.match_party.match_flight.startingHoleNumber -
-              b.match_party.match_flight.startingHoleNumber
-            );
-          }
         });
+      } else {
+        result.sort((a, b) =>
+          a.relation.full_name2.localeCompare(b.relation.full_name2)
+        );
       }
 
       return result;
@@ -319,7 +350,49 @@ export default {
       );
       return relNr === this.currentUser.relNr && team.length > 1;
     },
+    showFlightHeader(index) {
+      if (this.match.StartlijstGereed !== 1 || this.players.length - 1 === index) {
+        return false;
+      }
+
+      const player0 = this.players[index];
+
+      if (player0.match_party === undefined ||
+        player0.match_party.match_flight === undefined ||
+        player0.match_party.match_flight.flightNumber === undefined) {
+        return false;
+      }
+
+      return true;
+    },
+    getPlayerClass(index) {
+      if (this.players.length - 1 === index) {
+        return '';
+      }
+      const player0 = this.players[index];
+      const player1 = this.players[index + 1];
+
+      if (player0.match_party === undefined ||
+        player0.match_party.match_flight === undefined ||
+        player0.match_party.match_flight.flightNumber === undefined ||
+        player1.match_party === undefined ||
+        player1.match_party.match_flight === undefined ||
+        player1.match_party.match_flight.flightNumber === undefined) {
+        return '';
+      }
+
+      if (player0.match_party.match_flight.flightNumber === player1.match_party.match_flight.flightNumber &&
+        player0.match_party.match_flight.partyNumber === player1.match_party.match_flight.partyNumber) {
+        return '';
+      }
+
+      return 'q-mb-sm';
+    },
     handleSubscribeGuest: function (player) {
+      if (this.hasTeamMembers(player.relNr)) {
+        return;
+      }
+
       if (this.match.InschrijvenInternet === 0) {
         return;
       }
@@ -357,3 +430,7 @@ export default {
   },
 };
 </script>
+
+<style>
+
+</style>

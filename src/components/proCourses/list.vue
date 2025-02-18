@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     async getClasses() {
-      this.ProCourseArray = await this.$http.get("golfer/classes");
+      this.ProCourseArray = await this.$http.get("public/courses");
     },
     onOpenCourse(item) {
       this.$emit("onOpenCourse", item);

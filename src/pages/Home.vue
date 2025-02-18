@@ -1,16 +1,16 @@
 <template>
   <q-page class="q-pa-sm">
-    <dashboard-whs-status />
-    <dashboard-course-status />
+    <dashboard-whs-status/>
+    <dashboard-course-status/>
     <q-card
       v-if="usrHasTeeTimes && bookingsArray.length === 0"
       bordered
-      class="full-width q-mt-md"
+      class="full-width q-mt-md q-mb-md"
       flat
     >
       <q-card-section>
         <div class="text-h6">Geen starttijden</div>
-        <q-separator />
+        <q-separator/>
         <div class="text-subtitle1">
           er zijn geen gereserveerde starttijden gevonden...
         </div>
@@ -20,15 +20,15 @@
           flat
           label="boek een starttijd"
           size="small"
-          to="reservations"
+          v-on:click="$router.replace({path: '/reservations'})"
         />
       </q-card-section>
     </q-card>
-    <match />
-    <bills v-if="usrHasTeeTimes" />
-    <bookings v-if="usrHasTeeTimes" :bookingsArray="bookingsArray" />
-    <messages v-if="setHasMessages" />
-    <lessons v-if="usrHasLessons" />
+    <match/>
+    <bills v-if="usrHasTeeTimes"/>
+    <bookings v-if="usrHasTeeTimes" :bookingsArray="bookingsArray"/>
+    <messages v-if="setHasMessages"/>
+    <lessons v-if="usrHasLessons"/>
   </q-page>
 </template>
 
@@ -39,7 +39,7 @@ import lessons from "../components/dashboard/lessons.vue";
 import Match from "../components/dashboard/match.vue";
 import Bills from "../components/dashboard/bills.vue";
 import authMixin from "src/mixins/auth";
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 import DashboardCourseStatus from "components/dashboard/status.vue";
 import DashboardWhsStatus from "components/dashboard/whs.vue";
 
@@ -66,9 +66,9 @@ export default {
       bookingsArray: [],
     };
   },
-  mounted() {
-    console.log(this.item);
-    this.getBookings();
+  async mounted() {
+    await this.$store.dispatch("settings/fetchSettings");
+    await this.getBookings();
   },
   methods: {
     async getBookings() {

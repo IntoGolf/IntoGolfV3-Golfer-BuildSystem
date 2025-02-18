@@ -1,6 +1,6 @@
 <template>
-  <q-list v-if="bills.length > 0" separator>
-    <bill v-for="(item, key) in bills" :key="key" :item="item" />
+  <q-list v-if="bills.length > 0" class="q-mb-sm" separator>
+    <bill v-for="(item, key) in bills" :key="key" :item="item"/>
   </q-list>
 </template>
 
@@ -8,7 +8,7 @@
 import Bill from "components/dashboard/bill.vue";
 
 export default {
-  components: { Bill },
+  components: {Bill},
   created() {
     this.loadBills();
   },

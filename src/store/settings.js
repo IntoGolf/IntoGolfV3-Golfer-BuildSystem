@@ -27,7 +27,7 @@ const mutations = {
 };
 
 const actions = {
-  async fetchSettings({ commit, state }) {
+  async fetchSettings({commit, state}) {
     try {
       const response = await this.$axios.get("golfer/settings");
       commit("SET_SETTINGS", response);
@@ -36,7 +36,7 @@ const actions = {
       console.error("There was an error fetching the settings!", error);
     }
   },
-  async fetchPublicSettings({ commit, state }) {
+  async fetchPublicSettings({commit, state}) {
     try {
       const response = await this.$axios.get("golfer/psettings");
       commit("SET_PUBLIC_SETTINGS", response);
@@ -44,10 +44,10 @@ const actions = {
       console.error("There was an error fetching the settings!", error);
     }
   },
-  async clear({ commit }) {
+  async clear({commit}) {
     commit("CLEAR_VALUE");
   },
-  async clearPublic({ commit }) {
+  async clearPublic({commit}) {
     commit("CLEAR_PUBLIC_VALUE");
   },
 };
@@ -142,6 +142,22 @@ const getters = {
       typeof state.item === "object" &&
       "EXT_COURSE_STATUS" in state.item &&
       state.item.EXT_COURSE_STATUS
+    );
+  },
+  showWhs: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "app_show_whs" in state.item &&
+      state.item.app_show_whs
+    );
+  },
+  showHistory: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "app_show_history" in state.item &&
+      state.item.app_show_history
     );
   },
 };
