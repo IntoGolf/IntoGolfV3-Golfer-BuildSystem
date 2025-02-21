@@ -31,7 +31,7 @@
                   @change="loadTeetimes"
                 >
                   <div class="row items-center justify-end" flat>
-                    <q-btn v-close-popup color="primary" flat label="Sluiten" />
+                    <q-btn v-close-popup color="primary" flat label="Sluiten"/>
                   </div>
                 </q-date>
               </q-popup-proxy>
@@ -112,7 +112,7 @@
         </div>
       </div>
 
-      <q-separator />
+      <q-separator/>
 
       <div class="row q-gutter-xs" style="max-height: 600px; overflow: scroll">
         <div
@@ -123,7 +123,7 @@
           <div
             v-for="(time, tKey) of timeFilter(course.times)"
             :key="tKey"
-            :class="time.sttPlayerArray.length > 0 ? 'bg-blue-3' : 'bg-green-3'"
+            :style="getStyle(time)"
             class="text-center q-mt-xs q-pa-sm"
             @click="handleOpenDialog(time, course)"
           >
@@ -168,7 +168,7 @@
             <div v-if="dialogErrors.length > 0">Probleem gevonden!</div>
           </q-card-section>
 
-          <q-separator inset />
+          <q-separator inset/>
 
           <q-card-section v-if="dialogErrors.length === 0">
             <div class="row">
@@ -221,7 +221,7 @@
             </div>
           </q-card-section>
 
-          <q-separator inset />
+          <q-separator inset/>
 
           <q-card-actions align="right">
             <q-btn
@@ -307,7 +307,14 @@ export default {
             (time.sttCrlNrNext > 0 && this.form.holes === 18))
       );
     },
-
+    getStyle(time) {
+      let test = '#105158';
+      //$bg-green-3
+      let backgroundColor = time.sttPlayerArray.length > 0 ? '$bg-blue-3' : test
+      return {
+        backgroundColor: backgroundColor
+      }
+    },
     optionsFn(date) {
       return (
         this.$dayjs(date) >= this.$dayjs().add(-1, "day") &&

@@ -18,7 +18,7 @@
       <div v-else class="col-12">
         <div class="row">
           <div
-            :class="backgroundColor(time)"
+            :style="backgroundColor(time)"
             class="col-5 q-pa-sm cursor-pointer"
           >
             {{ $filters.minuteToTime(time.sttTimeFrom) }}
@@ -31,7 +31,7 @@
             />
           </div>
           <div
-            :class="backgroundColor(time)"
+            :style="backgroundColor(time)"
             class="col-7 text-right q-pa-sm cursor-pointer"
           >
             {{ $filters.money(price(time)) }} pp
@@ -104,8 +104,21 @@ export default {
       }
     },
     backgroundColor: function (time) {
-      return time.playerCount > 0 ? "bg-blue-3" : "bg-green-3";
-    },
+      let customBG = this.$store.getters["settings/publicItems"].app_teetime_bg_color;
+      let customFont = this.$store.getters["settings/publicItems"].app_teetime_font_color;
+
+      let backgroundColor = time.players.length > 0 ? '#90caf9' : '#a5d6a7';
+      let color = 'black;'
+      if (customBG) {
+        backgroundColor = customBG;
+        color = customFont;
+      }
+
+      return {
+        backgroundColor: backgroundColor,
+        color: color
+      }
+    }
   },
 };
 </script>
