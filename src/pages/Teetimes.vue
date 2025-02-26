@@ -452,22 +452,22 @@ export default {
 
         flpName1: "",
         flpEmail1: null,
-        flpPhone1: null,
+        flpPhone1: "",
         flpHandicap1: null,
 
         flpName2: "",
         flpEmail2: null,
-        flpPhone2: null,
+        flpPhone2: "",
         flpHandicap2: null,
 
         flpName3: "",
         flpEmail3: null,
-        flpPhone3: null,
+        flpPhone3: "",
         flpHandicap3: null,
 
         flpName4: "",
         flpEmail4: null,
-        flpPhone4: null,
+        flpPhone4: "",
         flpHandicap4: null,
         agreeConditions: false,
         agreeCommerce: false,
