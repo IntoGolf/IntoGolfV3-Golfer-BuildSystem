@@ -321,7 +321,7 @@
             </div>
           </div>
 
-          <div>
+          <div v-if="hasPayOption">
             <div class="row">Betaalwijze:</div>
             <div class="row q-mt-md">
               <q-option-group
@@ -450,10 +450,10 @@ export default {
         fltCrlNr2: null,
         fltSize: 3,
 
-        flpName1: "laurens",
-        flpEmail1: "laurenssssa@intogolf.nl",
-        flpPhone1: "0172617000",
-        flpHandicap1: 12.2,
+        flpName1: "",
+        flpEmail1: null,
+        flpPhone1: null,
+        flpHandicap1: null,
 
         flpName2: "",
         flpEmail2: null,

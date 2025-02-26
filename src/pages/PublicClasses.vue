@@ -52,12 +52,11 @@ export default {
           name: item.pro_lessons[0].pro.full_name
         },
         fee: {
-          pcfNr: item.pro_lesson_type.pro_course_fees[0].pcfNr,
-          pcfGrpNr: item.pro_lesson_type.pro_course_fees[0].pcfGrpNr,
-          lfpItmNr: item.pro_lesson_type.pro_course_fees[0].pcfPltNr,
-          lfpPrice: item.pro_lesson_type.pro_course_fees[0].pcfPrice,
+          lsfNr: item.pro_lesson_fee.lsfNr,
+          lfpItmNr: item.pro_lesson_fee.lfpItmNr,
+          lfpPrice: item.pro_lesson_fee.lfpPrice,
         },
-        pro_lesson_fee_les: item.pro_lesson_type.pro_course_fees
+        pro_lesson_fee: item.pro_lesson_fee
       }
     },
   },

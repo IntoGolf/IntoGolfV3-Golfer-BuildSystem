@@ -81,11 +81,11 @@ export default {
       return result;
     },
     price() {
-      const fee = this.item.pro_lesson_type.pro_course_fees[0];
+      const fee = this.item.pro_lesson_fee;
       if (fee === undefined) {
         return "onbekend";
       }
-      return this.$filters.money(fee.pcfPrice);
+      return this.$filters.money(fee.lfpPrice);
     },
   },
 };
