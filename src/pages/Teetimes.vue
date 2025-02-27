@@ -358,7 +358,7 @@
                 v-model="flight.agreeCommerce"
                 :rules="[(val) => !!val || '* Required']"
                 class="q-mb-sm"
-                label="Stuur mij aanbiedingen"
+                label="Stuur mij de laatste updates"
                 stack-label
               />
             </div>
