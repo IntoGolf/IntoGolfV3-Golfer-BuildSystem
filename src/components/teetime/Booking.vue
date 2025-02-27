@@ -308,12 +308,12 @@ export default {
       );
     },
     getStyle(time) {
-      let test = '#105158';
-      //$bg-green-3
-      let backgroundColor = time.sttPlayerArray.length > 0 ? '$bg-blue-3' : test
+      let customBG = this.$store.getters["settings/publicItems"].app_primary_color;
+      let customFont = this.$store.getters["settings/publicItems"].app_primary_font_color;
+      let backgroundColor = time.sttPlayerArray.length > 0 ? '$bg-blue-3' : customBG
       return {
         backgroundColor: backgroundColor,
-        color: 'white'
+        color: customFont
       }
     },
     optionsFn(date) {

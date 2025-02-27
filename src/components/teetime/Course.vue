@@ -114,9 +114,6 @@ export default {
         color = customFont;
       }
 
-      console.log(backgroundColor);
-      console.log(color);
-
       return {
         backgroundColor: backgroundColor,
         color: color
