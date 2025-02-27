@@ -39,14 +39,14 @@ const timeToMinute = function (time) {
 
 const money = function (number, decimal = 1) {
   return (
-    "€" +
+    "€ " +
     (number * decimal)
       .toFixed(2)
       .replace(/\d(?=(\d{3})+\.)/g, "$&,")
       .replace(".", ",")
   );
 };
-export default ({ app }) => {
+export default ({app}) => {
   app.config.globalProperties.$filters = {
     unixToDate,
     dateToUnix,

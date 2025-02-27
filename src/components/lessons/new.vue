@@ -10,7 +10,7 @@
           flat
           icon="arrow_back"
           v-on:click="$emit('handleCloseNew')"
-          >Sluiten
+        >Sluiten
         </q-btn>
       </div>
     </div>
@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <q-separator class="q-mt-md" />
+    <q-separator class="q-mt-md"/>
 
     <div class="row">
       <div class="col hide-scrollbar" style="overflow-x: scroll">
@@ -151,8 +151,8 @@ export default {
     async onBooking(lesson) {
       let data = {
         lesNr: null,
-        lesRelNrPro: lesson.pro.relNr,
-        lesProNr: lesson.pro.relNr,
+        lesRelNrPro: lesson.proNr,
+        lesProNr: lesson.proNr,
         lesPltNr: lesson.pro_lesson_type.pltNr,
         lesDate: this.$filters.dateToUnix(this.date, "YYYY-MM-DD"),
         lesTimeFrom: lesson.pagTimeFrom,

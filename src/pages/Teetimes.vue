@@ -124,7 +124,7 @@
           <div class="row">
             <div class="col-4 text-bold">Datum:</div>
             <div class="col-8">
-              {{ dayjs(date).format("dddd DD MMMM") }}
+              {{ $filters.capitalizeFirstLetter(dayjs(date).format("dddd DD MMMM")) }}
             </div>
           </div>
 
@@ -448,7 +448,7 @@ export default {
         fltTime1Booked: null,
         fltCrlNr1: null,
         fltCrlNr2: null,
-        fltSize: 3,
+        fltSize: this.$store.getters["settings/publicItems"].planner_default_reservation_count,
 
         flpName1: "",
         flpEmail1: null,
@@ -544,7 +544,7 @@ export default {
       };
     },
     flightPrice: function () {
-      return Math.round(this.timePrice * this.flight.fltSize * 100) / 100;
+      return Math.round(this.timePrice * 100) / 100;
     },
     totalHandicap() {
       let hcp = parseFloat(this.flight.flpHandicap1);

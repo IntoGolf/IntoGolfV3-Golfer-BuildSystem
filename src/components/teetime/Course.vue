@@ -34,7 +34,7 @@
             :style="backgroundColor(time)"
             class="col-7 text-right q-pa-sm cursor-pointer"
           >
-            {{ $filters.money(price(time)) }} pp
+            {{ $filters.money(price(time)) }}
           </div>
         </div>
       </div>
@@ -98,14 +98,14 @@ export default {
       }
 
       if (this.holes.value === 18) {
-        return time.greenFeePrice18[0].price;
+        return time.greenFeePrice18[0].price * this.size;
       } else {
-        return time.greenFeePrice9[0].price;
+        return time.greenFeePrice9[0].price * this.size;
       }
     },
     backgroundColor: function (time) {
-      let customBG = this.$store.getters["settings/publicItems"].app_teetime_bg_color;
-      let customFont = this.$store.getters["settings/publicItems"].app_teetime_font_color;
+      let customBG = this.$store.getters["settings/publicItems"].app_primary_color;
+      let customFont = this.$store.getters["settings/publicItems"].app_primary_font_color;
 
       let backgroundColor = time.players.length > 0 ? '#90caf9' : '#a5d6a7';
       let color = 'black;'

@@ -112,7 +112,7 @@ export default {
         lesBlockedFrom: this.lesson.pagTimeFrom,
         lesBlockedTo: null,
         lesPltNr: null,
-        lesRelNrPro: null,
+        lesProNr: null,
         lesSize: null,
         lesLsfNr: null,
         lesPrice: null,
@@ -180,7 +180,7 @@ export default {
       les.lesDate = this.$filters.dateToUnix(this.date, "YYYY-MM-DD");
       les.lesBlockedFrom = this.lesson.pagTimeFrom;
       les.lesPltNr = this.lesson.pro_lesson_type.pltNr;
-      les.lesRelNrPro = this.lesson.pro.relNr;
+      les.lesProNr = this.lesson.proNr;
 
       les.ProLessonClient.plcLsfNr = this.lesson.pro_lesson_fee_les[0].lfpNr;
       les.ProLessonClient.plcPrice = this.lesson.pro_lesson_fee_les[0].lfpPrice;
