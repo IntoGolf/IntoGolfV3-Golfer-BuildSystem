@@ -477,8 +477,8 @@ export default {
       maxTotalHandicap: 108,
       mollie: null,
       paymentOptions: [
-        {label: "op de baan", value: "onCourse"},
         {label: "via iDeal", value: "iDeal"},
+        {label: "op de baan", value: "onCourse"},
       ],
     };
   },
