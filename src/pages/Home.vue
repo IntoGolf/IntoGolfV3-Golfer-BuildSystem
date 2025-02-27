@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-sm">
     <dashboard-whs-status/>
-    <dashboard-course-status/>
+    <dashboard-course-status v-if="setHasCourseStatus"/>
     <q-card
       v-if="usrHasTeeTimes && bookingsArray.length === 0"
       bordered
@@ -58,7 +58,7 @@ export default {
     nav() {
       return navigator.userAgent.toString();
     },
-    ...mapGetters("settings", ["setHasMessages"]),
+    ...mapGetters("settings", ["setHasMessages", "setHasCourseStatus"]),
     ...mapGetters("currentUser", ["usrHasLessons", "usrHasTeeTimes", "item"]),
   },
   data() {
