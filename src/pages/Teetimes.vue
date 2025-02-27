@@ -332,7 +332,7 @@
           </div>
 
           <div v-if="hasPayOption">
-            <div class="row">Leveringsvoorwaarden:</div>
+            <div class="row q-mt-md">Zorgeloze betaalvoorwaarden:</div>
             <div
               class="row q-pa-sm"
               style="
@@ -349,7 +349,7 @@
                 v-model="flight.agreeConditions"
                 :rules="[(val) => !!val || '* Required']"
                 class="q-mb-sm"
-                label="Ik ga akkoord met de leveringsvoorvaarden"
+                label="Ik ga akkoord met de betaalvoorwaarden"
                 stack-label
               />
             </div>
