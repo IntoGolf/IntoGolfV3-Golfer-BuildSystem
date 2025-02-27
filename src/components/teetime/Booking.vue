@@ -312,7 +312,8 @@ export default {
       //$bg-green-3
       let backgroundColor = time.sttPlayerArray.length > 0 ? '$bg-blue-3' : test
       return {
-        backgroundColor: backgroundColor
+        backgroundColor: backgroundColor,
+        color: 'white'
       }
     },
     optionsFn(date) {
