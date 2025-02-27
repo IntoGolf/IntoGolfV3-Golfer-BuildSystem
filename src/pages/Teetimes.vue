@@ -477,8 +477,8 @@ export default {
       maxTotalHandicap: 108,
       mollie: null,
       paymentOptions: [
-        {label: "via iDeal", value: "iDeal"},
-        {label: "op de baan", value: "onCourse"},
+        {label: "Betaal direct online en ontvang € 5 korting per persoon", value: "iDeal"},
+        {label: "Op locatie", value: "onCourse"},
       ],
     };
   },
