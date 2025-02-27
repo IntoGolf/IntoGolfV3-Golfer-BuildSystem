@@ -448,7 +448,7 @@ export default {
         fltTime1Booked: null,
         fltCrlNr1: null,
         fltCrlNr2: null,
-        fltSize: this.$store.getters["settings/publicItems"].planner_default_reservation_count,
+        fltSize: 1,
 
         flpName1: "",
         flpEmail1: null,
@@ -484,6 +484,7 @@ export default {
   },
   mounted() {
     this.date = this.$dayjs().format("YYYY-MM-DD");
+    this.flight.fltSize = this.defaultSize;
   },
   watch: {
     date: function () {
@@ -514,6 +515,9 @@ export default {
     },
     mergeText: function () {
       return this.$store.state.settings.publicItems.website_flight_merge_text;
+    },
+    defaultSize() {
+      return this.$store.getters["settings/publicItems"].planner_default_reservation_count;
     },
     valid: function () {
       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
