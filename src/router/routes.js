@@ -104,6 +104,12 @@ const routes = [
     meta: {requiresAuth: false, title: "Boek een inlooples"},
   },
   {
+    path: "/publicStatus",
+    name: "publicStatus",
+    component: () => import("pages/PublicStatus.vue"),
+    meta: {requiresAuth: false, title: "Baanstatus"},
+  },
+  {
     path: "/classes",
     name: "classes",
     component: () => import("pages/PublicClasses.vue"),

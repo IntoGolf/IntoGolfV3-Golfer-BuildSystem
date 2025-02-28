@@ -119,6 +119,9 @@ export default {
       return result;
     },
     reloadStep() {
+      if (this.hasPcsNrParam) {
+        return false;
+      }
       let array = [4];
       if (this.lForm.type.category === 1) {
         array.push(1);
@@ -145,6 +148,9 @@ export default {
       }
       return "Bevestig";
     },
+    hasPcsNrParam() {
+      return this.$route.query.id > 0;
+    }
   },
   methods: {
     async handleSave() {

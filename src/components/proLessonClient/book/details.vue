@@ -1,34 +1,41 @@
 <template>
   <div>
-    <div class="row q-pa-sm bg-green-1">
+    <div class="row q-pb-sm">
+      <div class="col-4 text-bold">Naam:</div>
+      <div class="col-8">
+        {{ form.type.name }}
+      </div>
+    </div>
+
+    <div class="row q-pb-sm">
       <div class="col-4 text-bold">Datum:</div>
       <div class="col-8">
         {{ form.date }}
       </div>
     </div>
 
-    <div class="row q-pa-sm">
+    <div class="row q-pb-sm">
       <div class="col-4 text-bold">Tijd:</div>
       <div class="col-8">
         {{ form.timeStart }}
       </div>
     </div>
 
-    <div class="row q-pa-sm bg-green-1">
+    <div class="row q-pb-sm">
       <div class="col-4 text-bold">Les soort:</div>
       <div class="col-8">
         {{ form.type.name }}
       </div>
     </div>
 
-    <div class="row q-pa-sm">
+    <div class="row q-pb-sm">
       <div class="col-4 text-bold">Pro:</div>
       <div class="col-8">
         {{ form.pro.name }}
       </div>
     </div>
 
-    <div v-if="form.fee" class="row q-pa-sm bg-green-1">
+    <div v-if="form.fee" class="row q-pb-sm">
       <div class="col-4 text-bold">Tarief:</div>
       <div class="col-8">
         {{ $filters.money(form.fee.lfpPrice) }}
@@ -36,7 +43,7 @@
     </div>
 
     <div v-if="step === 3">
-      <div v-for="(client, key) in form.clients" :key="key" class="row q-pa-sm">
+      <div v-for="(client, key) in form.clients" :key="key" class="row q-pb-sm">
         <div class="col-4 text-bold">{{ getLabel(key) }}:</div>
         <div class="col-8">
           {{ client.firstName }}

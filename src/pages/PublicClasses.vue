@@ -21,7 +21,25 @@ export default {
       form: null,
     };
   },
+  computed: {
+    pcsNrParam() {
+      return this.$route.query.id;
+    }
+  },
+  async mounted() {
+    this.handleOpenId()
+  },
   methods: {
+    async handleOpenId() {
+      if (!(this.pcsNrParam > 0)) {
+        return
+      }
+      const list = await this.$http.get("public/courses");
+      this.course = list.find((item) => item.pcsNr = this.pcsNrParam);
+      if (this.course) {
+        this.onOpenCourse(this.course);
+      }
+    },
     onOpenCourse(item) {
       this.form = {
         id: item.pcsNr,
@@ -32,20 +50,20 @@ export default {
           minPerson: item.pro_lesson_type.pltMinPers,
           maxPerson: item.pro_lesson_type.pltMaxPers
         },
-        date: item.pcsDateFrom,
-        timeStart: item.pro_lessons[0].lesBlockedFrom,
+        date: this.$filters.unixToDate(item.pcsDateFrom),
+        timeStart: this.$filters.minuteToTime(item.pro_lessons[0].lesBlockedFrom),
         timeEnd: item.pro_lessons[0].lesBlockedTo,
         size: 0,
         agreeConditions: false,
         agreeCommerce: false,
         payMethod: "onCourse",
         clients: [{
-          firstName: "test",
-          prefix: "test",
-          lastName: "test",
-          phone: "0172617000",
-          email: "test@intogolf.nl",
-          handicap: "10"
+          firstName: "",
+          prefix: "",
+          lastName: "",
+          phone: "",
+          email: "",
+          handicap: ""
         }],
         pro: {
           proNr: item.pro_lessons[0].pro.relNr,

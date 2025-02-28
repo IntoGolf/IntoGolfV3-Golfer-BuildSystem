@@ -69,7 +69,7 @@
                 {{ course.crlNameInternet }}
               </div>
             </div>
-            <div class="row q-gutter-xs">
+            <div class="row q-gutter-xs" style="max-height: 600px; overflow-y: scroll">
               <div
                 v-for="(course, cKey) in courses"
                 :key="cKey"
@@ -367,7 +367,7 @@
             class="q-mr-sm"
             color="primary"
             label="Terug"
-            v-on:click="step = 1"
+            v-on:click="onBack"
           />
           <q-btn
             v-if="pay"
@@ -491,13 +491,15 @@ export default {
       this.handleLoadDate();
     },
     timeObject: function (newValue) {
-      this.flight.fltDate = newValue.sttDate;
-      this.flight.fltTime1 = newValue.sttTimeFrom;
-      this.flight.fltTime1Booked = newValue.sttTimeFrom;
-      this.flight.fltCrlNr1 = newValue.sttCrlNr;
-      this.flight.fltCrlNr2 =
-        this.holes.value === 18 ? newValue.sttCrlNrNext : null;
-      this.step = 2;
+      if (newValue !== null) {
+        this.flight.fltDate = newValue.sttDate;
+        this.flight.fltTime1 = newValue.sttTimeFrom;
+        this.flight.fltTime1Booked = newValue.sttTimeFrom;
+        this.flight.fltCrlNr1 = newValue.sttCrlNr;
+        this.flight.fltCrlNr2 =
+          this.holes.value === 18 ? newValue.sttCrlNrNext : null;
+        this.step = 2;
+      }
     },
   },
   computed: {
@@ -605,6 +607,14 @@ export default {
         }
       });
     },
+    onBack() {
+      this.step = 1;
+      this.timeObject = null;
+      this.flight.fltTime1 = null;
+      this.timePrice = 0;
+      this.maxHandicap = 54;
+      this.maxTotalHandicap = 108;
+    },
     setTimeObject: function (obj) {
       this.timeObject = obj.time;
       this.timePrice = obj.price;
@@ -619,7 +629,7 @@ export default {
         this.step = 2;
       }
       this.mollie = null;
-    },
+    }
   },
 };
 </script>

@@ -28,7 +28,6 @@ export default {
   methods: {
     async getList() {
       this.list = await this.$http.get("public/walkins");
-      console.log(this.list);
     },
     async onClose() {
       this.form = null;
@@ -36,11 +35,11 @@ export default {
     },
     onSetProLesson(item) {
       let client = {
-        firstName: "laurens",
+        firstName: "",
         prefix: "",
-        lastName: "luder",
-        email: "lluder@icloud.com",
-        phone: "0172617000",
+        lastName: "",
+        email: "",
+        phone: "",
         handicap: 54.0
       }
       item.clients.push(client);

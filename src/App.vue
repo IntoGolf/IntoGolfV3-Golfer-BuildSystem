@@ -81,7 +81,7 @@
       </q-toolbar>
     </q-header>
     <q-page-container>
-      <router-view :key="$route.fullPath" :style="{backgroundColor: getVeryLightPastel()}" class="web-width"/>
+      <router-view :key="$route.fullPath" class="web-width bg-white"/>
     </q-page-container>
     <q-drawer v-if="isApp" v-model="drawer" class="q-drawer" show-if-above>
       <div
@@ -118,6 +118,7 @@
 import {defineComponent} from "vue";
 import {mapGetters} from "vuex";
 import Login from "pages/Login.vue";
+import {setCssVar} from "quasar";
 
 export default defineComponent({
   name: "PageLayout",
@@ -153,7 +154,7 @@ export default defineComponent({
       return this.$q.platform.is.capacitor || this.$q.platform.is.mobile;
     },
     showFullHeader() {
-      if (["/publicLesson", "/classes", "/publicWalkins"].includes(this.$route.path)) {
+      if (["/publicLesson", "/classes", "/publicStatus", "/publicWalkins"].includes(this.$route.path)) {
         return true;
       }
       return false;
@@ -168,6 +169,7 @@ export default defineComponent({
           "/publicLesson",
           "/classes",
           "/publicWalkins",
+          "/publicStatus",
         ].includes(this.$route.path)
       ) {
         return false;
@@ -355,8 +357,9 @@ export default defineComponent({
       ];
     },
   },
-  mounted() {
+  async mounted() {
     this.drawer = false;
+    await this.setColors();
   },
   methods: {
     qItemActiveStyle(name) {
@@ -371,33 +374,18 @@ export default defineComponent({
         this.$router.replace({path: '/' + name});
       }
     },
-    hexToRgb(hex) {
-      hex = hex.replace("#", "");
-      if (hex.length === 3) {
-        hex = hex.split("").map(c => c + c).join("");
+    async setColors() {
+      let settings = this.$store.state.settings.publicItems;
+      if (settings.app_primary_color === undefined) {
+        await this.$store.dispatch("settings/fetchPublicSettings")
+        settings = this.$store.state.settings.publicItems;
       }
-      let r = parseInt(hex.substring(0, 2), 16);
-      let g = parseInt(hex.substring(2, 4), 16);
-      let b = parseInt(hex.substring(4, 6), 16);
-      return {r, g, b};
-    },
-    rgbToHex(r, g, b) {
-      return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-    },
-    getVeryLightPastel() {
-      return 'white';
-      const hexColor = this.$store.state.settings.publicItems.app_secondary_color;
-      if (!hexColor) {
-        return ''
-      }
-      const mixRatio = 0.95;
-      let {r, g, b} = this.hexToRgb(hexColor);
-      // Meng de kleur met wit (95% wit en 5% originele kleur)
-      let lightR = Math.round(255 * mixRatio + r * (1 - mixRatio));
-      let lightG = Math.round(255 * mixRatio + g * (1 - mixRatio));
-      let lightB = Math.round(255 * mixRatio + b * (1 - mixRatio));
-      return this.rgbToHex(lightR, lightG, lightB);
-    },
+
+      setCssVar("primary", settings.app_primary_color);
+      setCssVar("primary_font", settings.app_primary_font_color);
+      setCssVar("secondary", settings.app_secondary_color);
+      setCssVar("secondary_font", settings.app_secondary_font_color);
+    }
   }
 })
 </script>
