@@ -104,10 +104,8 @@ export default {
       }
     },
     backgroundColor: function (time) {
-      console.log(this.$store.getters["settings/item"]);
-      console.log(this.$store.getters["settings/publicItems"]);
-      let customBG = this.$store.getters["settings/item"].app_primary_color;
-      let customFont = this.$store.getters["settings/item"].app_primary_font_color;
+      let customBG = this.$store.getters["settings/publicItems"].app_primary_color;
+      let customFont = this.$store.getters["settings/publicItems"].app_primary_font_color;
 
       let backgroundColor = time.players.length > 0 ? '#90caf9' : '#a5d6a7';
       let color = 'black;'

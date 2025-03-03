@@ -308,8 +308,8 @@ export default {
       );
     },
     getStyle(time) {
-      let customBG = this.$store.getters["settings/publicItems"].app_primary_color;
-      let customFont = this.$store.getters["settings/publicItems"].app_primary_font_color;
+      let customBG = this.$store.getters["settings/item"].app_primary_color;
+      let customFont = this.$store.getters["settings/item"].app_primary_font_color;
       let backgroundColor = time.sttPlayerArray.length > 0 ? '$bg-blue-3' : customBG
       return {
         backgroundColor: backgroundColor,
