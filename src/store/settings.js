@@ -160,6 +160,14 @@ const getters = {
       state.item.app_show_history
     );
   },
+  getBackgroundColor: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "app_primary_color" in state.item ?
+        state.item.app_primary_color : 'blue'
+    );
+  }
 };
 
 export default {

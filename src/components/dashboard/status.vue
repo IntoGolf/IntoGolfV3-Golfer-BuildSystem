@@ -1,5 +1,5 @@
 <template>
-  <q-card bordered class="full-width q-pa-md q-mb-md" flat>
+  <q-card bordered class="full-width q-pa-md q-mb-md bg-amber-1" flat>
     <div class="text-h6">Baan condities</div>
     <q-separator/>
     <table class="full-width">
@@ -49,7 +49,6 @@
     <q-btn
       class="full-width q-mt-md"
       color="primary"
-      flat
       label="toon alles"
       size="small"
       v-on:click="$router.replace({path: '/baanstatus'})"

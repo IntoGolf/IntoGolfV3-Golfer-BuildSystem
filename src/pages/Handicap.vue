@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-sm">
     <div v-if="page === 1">
-      <handicap-menu v-on:handleNew="handleNew" />
+      <handicap-menu v-on:handleNew="handleNew"/>
 
       <q-pull-to-refresh @refresh="refreshScoreCards">
         <handicap-list
@@ -52,7 +52,7 @@ import HandicapNewForeign from "../components/handicap/newForeign";
 import HandicapScore from "../components/handicap/score";
 
 import authMixin from "../mixins/auth";
-import { mapActions, mapGetters } from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   mixins: [authMixin],
@@ -74,7 +74,7 @@ export default {
         remarks: "",
         club: 2,
         course: 2,
-        loop: { id: 1, label: "9 Holes" },
+        loop: {id: 1, label: "9 Holes"},
         tee: this.defaultTee,
         marker: "",
         format_of_play: 1,
@@ -159,7 +159,7 @@ export default {
         return;
       }
       this.scorecard = res.data;
-      this.scorecard.handicap = card.handicap_index;
+      this.scorecard.handicap = this.scorecard.handicap_index;
       this.scorecard.type = 1;
       this.page = 2;
     },
@@ -207,7 +207,7 @@ export default {
       }
     },
     handleNew: function (type) {
-      this.scorecard = { ...this.scorecard_template };
+      this.scorecard = {...this.scorecard_template};
       this.scorecard.type = type;
       this.scorecard.datetime = this.$dayjs().format("YYYY-MM-DD HH:mm");
       this.scorecard.player.gsn = this.currentUser.relGsn;

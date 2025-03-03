@@ -5,7 +5,7 @@
     <q-card
       v-if="usrHasTeeTimes && bookingsArray.length === 0"
       bordered
-      class="full-width q-mt-md q-mb-md"
+      class="full-width q-mt-md q-mb-md bg-brown-1"
       flat
     >
       <q-card-section>
@@ -17,7 +17,6 @@
         <q-btn
           class="q-mt-md full-width"
           color="primary"
-          flat
           label="boek een starttijd"
           size="small"
           v-on:click="$router.replace({path: '/reservations'})"

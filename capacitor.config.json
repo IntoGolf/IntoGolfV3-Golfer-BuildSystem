@@ -1,6 +1,6 @@
 {
-  "appId": "nl.intogolf.graafschap",
-  "appName": "graafschap",
+  "appId": "nl.intogolf.amelisweerd",
+  "appName": "amelisweerd",
   "version": "1.4.8",
   "webDir": "dist/spa",
   "ios": {

@@ -1,17 +1,17 @@
 <template>
-  <q-list v-if="unreadMessages.length > 0" class="q-mb-md" separator>
+  <q-list v-if="unreadMessages.length > 0" class="q-mb-md bg-indigo-1" separator>
     <q-item
       v-for="(item, index) in unreadMessages"
       v-bind:key="index"
       v-ripple
-      class="full-width bg-white shadow-1 q-mb-sm"
+      class="full-width shadow-1 q-mb-sm"
       clickable
       style="border-radius: 4px"
     >
       <q-item-section>
-        <q-item-label>
-          <div class="float-left">
-            <b>Bericht: {{ item.msgTitle }}</b>
+        <q-item-label class="q-mt-sm">
+          <div class="text-h6 float-left">
+            {{ item.msgTitle }}
           </div>
           <div
             v-if="item.msgType !== 1"
@@ -21,7 +21,7 @@
             X
           </div>
         </q-item-label>
-        <q-separator class="q-mt-sm q-mb-sm"/>
+        <q-separator class="q-mb-sm"/>
         <q-item-label v-html="item.msgText"/>
       </q-item-section>
     </q-item>

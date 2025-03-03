@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">graafschap</string>
-    <string name="title_activity_main">graafschap</string>
-    <string name="package_name">nl.intogolf.graafschap</string>
-    <string name="custom_url_scheme">nl.intogolf.graafschap</string>
+    <string name="app_name">amelisweerd</string>
+    <string name="title_activity_main">amelisweerd</string>
+    <string name="package_name">nl.intogolf.amelisweerd</string>
+    <string name="custom_url_scheme">nl.intogolf.amelisweerd</string>
 </resources>

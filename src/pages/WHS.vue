@@ -9,13 +9,13 @@
     </div>
 
     <div class="row q-mb-md">
-      <q-input v-model="whs" label="Voer je handicap in" />
+      <q-input v-model="whs" label="Voer je handicap in"/>
     </div>
 
     <div v-for="(item, key) in list" :key="key" class="row q-mb-md">
       <div class="col">
         <div class="text-h6 text-center text-bold">{{ item.name }}</div>
-        <q-separator class="q-mb-sm q-mt-sm" />
+        <q-separator class="q-mb-sm q-mt-sm"/>
         <div class="row text-bold">
           <div class="col-4">Tee</div>
           <div class="col-2">Lengte</div>
@@ -24,7 +24,7 @@
           <div class="col-1">SR</div>
           <div class="col-2 text-right">B.Hcp</div>
         </div>
-        <q-separator class="q-mb-sm q-mt-sm" />
+        <q-separator class="q-mb-sm q-mt-sm"/>
         <div
           v-for="(tee, key) in item.tees"
           :key="key"
@@ -51,7 +51,7 @@
             {{ getBaanHcp(tee, item) }}
           </div>
         </div>
-        <q-separator class="q-mb-sm q-mt-sm" />
+        <q-separator class="q-mb-sm q-mt-sm"/>
       </div>
     </div>
   </q-page>
@@ -80,7 +80,7 @@
         <div class="col-2 text-center">SI</div>
         <div class="col-2 text-center">P.Hcp</div>
       </div>
-      <q-separator class="q-mt-sm q-mb-sm" />
+      <q-separator class="q-mt-sm q-mb-sm"/>
       <div
         v-for="(hole, key) in selectedItem.courseType"
         :key="key"
@@ -99,12 +99,12 @@
             calculateHoleStrokes(
               getBaanHcp(selectedTee, selectedItem),
               selectedTee["strokeIndexHole" + hole],
-              selectedItem
+              selectedItem, selectedTee
             )
           }}
         </div>
       </div>
-      <q-separator class="q-mt-sm q-mb-sm" />
+      <q-separator class="q-mt-sm q-mb-sm"/>
       <div class="row text-bold">
         <div class="col-2">&nbsp;</div>
         <div class="col-4">{{ selectedTee.totalDistance }}</div>
@@ -153,7 +153,7 @@
                 calculateHoleStrokes(
                   getBaanHcp(selectedTee, selectedItem),
                   selectedTee["strokeIndexHole" + hole],
-                  selectedItem
+                  selectedItem, selectedTee
                 )
               }}
             </div>
@@ -176,7 +176,7 @@
                 calculateHoleStrokes(
                   getBaanHcp(selectedTee, selectedItem),
                   selectedTee["strokeIndexHole" + (hole + 9)],
-                  selectedItem
+                  selectedItem, selectedTee
                 )
               }}
             </div>
@@ -270,14 +270,14 @@ export default {
       whs: 36,
       gender: "M",
       teeAdvise: [
-        { gender: "M", max: 90, min: 54, letter: "O" },
-        { gender: "M", max: 54, min: 28, letter: "R" },
-        { gender: "M", max: 28, min: 15, letter: "B" },
-        { gender: "M", max: 15, min: 5, letter: "Y" },
-        { gender: "M", max: 5, min: -9.9, letter: "W" },
-        { gender: "F", max: 90, min: 28, letter: "O" },
-        { gender: "F", max: 28, min: 5, letter: "R" },
-        { gender: "F", max: 5, min: -9.9, letter: "B" },
+        {gender: "M", max: 90, min: 54, letter: "O"},
+        {gender: "M", max: 54, min: 28, letter: "R"},
+        {gender: "M", max: 28, min: 15, letter: "B"},
+        {gender: "M", max: 15, min: 5, letter: "Y"},
+        {gender: "M", max: 5, min: -9.9, letter: "W"},
+        {gender: "F", max: 90, min: 28, letter: "O"},
+        {gender: "F", max: 28, min: 5, letter: "R"},
+        {gender: "F", max: 5, min: -9.9, letter: "B"},
       ],
     };
   },
@@ -287,7 +287,8 @@ export default {
     });
   },
   watch: {
-    selectedTee(newValue) {},
+    selectedTee(newValue) {
+    },
   },
   computed: {
     teeLetterMale() {
@@ -333,13 +334,13 @@ export default {
       if (item.courseType === 18) {
         result = Math.round(
           this.whs * (tee.slopeRating / 113) +
-            (tee.courseRating - tee.totalPar),
+          (tee.courseRating - tee.totalPar),
           0
         );
       } else {
         result = Math.round(
           (this.whs / 2) * (tee.slopeRating / 113) +
-            (tee.courseRating - tee.totalPar),
+          (tee.courseRating - tee.totalPar),
           0
         );
       }
@@ -365,7 +366,7 @@ export default {
           result += this.calculateHoleStrokes(
             this.getBaanHcp(this.selectedTee, this.selectedItem),
             this.selectedTee["strokeIndexHole" + hole],
-            this.selectedItem
+            this.selectedItem, this.selectedTee
           );
         }
       }
@@ -380,7 +381,7 @@ export default {
       }
       return result;
     },
-    calculateHoleStrokes(playingHandicap, strokeIndex, selectedItem) {
+    calculateHoleStrokes(playingHandicap, strokeIndex, selectedItem, selectedTee) {
       const totalHoles = parseInt(selectedItem.courseType);
       if (![9, 18].includes(totalHoles)) {
         throw new Error(
@@ -391,11 +392,11 @@ export default {
       const baseStrokes = Math.floor(playingHandicap / totalHoles);
       const extraStrokes = playingHandicap % totalHoles;
 
-      const siArray = selectedItem.tees
-        .map(
-          (_, index) => selectedItem.tees[index][`strokeIndexHole${index + 1}`]
-        )
-        .sort((a, b) => a - b);
+      let siArray = [];
+      for (let i = 0; i < totalHoles; i++) {
+        siArray.push(selectedTee[`strokeIndexHole${i + 1}`])
+      }
+      siArray.sort((a, b) => a - b);
 
       const siIndex = siArray.indexOf(strokeIndex);
 

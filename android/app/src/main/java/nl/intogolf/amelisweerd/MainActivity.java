@@ -1,4 +1,4 @@
-package nl.intogolf.graafschap;
+package nl.intogolf.amelisweerd;
 
 import com.getcapacitor.BridgeActivity;
 

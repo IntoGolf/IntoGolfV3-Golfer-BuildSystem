@@ -83,7 +83,11 @@
     <q-page-container>
       <router-view :key="$route.fullPath" class="web-width bg-white"/>
     </q-page-container>
-    <q-drawer v-if="isApp" v-model="drawer" class="q-drawer" show-if-above>
+    <q-drawer
+      v-if="isApp"
+      v-model="drawer" :style="{backgroundColor:backgroundColor}"
+      class="q-drawer"
+      show-if-above>
       <div
         style="
           width: 100%;
@@ -144,6 +148,9 @@ export default defineComponent({
         navigator.userAgent.includes(device)
       );
     },
+    backgroundColor() {
+      return this.getBackgroundColor;
+    },
     fullName() {
       if (this.$store.getters["currentUser/item"]) {
         return this.$store.getters["currentUser/item"].full_name2;
@@ -195,6 +202,7 @@ export default defineComponent({
       "usrHasCourseStatus",
       "showWhs",
       "showHistory",
+      "getBackgroundColor",
     ]),
     ...mapGetters("currentUser", [
       "usrHasLessons",

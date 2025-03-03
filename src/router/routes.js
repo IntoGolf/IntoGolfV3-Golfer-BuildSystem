@@ -19,7 +19,7 @@ const routes = [
     component: homeComponent,
     meta: {
       requiresAuth: true,
-      title: "",
+      title: "Home",
     },
   },
   {
