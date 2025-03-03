@@ -167,7 +167,24 @@ const getters = {
       "app_primary_color" in state.item ?
         state.item.app_primary_color : 'blue'
     );
+  },
+  showMaxHandicap: (state) => {
+    return (
+      state.item &&
+      typeof state.publicItems === "object" &&
+      "website_display_max_handicap" in state.publicItems ?
+        state.publicItems.website_display_max_handicap === 1 : false
+    );
+  },
+  hasWebsiteBookingText: (state) => {
+    return (
+      state.item &&
+      typeof state.publicItems === "object" &&
+      "website_booking_text" in state.publicItems ?
+        state.publicItems.website_booking_text.length > 0 : false
+    );
   }
+
 };
 
 export default {

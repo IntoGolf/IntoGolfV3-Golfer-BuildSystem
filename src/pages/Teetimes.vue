@@ -161,27 +161,15 @@
             </div>
           </div>
 
-          <div class="row q-mt-sm">
+          <div v-show="displayMaxHandicap" class="row q-mt-sm">
             Voor deze flight geldt een maximale totale WHS handicap van:
             {{ maxFlightHandicap }}.
           </div>
-          <div
-            v-if="
-              $store.state.settings.publicItems.app_display_greenfee_pay == 1
-            "
-            class="row q-mt-sm"
-          >
-            Nadat je de flight hebt betaald ontvang je een e-mail ter
-            bevestiging van je reservering. In deze e-mail vindt je een link
-            waarmee je je resevering kan aanvullen met de details van je
-            medespelers.
+
+          <div v-if="hasWebsiteBookingText">
+            {{ $store.state.settings.publicItems.website_booking_text }}
           </div>
-          <div v-else class="row q-mt-sm">
-            Nadat je de flight hebt geboekt ontvang je een e-mail ter
-            bevestiging van je reservering. In deze e-mail vindt je een link
-            waarmee je je resevering kan aanvullen met de details van je
-            medespelers.
-          </div>
+          
           <q-input
             v-model="flight.flpName1"
             :rules="[(val) => !!val || '* Required']"
@@ -520,6 +508,12 @@ export default {
     },
     defaultSize() {
       return this.$store.getters["settings/publicItems"].planner_default_reservation_count;
+    },
+    displayMaxHandicap() {
+      return this.$store.getters['settings/showMaxHandicap'];
+    },
+    hasWebsiteBookingText() {
+      return this.$store.getters['settings/hasWebsiteBookingText'];
     },
     valid: function () {
       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
