@@ -104,6 +104,8 @@ export default {
       }
     },
     backgroundColor: function (time) {
+      console.log(this.$store.getters["settings/item"]);
+      console.log(this.$store.getters["settings/publicItems"]);
       let customBG = this.$store.getters["settings/item"].app_primary_color;
       let customFont = this.$store.getters["settings/item"].app_primary_font_color;
 
