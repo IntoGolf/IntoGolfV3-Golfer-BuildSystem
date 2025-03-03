@@ -56,9 +56,6 @@ export default {
   props: {
     item: Object,
   },
-  created() {
-    console.log(this.item);
-  },
   methods: {
     onOpen(item) {
       this.$emit('onOpen', item);

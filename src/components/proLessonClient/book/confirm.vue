@@ -31,15 +31,6 @@
         stack-label
       />
     </div>
-    <div class="row">
-      <q-checkbox
-        v-model="lForm.agreeCommerce"
-        :rules="[(val) => !!val || '* Required']"
-        class="q-mb-sm"
-        label="Stuur mij aanbiedingen"
-        stack-label
-      />
-    </div>
   </div>
 </template>
 

@@ -46,7 +46,6 @@ export default route(function (/* { store, ssrContext } */) {
     const version = localStorage.getItem('version');
 
     if (data.version != version) {
-      console.log('reload');
       localStorage.setItem('version', data.version);
       window.location.reload();
     }

@@ -89,7 +89,6 @@ export default {
       this.per = per;
     },
     handleBook: function (lesson) {
-      console.log(this.date);
       this.form = {
         id: null,
         type: {
