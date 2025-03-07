@@ -2,27 +2,6 @@
   <q-page class="q-pa-sm">
     <dashboard-whs-status/>
     <dashboard-course-status v-if="setHasCourseStatus"/>
-    <q-card
-      v-if="usrHasTeeTimes && bookingsArray.length === 0"
-      bordered
-      class="full-width q-mt-md q-mb-md bg-brown-1"
-      flat
-    >
-      <q-card-section>
-        <div class="text-h6">Geen starttijden</div>
-        <q-separator/>
-        <div class="text-subtitle1">
-          er zijn geen gereserveerde starttijden gevonden...
-        </div>
-        <q-btn
-          class="q-mt-md full-width"
-          color="primary"
-          label="boek een starttijd"
-          size="small"
-          v-on:click="$router.replace({path: '/reservations'})"
-        />
-      </q-card-section>
-    </q-card>
     <match/>
     <bills v-if="usrHasTeeTimes"/>
     <bookings v-if="usrHasTeeTimes" :bookingsArray="bookingsArray"/>

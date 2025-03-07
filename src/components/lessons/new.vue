@@ -42,36 +42,21 @@
 
     <q-separator class="q-mt-md"/>
 
-    <div class="row">
-      <div class="col hide-scrollbar" style="overflow-x: scroll">
-        <div :style="{ width: colWidth }" class="row q-gutter-sm">
-          <div v-for="(pro, key) in proArray" :key="key" class="col q-mb-lg">
-            <div class="row">
-              <div class="col q-pt-sm text-bold text-center">
-                <b>{{ pro.full_name2 }}</b>
-              </div>
-            </div>
-            <div class="row hide-scrollbar">
-              <comp-lesson
-                :lessons="lessonArray"
-                :pro="pro"
-                :proLessonType="proLessonType"
-                v-on:handleBook="handleBook"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <component-lesson-pros
+      :lessonType="proLessonType"
+      :lessons="lessonArray"
+      :per="per"
+      v-on:handleBook="handleBook"/>
+
   </div>
 </template>
 
 <script>
-import compLesson from "./newProLessons.vue";
+import ComponentLessonPros from "components/proLesson/Pros.vue";
 
 export default {
   components: {
-    compLesson,
+    ComponentLessonPros,
   },
   data: function () {
     return {
@@ -81,6 +66,7 @@ export default {
       lessonArray: [],
       lessonTypeArray: [],
       clientLessonArray: [],
+      per: {value: 1, label: "Dag"},
     };
   },
   watch: {

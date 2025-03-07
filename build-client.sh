@@ -9,7 +9,7 @@ fi
 CLIENT=$1
 APP_NAME="${CLIENT}"
 PACKAGE_NAME="nl.intogolf.${CLIENT}"
-VERSION_CODE=3
+VERSION_CODE=4
 
 # Keystore configuration
 KEYSTORE_DIR="${CLIENT}"

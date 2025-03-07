@@ -203,6 +203,14 @@ export default {
               },
             },
           ],
+          onDismiss: () => {
+            const ngfCardId = res.response?.scorecard?.ngf_card_id;
+            if (!ngfCardId) return;
+            
+            that.handleOpen({
+              ngf_card_id: res.response.scorecard.ngf_card_id,
+            });
+          },
         });
       }
     },

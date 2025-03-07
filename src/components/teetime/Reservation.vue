@@ -36,7 +36,7 @@
       v-on:handleSave="handleSave"
     />
 
-    <check-in v-else-if="checkIn" :flight="local_flight" />
+    <check-in v-else-if="checkIn" :flight="local_flight"/>
   </q-page>
 </template>
 
@@ -67,7 +67,7 @@ export default {
       editPlayer: null,
       addPlayer: null,
       addRent: false,
-      local_flight: { ...this.flight },
+      local_flight: {...this.flight},
       checkIn: false,
     };
   },

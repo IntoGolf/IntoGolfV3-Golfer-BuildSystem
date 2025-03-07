@@ -87,7 +87,7 @@
           </div>
           <div v-else-if="loading">
             <div
-              class="text-h5 text-center"
+              class="text-h5 text-center q-pt-lg"
               style="
                 width: 100%;
                 height: 641px;
@@ -169,7 +169,7 @@
           <div v-if="hasWebsiteBookingText">
             {{ $store.state.settings.publicItems.website_booking_text }}
           </div>
-          
+
           <q-input
             v-model="flight.flpName1"
             :rules="[(val) => !!val || '* Required']"

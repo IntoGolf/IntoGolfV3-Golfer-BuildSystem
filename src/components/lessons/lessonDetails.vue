@@ -4,7 +4,13 @@
       <div class="row q-pb-sm q-pt-sm">
         <div class="col"><h5 class="q-mt-sm q-mb-sm">Lesinformatie</h5></div>
       </div>
-      <q-separator />
+      <q-separator/>
+      <div class="row q-pb-sm q-pt-sm">
+        <div class="col text-bold">Soort les</div>
+        <div class="col overflow-hidden text-right">
+          {{ soortLes }}
+        </div>
+      </div>
       <div class="row q-pb-sm q-pt-sm">
         <div class="col text-bold">Datum</div>
         <div class="col overflow-hidden text-right">
@@ -24,18 +30,12 @@
         </div>
       </div>
       <div class="row q-pb-sm q-pt-sm">
-        <div class="col text-bold">Soort les</div>
-        <div class="col overflow-hidden text-right">
-          {{ soortLes }}
-        </div>
-      </div>
-      <div class="row q-pb-sm q-pt-sm">
         <div class="col text-bold">Max. aantal deelnemers</div>
         <div class="col overflow-hidden text-right">
           {{ pro_lesson.pro_lesson_type.pltMaxPers }}
         </div>
       </div>
-      <q-separator class="q-mt-sm q-mb-sm" />
+      <q-separator class="q-mt-sm q-mb-sm"/>
       <div class="col"><h6 class="q-mt-sm q-mb-sm">Deelnemer(s)</h6></div>
       <q-list separator>
         <q-item
@@ -52,11 +52,11 @@
             </q-item-label>
           </q-item-section>
           <q-item-section avatar>
-            <q-icon v-if="client.canCancel === 1" name="delete" />
+            <q-icon v-if="client.canCancel === 1" name="delete"/>
           </q-item-section>
         </q-item>
       </q-list>
-      <q-separator class="q-mt-sm q-mb-sm" />
+      <q-separator class="q-mt-sm q-mb-sm"/>
       <div class="col"><h6 class="q-mt-sm q-mb-sm">Acties</h6></div>
       <q-btn
         v-if="pro_lesson.canCancel === 1"
@@ -65,7 +65,7 @@
         icon="delete"
         v-on:click="handleCancel"
       >
-        Annuleer les
+        {{ cancelLabel }}
       </q-btn>
       <q-btn
         class="full-width q-mb-md"
@@ -103,6 +103,12 @@ export default {
     soortLes() {
       return this.pro_lesson.pro_lesson_type.pltName;
     },
+    cancelLabel() {
+      if (this.pro_lesson.pro_lesson_type.pltLtcNr === 2) {
+        return "Annuleer deelname";
+      }
+      return "Annuleer les";
+    }
   },
   methods: {
     handleCancel: function () {
@@ -114,8 +120,7 @@ export default {
           persistent: true,
         })
         .onOk(() => {
-          this.pro_lesson.lesCarNr = 1;
-          this.$http.post("golfer/lesson", this.pro_lesson).then(() => {
+          this.$http.post("golfer/cancelLesson", this.pro_lesson).then(() => {
             this.$q.notify({
               type: "positive",
               message: "uw les is geannuleerd",

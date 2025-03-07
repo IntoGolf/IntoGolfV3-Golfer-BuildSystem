@@ -6,7 +6,7 @@
           class="full-width"
           color="primary"
           icon="add"
-          label="Nieuwe reservering"
+          label="Nieuwe starttijd"
           v-on:click="handleOpenNew"
         />
       </div>
@@ -25,15 +25,15 @@
           >
             <q-item-section>
               <q-item-label class="itg-text-overflow">
-                <i class="far fa-calendar-alt mr-2" />
+                <i class="far fa-calendar-alt mr-2"/>
                 {{ $filters.unixToDate(item.fltDate, "dddd DD-MM") }}
                 {{}} -
-                                {{ $filters.minuteToTime(item.fltTime1) }}
+                {{ $filters.minuteToTime(item.fltTime1) }}
               </q-item-label>
 
               <q-item-label caption>
                 <!--                {{ item.flight_players.length }} golfers-->
-                <i class="far fa-golf-club mr-2" />
+                <i class="far fa-golf-club mr-2"/>
                 {{ item.loop1.crlName }}
               </q-item-label>
             </q-item-section>

@@ -67,4 +67,5 @@ export const message = {
   Speelhistorie: "PLayer history",
   WHS: "WHS",
   Facturen: "Invoices",
+  Home: "Home"
 };

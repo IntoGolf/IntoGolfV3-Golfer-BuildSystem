@@ -11,7 +11,7 @@
         />
       </q-card-section>
 
-      <q-separator />
+      <q-separator/>
 
       <q-list bordered separator>
         <q-item
@@ -29,7 +29,7 @@
             </q-item-label>
           </q-item-section>
           <q-item-section side>
-            <q-icon name="person" />
+            <q-icon name="person"/>
           </q-item-section>
         </q-item>
         <q-item v-ripple clickable @click="typePlayer = 2">
@@ -42,7 +42,7 @@
             </q-item-label>
           </q-item-section>
           <q-item-section side>
-            <q-icon name="search" />
+            <q-icon name="search"/>
           </q-item-section>
         </q-item>
         <q-item
@@ -58,7 +58,7 @@
             <q-item-label caption> voer een speler in als gast</q-item-label>
           </q-item-section>
           <q-item-section side>
-            <q-icon name="add" />
+            <q-icon name="add"/>
           </q-item-section>
         </q-item>
       </q-list>
@@ -74,7 +74,7 @@
           v-on:click="typePlayer = 0"
         />
       </q-card-section>
-      <q-separator />
+      <q-separator/>
       <q-list v-if="knownPlayers.length > 0" bordered separator>
         <q-item
           v-for="(player, key) in knownPlayers"
@@ -92,7 +92,7 @@
             </q-item-label>
           </q-item-section>
           <q-item-section side>
-            <q-icon name="person" />
+            <q-icon name="person"/>
           </q-item-section>
         </q-item>
       </q-list>
@@ -115,7 +115,7 @@
           v-on:click="typePlayer = 0"
         />
       </q-card-section>
-      <q-separator />
+      <q-separator/>
       <q-card-section>
         <q-input
           v-model="relationSearch"
@@ -153,7 +153,7 @@
             </q-item-label>
           </q-item-section>
           <q-item-section side>
-            <q-icon name="person" />
+            <q-icon name="person"/>
           </q-item-section>
         </q-item>
       </q-list>
@@ -173,7 +173,7 @@
           v-on:click="typePlayer = 0"
         />
       </q-card-section>
-      <q-separator />
+      <q-separator/>
       <q-card-section>
         <p>Voer de gegevens in van de gast die u wenst uit te nodigen.</p>
         <div class="q-gutter-y-md column">
@@ -219,7 +219,7 @@
           />
         </div>
       </q-card-section>
-      <q-separator />
+      <q-separator/>
       <q-card-section>
         <q-btn
           :disable="!validGuest"
@@ -339,7 +339,7 @@ export default {
     },
 
     handleSave: function () {
-      let local_flight = { ...this.flight };
+      let local_flight = {...this.flight};
       let player;
       let newPlayer = false;
       if (this.player.flpNr === null) {
@@ -395,8 +395,7 @@ export default {
               player.flpNr = local_flight.flight_players[key].flpNr;
               local_flight.flight_players[key] = player;
             } else if (
-              local_flight.startTime.sttMaxPlayers >
-              local_flight.flight_players.length
+              local_flight.freeSlots > 0
             ) {
               local_flight.flight_players.push(player);
             }
@@ -410,7 +409,7 @@ export default {
         return;
       }
       let data = {
-        params: { fltNr: this.flight.fltNr, search: this.relationSearch },
+        params: {fltNr: this.flight.fltNr, search: this.relationSearch},
       };
       this.relations = await this.$http.get(`golfer/relation`, data);
       this.showEmptySearch = this.relations.length === 0;

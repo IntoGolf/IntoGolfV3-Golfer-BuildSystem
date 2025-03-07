@@ -20,6 +20,7 @@
 import Pro from "components/proLesson/Pro.vue";
 
 export default {
+  name: "componentLessonPros",
   props: {
     lessons: Array,
     per: Object,
@@ -31,6 +32,7 @@ export default {
       return this.proArray.length * 180 + "px";
     },
     proArray: function () {
+      console.log(this.lessons);
       if (this.lessons === undefined) {
         return [];
       }

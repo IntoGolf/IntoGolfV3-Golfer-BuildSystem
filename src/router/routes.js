@@ -203,12 +203,30 @@ const routes = [
     },
   },
   {
-    path: "/lessons",
+    path: "/lessons/:lesNr?",
     name: "lessons",
     component: () => import("pages/Lessons.vue"),
     meta: {
       requiresAuth: true,
       title: "Lessen",
+    },
+  },
+  {
+    path: "/walkins",
+    name: "walkins",
+    component: () => import("../components/lessons/walkins.vue"),
+    meta: {
+      requiresAuth: true,
+      title: "Inlooplessen",
+    },
+  },
+  {
+    path: "/relation_classes",
+    name: "relation_classes",
+    component: () => import("../components/lessons/classes.vue"),
+    meta: {
+      requiresAuth: true,
+      title: "Cursussen",
     },
   },
   {

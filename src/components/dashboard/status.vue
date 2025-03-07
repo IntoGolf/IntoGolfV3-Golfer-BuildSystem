@@ -50,6 +50,7 @@
       class="full-width q-mt-md"
       color="primary"
       label="toon alles"
+      outline
       size="small"
       v-on:click="$router.replace({path: '/baanstatus'})"
     />

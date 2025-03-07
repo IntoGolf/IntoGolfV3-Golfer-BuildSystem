@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md overflow-auto" style="height: 100vh">
     <div v-if="form === null">
-      <q-card v-for="(item,key) in list" :key="key" v-ripple class="q-pa-sm">
+      <q-card v-for="(item,key) in list" :key="key" v-ripple class="q-pa-sm q-mb-md">
         <pro-them-lesson-list-details :item="item" v-on:onOpen="onSetProLesson"/>
       </q-card>
     </div>

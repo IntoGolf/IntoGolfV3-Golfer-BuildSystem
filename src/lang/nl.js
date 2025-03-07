@@ -364,4 +364,5 @@ export const message = {
   Speelhistorie: "Speelhistorie",
   WHS: "WHS",
   Facturen: "Facturen",
+  Home: "Home"
 };

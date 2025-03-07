@@ -1,34 +1,48 @@
 <template>
-  <q-card
-    v-for="(lesson, key) in lessonArray"
-    :key="key"
-    class="dashboard-card q-mb-md"
-  >
-    <q-card-section class="bg-amber-3 dashboard-card-title">
-      Les
+  <q-card bordered class="full-width q-pa-md q-mb-md  bg-blue-grey-1" flat>
+    <div class="row text-h6">
+      <div class="col">Lessen</div>
+    </div>
+    <q-separator class="q-mb-sm"/>
+    <q-list v-if="lessonArray.length > 0" separator>
+      <q-item
+        v-for="(lesson, index) in lessonArray"
+        v-show="index < 3"
+        v-bind:key="index"
+        v-ripple
+        class="full-width q-pa-sm bg-blue-grey-2 q-mb-sm"
+        clickable
+        style="border-radius: 4px"
+        v-on:click="handleOpenLesson(lesson)"
+      >
+        <q-item-section>
+          <q-item-label class="itg-text-overflow">
+            <i class="far fa-calendar-alt mr-2"/>
+            {{ $filters.unixToDate(lesson.pro_lesson.lesDate, "ddd D MMM") }}
+            -
+            {{ $filters.minuteToTime(lesson.pro_lesson.lesTimeFrom) }}
+          </q-item-label>
+
+          <q-item-label caption class="text-bold">
+            <i class="far fa-golf-club mr-2"/>
+            {{ lesson.pro_lesson.pro_lesson_type.pltName }} {{ lesson.pro_lesson.relation.full_name2 }}
+          </q-item-label>
+        </q-item-section>
+        <q-item-section avatar> ></q-item-section>
+      </q-item>
+    </q-list>
+    <q-card-section v-else>
+      er zijn geen gereserveerde lessen gevonden...
     </q-card-section>
-    <q-card-section class="q-pa-sm">
-      <div class="row q-pa-sm" style="background-color: #f2f2f2">
-        <div class="col-4 text-bold">Datum:</div>
-        <div class="col-8">
-          {{ $filters.unixToDate(lesson.pro_lesson.lesDate, "dddd DD MMMM") }}
-        </div>
-      </div>
-      <div class="row q-pa-sm">
-        <div class="col-4 text-bold">Tijd:</div>
-        <div class="col-8">
-          {{ $filters.minuteToTime(lesson.pro_lesson.lesTimeFrom) }}
-        </div>
-      </div>
-      <div class="row q-pa-sm" style="background-color: #f2f2f2">
-        <div class="col-4 text-bold">Les:</div>
-        <div class="col-8">{{ lesson.pro_lesson.pro_lesson_type.pltName }}</div>
-      </div>
-      <div class="row q-pa-sm">
-        <div class="col-4 text-bold">Pro:</div>
-        <div class="col-8">{{ lesson.pro_lesson.relation.full_name2 }}</div>
-      </div>
-    </q-card-section>
+    <q-separator class="q-mb-sm"/>
+    <q-btn
+      class="q-mt-md full-width"
+      color="primary"
+      label="boek een les"
+      outline
+      size="small"
+      v-on:click="$router.replace({path: '/lessons'})"
+    />
   </q-card>
 </template>
 
@@ -39,10 +53,13 @@ export default {
       lessonArray: [],
     };
   },
-  mounted() {
-    this.$http.get("golfer/clientLessons").then((res) => {
-      this.lessonArray = res;
-    });
+  async mounted() {
+    this.lessonArray = await this.$http.get("golfer/clientLessons");
   },
+  methods: {
+    handleOpenLesson(lesson) {
+      this.$router.push({name: 'lessons', params: {lesNr: lesson.pro_lesson.lesNr}});
+    },
+  }
 };
 </script>

@@ -22,9 +22,9 @@
       />
     </q-card-section>
 
-    <q-separator />
+    <q-separator/>
 
-    <details-booking :flight="flight" />
+    <details-booking :flight="flight"/>
 
     <q-item-label header>Deelnemers</q-item-label>
 
@@ -41,7 +41,7 @@
       "
     >
       <q-item-label header>Verhuur</q-item-label>
-      <rent :flight="flight" v-on:handleRefresh="$emit('handleRefresh')" />
+      <rent :flight="flight" v-on:handleRefresh="$emit('handleRefresh')"/>
     </template>
   </q-card>
 
@@ -54,7 +54,7 @@
         v-on:click="handleAddPlayer"
       >
         <q-item-section side>
-          <q-icon name="person_add" />
+          <q-icon name="person_add"/>
         </q-item-section>
         <q-item-section>
           <q-item-label>
@@ -77,7 +77,7 @@
         v-on:click="handleAddRent"
       >
         <q-item-section side>
-          <q-icon name="add" />
+          <q-icon name="add"/>
         </q-item-section>
         <q-item-section>
           <q-item-label>
@@ -98,7 +98,7 @@
         v-on:click="showShareDialog"
       >
         <q-item-section side>
-          <q-icon name="ios_share" />
+          <q-icon name="ios_share"/>
         </q-item-section>
         <q-item-section>
           <q-item-label>
@@ -115,7 +115,7 @@
         v-on:click="getIcs"
       >
         <q-item-section side>
-          <q-icon name="event" />
+          <q-icon name="event"/>
         </q-item-section>
         <q-item-section>
           <q-item-label>
@@ -132,7 +132,7 @@
         v-on:click="onPay"
       >
         <q-item-section side>
-          <q-icon name="payments" />
+          <q-icon name="payments"/>
         </q-item-section>
         <q-item-section>
           <q-item-label>
@@ -167,10 +167,10 @@
             <b>Checkin</b>
           </q-item-label>
           <q-item-label v-if="checkedIn" caption
-            >u bent ingechecked
+          >u bent ingechecked
           </q-item-label>
           <q-item-label v-else caption
-            >check uzelf in voor deze flight
+          >check uzelf in voor deze flight
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -189,7 +189,7 @@
         v-on:click="showDialogSecNine"
       >
         <q-item-section side>
-          <q-icon name="counter_9" />
+          <q-icon name="counter_9"/>
         </q-item-section>
         <q-item-section>
           <q-item-label>
@@ -293,17 +293,7 @@ export default {
       return this.player.flpScorecard > 0;
     },
     freeSlots() {
-      if (this.$store.state.settings.item.app_only_book_members === 1) {
-        return (
-          this.flight.startTime.sttMaxPlayers -
-          this.playerArray.filter((item) => item.flpName !== "").length
-        );
-      }
-      return (
-        this.flight.startTime.sttMaxPlayers -
-        this.local_flight.flight_players.filter((item) => item.flpName !== "")
-          .length
-      );
+      return this.flight.freeSlots;
     },
     inThePast: function () {
       return this.$dayjs(
@@ -406,7 +396,7 @@ export default {
         .onOk((selectedChats) => {
           const res = this.getIcsFile();
           if (res) {
-            const blob = new Blob([res], { type: "text/calendar" });
+            const blob = new Blob([res], {type: "text/calendar"});
             const downloadUrl = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = downloadUrl;
@@ -418,8 +408,8 @@ export default {
         });
     },
     async getIcsFile() {
-      let data = { fltNr: this.local_flight.fltNr };
-      return await this.$http.get("golfer/flight/ics", { params: data });
+      let data = {fltNr: this.local_flight.fltNr};
+      return await this.$http.get("golfer/flight/ics", {params: data});
     },
     showShareDialog() {
       this.$q

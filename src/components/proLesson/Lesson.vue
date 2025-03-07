@@ -6,7 +6,7 @@
           <b class="float-left">{{
               $filters.minuteToTime(lesson.pagTimeFrom)
             }}</b>
-          <i class="float-right">v.a. {{ price }}</i>
+          <i v-show="hasPrices" class="float-right">v.a. {{ price }}</i>
         </div>
       </div>
     </div>
@@ -33,7 +33,13 @@ export default {
       return this.max - this.lesson.pagGolfers;
     },
     price: function () {
+      if (!this.lesson.pro_lesson_fee_les) {
+        return 0;
+      }
       return this.$filters.money(this.lesson.pro_lesson_fee_les[0].lfpPrice);
+    },
+    hasPrices: function () {
+      return this.lesson.pro_lesson_fee_les !== undefined;
     },
     bg: function () {
       if (this.players / this.max > 0.5) {

@@ -69,14 +69,13 @@
           {{ this.$route.meta.title }}
         </q-toolbar-title>
         <q-btn
-          v-if="['/'].includes($route.path)"
+          v-if="!['home'].includes($route.name)"
           dense
           flat
-          icon="account_circle"
+          icon="home"
           round
-          v-on:click="$router.push('/profile')"
-        >{{ fullName }}
-        </q-btn>
+          v-on:click="$router.push('/')"
+        />
         <q-btn v-else dense flat round/>
       </q-toolbar>
     </q-header>
