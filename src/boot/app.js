@@ -19,11 +19,16 @@ dayjs.extend(isToday);
 export default boot(({app}) => {
   app.config.globalProperties.$dayjs = dayjs;
 
-  if ('serviceWorker' in navigator) {
+  if ("serviceWorker" in navigator) {
     navigator.serviceWorker.getRegistrations().then((registrations) => {
-      registrations.forEach((registration) => {
-        registration.unregister();
-      });
+      if (registrations.length > 0) {
+        console.log("Service workers found, unregistering...");
+        registrations.forEach((registration) => {
+          registration.unregister();
+        });
+      } else {
+        console.log("No service workers found.");
+      }
     });
   }
 });
