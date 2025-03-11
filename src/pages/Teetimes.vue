@@ -166,9 +166,7 @@
             {{ maxFlightHandicap }}.
           </div>
 
-          <div v-if="hasWebsiteBookingText">
-            {{ $store.state.settings.publicItems.website_booking_text }}
-          </div>
+          <div v-if="hasWebsiteBookingText" v-html="$store.state.settings.publicItems.website_booking_text"/>
 
           <q-input
             v-model="flight.flpName1"
