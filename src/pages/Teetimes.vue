@@ -625,3 +625,9 @@ export default {
   },
 };
 </script>
+
+<style>
+p {
+  margin-bottom: 0;
+}
+</style>
