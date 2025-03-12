@@ -1,6 +1,6 @@
 {
-  "appId": "nl.intogolf.amelisweerd",
-  "appName": "amelisweerd",
+  "appId": "nl.intogolf.noordwijkse",
+  "appName": "noordwijkse",
   "version": "1.4.8",
   "webDir": "dist/spa",
   "ios": {

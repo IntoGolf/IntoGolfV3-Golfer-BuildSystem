@@ -457,7 +457,7 @@ export default {
         flpHandicap4: null,
         agreeConditions: false,
         agreeCommerce: false,
-        payMethod: 'onCourse'
+        payMethod: 'iDeal'
       },
       maxHandicap: 54,
       maxTotalHandicap: 108,
