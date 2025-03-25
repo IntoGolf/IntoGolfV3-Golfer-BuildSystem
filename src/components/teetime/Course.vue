@@ -10,7 +10,7 @@
     >
       <div
         v-if="$store.state.settings.publicItems.app_display_greenfee_pay == 0"
-        :class="backgroundColor(time)"
+        :style="backgroundColor(time)"
         class="col-12 q-pa-sm cursor-pointer"
       >
         {{ $filters.minuteToTime(time.sttTimeFrom) }}

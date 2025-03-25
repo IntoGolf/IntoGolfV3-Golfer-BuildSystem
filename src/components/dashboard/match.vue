@@ -1,50 +1,72 @@
 <template>
-  <q-list
-    v-if="
-      $store.state.currentUser.item.tile_match_y_n &&
-      $store.state.settings.item.match !== null
-    "
-    separator
-  >
-    <q-item
-      v-ripple
-      class="full-width bg-white shadow-1 q-mb-sm"
-      clickable
-      style="border-radius: 4px"
-      v-on:click="
-        $router.push('/match?id=' + $store.state.settings.item.match.matchId)
-      "
-    >
-      <q-item-section>
-        <q-item-label class="itg-text-overflow">
-          <i class="far fa-calendar-alt mr-2" />
-          <b>Wedstrijd:</b>
-          {{ $store.state.settings.item.match.name }}
-        </q-item-label>
+  <q-card v-if="$store.state.currentUser.item.tile_match_y_n"
+          bordered class="full-width q-pa-md q-mb-md  bg-purple-1" flat>
+    <div class="row text-h6">
+      <div class="col">Wedstrijden</div>
+    </div>
+    <q-separator class="q-mb-sm"/>
 
-        <q-item-label caption>
-          <i class="far fa-golf-club mr-2" />
-        </q-item-label>
-      </q-item-section>
-      <q-item-section avatar> ></q-item-section>
-    </q-item>
-  </q-list>
-  <!--  <div v-else class="row q-pa-sm">-->
-  <!--    <div class="col-12 q-pa-xs text-center" style="border: 1px solid lightgrey">-->
-  <!--      <p class="q-mt-md" style="font-size: larger">-->
-  <!--        Er zijn geen toekomstige wedstrijddeelnames gevonden-->
-  <!--      </p>-->
-  <!--      <q-icon class="q-ml-auto q-mr-auto" name="trophy" />-->
-  <!--    </div>-->
-  <!--  </div>-->
+    <q-list v-if="list.length > 0" separator>
+      <q-item
+        v-for="(item, index) in list"
+        v-show="index < 3"
+        v-bind:key="index"
+        v-ripple
+        class="full-width q-pa-sm bg-purple-2 q-mb-sm"
+        clickable
+        style="border-radius: 4px"
+        v-on:click="handleOpen(item)"
+      >
+        <q-item-section>
+          <q-item-label class="itg-text-overflow">
+            <i class="far fa-calendar-alt mr-2"/>
+            {{ $dayjs(item.date).format("ddd D MMM") }}
+            {{}} -
+            {{ item.time }}
+          </q-item-label>
+
+          <q-item-label caption class="text-bold">
+            <i class="far fa-golf-club mr-2"/>
+            {{ item.name }}
+          </q-item-label>
+        </q-item-section>
+        <q-item-section avatar> ></q-item-section>
+      </q-item>
+    </q-list>
+    <q-card-section v-else>
+      er zijn geen wedstrijden gevonden...
+    </q-card-section>
+    <q-separator class="q-mb-sm"/>
+    <q-btn
+      class="full-width"
+      color="primary"
+      label="ga naar wedstrijden"
+      outline
+      size="small"
+      v-on:click="$router.replace({path: '/match'})"
+    />
+  </q-card>
+
+
 </template>
 
 <script>
 export default {
   data() {
-    return {};
+    return {
+      list: []
+    };
   },
-  mounted() {},
-  methods: {},
+  mounted() {
+    this.load();
+  },
+  methods: {
+    async load() {
+      this.list = await this.$http.get('golfer/userEvents');
+    },
+    handleOpen(player) {
+      this.$router.push('/match?id=' + player.id)
+    }
+  },
 };
 </script>

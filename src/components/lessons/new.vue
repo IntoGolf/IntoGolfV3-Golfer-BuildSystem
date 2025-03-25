@@ -2,7 +2,7 @@
   <div>
     <div class="row q-mt-sm">
       <div class="col-6">
-        <h5 class="q-mt-none q-mb-none">Reserver een les</h5>
+        <h5 class="q-mt-none q-mb-none">Reserveer een les</h5>
       </div>
       <div class="col-6 text-right">
         <q-btn
@@ -60,7 +60,7 @@ export default {
   },
   data: function () {
     return {
-      date: null,
+      date: this.$dayjs().format("YYYY-MM-DD"),
       relNr: null,
       pltNr: null,
       lessonArray: [],
@@ -77,8 +77,8 @@ export default {
       this.handleLoad();
     },
   },
-  mounted() {
-    this.handleLoadLessonTypes();
+  async created() {
+    await this.handleLoadLessonTypes();
   },
   computed: {
     pro: function () {
@@ -105,28 +105,28 @@ export default {
     },
   },
   methods: {
-    handleLoad: function () {
-      this.$http
-        .get("golfer/lessons?date=" + this.date + "&pltNr=" + this.pltNr)
-        .then((res) => {
-          this.lessonArray = res;
-          if (this.proArray.length > 0) {
-            this.relNr = this.proArray[0].relNr;
-          }
-        });
+    async handleLoad() {
+      this.lessonArray = await this.$http
+        .get("golfer/lessons?date=" + this.date + "&pltNr=" + this.pltNr);
+      if (this.proArray.length > 0) {
+        this.relNr = this.proArray[0].relNr;
+      }
     },
-    handleLoadLessonTypes: function () {
-      this.$http.get("golfer/lessonTypes").then((res) => {
-        this.lessonTypeArray = res;
-        this.pltNr = this.lessonTypeArray[0].pltNr;
-        this.date = this.$dayjs().format("YYYY-MM-DD");
-      });
+    async handleLoadLessonTypes() {
+      this.lessonTypeArray = await this.$http.get("golfer/lessonTypes");
+      this.pltNr = this.lessonTypeArray[0].pltNr;
     },
     handleBook: function (lesson) {
+      const time = this.$filters.minuteToTime(lesson.pagTimeFrom);
+      const date = this.$dayjs(this.date).format('ddd DD MMM');
+      const type = lesson.pro_lesson_type.pltName;
+      const message = "Je boekt nu een " + type +
+        " op " + date +
+        " om " + time + " , wil je doorgaan?"
       this.$q
         .dialog({
-          title: "Boek een les",
-          message: "Uw boekt nu een les, wilt u doorgaan?",
+          title: type,
+          message: message,
           cancel: true,
           persistent: true,
         })

@@ -1,6 +1,6 @@
 <template>
   <q-card bordered class="full-width q-pa-md q-mb-md bg-amber-1" flat>
-    <div class="text-h6">Baan condities</div>
+    <div class="text-h6">Baancondities</div>
     <q-separator/>
     <table class="full-width">
       <thead>

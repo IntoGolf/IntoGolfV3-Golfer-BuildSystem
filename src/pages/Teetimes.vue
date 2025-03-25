@@ -579,9 +579,9 @@ export default {
       let res = await this.$http.get("igg?date=" + this.date);
       this.loading = false;
       this.courses = res.payload;
-      if (!this.hasTimes) {
-        this.date = this.$dayjs(this.date).add(1, "day").format("YYYY-MM-DD");
-      }
+      // if (!this.hasTimes) {
+      //   this.date = this.$dayjs(this.date).add(1, "day").format("YYYY-MM-DD");
+      // }
     },
     setDay: function (value) {
       this.date = this.$dayjs(this.date)

@@ -97,13 +97,10 @@ export default {
       }
     },
     async handleLoadClasses() {
-      let res = await this.$http.get("public/courses");
-      console.log(res);
-      this.classesArray = res;
+      this.classesArray = await this.$http.get("public/courses");
     },
     async handleLoadWalkins() {
       this.walkinsArray = await this.$http.get("public/walkins");
-      console.log(this.walkinsArray);
     },
     handleCloseNew: function () {
       this.handleLoadClientLessons();
