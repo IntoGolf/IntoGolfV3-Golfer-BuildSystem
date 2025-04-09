@@ -5,7 +5,7 @@
   <chat-form
     v-else-if="$store.state.chats.chat !== null && $store.state.chats.edit"
   />
-  <chat-list v-else v-on:handleNew="handleNew" />
+  <chat-list v-else v-on:handleNew="handleNew"/>
 </template>
 
 <script>
@@ -14,7 +14,7 @@ import ChatMessages from "components/chats/chatMessages.vue";
 import ChatForm from "components/chats/chatForm.vue";
 
 export default {
-  components: { ChatForm, ChatMessages, ChatList },
+  components: {ChatForm, ChatMessages, ChatList},
   data: function () {
     return {
       form: {
@@ -27,11 +27,11 @@ export default {
   },
   methods: {
     async handleSave() {
-      const result = await this.$store.dispatch("chats/setChat", this.chat);
+      await this.$store.dispatch("chats/setChat", this.chat);
     },
     handleNew() {
       this.$store.dispatch("chats/set", {
-        chat: { ...this.form },
+        chat: {...this.form},
         edit: true,
       });
     },

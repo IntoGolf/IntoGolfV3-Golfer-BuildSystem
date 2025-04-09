@@ -29,13 +29,18 @@
 import ChatListItem from "components/chats/chatListItem.vue";
 
 export default {
-  components: { ChatListItem },
+  components: {ChatListItem},
+  mounted() {
+    this.fetchChats();
+  },
   methods: {
-    onRefresh(done) {
-      this.$store.dispatch("chats/fetchChats").then(() => {
-        done();
-      });
+    async onRefresh(done) {
+      await this.fetchChats();
+      done();
     },
+    async fetchChats() {
+      await this.$store.dispatch("chats/fetchChats");
+    }
   },
 };
 </script>

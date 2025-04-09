@@ -42,14 +42,26 @@ export default {
     };
   },
   mounted() {
-    if (!this.pro.proImage) {
-      return;
+    this.loadImage();
+  },
+  watch: {
+    pro: {
+      handler() {
+        this.loadImage();
+      },
+      deep: true,
+      immediate: true, // optioneel als je `loadImage()` ook bij mount wil forceren
     }
-    this.$http.get("public/image?name=" + this.pro.proImage).then((res) => {
-      this.image = "data:image/png;base64," + res;
-    });
   },
   methods: {
+    loadImage() {
+      if (!this.pro.proImage) {
+        return;
+      }
+      this.$http.get("public/image?name=" + this.pro.proImage).then((res) => {
+        this.image = "data:image/png;base64," + res;
+      });
+    },
     handleBook: function (lesson) {
       this.$emit("handleBook", lesson);
     },

@@ -81,7 +81,7 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>
-            <b>Voeg verhuur toe</b>
+            <b>Voeg verhuur of golfitems toe</b>
           </q-item-label>
           <q-item-label caption> reserveer een handicar of buggy</q-item-label>
         </q-item-section>

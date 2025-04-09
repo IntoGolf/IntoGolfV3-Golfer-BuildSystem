@@ -179,6 +179,7 @@
         <div class="q-gutter-y-md column">
           <q-input
             v-model="guest.flpName"
+            :rules="[(val) => (val && val.length > 0) || 'Geen geldige naam',]"
             clearable
             counter
             dense
@@ -189,7 +190,6 @@
           />
           <q-input
             v-model="guest.flpEmail"
-            :rules="[emailRule]"
             clearable
             dense
             hint="Voer het e-mailadres van je gast in"

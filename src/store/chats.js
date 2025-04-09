@@ -63,7 +63,7 @@ const mutations = {
     }
   },
   // Mutation to manage Pusher channel references
-  SET_CHANNEL(state, { chtNr, channel }) {
+  SET_CHANNEL(state, {chtNr, channel}) {
     state.channels[chtNr] = channel;
   },
   REMOVE_CHANNEL(state, chtNr) {
@@ -74,7 +74,7 @@ const mutations = {
 };
 
 const actions = {
-  async fetchChats({ dispatch, commit, state }, onlyRefresh = false) {
+  async fetchChats({dispatch, commit, state}, onlyRefresh = false) {
     try {
       // Attempt to use the process object
       pusher = new Pusher(process.env.VUE_PUSHER_APP_KEY, {
@@ -121,7 +121,7 @@ const actions = {
       console.error("There was an error fetching the chats!", error);
     }
   },
-  async setChat({ dispatch, commit }, item) {
+  async setChat({dispatch, commit}, item) {
     if (!pusher) return;
 
     try {
@@ -132,7 +132,9 @@ const actions = {
       console.error("There was an error saving the chat!", error);
     }
   },
-  async getMessages({ dispatch, commit }, chtNr) {
+  async getMessages({dispatch, commit}, chtNr) {
+    console.log('getMessages');
+    console.log(pusher);
     if (!pusher) return;
 
     try {
@@ -142,7 +144,7 @@ const actions = {
       console.error("There was an error saving the message!", error);
     }
   },
-  async getRelations({ dispatch, commit }, chtNr) {
+  async getRelations({dispatch, commit}, chtNr) {
     if (!pusher) return;
 
     try {
@@ -152,7 +154,7 @@ const actions = {
       console.error("There was an error saving the message!", error);
     }
   },
-  async setMessage({ dispatch }, item) {
+  async setMessage({dispatch}, item) {
     if (!pusher) return;
 
     try {
@@ -161,7 +163,7 @@ const actions = {
       console.error("There was an error saving the message!", error);
     }
   },
-  async invite({ dispatch }, item) {
+  async invite({dispatch}, item) {
     if (!pusher) return;
 
     try {
@@ -171,7 +173,7 @@ const actions = {
       console.error("There was an error saving the invite!", error);
     }
   },
-  async accept({ dispatch }, item) {
+  async accept({dispatch}, item) {
     if (!pusher) return;
 
     try {
@@ -181,13 +183,13 @@ const actions = {
       console.error("There was an error saving the accept!", error);
     }
   },
-  async set({ commit }, item) {
+  async set({commit}, item) {
     if (!pusher) return;
 
     commit("SET_CHAT", item.chat);
     commit("SET_EDIT", item.edit);
   },
-  async delete({ dispatch, state }) {
+  async delete({dispatch, state}) {
     if (!pusher) return;
 
     try {
@@ -199,14 +201,14 @@ const actions = {
       console.error("There was an error saving the chat!", error);
     }
   },
-  async close({ commit, state }) {
+  async close({commit, state}) {
     if (!pusher) return;
 
     if (state.chat) {
       commit("CLOSE_CHAT");
     }
   },
-  async clear({ commit, state }) {
+  async clear({commit, state}) {
     if (!pusher) return;
 
     Object.keys(state.channels).forEach((chtNr) => {
@@ -214,13 +216,13 @@ const actions = {
     });
     commit("CLEAR_VALUE");
   },
-  async edit({ dispatch, commit, state }, value) {
+  async edit({dispatch, commit, state}, value) {
     if (!pusher) return;
 
     dispatch("getRelations", state.chat.chtNr);
     commit("SET_EDIT", value);
   },
-  subscribeToChatChannel({ dispatch, commit, state }, chtNr) {
+  subscribeToChatChannel({dispatch, commit, state}, chtNr) {
     console.log("subscribeToChatChannel");
     if (!pusher) return;
 
@@ -235,10 +237,10 @@ const actions = {
         commit("UPDATE_CHAT", data.data);
       }
     });
-    commit("SET_CHANNEL", { chtNr, channel });
+    commit("SET_CHANNEL", {chtNr, channel});
   },
   // New action to unsubscribe from a chat channel
-  unsubscribeFromChatChannel({ commit, state }, chtNr) {
+  unsubscribeFromChatChannel({commit, state}, chtNr) {
     if (!pusher) return;
 
     const channel = state.channels[chtNr];

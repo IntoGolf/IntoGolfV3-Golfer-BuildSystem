@@ -8,7 +8,7 @@
     </div>
 
     <div class="row q-mb-sm">
-      <div class="col text-bold">Lus uit</div>
+      <div class="col text-bold">Starthole</div>
       <div class="col-8 text-right">
         {{ flight.loop1.crlName }}
       </div>
@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <div class="row q-mb-sm">
+    <div v-show="flight.IntroMax > 0 && flight.IntroMax < 99" class="row q-mb-sm">
       <div class="col text-bold">Intro ruimte</div>
       <div class="col-8 text-right">
         {{ flight.IntroMax - flight.IntroCount }}X
@@ -108,8 +108,8 @@ export default {
     slot: function () {
       return this.$dayjs(
         this.$filters.unixToDate(this.flight.fltDate) +
-          " " +
-          this.$filters.minuteToTime(this.flight.fltTime1),
+        " " +
+        this.$filters.minuteToTime(this.flight.fltTime1),
         "DD-MM-YYYY H:mm"
       ).format("dddd D MMM HH:mm");
     },

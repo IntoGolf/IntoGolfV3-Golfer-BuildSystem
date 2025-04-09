@@ -26,6 +26,18 @@
             <div class="col-md-3 col-xs-6 q-pr-md">
               <q-input v-model="date" label="Datum" size="sm" type="date"/>
             </div>
+            <!--            <div class="col-md-3 col-xs-6 q-pr-md">-->
+            <!--              <q-select-->
+            <!--                v-model="location"-->
+            <!--                :option-label="'locName'"-->
+            <!--                :option-value="'locNr'"-->
+            <!--                :options="locations"-->
+            <!--                label="Lokatie"-->
+            <!--                size="sm"-->
+            <!--                toggle-color="primary"-->
+            <!--                @update:model-value="handleLoadDate"-->
+            <!--              />-->
+            <!--            </div>-->
             <div class="col-md-3 col-xs-6 q-pr-md">
               <q-select
                 v-model="flight.fltSize"
@@ -198,6 +210,7 @@
             </div>
             <div class="col-4">
               <q-input
+                v-if="maxHandicap < 90"
                 v-model="flight.flpHandicap1"
                 :rules="[
                   (val) =>
@@ -231,6 +244,7 @@
             </div>
             <div class="col-4">
               <q-input
+                v-if="maxHandicap < 90"
                 v-model="flight.flpHandicap2"
                 :rules="[
                   (val) =>
@@ -260,6 +274,7 @@
             </div>
             <div class="col-4">
               <q-input
+                v-if="maxHandicap < 90"
                 v-model="flight.flpHandicap3"
                 :rules="[
                   (val) =>
@@ -289,6 +304,7 @@
             </div>
             <div class="col-4">
               <q-input
+                v-if="maxHandicap < 90"
                 v-model="flight.flpHandicap4"
                 :rules="[
                   (val) =>
@@ -326,10 +342,10 @@
                 height: 150px;
                 font-size: 10px;
                 overflow-y: scroll;
+                display:block;
               "
-            >
-              {{ conditions }}
-            </div>
+              v-html="conditions"
+            />
             <div class="row q-mt-md">
               <q-checkbox
                 v-model="flight.agreeConditions"
@@ -403,6 +419,8 @@ export default {
     return {
       step: 1,
       courses: [],
+      locations: [],
+      location: null,
       loading: false,
       holesArray: [
         {label: "9 Holes", value: 9},
@@ -468,7 +486,8 @@ export default {
       ],
     };
   },
-  mounted() {
+  async mounted() {
+    await this.handleLoadLocations();
     this.date = this.$dayjs().format("YYYY-MM-DD");
     this.flight.fltSize = this.defaultSize;
   },
@@ -573,10 +592,36 @@ export default {
     }
   },
   methods: {
+    async handleLoadLocations() {
+      this.loading = true;
+
+      try {
+        this.locations = await this.$http.get("igg/locations");
+
+        const locNr = this.$route.query.locNr;
+        const foundLocation = locNr
+          ? this.locations.find(loc => loc.locNr == locNr)
+          : null;
+
+        this.location = foundLocation || this.locations[0];
+      } catch (error) {
+        console.error("Fout bij laden van locaties:", error);
+        this.locations = [];
+        this.location = null;
+      } finally {
+        this.loading = false;
+      }
+    },
     async handleLoadDate() {
       this.courses = [];
       this.loading = true;
-      let res = await this.$http.get("igg?date=" + this.date);
+      let data = {
+        params: {
+          date: this.date,
+          locNr: this.location.locNr
+        }
+      }
+      let res = await this.$http.get("igg", data);
       this.loading = false;
       this.courses = res.payload;
       // if (!this.hasTimes) {
@@ -612,6 +657,14 @@ export default {
       this.timePrice = obj.price;
       this.maxHandicap = obj.course.crlMaxHandicap;
       this.maxTotalHandicap = obj.course.crlMaxTotalHandicap;
+
+      if (this.maxHandicap == 90) {
+        this.flight.flpHandicap1 = 54;
+        this.flight.flpHandicap2 = 54;
+        this.flight.flpHandicap3 = 54;
+        this.flight.flpHandicap4 = 54;
+      }
+
     },
     handleClosePayment: function (status) {
       if (status === "paid") {
@@ -621,7 +674,7 @@ export default {
         this.step = 2;
       }
       this.mollie = null;
-    }
+    },
   },
 };
 </script>

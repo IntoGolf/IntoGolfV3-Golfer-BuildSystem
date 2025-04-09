@@ -59,6 +59,11 @@ export default route(function (/* { store, ssrContext } */) {
       await store.dispatch("initializePublicApp");
     }
 
+
+    if (to.name === 'members') {
+      to.meta.title = store.getters['settings/menuTextLedenBoekje'];
+    }
+
     if (to.matched.some((r) => r.meta.requiresAuth)) {
       if (token) {
         if (to.path === "/login") {

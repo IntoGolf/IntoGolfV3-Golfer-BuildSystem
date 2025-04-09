@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">noordwijkse</string>
-    <string name="title_activity_main">noordwijkse</string>
-    <string name="package_name">nl.intogolf.noordwijkse</string>
-    <string name="custom_url_scheme">nl.intogolf.noordwijkse</string>
+    <string name="app_name">goese</string>
+    <string name="title_activity_main">goese</string>
+    <string name="package_name">nl.intogolf.goese</string>
+    <string name="custom_url_scheme">nl.intogolf.goese</string>
 </resources>

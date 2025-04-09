@@ -4,6 +4,8 @@ PODS:
     - CapacitorCordova
   - CapacitorApp (6.0.2):
     - Capacitor
+  - CapacitorCamera (6.1.2):
+    - Capacitor
   - CapacitorCordova (6.2.0)
   - CapacitorDialog (6.0.2):
     - Capacitor
@@ -20,6 +22,7 @@ PODS:
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
+  - "CapacitorCamera (from `../../node_modules/@capacitor/camera`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
@@ -36,6 +39,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorApp:
     :path: "../../node_modules/@capacitor/app"
+  CapacitorCamera:
+    :path: "../../node_modules/@capacitor/camera"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorDialog:
@@ -49,6 +54,7 @@ SPEC CHECKSUMS:
   Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
   Capacitor: 1f3c7b9802d958cd8c4eb63895fff85dff2e1eea
   CapacitorApp: 2a8c3a0b0814322e5e6e15fe595f02c3808f0f8b
+  CapacitorCamera: 9052bd3f464f135ba983feccd8ac1266272f0549
   CapacitorCordova: b33e7f4aa4ed105dd43283acdd940964374a87d9
   CapacitorDialog: e966e2261e1c74a8a502e610dd66b4f97ec6fcca
   CapacitorSplashScreen: 68893659d77b5f82d753b3a70475082845e3039c
@@ -56,6 +62,6 @@ SPEC CHECKSUMS:
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   Version: de5907f2c5d0f3cf21708db7801d1d5401139486
 
-PODFILE CHECKSUM: 5398f7b3110423ac14398616717ef03d822f3ed8
+PODFILE CHECKSUM: 9c18c913f75c14bf0645e571cdbb70a2363a57dd
 
 COCOAPODS: 1.16.2

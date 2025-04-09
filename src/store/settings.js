@@ -112,6 +112,23 @@ const getters = {
       state.item.app_display_message_tile === 1
     );
   },
+  showMoreRound: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      (!("app_hide_morerounds_tile" in state.item) ||
+        state.item.app_hide_morerounds_tile === 0)
+    );
+  },
+  menuTextLedenBoekje: (state) => {
+    return state.item &&
+    typeof state.item === "object" &&
+    "app_menu_text_ledenboekje" in state.item &&
+    state.item.app_menu_text_ledenboekje.length > 0 ?
+      state.item.app_menu_text_ledenboekje :
+      "Ledenboekje";
+
+  },
   setHasInvoices: (state) => {
     return (
       state.item &&

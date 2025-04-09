@@ -137,7 +137,7 @@ export default {
       return "Andere datum";
     },
     confirmButtonLabel() {
-      return this.lForm.payMethod === "onCourse" ? "Reseveren" : "Betalen";
+      return this.lForm.payMethod === "onCourse" ? "Reserveren" : "Betalen";
     },
     labelRegister() {
       const lastPerson = "person" + (this.lForm.clients.length - 1);

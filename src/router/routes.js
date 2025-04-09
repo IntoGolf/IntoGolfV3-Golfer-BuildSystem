@@ -1,6 +1,5 @@
 import {Platform} from "quasar";
 import app from "../App.vue";
-
 import Home from "pages/Home.vue";
 import HomeWeb from "pages/HomeWeb.vue";
 import {createRouter, createWebHistory} from "vue-router";
@@ -289,7 +288,7 @@ const routes = [
     component: () => import("pages/Members.vue"),
     meta: {
       requiresAuth: true,
-      title: "Ledenlijst",
+      title: 'Ledenboekje',
     },
   },
   {
@@ -338,6 +337,7 @@ const routes = [
     redirect: "/404",
   },
 ];
+
 
 const router = createRouter({
   linkActiveClass: 'active',

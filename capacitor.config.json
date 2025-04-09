@@ -1,6 +1,6 @@
 {
-  "appId": "nl.intogolf.noordwijkse",
-  "appName": "noordwijkse",
+  "appId": "nl.intogolf.goese",
+  "appName": "goese",
   "version": "1.4.8",
   "webDir": "dist/spa",
   "ios": {

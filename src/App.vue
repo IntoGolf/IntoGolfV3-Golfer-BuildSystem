@@ -202,6 +202,8 @@ export default defineComponent({
       "showWhs",
       "showHistory",
       "getBackgroundColor",
+      "showMoreRound",
+      "menuTextLedenBoekje"
     ]),
     ...mapGetters("currentUser", [
       "usrHasLessons",
@@ -245,7 +247,7 @@ export default defineComponent({
           name: "meerronden",
           menuName: "Meerronden",
           icon: "emoji_events",
-          visible: this.usrHasMatch,
+          visible: this.usrHasMatch && this.showMoreRound,
         },
         {
           name: "invoice",
@@ -258,6 +260,7 @@ export default defineComponent({
           menuName: "Chat",
           icon: "chat",
           visible: this.setHasCircles,
+          //visible: true,
         },
         {
           name: "external_teetimes",
@@ -304,7 +307,7 @@ export default defineComponent({
         {
           name: "handicap",
           menuName: "handicap",
-          icon: "grade",
+          icon: "trending_down",
           visible: this.usrHasHandicap,
         },
         {
@@ -315,7 +318,7 @@ export default defineComponent({
         },
         {
           name: "members",
-          menuName: "members",
+          menuName: this.menuTextLedenBoekje,
           icon: "groups",
           visible: this.usrHasMembers,
         },

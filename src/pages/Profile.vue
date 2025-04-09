@@ -152,17 +152,9 @@
           <br/>
 
           <q-toggle
-            v-model="relMagazineGolfNL"
-            :disable="!canChange"
-            label="Golfers magazine ontvangen"
-          />
-
-          <br/>
-
-          <q-toggle
             v-model="relEmailnewsletterNGF"
             :disable="!canChange"
-            label="E-mail nieuwsbrief ontvangen"
+            label="Nieuwsbrief ontvangen? (opt-out)"
           />
 
           <br/>
@@ -201,8 +193,13 @@
           </div>
         </q-tab-panel>
       </q-tab-panels>
-      <div v-show="tab !== 'password'" class="text-center q-mt-md q-pb-md">
-        <q-btn v-show="canChange" color="primary" label="Opslaan" type="submit"/>
+      <div class="text-center q-mt-md q-pb-md">
+
+        <q-btn
+          v-show="canChange"
+          color="primary"
+          label="Opslaan"
+          type="submit"/>
 
         <q-btn
           class="q-ml-md"
@@ -288,7 +285,7 @@ export default {
   },
   computed: {
     canChange() {
-      return parseInt(this.settings.app_allow_member_change_contact) === 1;
+      return parseInt(this.settings.app_allow_member_change_contact) === 1 || 'preference' === this.tab;
     },
     canChangeInvoiceByEmail() {
       return this.settings.app_allow_member_set_invoice_email === 1;

@@ -50,7 +50,7 @@ export const message = {
   greenfeecards: "Rondekaarten",
   messages: "Berichten",
   message: "Bericht",
-  profile: "Account",
+  profile: "Profiel",
   Sunrise: "Zondag",
   Sunset: "ZondZon onderag",
   Dark: "Donker",
@@ -364,5 +364,6 @@ export const message = {
   Speelhistorie: "Speelhistorie",
   WHS: "WHS",
   Facturen: "Facturen",
-  Home: "Home"
+  Home: "Home",
+  "Relaties van club": "Relaties van club"
 };

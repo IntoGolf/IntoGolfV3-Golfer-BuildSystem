@@ -23,7 +23,7 @@ const mutations = {
 };
 
 const actions = {
-  async login({ commit, state }, form) {
+  async login({commit, state}, form) {
     try {
       const response = await this.$axios.post("golfer/login", form);
 
@@ -32,7 +32,7 @@ const actions = {
       console.error("There was an error fetching the user!", error);
     }
   },
-  async fetch({ commit, state }) {
+  async fetch({commit, state}) {
     try {
       const response = await this.$axios.get("golfer/user");
       commit("SET_CURRENT_USER", response);
@@ -40,10 +40,10 @@ const actions = {
       console.error("There was an error fetching the user!", error);
     }
   },
-  async updateMatchFilter({ commit }, newValue) {
+  async updateMatchFilter({commit}, newValue) {
     commit("SET_VALUE", newValue);
   },
-  async clear({ commit }) {
+  async clear({commit}) {
     commit("CLEAR_VALUE");
   },
 };

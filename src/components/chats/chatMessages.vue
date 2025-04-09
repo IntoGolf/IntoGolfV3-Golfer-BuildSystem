@@ -17,12 +17,14 @@
       <b class="q-pl-sm">{{ chatName }}</b>
     </q-banner>
 
-    <div class="column col justify-end q-pa-sm">
-      <chat-message
-        v-for="(message, key) in reversedMessages"
-        :key="key"
-        :message="message"
-      />
+    <div ref="scrollContainer" style="height: Calc(100vh - 160px); overflow-y: scroll">
+      <div class="column col justify-end q-pa-sm">
+        <chat-message
+          v-for="(message, key) in reversedMessages"
+          :key="key"
+          :message="message"
+        />
+      </div>
     </div>
 
     <q-footer>
@@ -57,7 +59,7 @@
 import ChatMessage from "components/chats/chatMessage.vue";
 
 export default {
-  components: { ChatMessage },
+  components: {ChatMessage},
   data: function () {
     return {
       message: {
@@ -66,8 +68,9 @@ export default {
       },
     };
   },
-  created() {
-    this.getMessages();
+  async mounted() {
+    await this.getMessages();
+    await this.scrollToBottom();
   },
   computed: {
     reversedMessages() {
@@ -77,7 +80,18 @@ export default {
       return this.$store.state.chats.chat.chtName;
     },
   },
+  watch: {
+    async reversedMessages() {
+      await this.scrollToBottom();
+    }
+  },
   methods: {
+    async scrollToBottom() {
+      await this.$nextTick(() => {
+        const el = this.$refs.scrollContainer;
+        if (el) el.scrollTop = el.scrollHeight;
+      });
+    },
     filterStrokes(event) {
       if (event.key === "Enter") {
         this.sendMessage();

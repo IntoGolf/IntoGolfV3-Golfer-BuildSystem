@@ -137,7 +137,7 @@ export default {
   },
   computed: {
     confirmButtonLabel() {
-      return this.ProLesson.payMethod === "onCourse" ? "Reseveren" : "Betalen";
+      return this.ProLesson.payMethod === "onCourse" ? "Reserveren" : "Betalen";
     },
     feeOptions() {
       return this.lesson.pro_lesson_fee_les.map((price) => {
