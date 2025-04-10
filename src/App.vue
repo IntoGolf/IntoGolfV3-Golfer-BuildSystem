@@ -122,6 +122,8 @@ import {defineComponent} from "vue";
 import {mapGetters} from "vuex";
 import Login from "pages/Login.vue";
 import {setCssVar} from "quasar";
+import {PushNotifications} from '@capacitor/push-notifications';
+import {FirebaseX} from '@awesome-cordova-plugins/firebase-x';
 
 export default defineComponent({
   name: "PageLayout",
@@ -370,6 +372,55 @@ export default defineComponent({
   async mounted() {
     this.drawer = false;
     await this.setColors();
+
+    PushNotifications.requestPermissions().then(result => {
+      if (result.receive === 'granted') {
+        PushNotifications.register();
+      }
+    });
+
+// Ontvangen van het device token (bijv. nodig voor Firebase)
+    PushNotifications.addListener('registration', token => {
+      console.log('Device token:', token.value);
+      alert(token.value);
+    });
+
+// Foutafhandeling
+    PushNotifications.addListener('registrationError', err => {
+      console.error('Registration error:', err);
+    });
+
+    PushNotifications.addListener('pushNotificationReceived', notification => {
+      console.log('Push ontvangen', notification);
+
+      // Toon lokale notificatie of badge
+      // Dit werkt als de app op de voorgrond is
+    });
+
+    PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+      console.log('Notificatie geklikt', notification);
+    });
+
+    document.addEventListener('deviceready', async () => {
+      try {
+        const token = await FirebaseX.getToken();
+        console.log('FCM Token:', token);
+
+        FirebaseX.onMessageReceived().subscribe(data => {
+          if (data.tap) {
+            // Gebruiker heeft notificatie aangeklikt
+            console.log('Notificatie aangeklikt', data);
+          } else {
+            // App open - toon alert of badge
+            console.log('Notificatie ontvangen', data);
+          }
+        });
+
+      } catch (error) {
+        console.error('Firebase init error:', error);
+      }
+    });
+
   },
   methods: {
     qItemActiveStyle(name) {

@@ -13,4 +13,6 @@ ext {
     androidxJunitVersion = '1.1.5'
     androidxEspressoCoreVersion = '3.5.1'
     cordovaAndroidVersion = '10.1.1'
+    android_gradle_plugin_version = '8.2.1'
+    google_services_version = '4.4.0'
 }

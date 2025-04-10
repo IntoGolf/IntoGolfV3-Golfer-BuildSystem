@@ -9,6 +9,8 @@ PODS:
   - CapacitorCordova (6.2.0)
   - CapacitorDialog (6.0.2):
     - Capacitor
+  - CapacitorPushNotifications (6.0.0):
+    - Capacitor
   - CapacitorSplashScreen (6.0.3):
     - Capacitor
   - CapgoCapacitorUpdater (6.14.7):
@@ -25,6 +27,7 @@ DEPENDENCIES:
   - "CapacitorCamera (from `../../node_modules/@capacitor/camera`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
+  - "CapacitorPushNotifications (from `../../node_modules/@capacitor/push-notifications`)"
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - "CapgoCapacitorUpdater (from `../../node_modules/@capgo/capacitor-updater`)"
 
@@ -45,6 +48,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorDialog:
     :path: "../../node_modules/@capacitor/dialog"
+  CapacitorPushNotifications:
+    :path: "../../node_modules/@capacitor/push-notifications"
   CapacitorSplashScreen:
     :path: "../../node_modules/@capacitor/splash-screen"
   CapgoCapacitorUpdater:
@@ -57,11 +62,12 @@ SPEC CHECKSUMS:
   CapacitorCamera: 9052bd3f464f135ba983feccd8ac1266272f0549
   CapacitorCordova: b33e7f4aa4ed105dd43283acdd940964374a87d9
   CapacitorDialog: e966e2261e1c74a8a502e610dd66b4f97ec6fcca
+  CapacitorPushNotifications: e18636e8a96f1d70b4c669e21c730e995bf5e5c9
   CapacitorSplashScreen: 68893659d77b5f82d753b3a70475082845e3039c
   CapgoCapacitorUpdater: bec43aa7edf5f7d9cacfe411415e0e0ec641915f
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   Version: de5907f2c5d0f3cf21708db7801d1d5401139486
 
-PODFILE CHECKSUM: 9c18c913f75c14bf0645e571cdbb70a2363a57dd
+PODFILE CHECKSUM: d9f2916b20667521b510ee61c3492ef5cd7fe856
 
 COCOAPODS: 1.16.2

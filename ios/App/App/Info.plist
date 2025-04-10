@@ -45,9 +45,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-  <string>We gebruiken je camera om een profielfoto te maken.</string>
-  <key>NSPhotoLibraryUsageDescription</key>
-  <string>We gebruiken je fotobibliotheek zodat je een bestaande foto kunt kiezen als profielfoto.</string>
 </dict>
 </plist>
