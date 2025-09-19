@@ -1,0 +1,60 @@
+name: Test Build (Feature Branch)
+on:
+  workflow_dispatch:
+    inputs:
+      tenant:
+        description: 'Tenant to build'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+        - dev
+        - engelenburg
+        - delfland
+      platform:
+        description: 'Platform to build'
+        required: true
+        default: 'android'
+        type: choice
+        options:
+        - android
+        - ios
+        - both
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Show build info
+      run: |
+        echo "🏗️ Testing build for:"
+        echo "   Tenant: ${{ github.event.inputs.tenant }}"
+        echo "   Platform: ${{ github.event.inputs.platform }}"
+        echo "   Branch: ${{ github.ref_name }}"
+        echo ""
+        echo "📋 Available env files:"
+        ls -la env/.env.* 2>/dev/null || echo "No env files found"
+        echo ""
+        echo "🔐 Secrets directory:"
+        ls -la .secrets/ 2>/dev/null || echo "No secrets directory"
+        echo ""
+        echo "📱 Available tenants:"
+        ls env/.env.* | sed 's/env\/.env./- /' | grep -v template
+
+    - name: Validate tenant
+      run: |
+        TENANT="${{ github.event.inputs.tenant }}"
+        if [ ! -f "env/.env.${TENANT}" ]; then
+          echo "❌ Environment file not found: env/.env.${TENANT}"
+          exit 1
+        fi
+        echo "✅ Environment file found for ${TENANT}"
+
+    - name: Show tenant config
+      run: |
+        TENANT="${{ github.event.inputs.tenant }}"
+        echo "📋 Configuration for ${TENANT}:"
+        cat "env/.env.${TENANT}" | grep -v PASSWORD | grep -v SECRET | head -10
