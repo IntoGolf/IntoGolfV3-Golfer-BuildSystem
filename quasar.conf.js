@@ -87,9 +87,13 @@ module.exports = configure(function (ctx) {
       },
 
       extendWebpack(cfg) {
+        const envVars = envParser();
+        
         cfg.plugins.push(
           new (require("webpack").DefinePlugin)({
             __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false), // or true, depending on your needs
+            'process.env.VUE_APP_ENABLE_PUSH_NOTIFICATIONS': JSON.stringify(envVars.VUE_APP_ENABLE_PUSH_NOTIFICATIONS),
+            'process.env.VUE_APP_PUSH_DEBUG': JSON.stringify(envVars.VUE_APP_PUSH_DEBUG),
           })
         );
         cfg.module.rules.push({

@@ -54,7 +54,7 @@ export default {
       let name = this.relation.relImage;
       name = name === "" ? "empty" : name;
 
-      const url = "golfer/image/" + name;
+      const url = "public/image?name=" + name;
       const response = await this.$http({
         method: "get",
         url: url,

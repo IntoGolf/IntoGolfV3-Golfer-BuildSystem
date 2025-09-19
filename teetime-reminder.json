@@ -1,0 +1,20 @@
+{
+  "aps": {
+    "alert": {
+      "title": "Tee Time Reminder ⛳️",
+      "body": "Je tee time begint over 15 minuten op baan 1"
+    },
+    "badge": 1,
+    "sound": "default",
+    "content-available": 1,
+    "category": "TEETIME_REMINDER"
+  },
+  "data": {
+    "type": "teetime_reminder",
+    "teetime_id": 123,
+    "course": "Golfbaan Delfland",
+    "hole": 1,
+    "time": "14:30",
+    "players": ["Jan de Vries", "Piet Janssen"]
+  }
+}

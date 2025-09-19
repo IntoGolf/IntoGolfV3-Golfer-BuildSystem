@@ -1,14 +1,6 @@
 import Pusher from "pusher-js";
 
-// Initialize Pusher
 let pusher;
-if (process.env.PUSHER_APP_KEY) {
-  // Initialize Pusher only if PUSHER_APP_KEY is set
-  pusher = new Pusher(process.env.PUSHER_APP_KEY, {
-    cluster: process.env.PUSHER_APP_CLUSTER,
-    encrypted: true,
-  });
-}
 
 const state = {
   chats: [],
@@ -76,38 +68,36 @@ const mutations = {
 const actions = {
   async fetchChats({dispatch, commit, state}, onlyRefresh = false) {
     try {
-      // Attempt to use the process object
-      pusher = new Pusher(process.env.VUE_PUSHER_APP_KEY, {
-        cluster: process.env.VUE_PUSHER_APP_KEY,
-        encrypted: true,
-      });
-    } catch (error) {
-      if (
-        error instanceof ReferenceError &&
-        error.message.includes("process is not defined")
-      ) {
-        // Handle the specific error
-        console.log("process is not available in this environment");
-        // Implement alternative logic for environments where process is not available
-      } else {
-        // Handle other types of errors
-        console.error("An unexpected error occurred:", error);
-      }
-    }
-
-    if (!pusher) return;
-
-    try {
       const settings = await dispatch("settings/fetchSettings", null, {
         root: true,
       });
 
-      // if (!settings.app_display_chat) {
-      //   return;
-      // }
+      const appKey = settings.system_pusher_app_key;
+      const cluster = settings.system_pusher_app_cluster;
+
+      if (!appKey || !cluster) {
+        console.warn("Pusher config ontbreekt");
+        return;
+      }
+
+      const baseURL = process.env.VUE_APP_BASE_URL;
+      const userToken = this.getters['currentUser/token'];
+      
+      pusher = new Pusher(appKey, {
+        cluster: cluster,
+        encrypted: true,
+        authEndpoint: `${baseURL}api/broadcasting/auth`,
+        auth: {
+          headers: {
+            Authorization: `Bearer ${userToken}`
+          }
+        }
+      });
 
       commit("CLOSE_CHATS");
+
       const response = await this.$axios.get("chat/list");
+      console.log("DEBUG: Chat list from REST API:", response.data);
       commit("SET_CHATS", response.data);
 
       if (state.chat !== null) {
@@ -116,9 +106,11 @@ const actions = {
         );
         commit("SET_CHAT", item.chat);
       }
+
       return true;
+
     } catch (error) {
-      console.error("There was an error fetching the chats!", error);
+      console.error("Fout bij het ophalen van chats of settings:", error);
     }
   },
   async setChat({dispatch, commit}, item) {
@@ -133,8 +125,6 @@ const actions = {
     }
   },
   async getMessages({dispatch, commit}, chtNr) {
-    console.log('getMessages');
-    console.log(pusher);
     if (!pusher) return;
 
     try {
@@ -223,14 +213,26 @@ const actions = {
     commit("SET_EDIT", value);
   },
   subscribeToChatChannel({dispatch, commit, state}, chtNr) {
-    console.log("subscribeToChatChannel");
     if (!pusher) return;
 
-    const channelName = `chat-${chtNr}`;
-    console.log(channelName);
+    console.log(`DEBUG: Attempting to subscribe to chat ${chtNr}`);
+    const channelName = `private-chat.${chtNr}`;
     const channel = pusher.subscribe(channelName);
+    
+    // Handle authorization errors
+    channel.bind('pusher:subscription_error', (error) => {
+      console.error(`❌ AUTH FAILED - Chat ${chtNr}:`, error);
+      console.log(`DEBUG: Chat ${chtNr} - Failed channel:`, channelName);
+      // Remove failed channel from state
+      commit("REMOVE_CHANNEL", chtNr);
+    });
+    
+    // Handle successful subscription
+    channel.bind('pusher:subscription_succeeded', () => {
+      console.log(`✅ AUTH SUCCESS - Chat ${chtNr}`);
+    });
+    
     channel.bind("App\\Events\\TestEvent", (data) => {
-      console.log("TestEvent");
       if (data.data.crmFltNr > 0) {
         dispatch("getMessages", data.data.crmChtNr);
       } else {
@@ -245,7 +247,7 @@ const actions = {
 
     const channel = state.channels[chtNr];
     if (channel) {
-      pusher.unsubscribe(`chat-${chtNr}`);
+      pusher.unsubscribe(`private-chat.${chtNr}`);
       commit("REMOVE_CHANNEL", chtNr);
     }
   },

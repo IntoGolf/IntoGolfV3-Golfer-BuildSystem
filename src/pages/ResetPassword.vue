@@ -86,7 +86,13 @@
 </style>
 
 <script>
+import { useRecaptcha } from "../composables/useRecaptcha";
+
 export default {
+  setup() {
+    const { withRecaptcha } = useRecaptcha();
+    return { withRecaptcha };
+  },
   data: function () {
     return {
       form: {
@@ -104,9 +110,12 @@ export default {
     onVerifyCode() {
       this.$router.push("/reset/password");
     },
-    onResetPassword() {
+    async onResetPassword() {
       if (this.form.password === this.form.passwordAgain) {
-        this.$http.post("golfer/reset-password", this.form).then(() => {
+        // Add reCAPTCHA protection for password reset
+        const formWithCaptcha = await this.withRecaptcha(this.form, "password_reset");
+        
+        this.$http.post("golfer/reset-password", formWithCaptcha).then(() => {
           this.$router.push("/");
           this.$message({
             message: "Uw wachtwoord is aangepast.",

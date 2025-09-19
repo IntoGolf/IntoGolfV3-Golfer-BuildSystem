@@ -1,15 +1,30 @@
 {
-  "appId": "nl.intogolf.goese",
-  "appName": "goese",
-  "version": "1.4.8",
+  "appId": "nl.intogolf.dev",
+  "appName": "Dev Golf App",
+  "version": "1.4.11",
   "webDir": "dist/spa",
   "ios": {
+    "scheme": "Dev_Golf_App",
     "buildOptions": {
       "developmentTeam": "IntoGolf B.V.",
       "codeSignIdentity": "IntoGolf B.V.",
       "provisioningProfile": "IntoGolf B.V.",
-      "deviceFamily": "1",
+      "deviceFamily": "iPhone",
       "device": "iPhone"
+    }
+  },
+  "server": {
+    "hostname": "localhost",
+    "iosScheme": "capacitor",
+    "androidScheme": "http"
+  },
+  "android": {
+    "buildOptions": {
+      "keystorePath": "../../.secrets/dev.keystore",
+      "keystorePassword": "devKeystore123",
+      "keystoreAlias": "keyDev",
+      "keystoreAliasPassword": "devKeystore123",
+      "releaseType": "AAB"
     }
   }
 }

@@ -1,0 +1,7 @@
+#Fri Apr 11 22:30:53 CEST 2025
+base.1=/Users/laurensluder/Sites/IntoGolfV3_Golfer/src-capacitor/android/app/build/intermediates/global_synthetics_dex/release/classes.dex
+path.1=classes.dex
+base.0=/Users/laurensluder/Sites/IntoGolfV3_Golfer/src-capacitor/android/app/build/intermediates/dex/release/mergeDexRelease/classes.dex
+renamed.1=classes2.dex
+renamed.0=classes.dex
+path.0=classes.dex

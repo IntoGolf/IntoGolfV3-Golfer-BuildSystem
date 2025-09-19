@@ -1,0 +1,18 @@
+{
+  "aps": {
+    "alert": {
+      "title": "🏆 Match Resultaat",
+      "body": "Je hebt gewonnen! Bekijk de scorecard"
+    },
+    "badge": 1,
+    "sound": "default",
+    "content-available": 1,
+    "category": "MATCH_RESULT"
+  },
+  "data": {
+    "type": "match",
+    "match_id": "789",
+    "action": "view_scorecard",
+    "deep_link": "/match/789/scorecard"
+  }
+}

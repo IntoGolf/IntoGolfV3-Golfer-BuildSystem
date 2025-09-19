@@ -1,0 +1,285 @@
+name: Build Golf App
+on:
+  repository_dispatch:
+    types: [build-app]
+  workflow_dispatch:
+    inputs:
+      tenant:
+        description: 'Tenant to build (engelenburg, dev, delfland, etc.)'
+        required: true
+        default: 'dev'
+      platform:
+        description: 'Platform to build'
+        required: true
+        default: 'both'
+        type: choice
+        options:
+        - android
+        - ios
+        - both
+
+env:
+  NODE_VERSION: '18'
+  JAVA_VERSION: '17'
+
+jobs:
+  build-android:
+    if: github.event.inputs.platform == 'android' || github.event.inputs.platform == 'both' || github.event.client_payload.platform == 'android' || github.event.client_payload.platform == 'both'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'adopt'
+        java-version: ${{ env.JAVA_VERSION }}
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Get tenant from inputs
+      id: tenant
+      run: |
+        TENANT="${{ github.event.inputs.tenant || github.event.client_payload.tenant }}"
+        echo "tenant=${TENANT}" >> $GITHUB_OUTPUT
+        echo "Building for tenant: ${TENANT}"
+
+    - name: Setup tenant secrets
+      run: |
+        TENANT="${{ steps.tenant.outputs.tenant }}"
+
+        # Create .secrets directory
+        mkdir -p .secrets
+
+        # Create tenant secrets from GitHub secrets
+        cat > .secrets/${TENANT}.env << EOF
+        KEY_PASSWORD=${{ secrets[format('{0}_KEY_PASSWORD', steps.tenant.outputs.tenant)] }}
+        KEYSTORE_PASSWORD=${{ secrets[format('{0}_KEYSTORE_PASSWORD', steps.tenant.outputs.tenant)] }}
+        KEY_ALIAS=${{ secrets[format('{0}_KEY_ALIAS', steps.tenant.outputs.tenant)] }}
+        EOF
+
+        # Create keystore from base64 encoded secret
+        KEYSTORE_B64_SECRET="${{ secrets[format('{0}_KEYSTORE_BASE64', steps.tenant.outputs.tenant)] }}"
+        if [ ! -z "$KEYSTORE_B64_SECRET" ]; then
+          echo "$KEYSTORE_B64_SECRET" | base64 -d > .secrets/${TENANT}.keystore
+          echo "✅ Keystore created from GitHub secret"
+        else
+          echo "❌ No keystore found in secrets for ${TENANT}"
+          exit 1
+        fi
+
+    - name: Setup Firebase config
+      run: |
+        TENANT="${{ steps.tenant.outputs.tenant }}"
+
+        # Create Firebase config from secret
+        FIREBASE_CONFIG="${{ secrets[format('{0}_FIREBASE_CONFIG', steps.tenant.outputs.tenant)] }}"
+        if [ ! -z "$FIREBASE_CONFIG" ]; then
+          mkdir -p res/${TENANT}
+          echo "$FIREBASE_CONFIG" > res/${TENANT}/google-services.json
+          echo "✅ Firebase config created for ${TENANT}"
+        else
+          echo "⚠️ No Firebase config found for ${TENANT}"
+        fi
+
+    - name: Build Android
+      run: |
+        TENANT="${{ steps.tenant.outputs.tenant }}"
+        chmod +x build-client-v2.sh
+
+        # Set BUILD_ANDROID=true in the environment file
+        if [ -f "env/.env.${TENANT}" ]; then
+          if ! grep -q "BUILD_ANDROID" "env/.env.${TENANT}"; then
+            echo "BUILD_ANDROID=true" >> "env/.env.${TENANT}"
+          else
+            sed -i 's/BUILD_ANDROID=.*/BUILD_ANDROID=true/' "env/.env.${TENANT}"
+          fi
+
+          # Ensure BUILD_IOS=false for Android-only builds
+          if ! grep -q "BUILD_IOS" "env/.env.${TENANT}"; then
+            echo "BUILD_IOS=false" >> "env/.env.${TENANT}"
+          else
+            sed -i 's/BUILD_IOS=.*/BUILD_IOS=false/' "env/.env.${TENANT}"
+          fi
+        fi
+
+        ./build-client-v2.sh ${TENANT} --no-increment
+
+    - name: Upload Android artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-${{ steps.tenant.outputs.tenant }}
+        path: |
+          res/${{ steps.tenant.outputs.tenant }}/*.apk
+          res/${{ steps.tenant.outputs.tenant }}/*.aab
+        retention-days: 30
+
+    - name: Notify completion
+      if: always()
+      run: |
+        TENANT="${{ steps.tenant.outputs.tenant }}"
+        STATUS="${{ job.status }}"
+
+        # Send callback to IntoGolfCentral if callback URL provided
+        CALLBACK_URL="${{ github.event.client_payload.callback_url }}"
+        if [ ! -z "$CALLBACK_URL" ]; then
+          curl -X POST "$CALLBACK_URL" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"tenant\": \"${TENANT}\",
+              \"platform\": \"android\",
+              \"status\": \"${STATUS}\",
+              \"build_number\": \"${{ github.run_number }}\",
+              \"artifacts\": {
+                \"apk\": \"android-${TENANT}/${TENANT}-release.apk\",
+                \"aab\": \"android-${TENANT}/${TENANT}-release.aab\"
+              }
+            }" || echo "Failed to send callback"
+        fi
+
+  build-ios:
+    if: github.event.inputs.platform == 'ios' || github.event.inputs.platform == 'both' || github.event.client_payload.platform == 'ios' || github.event.client_payload.platform == 'both'
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Get tenant from inputs
+      id: tenant
+      run: |
+        TENANT="${{ github.event.inputs.tenant || github.event.client_payload.tenant }}"
+        echo "tenant=${TENANT}" >> $GITHUB_OUTPUT
+        echo "Building for tenant: ${TENANT}"
+
+    - name: Setup tenant secrets
+      run: |
+        TENANT="${{ steps.tenant.outputs.tenant }}"
+
+        # Create .secrets directory
+        mkdir -p .secrets
+
+        # Create tenant secrets from GitHub secrets
+        cat > .secrets/${TENANT}.env << EOF
+        KEY_PASSWORD=${{ secrets[format('{0}_KEY_PASSWORD', steps.tenant.outputs.tenant)] }}
+        KEYSTORE_PASSWORD=${{ secrets[format('{0}_KEYSTORE_PASSWORD', steps.tenant.outputs.tenant)] }}
+        KEY_ALIAS=${{ secrets[format('{0}_KEY_ALIAS', steps.tenant.outputs.tenant)] }}
+        EOF
+
+    - name: Setup Firebase config
+      run: |
+        TENANT="${{ steps.tenant.outputs.tenant }}"
+
+        # Create Firebase config from secret
+        FIREBASE_CONFIG="${{ secrets[format('{0}_FIREBASE_CONFIG', steps.tenant.outputs.tenant)] }}"
+        if [ ! -z "$FIREBASE_CONFIG" ]; then
+          mkdir -p res/${TENANT}
+          echo "$FIREBASE_CONFIG" > res/${TENANT}/GoogleService-Info.plist
+          echo "✅ Firebase config created for ${TENANT}"
+        fi
+
+    - name: Build iOS
+      run: |
+        TENANT="${{ steps.tenant.outputs.tenant }}"
+        chmod +x build-client-v2.sh
+
+        # Set BUILD_IOS=true in the environment file
+        if [ -f "env/.env.${TENANT}" ]; then
+          if ! grep -q "BUILD_IOS" "env/.env.${TENANT}"; then
+            echo "BUILD_IOS=true" >> "env/.env.${TENANT}"
+          else
+            sed -i '' 's/BUILD_IOS=.*/BUILD_IOS=true/' "env/.env.${TENANT}"
+          fi
+
+          # Ensure BUILD_ANDROID=false for iOS-only builds
+          if ! grep -q "BUILD_ANDROID" "env/.env.${TENANT}"; then
+            echo "BUILD_ANDROID=false" >> "env/.env.${TENANT}"
+          else
+            sed -i '' 's/BUILD_ANDROID=.*/BUILD_ANDROID=false/' "env/.env.${TENANT}"
+          fi
+        fi
+
+        ./build-client-v2.sh ${TENANT} --no-increment
+
+    - name: Archive iOS app
+      run: |
+        TENANT="${{ steps.tenant.outputs.tenant }}"
+
+        if [ -d "ios/App" ]; then
+          cd ios/App
+
+          # Build archive for distribution
+          xcodebuild -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -archivePath "build/${TENANT}.xcarchive" \
+            archive \
+            -quiet
+
+          # Export IPA
+          xcodebuild -exportArchive \
+            -archivePath "build/${TENANT}.xcarchive" \
+            -exportPath "build/export" \
+            -exportOptionsPlist "../../scripts/export-options.plist" \
+            -quiet
+
+          # Copy to artifacts directory
+          mkdir -p "../../res/${TENANT}"
+          cp build/export/*.ipa "../../res/${TENANT}/${TENANT}.ipa" 2>/dev/null || echo "No IPA generated"
+
+          cd ../..
+        fi
+
+    - name: Upload iOS artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-${{ steps.tenant.outputs.tenant }}
+        path: |
+          res/${{ steps.tenant.outputs.tenant }}/*.ipa
+          ios/App/build/${{ steps.tenant.outputs.tenant }}.xcarchive
+        retention-days: 30
+
+    - name: Notify completion
+      if: always()
+      run: |
+        TENANT="${{ steps.tenant.outputs.tenant }}"
+        STATUS="${{ job.status }}"
+
+        # Send callback to IntoGolfCentral if callback URL provided
+        CALLBACK_URL="${{ github.event.client_payload.callback_url }}"
+        if [ ! -z "$CALLBACK_URL" ]; then
+          curl -X POST "$CALLBACK_URL" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"tenant\": \"${TENANT}\",
+              \"platform\": \"ios\",
+              \"status\": \"${STATUS}\",
+              \"build_number\": \"${{ github.run_number }}\",
+              \"artifacts\": {
+                \"ipa\": \"ios-${TENANT}/${TENANT}.ipa\",
+                \"archive\": \"ios-${TENANT}/${TENANT}.xcarchive\"
+              }
+            }" || echo "Failed to send callback"
+        fi

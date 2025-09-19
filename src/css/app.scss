@@ -5,6 +5,8 @@
 @import "rewrite_quasar";
 @import "addToCalender";
 @import "quasar.variables";
+@import "golf-ui";
+@import "golf-modern";
 
 #app {
   -webkit-font-smoothing: antialiased;
@@ -14,6 +16,38 @@
 body {
   font-family: "Nunito", sans-serif;
   background-color: $body-bg;
+}
+
+/* iOS Safe Area Support - Only add extra padding for notch area */
+.ios-safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.ios-safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.ios-safe-area-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+.ios-safe-area-right {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Header safe area for iOS - only extra padding for notch, not full safe area */
+.q-header.ios-safe-header {
+  padding-top: max(0px, calc(env(safe-area-inset-top) - 40px));
+}
+
+/* Footer safe area for iOS */
+.q-footer.ios-safe-footer {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Layout with notch awareness - subtract normal status bar height */
+.ios-layout-safe {
+  padding-top: max(0px, calc(env(safe-area-inset-top) - 40px));
 }
 
 .page-title {

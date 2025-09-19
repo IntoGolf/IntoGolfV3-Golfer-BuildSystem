@@ -1,8 +1,8 @@
-import { boot } from "quasar/wrappers";
+import {boot} from "quasar/wrappers";
 import axios from "axios";
 import store from "../store";
 import router from "../router";
-import { Loading, Notify, Platform } from "quasar";
+import {Loading, Notify, Platform} from "quasar";
 
 const baseURL = process.env.VUE_APP_BASE_URL;
 
@@ -15,7 +15,13 @@ axios.interceptors.request.use(
       axios.defaults.headers.common["X-App-Identifier"] = process.env.APP_ID;
     }
 
-    config.url = `${baseURL}api/${config.url}`;
+    // Only add 'api/' if URL doesn't already start with '/api/'
+    if (config.url.startsWith('/api/')) {
+      config.url = `${baseURL}${config.url.substring(1)}`; // Remove leading slash
+    } else {
+      config.url = `${baseURL}api/${config.url}`;
+    }
+    console.log(config.url);
 
     const token = store.getters["currentUser/token"];
     if (token) {
@@ -99,7 +105,8 @@ axios.interceptors.response.use(
   }
 );
 
-export default boot(({ app, store }) => {
+export default boot(({app, store}) => {
   app.config.globalProperties.$http = axios;
+  app.config.globalProperties.$axios = axios;
   store.$axios = axios;
 });

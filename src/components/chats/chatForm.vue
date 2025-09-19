@@ -2,7 +2,7 @@
   <q-page class="flex q-pa-md">
     <div class="row q-pa-sm">
       <div class="col-2" @click="$store.dispatch('chats/edit', false)">
-        <q-icon name="arrow_back_ios" size="sm" />
+        <q-icon name="arrow_back_ios" size="sm"/>
       </div>
       <div class="col-8 text-center" style="font-size: 18px">
         Groepsinformatie
@@ -12,7 +12,7 @@
 
     <q-input v-model="form.chtName" class="full-width" dense label="Naam">
       <template v-slot:append>
-        <q-icon name="save" @click="$store.dispatch('chats/setChat', form)" />
+        <q-icon name="save" @click="$store.dispatch('chats/setChat', form)"/>
       </template>
     </q-input>
 
@@ -64,13 +64,13 @@
     <q-dialog v-model="showConfirm" persistent>
       <q-card>
         <q-card-section class="row items-center">
-          <q-avatar color="red" icon="delete" text-color="white" />
+          <q-avatar color="red" icon="delete" text-color="white"/>
           <span v-if="confirmDeleteChat" class="q-ml-sm"
-            >Weet u zeker dat u deze groep witl verwijderen? Deze actie kan niet
+          >Weet u zeker dat u deze groep witl verwijderen? Deze actie kan niet
             teruggedraaid worden!</span
           >
           <span v-else-if="confirmLeaveGroup" class="q-ml-sm"
-            >Weet u zeker dat u deze groep witl verlaten?</span
+          >Weet u zeker dat u deze groep witl verlaten?</span
           >
         </q-card-section>
 
@@ -101,7 +101,7 @@
 import ChatRelationItem from "components/chats/chatRelationItem.vue";
 
 export default {
-  components: { ChatRelationItem },
+  components: {ChatRelationItem},
   data: function () {
     return {
       form: null,
@@ -143,7 +143,7 @@ export default {
     },
     getImageUrl(imageName) {
       // Modify the base URL as needed
-      return `public/image?name=${encodeURIComponent(
+      return `golfer/image?name=${encodeURIComponent(
         imageName
       )}&t=${new Date().getTime()}`;
     },

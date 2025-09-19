@@ -117,7 +117,6 @@
     <q-separator/>
 
     <div v-if="match.StartlijstGereed === 1">
-
       <div v-for="(flight, fKey) in match.flights"
            :key="fKey"
            class="row shadow-1 bg-blue-1 q-mb-md">
@@ -162,8 +161,6 @@
           </div>
         </div>
       </div>
-
-
     </div>
 
     <div v-else>

@@ -1,0 +1,15 @@
+{
+  "aps": {
+    "alert": {
+      "title": "📅 Tee Time Update",
+      "body": "Tik om je tee times te bekijken"
+    },
+    "badge": 1,
+    "sound": "default",
+    "content-available": 1
+  },
+  "data": {
+    "type": "teetime",
+    "deep_link": "/teetimes"
+  }
+}

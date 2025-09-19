@@ -1,0 +1,30 @@
+{
+  "appId": "nl.intogolf.engelenburg",
+  "appName": "Golfbaan Kasteel Engelenburg",
+  "version": "1.4.11",
+  "webDir": "dist/spa",
+  "ios": {
+    "scheme": "Golfbaan_Kasteel_Engelenburg",
+    "buildOptions": {
+      "developmentTeam": "IntoGolf B.V.",
+      "codeSignIdentity": "IntoGolf B.V.",
+      "provisioningProfile": "IntoGolf B.V.",
+      "deviceFamily": "1",
+      "device": "iPhone"
+    }
+  },
+  "android": {
+    "buildOptions": {
+      "keystorePath": "../../res/engelenburg/engelenburg.keystore",
+      "keystorePassword": "mMdiPYRpw7iwbcctgRxA",
+      "keystoreAlias": "keyEngelenBurg",
+      "keystoreAliasPassword": "mMdiPYRpw7iwbcctgRxA",
+      "releaseType": "AAB"
+    }
+  },
+  "server": {
+    "hostname": "localhost",
+    "iosScheme": "capacitor",
+    "androidScheme": "http"
+  }
+}

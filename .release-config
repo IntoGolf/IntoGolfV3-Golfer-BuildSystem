@@ -1,0 +1,20 @@
+# App Store Connect API Configuration
+# 
+# Om automatisch te uploaden naar TestFlight heb je een API key nodig:
+# 1. Ga naar https://appstoreconnect.apple.com/access/api
+# 2. Maak een nieuwe API key aan met "App Manager" rol
+# 3. Download de .p8 file
+# 4. Vul de gegevens hieronder in
+
+# API Key ID (8 karakters, bijv: ABCD1234)
+APP_STORE_API_KEY=""
+
+# Issuer ID (UUID formaat)
+APP_STORE_ISSUER_ID=""
+
+# Path naar je .p8 key file
+APP_STORE_KEY_FILE=""
+
+# Google Play Console
+# Voor automatische upload (optioneel, kan via fastlane)
+GOOGLE_PLAY_JSON_KEY=""

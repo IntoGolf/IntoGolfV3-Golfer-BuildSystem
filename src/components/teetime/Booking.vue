@@ -250,9 +250,14 @@
 
 <script>
 import authMixin from "../../mixins/auth";
+import { useRecaptcha } from "../../composables/useRecaptcha";
 
 export default {
   mixins: [authMixin],
+  setup() {
+    const { withRecaptcha } = useRecaptcha();
+    return { withRecaptcha };
+  },
   data: function () {
     return {
       loading: false,
@@ -379,7 +384,10 @@ export default {
         flight_players: flight_players,
       };
 
-      let res = await this.$http.post(`golfer/booking`, info);
+      // Add reCAPTCHA protection for reservation requests
+      const infoWithCaptcha = await this.withRecaptcha(info, "reservation");
+      
+      let res = await this.$http.post(`golfer/booking`, infoWithCaptcha);
       if (res.flight) {
         this.flight = res.flight;
         await this.$store.dispatch("settings/fetchSettings");

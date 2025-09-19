@@ -1,0 +1,20 @@
+{
+  "aps": {
+    "alert": {
+      "title": "📅 Tee Time Beschikbaar",
+      "body": "Er is een plekje vrijgekomen om 14:30!"
+    },
+    "badge": 1,
+    "sound": "default",
+    "content-available": 1,
+    "category": "TEETIME_AVAILABLE"
+  },
+  "data": {
+    "type": "teetime",
+    "teetime_id": "456",
+    "action": "book_teetime",
+    "deep_link": "/teetimes?time=14:30&date=2025-09-14",
+    "available_time": "14:30",
+    "date": "2025-09-14"
+  }
+}

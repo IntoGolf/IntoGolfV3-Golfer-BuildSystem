@@ -4,13 +4,13 @@
     :name="name"
     :sent="isMe"
     :stamp="timeText"
-    size="8"
+    size="10"
   >
     <div v-if="message.crmFltNr > 0">
-      <span v-html="message.flightText" /><br />
-      <span v-if="!message.canceled" v-html="message.flightExtraText" />
-      <hr />
-      <span v-if="message.canceled"> <b>Status</b>: geannuleerd<br /></span>
+      <span v-html="message.flightText"/><br/>
+      <span v-if="!message.canceled" v-html="message.flightExtraText"/>
+      <hr/>
+      <span v-if="message.canceled"> <b>Status</b>: geannuleerd<br/></span>
       <span v-else-if="message.on_flight">
         <b>Status</b>: je bent deelnemer</span
       >
@@ -18,7 +18,7 @@
         <b>Status</b>: open
         <a @click="handleBook(message.crmFltNr)"><b>aanmelden</b></a></span
       >
-      <hr />
+      <hr/>
       <div v-if="message.players.length > 0 && !message.canceled">
         <b>Deelnemers:</b>
         <div v-for="(player, key) in message.players" :key="key">
@@ -28,7 +28,7 @@
     </div>
 
     <div v-else-if="message.crmFltNr === null">
-      <span v-html="message.crmMessage" />
+      <span v-html="message.crmMessage"/>
     </div>
   </q-chat-message>
 </template>
@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     handleBook(fltNr) {
-      let data = { fltNr: fltNr, chtNr: this.message.crmChtNr };
+      let data = {fltNr: fltNr, chtNr: this.message.crmChtNr};
       this.$http.post("golfer/booking/join", data).then(() => {
         const chtNr = this.$store.state.chats.chat.chtNr;
         this.$store.dispatch("chats/getMessages", chtNr);

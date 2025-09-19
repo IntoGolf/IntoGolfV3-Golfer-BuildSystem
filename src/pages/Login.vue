@@ -126,9 +126,14 @@
 <script>
 import {Platform} from "quasar";
 import packageJson from "../../package.json";
+import { useRecaptcha } from "../composables/useRecaptcha";
 
 export default {
   name: "Login",
+  setup() {
+    const { withRecaptcha } = useRecaptcha();
+    return { withRecaptcha };
+  },
   data: function () {
     return {
       form: {
@@ -199,12 +204,10 @@ export default {
     async onlogin() {
       this.$q.loading.show();
 
-      if (!Platform.is.ios && !Platform.is.android) {
-        await this.$recaptchaLoaded();
-        this.form.captcha = await this.$recaptcha("login");
-      }
+      // Add reCAPTCHA protection using the new composable
+      const formWithCaptcha = await this.withRecaptcha(this.form, "login");
 
-      await this.$store.dispatch("currentUser/login", this.form);
+      await this.$store.dispatch("currentUser/login", formWithCaptcha);
       const currentUser = this.$store.getters["currentUser/item"];
       if (currentUser === null) {
         return;

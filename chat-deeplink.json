@@ -1,0 +1,21 @@
+{
+  "aps": {
+    "alert": {
+      "title": "💬 Nieuw bericht van John",
+      "body": "Hey, zullen we morgen een rondje golfen?"
+    },
+    "badge": 1,
+    "sound": "default",
+    "content-available": 1,
+    "category": "CHAT_MESSAGE",
+    "thread-id": "chat-5"
+  },
+  "data": {
+    "type": "chat",
+    "chat_id": "5",
+    "action": "open_chat",
+    "deep_link": "/chat?id=5",
+    "sender_name": "John Doe",
+    "message_preview": "Hey, zullen we morgen een rondje golfen?"
+  }
+}

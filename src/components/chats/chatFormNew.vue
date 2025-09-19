@@ -15,7 +15,7 @@
     </div>
     <q-input v-model="form.chtName" class="q-mb-md" label="Naam">
       <template v-slot:append>
-        <q-icon name="save" @click="$store.dispatch('chats/setChat', form)" />
+        <q-icon name="save" @click="$store.dispatch('chats/setChat', form)"/>
       </template>
     </q-input>
 
@@ -25,7 +25,7 @@
     </div>
     <q-input v-model="email" label="Nodig uit voor groep">
       <template v-slot:append>
-        <q-icon name="send" @click="handleInvite" />
+        <q-icon name="send" @click="handleInvite"/>
       </template>
     </q-input>
 
@@ -57,13 +57,13 @@
     <q-dialog v-model="showConfirm" persistent>
       <q-card>
         <q-card-section class="row items-center">
-          <q-avatar color="red" icon="delete" text-color="white" />
+          <q-avatar color="red" icon="delete" text-color="white"/>
           <span v-if="confirmDeleteChat" class="q-ml-sm"
-            >Weet u zeker dat u deze groep witl verwijderen? Deze actie kan niet
+          >Weet u zeker dat u deze groep witl verwijderen? Deze actie kan niet
             teruggedraaid worden!</span
           >
           <span v-else-if="confirmLeaveGroup" class="q-ml-sm"
-            >Weet u zeker dat u deze groep witl verlaten?</span
+          >Weet u zeker dat u deze groep witl verlaten?</span
           >
         </q-card-section>
 
@@ -94,7 +94,7 @@
 import ChatRelationItem from "components/chats/chatRelationItem.vue";
 
 export default {
-  components: { ChatRelationItem },
+  components: {ChatRelationItem},
   data: function () {
     return {
       form: null,
@@ -130,7 +130,7 @@ export default {
     },
     getImageUrl(imageName) {
       // Modify the base URL as needed
-      return `public/image?name=${encodeURIComponent(
+      return `golfer/image?name=${encodeURIComponent(
         imageName
       )}&t=${new Date().getTime()}`;
     },

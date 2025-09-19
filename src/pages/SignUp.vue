@@ -393,9 +393,14 @@
 import SignUpConfirm from "pages/SignUpConfirm.vue";
 import settings from "src/store/settings";
 import { Platform } from "quasar";
+import { useRecaptcha } from "../composables/useRecaptcha";
 
 export default {
   components: { SignUpConfirm },
+  setup() {
+    const { withRecaptcha } = useRecaptcha();
+    return { withRecaptcha };
+  },
   props: {
     ProCourse: Object,
   },
@@ -697,13 +702,10 @@ export default {
       this.showConfirm = false;
     },
     async onSignUpPay() {
-      let that = this;
-      if (!Platform.is.ios && !Platform.is.android) {
-        await this.$recaptchaLoaded();
-        that.account_form.captcha = await this.$recaptcha("login");
-      }
+      // Add reCAPTCHA protection for sign up
+      const formWithCaptcha = await this.withRecaptcha(this.account_form, "signup");
 
-      const res = await this.$http.post(`golfer/sign-up`, this.account_form);
+      const res = await this.$http.post(`golfer/sign-up`, formWithCaptcha);
       this.onHideConfirm();
       if (res.success === 1) {
         if (this.$store.state.settings.publicItems.app_subscription_redirect) {
@@ -717,15 +719,11 @@ export default {
       }
     },
     async onSubmit() {
-      let that = this;
+      // Add reCAPTCHA protection for sign up (desktop version)
+      const formWithCaptcha = await this.withRecaptcha(this.account_form, "signup");
 
-      if (this.$q.platform.is.desktop) {
-        await this.$recaptchaLoaded();
-        that.account_form.captcha = await this.$recaptcha("login");
-      }
-
-      that.loading = true;
-      that.$http.post(`golfer/sign-up`, that.account_form).then((res) => {
+      this.loading = true;
+      this.$http.post(`golfer/sign-up`, formWithCaptcha).then((res) => {
         if (res.success === 1) {
           this.status = 2;
         } else {

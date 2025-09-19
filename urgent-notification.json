@@ -1,0 +1,19 @@
+{
+  "aps": {
+    "alert": {
+      "title": "🔔 URGENT: Match Update",
+      "body": "Je match is verplaatst naar 16:00 vanwege weersomstandigheden"
+    },
+    "badge": 3,
+    "sound": "default",
+    "content-available": 1,
+    "thread-id": "match-updates"
+  },
+  "data": {
+    "type": "match_update",
+    "match_id": 456,
+    "new_time": "16:00",
+    "reason": "weather",
+    "action_required": true
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "_comment": "This is a safe template - real config is generated at build time",
+  "appId": "nl.intogolf.template",
+  "appName": "Template App",
+  "version": "1.0.0",
+  "webDir": "dist/spa",
+  "ios": {
+    "scheme": "Template_App",
+    "buildOptions": {
+      "developmentTeam": "IntoGolf B.V.",
+      "codeSignIdentity": "IntoGolf B.V.",
+      "provisioningProfile": "IntoGolf B.V.",
+      "deviceFamily": "1",
+      "device": "iPhone"
+    }
+  },
+  "server": {
+    "hostname": "localhost",
+    "iosScheme": "capacitor",
+    "androidScheme": "http"
+  },
+  "android": {
+    "_comment": "Android config is generated at build time with secure credentials",
+    "buildOptions": {
+      "releaseType": "AAB"
+    }
+  }
+}

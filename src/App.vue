@@ -1,7 +1,7 @@
 <template>
   <q-layout
     v-if="['/login'].includes($route.path)"
-    :style="{ paddingTop: hasNotch ? '50px' : '0' }"
+    class="ios-layout-safe"
   >
     <login/>
   </q-layout>
@@ -27,9 +27,8 @@
       :style="{
         color: $store.state.settings.item.app_primary_font_color,
         backgroundColor: $store.state.settings.item.app_primary_color,
-        paddingTop: hasNotch ? '50px' : '0',
       }"
-      class="web-width q-header"
+      class="web-width q-header ios-safe-header"
       flat
     >
       <q-toolbar
@@ -122,8 +121,7 @@ import {defineComponent} from "vue";
 import {mapGetters} from "vuex";
 import Login from "pages/Login.vue";
 import {setCssVar} from "quasar";
-import {PushNotifications} from '@capacitor/push-notifications';
-import {FirebaseX} from '@awesome-cordova-plugins/firebase-x';
+import PushNotificationService from "src/services/PushNotificationService.js";
 
 export default defineComponent({
   name: "PageLayout",
@@ -131,24 +129,10 @@ export default defineComponent({
   data() {
     return {
       drawer: false,
+      pushService: null,
     };
   },
   computed: {
-    hasNotch() {
-      const devicesWithNotches = [
-        "iPhone X",
-        "iPhone XR",
-        "iPhone XS",
-        "iPhone 11",
-        "iPhone 12",
-        "iPhone 13",
-        "iPhone 14",
-        "iPhone 15",
-      ];
-      return devicesWithNotches.some((device) =>
-        navigator.userAgent.includes(device)
-      );
-    },
     backgroundColor() {
       return this.getBackgroundColor;
     },
@@ -370,59 +354,32 @@ export default defineComponent({
     },
   },
   async mounted() {
+    console.log('📱 App.vue mounted() - Starting initialization');
     this.drawer = false;
     await this.setColors();
 
-    PushNotifications.requestPermissions().then(result => {
-      if (result.receive === 'granted') {
-        PushNotifications.register();
-      }
-    });
-
-// Ontvangen van het device token (bijv. nodig voor Firebase)
-    PushNotifications.addListener('registration', token => {
-      console.log('Device token:', token.value);
-      alert(token.value);
-    });
-
-// Foutafhandeling
-    PushNotifications.addListener('registrationError', err => {
-      console.error('Registration error:', err);
-    });
-
-    PushNotifications.addListener('pushNotificationReceived', notification => {
-      console.log('Push ontvangen', notification);
-
-      // Toon lokale notificatie of badge
-      // Dit werkt als de app op de voorgrond is
-    });
-
-    PushNotifications.addListener('pushNotificationActionPerformed', notification => {
-      console.log('Notificatie geklikt', notification);
-    });
-
-    document.addEventListener('deviceready', async () => {
-      try {
-        const token = await FirebaseX.getToken();
-        console.log('FCM Token:', token);
-
-        FirebaseX.onMessageReceived().subscribe(data => {
-          if (data.tap) {
-            // Gebruiker heeft notificatie aangeklikt
-            console.log('Notificatie aangeklikt', data);
-          } else {
-            // App open - toon alert of badge
-            console.log('Notificatie ontvangen', data);
-          }
-        });
-
-      } catch (error) {
-        console.error('Firebase init error:', error);
-      }
-    });
-
+    // Initialize push notification service and get REAL FCM token
+    try {
+      this.pushService = new PushNotificationService(this, this.$router, this.$axios);
+      await this.pushService.initialize();
+    } catch (error) {
+      console.error('📱 Push service error:', error);
+      this.$q.notify({
+        type: 'negative',
+        message: 'Push Service Error',
+        caption: error.message,
+        timeout: 5000
+      });
+    }
+  },
+  async beforeUnmount() {
+    // Cleanup push notification service
+    if (this.pushService) {
+      await this.pushService.cleanup();
+    }
   },
   methods: {
+
     qItemActiveStyle(name) {
       return {
         fontWeight: this.$route.name === name ? 'bold' : ''

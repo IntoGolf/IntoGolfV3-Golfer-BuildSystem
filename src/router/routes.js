@@ -34,6 +34,18 @@ const routes = [
     meta: {requiresAuth: false},
   },
   {
+    path: "/teetimes-new",
+    name: "teetimes-new",
+    component: () => import("pages/TeetimesNew.vue"),
+    meta: {requiresAuth: false, title: "Starttijden (Nieuwe UX)"},
+  },
+  {
+    path: "/home-modern",
+    name: "home-modern",
+    component: () => import("pages/HomeModern.vue"),
+    meta: {requiresAuth: true, title: "Modern Dashboard"},
+  },
+  {
     path: "/external_teetimes",
     name: "external_teetimes",
     component: () => import("pages/ExtTeeTime.vue"),
@@ -49,15 +61,6 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: "Baanstatus",
-    },
-  },
-  {
-    path: "/chat",
-    name: "chat",
-    component: () => import("pages/Chat.vue"),
-    meta: {
-      requiresAuth: true,
-      title: "Chats",
     },
   },
   {
@@ -190,6 +193,15 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: "Berichten",
+    },
+  },
+  {
+    path: "/chat",
+    name: "chat",
+    component: () => import("pages/Chat.vue"),
+    meta: {
+      requiresAuth: true,
+      title: "Chat",
     },
   },
   {
