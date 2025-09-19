@@ -1,11 +1,6 @@
 name: Manual Build Test
 on:
   workflow_dispatch:
-    inputs:
-      tenant:
-        description: 'Tenant'
-        required: true
-        default: 'dev'
 
 jobs:
   info:
@@ -15,5 +10,4 @@ jobs:
     - name: Show info
       run: |
         echo "Branch: ${{ github.ref_name }}"
-        echo "Tenant: ${{ github.event.inputs.tenant }}"
-        echo "Workflow is working!"
+        echo "Manual Build Test is working!"

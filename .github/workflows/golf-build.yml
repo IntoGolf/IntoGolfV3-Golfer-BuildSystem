@@ -3,14 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       tenant:
-        description: 'Select tenant'
+        description: 'Tenant to build'
         required: true
         default: 'dev'
-        type: choice
-        options:
-        - dev
-        - engelenburg
-        - delfland
 
 jobs:
   build:
