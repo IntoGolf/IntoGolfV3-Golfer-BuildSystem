@@ -1,9 +1,6 @@
 name: Hello World Test
 on:
   workflow_dispatch:
-  push:
-    branches: [steble_design]
-    paths: ['.github/workflows/hello.yml']
 
 jobs:
   hello:
