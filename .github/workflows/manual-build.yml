@@ -1,6 +1,9 @@
 name: Manual Build Test
 on:
   workflow_dispatch:
+  push:
+    branches: [steble_design]
+    paths: ['.github/workflows/manual-build.yml']
 
 jobs:
   info:

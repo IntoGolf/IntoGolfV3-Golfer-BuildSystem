@@ -6,6 +6,9 @@ on:
         description: 'Tenant to build'
         required: true
         default: 'dev'
+  push:
+    branches: [steble_design]
+    paths: ['.github/workflows/golf-build.yml']
 
 jobs:
   build:
