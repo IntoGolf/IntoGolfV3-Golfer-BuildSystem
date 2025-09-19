@@ -1,0 +1,17 @@
+name: Simple Golf Build
+on:
+  workflow_dispatch:
+  push:
+    branches: [steble_design]
+    paths: ['.github/workflows/simple-golf.yml']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Test
+      run: |
+        echo "Simple Golf Build Test"
+        echo "Available tenants:"
+        ls env/.env.* | head -5
