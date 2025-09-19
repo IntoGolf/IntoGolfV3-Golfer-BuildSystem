@@ -1,0 +1,16 @@
+name: Hello World Test
+on:
+  workflow_dispatch:
+  push:
+    branches: [steble_design]
+    paths: ['.github/workflows/hello.yml']
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Say hello
+      run: |
+        echo "Hello from steble_design branch!"
+        echo "GitHub Actions is working! 🎉"
+        date
