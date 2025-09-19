@@ -20,6 +20,7 @@ jobs:
       run: |
         TENANT="${{ github.event.inputs.tenant || 'dev' }}"
         echo "Building for: $TENANT"
+        echo "Trigger: ${{ github.event_name }}"
 
         # Check if env file exists
         if [ -f "env/.env.${TENANT}" ]; then
