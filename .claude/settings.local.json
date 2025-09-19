@@ -46,7 +46,9 @@
       "Read(//tmp/**)",
       "Bash(pip3 install:*)",
       "Bash(python3:*)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "defaultMode": "acceptEdits"
   }
