@@ -1,0 +1,27 @@
+name: Golf App Build
+on:
+  workflow_dispatch:
+    inputs:
+      tenant:
+        description: 'Select tenant'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+        - dev
+        - engelenburg
+        - delfland
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Test build info
+      run: |
+        echo "🏗️ Golf App Build Test"
+        echo "Tenant: ${{ github.event.inputs.tenant }}"
+        echo "Branch: ${{ github.ref_name }}"
+        echo "✅ Workflow is working!"
