@@ -1,4 +1,4 @@
-package nl.intogolf.dev;
+package nl.intogolf.delfland;
 
 import com.getcapacitor.BridgeActivity;
 

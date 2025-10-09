@@ -304,6 +304,42 @@ const routes = [
     },
   },
   {
+    path: "/friends",
+    name: "friends",
+    component: () => import("pages/Friends.vue"),
+    meta: {
+      requiresAuth: true,
+      title: "Vrienden",
+    },
+  },
+  {
+    path: "/friends/search",
+    name: "friends-search",
+    component: () => import("pages/FriendsSearch.vue"),
+    meta: {
+      requiresAuth: true,
+      title: "Vrienden Zoeken",
+    },
+  },
+  {
+    path: "/open-bookings",
+    name: "open-bookings",
+    component: () => import("pages/OpenBookings.vue"),
+    meta: {
+      requiresAuth: true,
+      title: "Open Bookings",
+    },
+  },
+  {
+    path: "/friends/:relNr",
+    name: "friend-detail",
+    component: () => import("pages/FriendDetail.vue"),
+    meta: {
+      requiresAuth: true,
+      title: "Vriend Details",
+    },
+  },
+  {
     path: "/baankalender",
     name: "baankalender",
     component: () => import("pages/Calendar.vue"),

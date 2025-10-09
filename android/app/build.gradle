@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "nl.intogolf.dev"
+    namespace "nl.intogolf.delfland"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "nl.intogolf.dev"
+        applicationId "nl.intogolf.delfland"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 48
+        versionCode 16
         versionName "1.4.11"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {

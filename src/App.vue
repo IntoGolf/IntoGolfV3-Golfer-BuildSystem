@@ -309,6 +309,18 @@ export default defineComponent({
           visible: this.usrHasMembers,
         },
         {
+          name: "friends",
+          menuName: "Vrienden",
+          icon: "people",
+          visible: true,
+        },
+        {
+          name: "open-bookings",
+          menuName: "Open Bookings",
+          icon: "lock_open",
+          visible: true,
+        },
+        {
           name: "pos",
           menuName: "Horeca saldo",
           icon: "credit_card",

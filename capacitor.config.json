@@ -1,10 +1,10 @@
 {
-  "appId": "nl.intogolf.dev",
-  "appName": "Dev Golf App",
+  "appId": "nl.intogolf.delfland",
+  "appName": "Golfbaan Delfland",
   "version": "1.4.11",
   "webDir": "dist/spa",
   "ios": {
-    "scheme": "Dev_Golf_App",
+    "scheme": "Golfbaan_Delfland",
     "buildOptions": {
       "developmentTeam": "IntoGolf B.V.",
       "codeSignIdentity": "IntoGolf B.V.",
@@ -20,10 +20,10 @@
   },
   "android": {
     "buildOptions": {
-      "keystorePath": "../../.secrets/dev.keystore",
-      "keystorePassword": "devKeystore123",
-      "keystoreAlias": "keyDev",
-      "keystoreAliasPassword": "devKeystore123",
+      "keystorePath": "../../.secrets/delfland.keystore",
+      "keystorePassword": "LAbzTb8ZsmnLXoFGAkNb",
+      "keystoreAlias": "keyDelfland",
+      "keystoreAliasPassword": "dCbuCc0lW4atodOjCVs4",
       "releaseType": "AAB"
     }
   }
