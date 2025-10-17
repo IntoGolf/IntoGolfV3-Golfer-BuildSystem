@@ -308,10 +308,18 @@ if [ "$BUILD_ANDROID" = "true" ]; then
       sed -i '' 's/<application/<application android:usesCleartextTraffic="true"/' app/src/main/AndroidManifest.xml
     fi
     
-    # Copy Firebase config only if push notifications are enabled
+    # Handle Firebase configuration based on push notification settings
     echo "Checking Firebase configuration..."
     if grep -q "VUE_APP_ENABLE_PUSH_NOTIFICATIONS=true" "../env/.env.${CLIENT}"; then
-      echo "Push notifications enabled - copying Firebase config..."
+      echo "📱 Push notifications enabled - setting up Firebase..."
+      
+      # Ensure Google Services plugin is available in build.gradle
+      if ! grep -q "com.google.gms:google-services" build.gradle; then
+        echo "Adding Google Services plugin to build.gradle..."
+        sed -i '' 's/classpath.*gradle.*8\.5\.2.*/&\n        classpath "com.google.gms:google-services:4.4.0"/' build.gradle
+      fi
+      
+      # Copy Firebase config
       if [ -f "../res/${CLIENT}/google-services.json" ]; then
         cp "../res/${CLIENT}/google-services.json" app/google-services.json
         echo "✅ Firebase config copied from res/${CLIENT}/google-services.json"
@@ -319,9 +327,27 @@ if [ "$BUILD_ANDROID" = "true" ]; then
         echo "⚠️  No Firebase config found in res/${CLIENT}/google-services.json"
       fi
     else
-      echo "⚠️ Push notifications disabled - skipping Firebase config"
-      # Remove any existing google-services.json to prevent Firebase auto-initialization
+      echo "🚫 Push notifications DISABLED - removing ALL Firebase components..."
+      
+      # NUCLEAR OPTION: Remove ALL Firebase components
+      echo "   - Removing google-services.json..."
       rm -f app/google-services.json
+      
+      echo "   - Removing Google Services plugin from build.gradle..."
+      # Remove the Google Services classpath from build.gradle
+      sed -i '' '/com\.google\.gms:google-services/d' build.gradle
+      
+      echo "   - Disabling Google Services plugin in app/build.gradle..."
+      # Replace the conditional Firebase plugin application with a complete disable
+      sed -i '' '/def servicesJSON = file/,/^}/c\
+// Firebase/Google Services DISABLED for this client\
+logger.info("🚫 Firebase/Google Services intentionally disabled - no push notifications")' app/build.gradle
+      
+      echo "   - Removing any cached Firebase files..."
+      rm -rf app/build/generated/source/buildConfig/
+      rm -rf app/build/intermediates/
+      
+      echo "✅ All Firebase components removed"
     fi
   fi
   
