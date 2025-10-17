@@ -8,7 +8,7 @@ import currentUser from "./currentUser";
 import courseStatus from "./courseStatus";
 import greenfeeCards from "./greenfeeCards";
 import bills from "./bills";
-import chats from "./chats";
+// import chats from "./chats"; // DISABLED - contains pusher-js
 
 const store = createStore({
   modules: {
@@ -20,7 +20,7 @@ const store = createStore({
     courseStatus,
     greenfeeCards,
     bills,
-    chats,
+    // chats, // DISABLED - contains pusher-js
   },
   actions: {
     async initializeApp({ dispatch }) {
@@ -40,7 +40,7 @@ const store = createStore({
       await dispatch("messages/clear");
       await dispatch("scorecards/clear");
       await dispatch("settings/clear");
-      await dispatch("chats/clear");
+      // await dispatch("chats/clear"); // DISABLED - chats module removed
     },
   },
 });
