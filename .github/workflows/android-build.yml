@@ -139,10 +139,15 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
           rm -rf ios/App/App/public/
           
           # STEP 6: ULTRA NUCLEAR - TEMPORARILY REMOVE PUSH NOTIFICATION SOURCE FILES
-          echo "   - ULTRA NUCLEAR - temporarily removing PushNotificationService source file..."
+          echo "   - ULTRA NUCLEAR - temporarily removing PushNotificationService and updater source files..."
           if [ -f "src/services/PushNotificationService.js" ]; then
             mv src/services/PushNotificationService.js src/services/PushNotificationService.js.disabled
             echo "   - PushNotificationService.js temporarily disabled"
+          fi
+          
+          if [ -f "src/boot/updater.js" ]; then
+            mv src/boot/updater.js src/boot/updater.js.disabled
+            echo "   - updater.js temporarily disabled"
           fi
           
           echo "   - ALL compiled assets removed - forcing fresh build..."
