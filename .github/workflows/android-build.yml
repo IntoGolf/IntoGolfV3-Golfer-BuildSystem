@@ -1,6 +1,8 @@
 name: Build Android App
 
 on:
+  push:
+    branches: [ main ]
   workflow_dispatch:
     inputs:
       client:
@@ -61,24 +63,24 @@ jobs:
         GOOGLE_PLAY_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
       run: |
         # Create secrets file for client
-        cat > .secrets/${{ inputs.client }}.env << EOF
+        cat > .secrets/${CLIENT}.env << EOF
         KEYSTORE_PASSWORD="${KEYSTORE_PASSWORD}"
         KEY_PASSWORD="${KEY_PASSWORD}"
         KEY_ALIAS="${KEY_ALIAS}"
         EOF
         
         # Handle Firebase/Google Services based on push notification setting
-        if grep -q "VUE_APP_ENABLE_PUSH_NOTIFICATIONS=true" env/.env.${{ inputs.client }}; then
-          echo "📱 Push notifications enabled for ${{ inputs.client }} - setting up Firebase..."
+        if grep -q "VUE_APP_ENABLE_PUSH_NOTIFICATIONS=true" env/.env.${CLIENT}; then
+          echo "📱 Push notifications enabled for ${CLIENT} - setting up Firebase..."
           if [ ! -z "$GOOGLE_SERVICES_JSON" ]; then
-            echo "$GOOGLE_SERVICES_JSON" | base64 --decode > res/${{ inputs.client }}/google-services.json
-            echo "✅ Google Services JSON configured for ${{ inputs.client }}"
+            echo "$GOOGLE_SERVICES_JSON" | base64 --decode > res/${CLIENT}/google-services.json
+            echo "✅ Google Services JSON configured for ${CLIENT}"
           fi
         else
-          echo "🚫 Push notifications DISABLED for ${{ inputs.client }} - NUCLEAR REMOVAL OF ALL PUSH COMPONENTS..."
+          echo "🚫 Push notifications DISABLED for ${CLIENT} - NUCLEAR REMOVAL OF ALL PUSH COMPONENTS..."
           
           # STEP 1: Remove Firebase files
-          rm -f res/${{ inputs.client }}/google-services.json
+          rm -f res/${CLIENT}/google-services.json
           
           # STEP 2: Remove Firebase from Android build files
           if [ -d "android" ]; then
@@ -156,7 +158,7 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
           
           echo "   - ALL compiled assets removed - forcing fresh build..."
           
-          echo "✅ NUCLEAR OPTION COMPLETE - ALL push notification components removed for ${{ inputs.client }}"
+          echo "✅ NUCLEAR OPTION COMPLETE - ALL push notification components removed for ${CLIENT}"
         fi
         
         # Setup Google Play service account
@@ -167,8 +169,8 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
         
     - name: Check environment file
       run: |
-        if [ ! -f "env/.env.${{ inputs.client }}" ]; then
-          echo "❌ Environment file not found: env/.env.${{ inputs.client }}"
+        if [ ! -f "env/.env.${CLIENT}" ]; then
+          echo "❌ Environment file not found: env/.env.${CLIENT}"
           echo "Available clients:"
           ls env/.env.* | sed 's/env\/.env./  - /' | grep -v template
           exit 1
@@ -177,16 +179,18 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
         
     - name: Build Android app
       env:
-        ENVIRONMENT: ${{ inputs.client }}
+        ENVIRONMENT: ${{ inputs.client || 'goese' }}
       run: |
-        # Set build options
+        # Set build options and default client for push events
         BUILD_OPTIONS=""
-        if [ "${{ inputs.increment_build }}" = "false" ]; then
+        CLIENT="${{ inputs.client || 'goese' }}"
+        
+        if [ "${{ inputs.increment_build || 'true' }}" = "false" ]; then
           BUILD_OPTIONS="$BUILD_OPTIONS --no-increment"
         fi
         
         # Check if push notifications are disabled and clean Capacitor build files
-        if grep -q "VUE_APP_ENABLE_PUSH_NOTIFICATIONS=false" env/.env.${{ inputs.client }}; then
+        if grep -q "VUE_APP_ENABLE_PUSH_NOTIFICATIONS=false" env/.env.${CLIENT}; then
           echo "🧹 Post-build cleanup: Removing push-notifications from Capacitor Android build files..."
           
           # Remove from capacitor.settings.gradle (auto-generated file)
@@ -209,22 +213,22 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
         fi
         
         # Run build script for Android only
-        BUILD_ANDROID=true BUILD_IOS=false ./build-client-v2.sh ${{ inputs.client }} $BUILD_OPTIONS
+        BUILD_ANDROID=true BUILD_IOS=false ./build-client-v2.sh ${CLIENT} $BUILD_OPTIONS
         
     - name: Upload Android artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: android-build-${{ inputs.client }}
+        name: android-build-${CLIENT}
         path: |
-          res/${{ inputs.client }}/${{ inputs.client }}-release.apk
-          res/${{ inputs.client }}/${{ inputs.client }}-release.aab
+          res/${CLIENT}/${CLIENT}-release.apk
+          res/${CLIENT}/${CLIENT}-release.aab
           android/app/build/outputs/
         retention-days: 30
         
     - name: Upload to Google Play Console
       if: ${{ inputs.upload_to_play_console }}
       run: |
-        if [ -f ".secrets/google-play-service-account.json" ] && [ -f "res/${{ inputs.client }}/${{ inputs.client }}-release.aab" ]; then
+        if [ -f ".secrets/google-play-service-account.json" ] && [ -f "res/${CLIENT}/${CLIENT}-release.aab" ]; then
           echo "📤 Uploading to Google Play Console..."
           
           # Setup Ruby and Fastlane
@@ -233,7 +237,7 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
           sudo gem install fastlane
           
           # Get package name from environment
-          source env/.env.${{ inputs.client }}
+          source env/.env.${CLIENT}
           
           # Create minimal Fastfile for upload
           mkdir -p fastlane
@@ -259,7 +263,7 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
           
           # Upload to Internal Testing track
           PACKAGE_NAME="$APP_ID" \
-          AAB_PATH="res/${{ inputs.client }}/${{ inputs.client }}-release.aab" \
+          AAB_PATH="res/${CLIENT}/${CLIENT}-release.aab" \
           SERVICE_ACCOUNT_JSON=".secrets/google-play-service-account.json" \
           fastlane android internal
           
@@ -270,14 +274,14 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
           echo "⚠️ Google Play service account not configured or AAB not found"
           echo "📋 Required files:"
           echo "   - .secrets/google-play-service-account.json"
-          echo "   - res/${{ inputs.client }}/${{ inputs.client }}-release.aab"
+          echo "   - res/${CLIENT}/${CLIENT}-release.aab"
           
           if [ ! -f ".secrets/google-play-service-account.json" ]; then
             echo "❌ Missing: Google Play service account JSON"
             echo "   Add GOOGLE_PLAY_SERVICE_ACCOUNT secret to repository"
           fi
           
-          if [ ! -f "res/${{ inputs.client }}/${{ inputs.client }}-release.aab" ]; then
+          if [ ! -f "res/${CLIENT}/${CLIENT}-release.aab" ]; then
             echo "❌ Missing: AAB file"
             echo "   Build may have failed"
           fi
@@ -286,26 +290,26 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
     - name: Create release notes
       run: |
         # Get environment variables
-        source env/.env.${{ inputs.client }}
+        source env/.env.${CLIENT}
         
         cat > release-notes.md << EOF
-        # Android Build - ${{ inputs.client }}
+        # Android Build - ${CLIENT}
         
         ## Build Information
         - **Version:** ${APP_VERSION}
         - **Build Number:** ${APP_BUILD_NUMBER}
-        - **Client:** ${{ inputs.client }}
+        - **Client:** ${CLIENT}
         - **Build Date:** $(date '+%Y-%m-%d %H:%M:%S UTC')
         - **Android Target SDK:** ${ANDROID_TARGET_SDK}
         
         ## Files Generated
-        - APK: \`res/${{ inputs.client }}/${{ inputs.client }}-release.apk\`
-        - AAB: \`res/${{ inputs.client }}/${{ inputs.client }}-release.aab\`
+        - APK: \`res/${CLIENT}/${CLIENT}-release.apk\`
+        - AAB: \`res/${CLIENT}/${CLIENT}-release.aab\`
         
         ## Installation
         \`\`\`bash
         # Install APK on device/emulator
-        adb install res/${{ inputs.client }}/${{ inputs.client }}-release.apk
+        adb install res/${CLIENT}/${CLIENT}-release.apk
         \`\`\`
         
         ## Next Steps
@@ -320,7 +324,7 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
     - name: Upload release notes
       uses: actions/upload-artifact@v4
       with:
-        name: release-notes-${{ inputs.client }}
+        name: release-notes-${CLIENT}
         path: release-notes.md
         retention-days: 30
         
@@ -328,4 +332,4 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
       if: always()
       run: |
         rm -rf .secrets/
-        rm -rf res/${{ inputs.client }}/google-services.json 2>/dev/null || true
+        rm -rf res/${CLIENT}/google-services.json 2>/dev/null || true
