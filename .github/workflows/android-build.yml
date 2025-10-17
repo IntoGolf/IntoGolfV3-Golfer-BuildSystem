@@ -126,6 +126,15 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
           rm -rf node_modules package-lock.json
           npm install
           
+          # STEP 5: FORCE COMPLETE REBUILD - REMOVE ALL COMPILED ASSETS
+          echo "   - FORCE COMPLETE REBUILD - removing ALL compiled assets..."
+          rm -rf dist/
+          rm -rf src-capacitor/
+          rm -rf android/app/src/main/assets/
+          rm -rf android/app/build/
+          rm -rf ios/App/App/public/
+          echo "   - ALL compiled assets removed - forcing fresh build..."
+          
           echo "✅ NUCLEAR OPTION COMPLETE - ALL push notification components removed for ${{ inputs.client }}"
         fi
         
