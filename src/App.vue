@@ -121,7 +121,6 @@ import {defineComponent} from "vue";
 import {mapGetters} from "vuex";
 import Login from "pages/Login.vue";
 import {setCssVar} from "quasar";
-// PushNotificationService will be dynamically imported when needed
 
 export default defineComponent({
   name: "PageLayout",
@@ -367,41 +366,8 @@ export default defineComponent({
     },
   },
   async mounted() {
-    console.log('📱 App.vue mounted() - Starting initialization');
     this.drawer = false;
     await this.setColors();
-
-    // Initialize push notification service only if enabled
-    const enablePush = process.env.VUE_APP_ENABLE_PUSH_NOTIFICATIONS || 'false';
-    console.log('📱 Push notifications enabled:', enablePush);
-    
-    if (enablePush === 'true') {
-      try {
-        console.log('📱 Initializing push notification service...');
-        // Dynamically import PushNotificationService only when needed
-        const { default: PushNotificationService } = await import('src/services/PushNotificationService.js');
-        this.pushService = new PushNotificationService(this, this.$router, this.$axios);
-        await this.pushService.initialize();
-        console.log('✅ Push notification service initialized successfully');
-      } catch (error) {
-        console.error('📱 Push service error:', error);
-        this.$q.notify({
-          type: 'negative',
-          message: 'Push Service Error',
-          caption: error.message,
-          timeout: 5000
-        });
-      }
-    } else {
-      console.log('📱 Push notifications disabled - skipping initialization');
-      this.pushService = null;
-    }
-  },
-  async beforeUnmount() {
-    // Cleanup push notification service
-    if (this.pushService) {
-      await this.pushService.cleanup();
-    }
   },
   methods: {
 
