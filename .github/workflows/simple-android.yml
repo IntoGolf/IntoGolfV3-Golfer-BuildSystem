@@ -1,0 +1,102 @@
+name: Simple Android Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      client:
+        description: 'Client name'
+        required: true
+        default: 'goese'
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      
+    - name: Install dependencies
+      run: |
+        npm install
+        npm install -g @quasar/cli
+      
+    - name: Create secrets directory
+      run: mkdir -p .secrets
+      
+    - name: Setup secrets
+      env:
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      run: |
+        cat > .secrets/${{ inputs.client }}.env << EOF
+        KEYSTORE_PASSWORD="${KEYSTORE_PASSWORD}"
+        KEY_PASSWORD="${KEY_PASSWORD}"
+        KEY_ALIAS="${KEY_ALIAS}"
+        EOF
+        
+    - name: Nuclear cleanup for goese (no push notifications)
+      if: inputs.client == 'goese'
+      run: |
+        echo "🚫 NUCLEAR CLEANUP FOR GOESE - NO PUSH NOTIFICATIONS"
+        
+        # Remove notification dependencies from package.json
+        if [ -f "package.json" ]; then
+          cp package.json package.json.backup
+          sed -i '/"@capacitor\/push-notifications":/d' package.json
+          sed -i '/"@capgo\/capacitor-updater":/d' package.json
+          sed -i '/"firebase":/d' package.json
+          sed -i '/"pusher-js":/d' package.json
+          echo "✅ Removed notification dependencies"
+        fi
+        
+        # Remove notification source files
+        if [ -f "src/services/PushNotificationService.js" ]; then
+          mv src/services/PushNotificationService.js src/services/PushNotificationService.js.disabled
+          echo "✅ Disabled PushNotificationService.js"
+        fi
+        
+        if [ -f "src/boot/updater.js" ]; then
+          mv src/boot/updater.js src/boot/updater.js.disabled
+          echo "✅ Disabled updater.js"
+        fi
+        
+        # Clean compiled assets
+        rm -rf dist/ src-capacitor/ android/app/src/main/assets/ android/app/build/
+        echo "✅ Cleaned compiled assets"
+        
+        # Reinstall dependencies
+        rm -rf node_modules package-lock.json
+        npm install
+        echo "✅ Reinstalled dependencies without notifications"
+        
+    - name: Build Android
+      env:
+        ENVIRONMENT: ${{ inputs.client }}
+      run: |
+        BUILD_ANDROID=true BUILD_IOS=false ./build-client-v2.sh ${{ inputs.client }}
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-${{ inputs.client }}
+        path: |
+          res/${{ inputs.client }}/${{ inputs.client }}-release.apk
+          res/${{ inputs.client }}/${{ inputs.client }}-release.aab
+        retention-days: 7
