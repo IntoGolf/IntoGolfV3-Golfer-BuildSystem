@@ -85,6 +85,15 @@ jobs:
           echo "✅ Disabled chats.js (uses pusher-js)"
         fi
         
+        # Remove chats references from store index
+        if [ -f "src/store/index.js" ]; then
+          cp src/store/index.js src/store/index.js.backup
+          sed -i '/import chats from "\.\/chats";/d' src/store/index.js
+          sed -i '/chats,/d' src/store/index.js
+          sed -i '/dispatch("chats\/clear");/d' src/store/index.js
+          echo "✅ Removed chats references from store index"
+        fi
+        
         # Clean compiled assets
         rm -rf dist/ src-capacitor/ android/app/src/main/assets/ android/app/build/
         echo "✅ Cleaned compiled assets"
