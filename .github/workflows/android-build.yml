@@ -109,11 +109,15 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
             # Create backup
             cp package.json package.json.backup
             
-            # Remove push-notifications and capgo dependencies using sed
+            # Remove push-notifications, capgo, firebase, and pusher dependencies using sed
             sed -i '/"@capacitor\/push-notifications":/d' package.json
             sed -i '/"@capgo\/capacitor-updater":/d' package.json
+            sed -i '/"firebase":/d' package.json
+            sed -i '/"pusher-js":/d' package.json
             echo "   - Removed @capacitor/push-notifications dependency"
             echo "   - Removed @capgo/capacitor-updater dependency"
+            echo "   - Removed firebase dependency"
+            echo "   - Removed pusher-js dependency"
             
             # Also remove from iOS Podfile
             if [ -f "ios/App/Podfile" ]; then
