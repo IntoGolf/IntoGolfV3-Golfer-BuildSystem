@@ -109,15 +109,19 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
             # Create backup
             cp package.json package.json.backup
             
-            # Remove push-notifications dependency using sed
+            # Remove push-notifications and capgo dependencies using sed
             sed -i '/"@capacitor\/push-notifications":/d' package.json
+            sed -i '/"@capgo\/capacitor-updater":/d' package.json
             echo "   - Removed @capacitor/push-notifications dependency"
+            echo "   - Removed @capgo/capacitor-updater dependency"
             
             # Also remove from iOS Podfile
             if [ -f "ios/App/Podfile" ]; then
               cp ios/App/Podfile ios/App/Podfile.backup
               sed -i '/CapacitorPushNotifications/d' ios/App/Podfile
+              sed -i '/CapgoCapacitorUpdater/d' ios/App/Podfile
               echo "   - Removed CapacitorPushNotifications from iOS Podfile"
+              echo "   - Removed CapgoCapacitorUpdater from iOS Podfile"
             fi
           fi
           
@@ -179,13 +183,17 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
           # Remove from capacitor.settings.gradle (auto-generated file)
           if [ -f "android/capacitor.settings.gradle" ]; then
             sed -i '/capacitor-push-notifications/d' android/capacitor.settings.gradle
+            sed -i '/capgo-capacitor-updater/d' android/capacitor.settings.gradle
             echo "   - Removed push-notifications from capacitor.settings.gradle"
+            echo "   - Removed capgo-capacitor-updater from capacitor.settings.gradle"
           fi
           
           # Remove from capacitor.build.gradle (auto-generated file)  
           if [ -f "android/app/capacitor.build.gradle" ]; then
             sed -i '/capacitor-push-notifications/d' android/app/capacitor.build.gradle
+            sed -i '/capgo-capacitor-updater/d' android/app/capacitor.build.gradle
             echo "   - Removed push-notifications from capacitor.build.gradle"
+            echo "   - Removed capgo-capacitor-updater from capacitor.build.gradle"
           fi
           
           echo "✅ Capacitor build files cleaned of push notification references"
