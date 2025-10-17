@@ -16,6 +16,7 @@
     "start:delfland": "cross-env ENVIRONMENT=delfland quasar dev",
     "start:amelisweerd": "cross-env ENVIRONMENT=amelisweerd quasar dev",
     "start:engelenburg": "cross-env ENVIRONMENT=engelenburg quasar dev",
+    "start:goese": "cross-env ENVIRONMENT=goese quasar dev",
     "build:android": "cross-env ENVIRONMENT=staging quasar build -m android",
     "build:amelisweerd:ios": "ENVIRONMENT=amelisweerd quasar build -m ios",
     "build:amelisweerd:android": "ENVIRONMENT=amelisweerd quasar -m build capacitor && npx cap copy",
