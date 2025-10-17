@@ -1,0 +1,236 @@
+name: Nightly All Clients Build
+
+on:
+  schedule:
+    # Run every night at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform to build'
+        required: true
+        type: choice
+        options:
+          - android
+          - ios
+          - both
+        default: android
+      upload_to_stores:
+        description: 'Upload to app stores'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  get-clients:
+    runs-on: ubuntu-latest
+    outputs:
+      clients: ${{ steps.list-clients.outputs.clients }}
+      client-count: ${{ steps.list-clients.outputs.count }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: List all clients
+      id: list-clients
+      run: |
+        # Get all client environment files
+        CLIENTS=$(ls env/.env.* | sed 's/env\/.env\.//' | grep -v template | jq -R -s -c 'split("\n")[:-1]')
+        COUNT=$(ls env/.env.* | sed 's/env\/.env\.//' | grep -v template | wc -l)
+        
+        echo "clients=$CLIENTS" >> $GITHUB_OUTPUT
+        echo "count=$COUNT" >> $GITHUB_OUTPUT
+        
+        echo "Found $COUNT clients to build:"
+        echo "$CLIENTS" | jq -r '.[]' | sed 's/^/  - /'
+
+  build-all-android:
+    if: ${{ inputs.platform == 'android' || inputs.platform == 'both' || github.event_name == 'schedule' }}
+    needs: get-clients
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 5  # Limit parallel builds to avoid resource issues
+      matrix:
+        client: ${{ fromJson(needs.get-clients.outputs.clients) }}
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        api-level: 35
+        build-tools: 35.0.0
+        
+    - name: Install dependencies
+      run: |
+        npm install
+        npm install -g @quasar/cli
+      
+    - name: Create secrets directory
+      run: mkdir -p .secrets
+      
+    - name: Setup client secrets
+      env:
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+      run: |
+        cat > .secrets/${{ matrix.client }}.env << EOF
+        KEYSTORE_PASSWORD="${KEYSTORE_PASSWORD}"
+        KEY_PASSWORD="${KEY_PASSWORD}"
+        KEY_ALIAS="${KEY_ALIAS}"
+        EOF
+        
+        # Setup Google Services JSON if available
+        if [ ! -z "$GOOGLE_SERVICES_JSON" ]; then
+          mkdir -p res/${{ matrix.client }}
+          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > res/${{ matrix.client }}/google-services.json 2>/dev/null || true
+        fi
+        
+    - name: Build Android app
+      env:
+        ENVIRONMENT: ${{ matrix.client }}
+      run: |
+        # Skip build if environment file doesn't exist
+        if [ ! -f "env/.env.${{ matrix.client }}" ]; then
+          echo "⚠️ Skipping ${{ matrix.client }} - environment file not found"
+          exit 0
+        fi
+        
+        # Build with incremented version
+        BUILD_ANDROID=true BUILD_IOS=false ./build-client-v2.sh ${{ matrix.client }}
+        
+    - name: Upload artifacts
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: nightly-android-${{ matrix.client }}
+        path: |
+          res/${{ matrix.client }}/${{ matrix.client }}-release.apk
+          res/${{ matrix.client }}/${{ matrix.client }}-release.aab
+        retention-days: 7  # Shorter retention for nightly builds
+        
+    - name: Clean up
+      if: always()
+      run: |
+        rm -rf .secrets/
+        find res/ -name "google-services.json" -delete 2>/dev/null || true
+
+  build-all-ios:
+    if: ${{ inputs.platform == 'ios' || inputs.platform == 'both' }}
+    needs: get-clients
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 3  # Limit parallel builds on macOS
+      matrix:
+        client: ${{ fromJson(needs.get-clients.outputs.clients) }}
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+        
+    - name: Install dependencies
+      run: |
+        npm install
+        npm install -g @quasar/cli
+      
+    - name: Setup iOS certificates
+      env:
+        IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE }}
+        IOS_PROVISIONING_PROFILE: ${{ secrets.IOS_PROVISIONING_PROFILE }}
+        KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+      run: |
+        if [ ! -z "$IOS_CERTIFICATE" ] && [ ! -z "$IOS_PROVISIONING_PROFILE" ]; then
+          echo "✅ iOS certificates configured"
+          mkdir -p .secrets/ios
+          echo "$IOS_CERTIFICATE" | base64 --decode > .secrets/ios/certificate.p12
+          echo "$IOS_PROVISIONING_PROFILE" | base64 --decode > .secrets/ios/profile.mobileprovision
+        else
+          echo "⚠️ iOS certificates not configured - skipping iOS builds"
+          exit 0
+        fi
+        
+    - name: Build iOS app
+      env:
+        ENVIRONMENT: ${{ matrix.client }}
+      run: |
+        # Skip build if environment file doesn't exist
+        if [ ! -f "env/.env.${{ matrix.client }}" ]; then
+          echo "⚠️ Skipping ${{ matrix.client }} - environment file not found"
+          exit 0
+        fi
+        
+        # Build with incremented version
+        BUILD_ANDROID=false BUILD_IOS=true ./build-client-v2.sh ${{ matrix.client }}
+        
+    - name: Upload artifacts
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: nightly-ios-${{ matrix.client }}
+        path: |
+          res/${{ matrix.client }}/${{ matrix.client }}.ipa
+        retention-days: 7
+        
+    - name: Clean up
+      if: always()
+      run: |
+        rm -rf .secrets/
+        find . -name "*.mobileprovision" -delete 2>/dev/null || true
+        find . -name "*.p12" -delete 2>/dev/null || true
+
+  summary:
+    needs: [get-clients, build-all-android]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+    - name: Generate build summary
+      run: |
+        echo "## Nightly Build Summary" >> $GITHUB_STEP_SUMMARY
+        echo "**Date:** $(date '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+        echo "**Total Clients:** ${{ needs.get-clients.outputs.client-count }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Android Build Status:** ${{ needs.build-all-android.result }}" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ inputs.platform }}" = "ios" ] || [ "${{ inputs.platform }}" = "both" ]; then
+          echo "**iOS Build Status:** ${{ needs.build-all-ios.result }}" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Artifacts Available" >> $GITHUB_STEP_SUMMARY
+        echo "- Check the Actions tab for downloadable APK/AAB/IPA files" >> $GITHUB_STEP_SUMMARY
+        echo "- Each client has a separate artifact bundle" >> $GITHUB_STEP_SUMMARY
+        echo "- Artifacts are retained for 7 days" >> $GITHUB_STEP_SUMMARY
+        
+    - name: Notify on failure
+      if: ${{ needs.build-all-android.result == 'failure' }}
+      run: |
+        echo "⚠️ Nightly build failed for some clients"
+        echo "Check individual job logs for details"
