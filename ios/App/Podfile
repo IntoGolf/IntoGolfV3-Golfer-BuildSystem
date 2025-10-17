@@ -16,7 +16,6 @@ def capacitor_pods
   pod 'CapacitorDialog', :path => '../../node_modules/@capacitor/dialog'
   pod 'CapacitorPushNotifications', :path => '../../node_modules/@capacitor/push-notifications'
   pod 'CapacitorSplashScreen', :path => '../../node_modules/@capacitor/splash-screen'
-  pod 'CapgoCapacitorUpdater', :path => '../../node_modules/@capgo/capacitor-updater'
 end
 
 target 'App' do

@@ -75,7 +75,6 @@
     "@capacitor/ios": "^6.0.0",
     "@capacitor/push-notifications": "^6.0.4",
     "@capacitor/splash-screen": "^6.0.0",
-    "@capgo/capacitor-updater": "^6.7.4",
     "@quasar/extras": "^1.13.5",
     "axios": "^0.21.1",
     "capacitor-set-version": "^2.2.0",
