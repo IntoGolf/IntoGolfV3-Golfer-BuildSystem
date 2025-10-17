@@ -318,7 +318,7 @@ const routes = [
     component: () => import("pages/FriendsSearch.vue"),
     meta: {
       requiresAuth: true,
-      title: "Vrienden Zoeken",
+      title: "Vrienden",
     },
   },
   {
@@ -337,6 +337,14 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: "Vriend Details",
+    },
+  },
+  {
+    path: "/invitation/:hash",
+    name: "friend-invitation",
+    component: () => import("pages/FriendInvitation.vue"),
+    meta: {
+      requiresAuth: false,
     },
   },
   {

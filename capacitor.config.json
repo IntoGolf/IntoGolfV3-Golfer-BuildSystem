@@ -1,5 +1,5 @@
 {
-  "appId": "nl.intogolf.delfland",
+  "appId": "nl.intogolf.goese",
   "appName": "Golfbaan Delfland",
   "version": "1.4.11",
   "webDir": "dist/spa",
@@ -20,10 +20,10 @@
   },
   "android": {
     "buildOptions": {
-      "keystorePath": "../../.secrets/delfland.keystore",
-      "keystorePassword": "LAbzTb8ZsmnLXoFGAkNb",
-      "keystoreAlias": "keyDelfland",
-      "keystoreAliasPassword": "dCbuCc0lW4atodOjCVs4",
+      "keystorePath": "../../.secrets/goese.keystore",
+      "keystorePassword": "0DCHcBFyIBQDBgMR",
+      "keystoreAlias": "goese-key-alias",
+      "keystoreAliasPassword": "klroWk6U89W7y0wH",
       "releaseType": "AAB"
     }
   }

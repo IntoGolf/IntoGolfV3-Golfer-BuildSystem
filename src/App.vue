@@ -156,13 +156,14 @@ export default defineComponent({
         [
           "/login",
           "/teetimes",
+          "/invitation",
           "/signUp",
           "/verifyCode",
           "/publicLesson",
           "/classes",
           "/publicWalkins",
           "/publicStatus",
-        ].includes(this.$route.path)
+        ].some(path => this.$route.path.startsWith(path))
       ) {
         return false;
       }
@@ -179,6 +180,7 @@ export default defineComponent({
       "setHasInvoices",
       "setHasCalendar",
       "setHasCircles",
+      "setHasChat",
       "setHasBalance",
       "setHasCourseStatus",
       "setHasGreenFeeCard",
@@ -245,8 +247,7 @@ export default defineComponent({
           name: "chat",
           menuName: "Chat",
           icon: "chat",
-          visible: this.setHasCircles,
-          //visible: true,
+          visible: this.setHasChat,
         },
         {
           name: "external_teetimes",

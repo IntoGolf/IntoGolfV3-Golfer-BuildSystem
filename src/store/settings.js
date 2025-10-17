@@ -80,6 +80,15 @@ const getters = {
       state.item.app_display_circles_tile === 1
     );
   },
+  setHasChat: (state) => {
+    return (
+      state.item &&
+      typeof state.item === "object" &&
+      "app_display_chat" in state.item 
+        ? state.item.app_display_chat === 1
+        : false // Default to false when setting is not present
+    );
+  },
   setHasCalendar: (state) => {
     return (
       state.item &&

@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(gh api:*)",
-      "Bash(./scripts/trigger-github-build.sh:*)"
+      "Bash(./scripts/trigger-github-build.sh:*)",
+      "Bash(./build-client-v2.sh:*)"
     ],
     "deny": [],
     "ask": [],

@@ -6,12 +6,12 @@
         Open Bookings
       </div>
       <q-btn
-        flat
-        round
-        dense
-        icon="refresh"
-        @click="loadOpenBookings"
         :loading="loading"
+        dense
+        flat
+        icon="refresh"
+        round
+        @click="loadOpenBookings"
       />
     </div>
 
@@ -31,10 +31,14 @@
         <q-item
           v-for="(flight, index) in openBookings"
           :key="index"
-          v-ripple
-          class="full-width bg-white shadow-1 q-mb-sm"
-          clickable
-          @click="handleJoinFlight(flight)"
+          v-ripple="!cannotJoin(flight)"
+          :class="[
+            'full-width shadow-1 q-mb-sm',
+            isMyBooking(flight) ? 'bg-orange-1 text-orange-8' :
+            isAlreadyOnFlight(flight) ? 'bg-blue-1 text-blue-8' : 'bg-white'
+          ]"
+          :clickable="!cannotJoin(flight)"
+          @click="!cannotJoin(flight) && handleJoinFlight(flight)"
         >
           <q-item-section>
             <q-item-label class="itg-text-overflow">
@@ -57,7 +61,13 @@
             <q-item-label caption>
               <i class="far fa-golf-club mr-2"/>
               {{ flight.loop1.crlName }}
-              <span class="text-green q-ml-sm">
+              <span v-if="isMyBooking(flight)" class="text-orange q-ml-sm">
+                • Mijn boeking
+              </span>
+              <span v-else-if="isAlreadyOnFlight(flight)" class="text-blue q-ml-sm">
+                • U staat al op deze starttijd
+              </span>
+              <span v-else class="text-green q-ml-sm">
                 • Geboekt door: {{ flight.booker_name }}
               </span>
             </q-item-label>
@@ -72,7 +82,24 @@
           </q-item-section>
 
           <q-item-section avatar>
-            <q-icon name="chevron_right" color="grey-5" size="24px"/>
+            <q-icon
+              v-if="!cannotJoin(flight)"
+              color="grey-5"
+              name="chevron_right"
+              size="24px"
+            />
+            <q-icon
+              v-else-if="isMyBooking(flight)"
+              color="orange"
+              name="person"
+              size="24px"
+            />
+            <q-icon
+              v-else-if="isAlreadyOnFlight(flight)"
+              color="blue"
+              name="check_circle"
+              size="24px"
+            />
           </q-item-section>
         </q-item>
       </q-list>
@@ -88,23 +115,55 @@
 </template>
 
 <script>
-import { getCurrentInstance, onMounted, ref } from 'vue'
-import { useQuasar } from 'quasar'
+import {getCurrentInstance, onMounted, ref, watch} from 'vue'
+import {useQuasar} from 'quasar'
 
 export default {
   name: 'OpenBookings',
   setup() {
     const $q = useQuasar()
-    const { proxy } = getCurrentInstance()
+    const {proxy} = getCurrentInstance()
 
     const loading = ref(false)
     const openBookings = ref([])
+    const userBookings = ref([])
+
+    // Get current user from store
+    const currentUser = proxy.$store.getters['currentUser/item']
+
+    const loadUserBookings = async () => {
+      try {
+        const response = await proxy.$axios.get('golfer/bookings')
+        userBookings.value = response || []
+      } catch (error) {
+        console.error('Error loading user bookings:', error)
+      }
+    }
 
     const loadOpenBookings = async () => {
       loading.value = true
       try {
-        const response = await proxy.$axios.get('golfer/open-bookings')
-        openBookings.value = response || []
+        // Load both open bookings and user's own bookings
+        const [openBookingsResponse] = await Promise.all([
+          proxy.$axios.get('golfer/open-bookings'),
+          loadUserBookings()
+        ])
+        openBookings.value = openBookingsResponse || []
+
+        // Debug: log the structure to understand what data we have
+        if (openBookings.value.length > 0) {
+          console.log('Open booking sample:', openBookings.value[0])
+          console.log('Available fields:', Object.keys(openBookings.value[0]))
+        }
+
+        // Debug: log user bookings
+        if (userBookings.value.length > 0) {
+          console.log('User bookings sample:', userBookings.value[0])
+          console.log('User bookings count:', userBookings.value.length)
+        }
+
+        // Debug: log current user
+        console.log('Current user:', currentUser)
       } catch (error) {
         console.error('Error loading open bookings:', error)
         $q.notify({
@@ -116,7 +175,57 @@ export default {
       }
     }
 
+    const isMyBooking = (flight) => {
+      if (!currentUser) {
+        return false
+      }
+
+      if (userBookings.value && userBookings.value.length > 0) {
+        const isMyFlight = userBookings.value.some(userBooking => {
+          // Match by flight number if available
+          if (flight.fltNr && userBooking.fltNr) {
+            return flight.fltNr === userBooking.fltNr && userBooking.flight_players[0].flpRelNr === currentUser.relNr
+          }
+        })
+        return isMyFlight
+      }
+      return false
+    }
+
+    const isAlreadyOnFlight = (flight) => {
+      if (!currentUser) return false
+
+      // Method 1: Check if flight has flight_players array (detailed data)
+      return userBookings.value.some(uFlight => uFlight.fltNr === flight.fltNr)
+
+      // Method 2: For open bookings API, check if this matches any user booking
+      // If user is on a flight, it shouldn't appear in open bookings, but let's be safe
+      //return isMyBooking(flight) // If it's my booking, I'm definitely on it
+    }
+
+    const cannotJoin = (flight) => {
+      // User cannot join if they are the booker OR already on the flight
+      return isMyBooking(flight) || isAlreadyOnFlight(flight)
+    }
+
     const handleJoinFlight = (flight) => {
+      // Check if user cannot join
+      if (isMyBooking(flight)) {
+        $q.notify({
+          type: 'warning',
+          message: 'Dit is uw eigen boeking - u kunt zich niet aansluiten bij uw eigen starttijd'
+        })
+        return
+      }
+
+      if (isAlreadyOnFlight(flight)) {
+        $q.notify({
+          type: 'info',
+          message: 'U staat al op deze starttijd'
+        })
+        return
+      }
+
       // Check if there are available spots
       if (flight.available_spots <= 0) {
         $q.notify({
@@ -179,11 +288,22 @@ export default {
       loadOpenBookings()
     })
 
+    // Watch for changes in user bookings that might affect open bookings
+    watch(() => proxy.$store.state.currentUser.item, () => {
+      if (proxy.$store.state.currentUser.item) {
+        loadOpenBookings()
+      }
+    }, { deep: true })
+
     return {
       loading,
       openBookings,
+      userBookings,
       loadOpenBookings,
-      handleJoinFlight
+      handleJoinFlight,
+      isMyBooking,
+      isAlreadyOnFlight,
+      cannotJoin
     }
   }
 }
