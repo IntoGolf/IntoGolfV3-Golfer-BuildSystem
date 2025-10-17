@@ -97,6 +97,7 @@ module.exports = configure(function (ctx) {
             'process.env.VUE_APP_RECAPTCHA_SCORE_THRESHOLD': JSON.stringify(envVars.VUE_APP_RECAPTCHA_SCORE_THRESHOLD),
             'process.env.VUE_APP_ENABLE_PUSH_NOTIFICATIONS': JSON.stringify(envVars.VUE_APP_ENABLE_PUSH_NOTIFICATIONS),
             'process.env.VUE_APP_PUSH_DEBUG': JSON.stringify(envVars.VUE_APP_PUSH_DEBUG),
+            'process.env.APP_ID': JSON.stringify(envVars.APP_ID),
           })
         );
         cfg.module.rules.push({

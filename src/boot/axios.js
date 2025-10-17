@@ -11,6 +11,10 @@ let hideLoadingTimeout = null;
 
 axios.interceptors.request.use(
   (config) => {
+    console.log('🌍 axios baseURL:', baseURL);
+    console.log('📱 Platform check - iOS:', Platform.is.ios, 'Android:', Platform.is.android);
+    console.log('🆔 APP_ID:', process.env.APP_ID);
+    
     if (Platform.is.ios || Platform.is.android) {
       axios.defaults.headers.common["X-App-Identifier"] = process.env.APP_ID;
     }
@@ -21,7 +25,7 @@ axios.interceptors.request.use(
     } else {
       config.url = `${baseURL}api/${config.url}`;
     }
-    console.log(config.url);
+    console.log('🔗 Final URL:', config.url);
 
     const token = store.getters["currentUser/token"];
     if (token) {
