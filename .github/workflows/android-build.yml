@@ -75,12 +75,12 @@ jobs:
             echo "✅ Google Services JSON configured for ${{ inputs.client }}"
           fi
         else
-          echo "🚫 Push notifications DISABLED for ${{ inputs.client }} - removing ALL Firebase components..."
+          echo "🚫 Push notifications DISABLED for ${{ inputs.client }} - NUCLEAR REMOVAL OF ALL PUSH COMPONENTS..."
           
-          # NUCLEAR OPTION: Remove ALL Firebase traces
+          # STEP 1: Remove Firebase files
           rm -f res/${{ inputs.client }}/google-services.json
           
-          # Pre-emptively remove Firebase from Android build files (before build starts)
+          # STEP 2: Remove Firebase from Android build files
           if [ -d "android" ]; then
             echo "   - Pre-removing Firebase from Android project..."
             
@@ -103,7 +103,30 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
             echo "   - Removed any existing google-services.json"
           fi
           
-          echo "✅ ALL Firebase components removed for ${{ inputs.client }}"
+          # STEP 3: REMOVE CAPACITOR PUSH NOTIFICATIONS PLUGIN FROM PACKAGE.JSON
+          echo "   - Removing @capacitor/push-notifications from package.json..."
+          if [ -f "package.json" ]; then
+            # Create backup
+            cp package.json package.json.backup
+            
+            # Remove push-notifications dependency using sed
+            sed -i '/"@capacitor\/push-notifications":/d' package.json
+            echo "   - Removed @capacitor/push-notifications dependency"
+            
+            # Also remove from iOS Podfile
+            if [ -f "ios/App/Podfile" ]; then
+              cp ios/App/Podfile ios/App/Podfile.backup
+              sed -i '/CapacitorPushNotifications/d' ios/App/Podfile
+              echo "   - Removed CapacitorPushNotifications from iOS Podfile"
+            fi
+          fi
+          
+          # STEP 4: Clean npm cache and reinstall without push notifications
+          echo "   - Reinstalling dependencies without push notifications..."
+          rm -rf node_modules package-lock.json
+          npm install
+          
+          echo "✅ NUCLEAR OPTION COMPLETE - ALL push notification components removed for ${{ inputs.client }}"
         fi
         
         # Setup Google Play service account
