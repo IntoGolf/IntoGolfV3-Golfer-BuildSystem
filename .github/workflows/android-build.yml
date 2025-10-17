@@ -123,19 +123,62 @@ jobs:
       if: ${{ inputs.upload_to_play_console }}
       run: |
         if [ -f ".secrets/google-play-service-account.json" ] && [ -f "res/${{ inputs.client }}/${{ inputs.client }}-release.aab" ]; then
-          # Install Google Play CLI
-          npm install -g @google-cloud/storage
-          
-          # Upload to Google Play Console using fastlane or manual upload
           echo "📤 Uploading to Google Play Console..."
           
-          # For now, just confirm the files are ready
-          echo "✅ AAB file ready for upload: res/${{ inputs.client }}/${{ inputs.client }}-release.aab"
-          echo "ℹ️ Manual upload to Google Play Console required"
-          echo "   Go to: https://play.google.com/console"
+          # Setup Ruby and Fastlane
+          sudo apt-get update
+          sudo apt-get install -y ruby-full build-essential
+          sudo gem install fastlane
+          
+          # Get package name from environment
+          source env/.env.${{ inputs.client }}
+          
+          # Create minimal Fastfile for upload
+          mkdir -p fastlane
+          cat > fastlane/Fastfile << 'EOF'
+          default_platform(:android)
+          platform :android do
+            desc "Upload to Internal Testing"
+            lane :internal do
+              upload_to_play_store(
+                package_name: ENV['PACKAGE_NAME'],
+                aab: ENV['AAB_PATH'],
+                json_key: ENV['SERVICE_ACCOUNT_JSON'],
+                track: 'internal',
+                release_status: 'completed',
+                skip_upload_apk: true,
+                skip_upload_metadata: true,
+                skip_upload_images: true,
+                skip_upload_screenshots: true
+              )
+            end
+          end
+          EOF
+          
+          # Upload to Internal Testing track
+          PACKAGE_NAME="$APP_ID" \
+          AAB_PATH="res/${{ inputs.client }}/${{ inputs.client }}-release.aab" \
+          SERVICE_ACCOUNT_JSON=".secrets/google-play-service-account.json" \
+          fastlane android internal
+          
+          echo "✅ Successfully uploaded to Google Play Console (Internal Testing)"
+          echo "🔗 Check at: https://play.google.com/console"
           
         else
           echo "⚠️ Google Play service account not configured or AAB not found"
+          echo "📋 Required files:"
+          echo "   - .secrets/google-play-service-account.json"
+          echo "   - res/${{ inputs.client }}/${{ inputs.client }}-release.aab"
+          
+          if [ ! -f ".secrets/google-play-service-account.json" ]; then
+            echo "❌ Missing: Google Play service account JSON"
+            echo "   Add GOOGLE_PLAY_SERVICE_ACCOUNT secret to repository"
+          fi
+          
+          if [ ! -f "res/${{ inputs.client }}/${{ inputs.client }}-release.aab" ]; then
+            echo "❌ Missing: AAB file"
+            echo "   Build may have failed"
+          fi
         fi
         
     - name: Create release notes
