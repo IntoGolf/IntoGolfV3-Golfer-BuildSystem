@@ -98,6 +98,7 @@ module.exports = configure(function (ctx) {
             'process.env.VUE_APP_ENABLE_PUSH_NOTIFICATIONS': JSON.stringify(envVars.VUE_APP_ENABLE_PUSH_NOTIFICATIONS),
             'process.env.VUE_APP_PUSH_DEBUG': JSON.stringify(envVars.VUE_APP_PUSH_DEBUG),
             'process.env.APP_ID': JSON.stringify(envVars.APP_ID),
+            'process.env.APP_DISPLAY_NAME': JSON.stringify(envVars.APP_DISPLAY_NAME),
           })
         );
         cfg.module.rules.push({
