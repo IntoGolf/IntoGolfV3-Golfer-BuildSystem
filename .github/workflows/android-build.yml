@@ -54,25 +54,26 @@ jobs:
         KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
       run: |
+        CLIENT="${{ inputs.client || 'goese' }}"
         # Create secrets file for client
-        cat > .secrets/${{ inputs.client }}.env << EOF
+        cat > .secrets/$CLIENT.env << EOF
         KEYSTORE_PASSWORD="${KEYSTORE_PASSWORD}"
         KEY_PASSWORD="${KEY_PASSWORD}"
         KEY_ALIAS="${KEY_ALIAS}"
         EOF
         
         # Handle Firebase/Google Services based on push notification setting
-        if grep -q "VUE_APP_ENABLE_PUSH_NOTIFICATIONS=true" env/.env.${{ inputs.client }}; then
-          echo "📱 Push notifications enabled for ${{ inputs.client }} - setting up Firebase..."
+        if grep -q "VUE_APP_ENABLE_PUSH_NOTIFICATIONS=true" env/.env.$CLIENT; then
+          echo "📱 Push notifications enabled for $CLIENT - setting up Firebase..."
           if [ ! -z "$GOOGLE_SERVICES_JSON" ]; then
-            echo "$GOOGLE_SERVICES_JSON" | base64 --decode > res/${{ inputs.client }}/google-services.json
-            echo "✅ Google Services JSON configured for ${{ inputs.client }}"
+            echo "$GOOGLE_SERVICES_JSON" | base64 --decode > res/$CLIENT/google-services.json
+            echo "✅ Google Services JSON configured for $CLIENT"
           fi
         else
-          echo "🚫 Push notifications DISABLED for ${{ inputs.client }} - NUCLEAR REMOVAL OF ALL PUSH COMPONENTS..."
+          echo "🚫 Push notifications DISABLED for $CLIENT - NUCLEAR REMOVAL OF ALL PUSH COMPONENTS..."
           
           # STEP 1: Remove Firebase files
-          rm -f res/${{ inputs.client }}/google-services.json
+          rm -f res/$CLIENT/google-services.json
           
           # STEP 2: Remove Firebase from Android build files
           if [ -d "android" ]; then
@@ -146,13 +147,14 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
           
           echo "   - ALL compiled assets removed - forcing fresh build..."
           
-          echo "✅ NUCLEAR OPTION COMPLETE - ALL push notification components removed for ${{ inputs.client }}"
+          echo "✅ NUCLEAR OPTION COMPLETE - ALL push notification components removed for $CLIENT"
         fi
         
     - name: Check environment file
       run: |
-        if [ ! -f "env/.env.${{ inputs.client }}" ]; then
-          echo "❌ Environment file not found: env/.env.${{ inputs.client }}"
+        CLIENT="${{ inputs.client || 'goese' }}"
+        if [ ! -f "env/.env.$CLIENT" ]; then
+          echo "❌ Environment file not found: env/.env.$CLIENT"
           echo "Available clients:"
           ls env/.env.* | sed 's/env\/.env./  - /' | grep -v template
           exit 1
@@ -161,8 +163,9 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
         
     - name: Build Android app
       env:
-        ENVIRONMENT: ${{ inputs.client }}
+        ENVIRONMENT: ${{ inputs.client || 'goese' }}
       run: |
+        CLIENT="${{ inputs.client || 'goese' }}"
         # Set build options
         BUILD_OPTIONS=""
         
@@ -171,7 +174,7 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
         fi
         
         # Check if push notifications are disabled and clean Capacitor build files
-        if grep -q "VUE_APP_ENABLE_PUSH_NOTIFICATIONS=false" env/.env.${{ inputs.client }}; then
+        if grep -q "VUE_APP_ENABLE_PUSH_NOTIFICATIONS=false" env/.env.$CLIENT; then
           echo "🧹 Post-build cleanup: Removing push-notifications from Capacitor Android build files..."
           
           # Remove from capacitor.settings.gradle (auto-generated file)
@@ -194,41 +197,42 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
         fi
         
         # Run build script for Android only
-        BUILD_ANDROID=true BUILD_IOS=false ./build-client-v2.sh ${{ inputs.client }} $BUILD_OPTIONS
+        BUILD_ANDROID=true BUILD_IOS=false ./build-client-v2.sh $CLIENT $BUILD_OPTIONS
         
     - name: Upload Android artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: android-build-${{ inputs.client }}
+        name: android-build-$CLIENT
         path: |
-          res/${{ inputs.client }}/${{ inputs.client }}-release.apk
-          res/${{ inputs.client }}/${{ inputs.client }}-release.aab
+          res/$CLIENT/$CLIENT-release.apk
+          res/$CLIENT/$CLIENT-release.aab
           android/app/build/outputs/
         retention-days: 30
         
     - name: Create release notes
       run: |
+        CLIENT="${{ inputs.client || 'goese' }}"
         # Get environment variables
-        source env/.env.${{ inputs.client }}
+        source env/.env.$CLIENT
         
         cat > release-notes.md << EOF
-        # Android Build - ${{ inputs.client }}
+        # Android Build - $CLIENT
         
         ## Build Information
         - **Version:** \${APP_VERSION}
         - **Build Number:** \${APP_BUILD_NUMBER}
-        - **Client:** ${{ inputs.client }}
+        - **Client:** $CLIENT
         - **Build Date:** \$(date '+%Y-%m-%d %H:%M:%S UTC')
         - **Android Target SDK:** \${ANDROID_TARGET_SDK}
         
         ## Files Generated
-        - APK: \`res/${{ inputs.client }}/${{ inputs.client }}-release.apk\`
-        - AAB: \`res/${{ inputs.client }}/${{ inputs.client }}-release.aab\`
+        - APK: \`res/$CLIENT/$CLIENT-release.apk\`
+        - AAB: \`res/$CLIENT/$CLIENT-release.aab\`
         
         ## Installation
         \`\`\`bash
         # Install APK on device/emulator
-        adb install res/${{ inputs.client }}/${{ inputs.client }}-release.apk
+        adb install res/$CLIENT/$CLIENT-release.apk
         \`\`\`
         
         ## Next Steps
@@ -243,12 +247,13 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
     - name: Upload release notes
       uses: actions/upload-artifact@v4
       with:
-        name: release-notes-${{ inputs.client }}
+        name: release-notes-$CLIENT
         path: release-notes.md
         retention-days: 30
         
     - name: Clean up secrets
       if: always()
       run: |
+        CLIENT="${{ inputs.client || 'goese' }}"
         rm -rf .secrets/
-        rm -rf res/${{ inputs.client }}/google-services.json 2>/dev/null || true
+        rm -rf res/$CLIENT/google-services.json 2>/dev/null || true
