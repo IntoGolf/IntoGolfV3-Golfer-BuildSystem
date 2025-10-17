@@ -31,7 +31,6 @@ module.exports = configure(function (ctx) {
       "filters",
       "platformCheck",
       "store",
-      "updater",
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -88,7 +87,7 @@ module.exports = configure(function (ctx) {
 
       extendWebpack(cfg) {
         const envVars = envParser();
-        
+
         cfg.plugins.push(
           new (require("webpack").DefinePlugin)({
             __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false), // or true, depending on your needs

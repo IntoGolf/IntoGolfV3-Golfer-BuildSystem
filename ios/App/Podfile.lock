@@ -1,6 +1,4 @@
 PODS:
-  - Alamofire (5.10.2)
-  - BigInt (5.2.0)
   - Capacitor (6.2.1):
     - CapacitorCordova
   - CapacitorApp (6.0.2):
@@ -10,18 +8,8 @@ PODS:
     - Capacitor
   - CapacitorDialog (6.0.2):
     - Capacitor
-  - CapacitorPushNotifications (6.0.4):
-    - Capacitor
   - CapacitorSplashScreen (6.0.3):
     - Capacitor
-  - CapgoCapacitorUpdater (6.14.17):
-    - Alamofire (= 5.10.2)
-    - BigInt (= 5.2.0)
-    - Capacitor
-    - SSZipArchive (= 2.4.3)
-    - Version (= 0.8.0)
-  - SSZipArchive (2.4.3)
-  - Version (0.8.0)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -29,16 +17,7 @@ DEPENDENCIES:
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDevice (from `../../node_modules/@capacitor/device`)"
   - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
-  - "CapacitorPushNotifications (from `../../node_modules/@capacitor/push-notifications`)"
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
-  - "CapgoCapacitorUpdater (from `../../node_modules/@capgo/capacitor-updater`)"
-
-SPEC REPOS:
-  trunk:
-    - Alamofire
-    - BigInt
-    - SSZipArchive
-    - Version
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -51,27 +30,17 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/device"
   CapacitorDialog:
     :path: "../../node_modules/@capacitor/dialog"
-  CapacitorPushNotifications:
-    :path: "../../node_modules/@capacitor/push-notifications"
   CapacitorSplashScreen:
     :path: "../../node_modules/@capacitor/splash-screen"
-  CapgoCapacitorUpdater:
-    :path: "../../node_modules/@capgo/capacitor-updater"
 
 SPEC CHECKSUMS:
-  Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
-  BigInt: f668a80089607f521586bbe29513d708491ef2f7
   Capacitor: 1e0d0e7330dea9f983b50da737d8918abcf273f8
   CapacitorApp: 2a8c3a0b0814322e5e6e15fe595f02c3808f0f8b
   CapacitorCordova: 8d93e14982f440181be7304aa9559ca631d77fff
   CapacitorDevice: 1a215717f0b5061503b21a03508b0ec458a57d78
   CapacitorDialog: e966e2261e1c74a8a502e610dd66b4f97ec6fcca
-  CapacitorPushNotifications: 1fc22ae360214a0ac0625c348d3aea217085163d
   CapacitorSplashScreen: 68893659d77b5f82d753b3a70475082845e3039c
-  CapgoCapacitorUpdater: efa03a19a8adc8ba25ee786d4ad8fbee34383722
-  SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
-  Version: de5907f2c5d0f3cf21708db7801d1d5401139486
 
-PODFILE CHECKSUM: cd93c61c90f3899c5347f44f326be554231796df
+PODFILE CHECKSUM: 706dbd11d6dcf737101b09f87fd8d68035ca3dcc
 
 COCOAPODS: 1.16.2

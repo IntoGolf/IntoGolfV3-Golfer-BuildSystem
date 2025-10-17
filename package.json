@@ -87,6 +87,8 @@
     "macos-release": "^3.0.1",
     "mkcert": "^3.1.0",
     "next-vue-storage-watcher": "^0.0.7",
+    "pusher": "^5.2.0",
+    "pusher-js": "^8.4.0",
     "quasar": "2.13.1",
     "storybook": "^8.4.7",
     "three": "^0.152.2",

@@ -21,9 +21,9 @@
   "android": {
     "buildOptions": {
       "keystorePath": "../../.secrets/goese.keystore",
-      "keystorePassword": "0DCHcBFyIBQDBgMR",
-      "keystoreAlias": "goese-key-alias",
-      "keystoreAliasPassword": "klroWk6U89W7y0wH",
+      "keystorePassword": "d2LUkrGu7eJGjY3q5fSk",
+      "keystoreAlias": "keyGoese",
+      "keystoreAliasPassword": "YdI4lz42bdHMkgcJqYLv",
       "releaseType": "AAB"
     }
   }
