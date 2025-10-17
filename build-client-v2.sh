@@ -62,6 +62,14 @@ fi
 echo "📋 Loading configuration from $ENV_FILE"
 source "$ENV_FILE"
 
+echo ""
+echo "🌍 Environment Configuration:"
+echo "   VUE_APP_BASE_URL: ${VUE_APP_BASE_URL:-'NOT SET'}"
+echo "   APP_ID: ${APP_ID:-'NOT SET'}"
+echo "   APP_DISPLAY_NAME: ${APP_DISPLAY_NAME:-'NOT SET'}"
+echo "   VUE_APP_ENABLE_PUSH_NOTIFICATIONS: ${VUE_APP_ENABLE_PUSH_NOTIFICATIONS:-'NOT SET'}"
+echo ""
+
 # Function to increment build number
 increment_build_number() {
   local current_build="${APP_BUILD_NUMBER:-0}"
