@@ -79,6 +79,12 @@ jobs:
           echo "✅ Disabled updater.js"
         fi
         
+        # Disable chat store that uses pusher-js
+        if [ -f "src/store/chats.js" ]; then
+          mv src/store/chats.js src/store/chats.js.disabled
+          echo "✅ Disabled chats.js (uses pusher-js)"
+        fi
+        
         # Clean compiled assets
         rm -rf dist/ src-capacitor/ android/app/src/main/assets/ android/app/build/
         echo "✅ Cleaned compiled assets"
