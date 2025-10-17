@@ -91,6 +91,10 @@ module.exports = configure(function (ctx) {
         cfg.plugins.push(
           new (require("webpack").DefinePlugin)({
             __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false), // or true, depending on your needs
+            'process.env.VUE_APP_NAME': JSON.stringify(envVars.VUE_APP_NAME),
+            'process.env.VUE_APP_BASE_URL': JSON.stringify(envVars.VUE_APP_BASE_URL),
+            'process.env.VUE_APP_GOOGLE_RECAPTCHA': JSON.stringify(envVars.VUE_APP_GOOGLE_RECAPTCHA),
+            'process.env.VUE_APP_RECAPTCHA_SCORE_THRESHOLD': JSON.stringify(envVars.VUE_APP_RECAPTCHA_SCORE_THRESHOLD),
             'process.env.VUE_APP_ENABLE_PUSH_NOTIFICATIONS': JSON.stringify(envVars.VUE_APP_ENABLE_PUSH_NOTIFICATIONS),
             'process.env.VUE_APP_PUSH_DEBUG': JSON.stringify(envVars.VUE_APP_PUSH_DEBUG),
           })
