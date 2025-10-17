@@ -308,13 +308,20 @@ if [ "$BUILD_ANDROID" = "true" ]; then
       sed -i '' 's/<application/<application android:usesCleartextTraffic="true"/' app/src/main/AndroidManifest.xml
     fi
     
-    # Copy Firebase config for development
-    echo "Copying Firebase configuration..."
-    if [ -f "../res/${CLIENT}/google-services.json" ]; then
-      cp "../res/${CLIENT}/google-services.json" app/google-services.json
-      echo "✅ Firebase config copied from res/${CLIENT}/google-services.json"
+    # Copy Firebase config only if push notifications are enabled
+    echo "Checking Firebase configuration..."
+    if grep -q "VUE_APP_ENABLE_PUSH_NOTIFICATIONS=true" "../env/.env.${CLIENT}"; then
+      echo "Push notifications enabled - copying Firebase config..."
+      if [ -f "../res/${CLIENT}/google-services.json" ]; then
+        cp "../res/${CLIENT}/google-services.json" app/google-services.json
+        echo "✅ Firebase config copied from res/${CLIENT}/google-services.json"
+      else
+        echo "⚠️  No Firebase config found in res/${CLIENT}/google-services.json"
+      fi
     else
-      echo "⚠️  No Firebase config found in res/${CLIENT}/google-services.json"
+      echo "⚠️ Push notifications disabled - skipping Firebase config"
+      # Remove any existing google-services.json to prevent Firebase auto-initialization
+      rm -f app/google-services.json
     fi
   fi
   

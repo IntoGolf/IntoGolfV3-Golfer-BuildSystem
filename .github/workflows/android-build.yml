@@ -67,10 +67,17 @@ jobs:
         KEY_ALIAS="${KEY_ALIAS}"
         EOF
         
-        # Setup Google Services JSON
+        # Setup Google Services JSON only for clients with push notifications enabled
         if [ ! -z "$GOOGLE_SERVICES_JSON" ]; then
-          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > res/${{ inputs.client }}/google-services.json
-          echo "✅ Google Services JSON configured"
+          # Check if client has push notifications enabled
+          if grep -q "VUE_APP_ENABLE_PUSH_NOTIFICATIONS=true" env/.env.${{ inputs.client }}; then
+            echo "$GOOGLE_SERVICES_JSON" | base64 --decode > res/${{ inputs.client }}/google-services.json
+            echo "✅ Google Services JSON configured for ${{ inputs.client }} (push notifications enabled)"
+          else
+            echo "⚠️ Skipping Google Services JSON for ${{ inputs.client }} (push notifications disabled)"
+            # Remove any existing google-services.json to prevent Firebase auto-initialization
+            rm -f res/${{ inputs.client }}/google-services.json
+          fi
         fi
         
         # Setup Google Play service account
