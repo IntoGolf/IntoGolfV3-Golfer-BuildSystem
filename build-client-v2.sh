@@ -253,17 +253,44 @@ if [ "$BUILD_ANDROID" = "true" ]; then
     echo "[error] Failed to sync Android to project"; exit 1;
   }
   
-  # Update Android SDK versions
+  # Update Android SDK versions (cross-platform sed)
   echo "Updating Android SDK versions..."
-  sed -i '' "s/compileSdkVersion = .*/compileSdkVersion = $ANDROID_COMPILE_SDK/" android/variables.gradle
-  sed -i '' "s/targetSdkVersion = .*/targetSdkVersion = $ANDROID_TARGET_SDK/" android/variables.gradle
-  sed -i '' "s/minSdkVersion = .*/minSdkVersion = $ANDROID_MIN_SDK/" android/variables.gradle
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    sed -i '' "s/compileSdkVersion = .*/compileSdkVersion = $ANDROID_COMPILE_SDK/" android/variables.gradle
+    sed -i '' "s/targetSdkVersion = .*/targetSdkVersion = $ANDROID_TARGET_SDK/" android/variables.gradle
+    sed -i '' "s/minSdkVersion = .*/minSdkVersion = $ANDROID_MIN_SDK/" android/variables.gradle
+  else
+    # Linux
+    sed -i "s/compileSdkVersion = .*/compileSdkVersion = $ANDROID_COMPILE_SDK/" android/variables.gradle
+    sed -i "s/targetSdkVersion = .*/targetSdkVersion = $ANDROID_TARGET_SDK/" android/variables.gradle
+    sed -i "s/minSdkVersion = .*/minSdkVersion = $ANDROID_MIN_SDK/" android/variables.gradle
+  fi
   
-  # Update Gradle versions for compatibility with SDK 35
-  sed -i '' 's/com.android.tools.build:gradle:8.2.1/com.android.tools.build:gradle:8.5.2/' android/build.gradle
-  sed -i '' 's/com.android.tools.build:gradle:8.3.2/com.android.tools.build:gradle:8.5.2/' android/build.gradle
-  sed -i '' 's/gradle-8.2.1-all.zip/gradle-8.10-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
-  sed -i '' 's/gradle-8.4-all.zip/gradle-8.10-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
+  # Update Gradle versions for compatibility with SDK 35 (cross-platform sed)
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    sed -i '' 's/com.android.tools.build:gradle:8.2.1/com.android.tools.build:gradle:8.5.2/' android/build.gradle
+    sed -i '' 's/com.android.tools.build:gradle:8.3.2/com.android.tools.build:gradle:8.5.2/' android/build.gradle
+    sed -i '' 's/gradle-8.2.1-all.zip/gradle-8.10-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
+    sed -i '' 's/gradle-8.4-all.zip/gradle-8.10-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
+  else
+    # Linux
+    sed -i 's/com.android.tools.build:gradle:8.2.1/com.android.tools.build:gradle:8.5.2/' android/build.gradle
+    sed -i 's/com.android.tools.build:gradle:8.3.2/com.android.tools.build:gradle:8.5.2/' android/build.gradle
+    sed -i 's/gradle-8.2.1-all.zip/gradle-8.10-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
+    sed -i 's/gradle-8.4-all.zip/gradle-8.10-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
+  fi
+  
+  # Force update variables.gradle to ensure API 35
+  echo "Forcing Android API 35 configuration..."
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' 's/compileSdkVersion = [0-9]*/compileSdkVersion = 35/' android/variables.gradle
+    sed -i '' 's/targetSdkVersion = [0-9]*/targetSdkVersion = 35/' android/variables.gradle
+  else
+    sed -i 's/compileSdkVersion = [0-9]*/compileSdkVersion = 35/' android/variables.gradle  
+    sed -i 's/targetSdkVersion = [0-9]*/targetSdkVersion = 35/' android/variables.gradle
+  fi
   
   # Continue with Android build steps...
   cd android || exit 1
