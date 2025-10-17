@@ -45,3 +45,4 @@ see tutorial video https://finley-soft.pek3b.qingstor.com/Filmage%202022-04-08_1
    ![](http://pek3b.qingstor.com/hexo-blog/20220408163028.png)
 3. click Product-Archive in menu bar
    ![](http://pek3b.qingstor.com/hexo-blog/20220408163053.png)
+# Trigger build
