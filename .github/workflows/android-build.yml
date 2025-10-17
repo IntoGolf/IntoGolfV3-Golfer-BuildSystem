@@ -172,6 +172,25 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
           BUILD_OPTIONS="$BUILD_OPTIONS --no-increment"
         fi
         
+        # Check if push notifications are disabled and clean Capacitor build files
+        if grep -q "VUE_APP_ENABLE_PUSH_NOTIFICATIONS=false" env/.env.${{ inputs.client }}; then
+          echo "🧹 Post-build cleanup: Removing push-notifications from Capacitor Android build files..."
+          
+          # Remove from capacitor.settings.gradle (auto-generated file)
+          if [ -f "android/capacitor.settings.gradle" ]; then
+            sed -i '/capacitor-push-notifications/d' android/capacitor.settings.gradle
+            echo "   - Removed push-notifications from capacitor.settings.gradle"
+          fi
+          
+          # Remove from capacitor.build.gradle (auto-generated file)  
+          if [ -f "android/app/capacitor.build.gradle" ]; then
+            sed -i '/capacitor-push-notifications/d' android/app/capacitor.build.gradle
+            echo "   - Removed push-notifications from capacitor.build.gradle"
+          fi
+          
+          echo "✅ Capacitor build files cleaned of push notification references"
+        fi
+        
         # Run build script for Android only
         BUILD_ANDROID=true BUILD_IOS=false ./build-client-v2.sh ${{ inputs.client }} $BUILD_OPTIONS
         
