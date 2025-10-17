@@ -1,6 +1,9 @@
 name: Build Android App
 
 on:
+  push:
+    paths:
+      - 'trigger-build'
   workflow_dispatch:
     inputs:
       client:
