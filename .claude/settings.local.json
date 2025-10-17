@@ -18,7 +18,8 @@
       "Bash(gh run view:*)",
       "Bash(find:*)",
       "Bash(gh workflow:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": [],
