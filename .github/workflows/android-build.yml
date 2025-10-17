@@ -1,0 +1,177 @@
+name: Build Android App
+
+on:
+  workflow_dispatch:
+    inputs:
+      client:
+        description: 'Client name (e.g., goese)'
+        required: true
+        type: string
+      increment_build:
+        description: 'Increment build number'
+        required: false
+        default: true
+        type: boolean
+      upload_to_play_console:
+        description: 'Upload to Google Play Console'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        api-level: 34
+        build-tools: 34.0.0
+        
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Create secrets directory
+      run: mkdir -p .secrets
+      
+    - name: Setup client secrets
+      env:
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        GOOGLE_PLAY_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+      run: |
+        # Create secrets file for client
+        cat > .secrets/${{ inputs.client }}.env << EOF
+        KEYSTORE_PASSWORD="${KEYSTORE_PASSWORD}"
+        KEY_PASSWORD="${KEY_PASSWORD}"
+        KEY_ALIAS="${KEY_ALIAS}"
+        EOF
+        
+        # Setup Google Services JSON
+        if [ ! -z "$GOOGLE_SERVICES_JSON" ]; then
+          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > res/${{ inputs.client }}/google-services.json
+          echo "✅ Google Services JSON configured"
+        fi
+        
+        # Setup Google Play service account
+        if [ ! -z "$GOOGLE_PLAY_SERVICE_ACCOUNT" ]; then
+          echo "$GOOGLE_PLAY_SERVICE_ACCOUNT" | base64 --decode > .secrets/google-play-service-account.json
+          echo "✅ Google Play service account configured"
+        fi
+        
+    - name: Check environment file
+      run: |
+        if [ ! -f "env/.env.${{ inputs.client }}" ]; then
+          echo "❌ Environment file not found: env/.env.${{ inputs.client }}"
+          echo "Available clients:"
+          ls env/.env.* | sed 's/env\/.env./  - /' | grep -v template
+          exit 1
+        fi
+        echo "✅ Environment file found"
+        
+    - name: Build Android app
+      env:
+        ENVIRONMENT: ${{ inputs.client }}
+      run: |
+        # Set build options
+        BUILD_OPTIONS=""
+        if [ "${{ inputs.increment_build }}" = "false" ]; then
+          BUILD_OPTIONS="$BUILD_OPTIONS --no-increment"
+        fi
+        
+        # Run build script for Android only
+        BUILD_ANDROID=true BUILD_IOS=false ./build-client-v2.sh ${{ inputs.client }} $BUILD_OPTIONS
+        
+    - name: Upload Android artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-build-${{ inputs.client }}
+        path: |
+          res/${{ inputs.client }}/${{ inputs.client }}-release.apk
+          res/${{ inputs.client }}/${{ inputs.client }}-release.aab
+          android/app/build/outputs/
+        retention-days: 30
+        
+    - name: Upload to Google Play Console
+      if: ${{ inputs.upload_to_play_console }}
+      run: |
+        if [ -f ".secrets/google-play-service-account.json" ] && [ -f "res/${{ inputs.client }}/${{ inputs.client }}-release.aab" ]; then
+          # Install Google Play CLI
+          npm install -g @google-cloud/storage
+          
+          # Upload to Google Play Console using fastlane or manual upload
+          echo "📤 Uploading to Google Play Console..."
+          
+          # For now, just confirm the files are ready
+          echo "✅ AAB file ready for upload: res/${{ inputs.client }}/${{ inputs.client }}-release.aab"
+          echo "ℹ️ Manual upload to Google Play Console required"
+          echo "   Go to: https://play.google.com/console"
+          
+        else
+          echo "⚠️ Google Play service account not configured or AAB not found"
+        fi
+        
+    - name: Create release notes
+      run: |
+        # Get environment variables
+        source env/.env.${{ inputs.client }}
+        
+        cat > release-notes.md << EOF
+        # Android Build - ${{ inputs.client }}
+        
+        ## Build Information
+        - **Version:** ${APP_VERSION}
+        - **Build Number:** ${APP_BUILD_NUMBER}
+        - **Client:** ${{ inputs.client }}
+        - **Build Date:** $(date '+%Y-%m-%d %H:%M:%S UTC')
+        - **Android Target SDK:** ${ANDROID_TARGET_SDK}
+        
+        ## Files Generated
+        - APK: \`res/${{ inputs.client }}/${{ inputs.client }}-release.apk\`
+        - AAB: \`res/${{ inputs.client }}/${{ inputs.client }}-release.aab\`
+        
+        ## Installation
+        \`\`\`bash
+        # Install APK on device/emulator
+        adb install res/${{ inputs.client }}/${{ inputs.client }}-release.apk
+        \`\`\`
+        
+        ## Next Steps
+        1. Download artifacts from GitHub Actions
+        2. Test APK on devices/emulators
+        3. Upload AAB to Google Play Console for release
+        EOF
+        
+        echo "📋 Release notes created"
+        cat release-notes.md
+        
+    - name: Upload release notes
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-notes-${{ inputs.client }}
+        path: release-notes.md
+        retention-days: 30
+        
+    - name: Clean up secrets
+      if: always()
+      run: |
+        rm -rf .secrets/
+        rm -rf res/${{ inputs.client }}/google-services.json 2>/dev/null || true

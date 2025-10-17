@@ -3,7 +3,10 @@
     "allow": [
       "Bash(gh api:*)",
       "Bash(./scripts/trigger-github-build.sh:*)",
-      "Bash(./build-client-v2.sh:*)"
+      "Bash(./build-client-v2.sh:*)",
+      "Bash(git remote remove:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": [],
