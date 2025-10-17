@@ -66,25 +66,25 @@ source "$ENV_FILE"
 increment_build_number() {
   local current_build="${APP_BUILD_NUMBER:-0}"
   local new_build=$((current_build + 1))
-  
+
   echo "📈 Incrementing build number: $current_build → $new_build"
-  
+
   # Update the env file
   if grep -q "^APP_BUILD_NUMBER=" "$ENV_FILE"; then
     sed -i '' "s/^APP_BUILD_NUMBER=.*/APP_BUILD_NUMBER=$new_build/" "$ENV_FILE"
   else
     echo "APP_BUILD_NUMBER=$new_build" >> "$ENV_FILE"
   fi
-  
+
   # Also update Android version code if it exists
   if grep -q "^ANDROID_VERSION_CODE=" "$ENV_FILE"; then
     sed -i '' "s/^ANDROID_VERSION_CODE=.*/ANDROID_VERSION_CODE=$new_build/" "$ENV_FILE"
   fi
-  
+
   # Reload the environment with new build number
   APP_BUILD_NUMBER=$new_build
   ANDROID_VERSION_CODE=$new_build
-  
+
   return $new_build
 }
 
@@ -200,25 +200,25 @@ fi
 if [ "$BUILD_IOS" = "true" ]; then
   if [ -d "ios" ]; then
     echo "🔧 Preserving existing iOS configurations..."
-    
+
     # Create backup directory
     BACKUP_DIR=".ios-backup-$(date +%s)"
     mkdir -p "$BACKUP_DIR"
-    
+
     # Backup critical files that shouldn't be overwritten
     IOS_FILES_TO_PRESERVE=(
       "ios/App/App/GoogleService-Info.plist"
       "ios/App/App/AppDelegate.swift"
       "ios/App/App/App.entitlements"
     )
-    
+
     for file in "${IOS_FILES_TO_PRESERVE[@]}"; do
       if [ -f "$file" ]; then
         echo "📋 Backing up: $file"
         cp "$file" "$BACKUP_DIR/$(basename "$file")"
       fi
     done
-    
+
     echo "Removing existing iOS platform..."
     rm -rf ios || {
       echo "[error] Failed to remove existing iOS platform"; exit 1;
@@ -240,7 +240,7 @@ if [ "$BUILD_ANDROID" = "true" ]; then
   echo "=========================================="
   echo "📱 Building Android"
   echo "=========================================="
-  
+
   # Add Android to the project
   echo "Capacitor add Android project..."
   npx cap add android || {
@@ -252,7 +252,7 @@ if [ "$BUILD_ANDROID" = "true" ]; then
   npx cap sync android || {
     echo "[error] Failed to sync Android to project"; exit 1;
   }
-  
+
   # Update Android SDK versions (cross-platform sed)
   echo "Updating Android SDK versions..."
   if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -266,7 +266,7 @@ if [ "$BUILD_ANDROID" = "true" ]; then
     sed -i "s/targetSdkVersion = .*/targetSdkVersion = $ANDROID_TARGET_SDK/" android/variables.gradle
     sed -i "s/minSdkVersion = .*/minSdkVersion = $ANDROID_MIN_SDK/" android/variables.gradle
   fi
-  
+
   # Update Gradle versions for compatibility with SDK 35 (cross-platform sed)
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS
@@ -281,78 +281,27 @@ if [ "$BUILD_ANDROID" = "true" ]; then
     sed -i 's/gradle-8.2.1-all.zip/gradle-8.10-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
     sed -i 's/gradle-8.4-all.zip/gradle-8.10-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
   fi
-  
+
   # Force update variables.gradle to ensure API 35
   echo "Forcing Android API 35 configuration..."
   if [[ "$OSTYPE" == "darwin"* ]]; then
     sed -i '' 's/compileSdkVersion = [0-9]*/compileSdkVersion = 35/' android/variables.gradle
     sed -i '' 's/targetSdkVersion = [0-9]*/targetSdkVersion = 35/' android/variables.gradle
   else
-    sed -i 's/compileSdkVersion = [0-9]*/compileSdkVersion = 35/' android/variables.gradle  
+    sed -i 's/compileSdkVersion = [0-9]*/compileSdkVersion = 35/' android/variables.gradle
     sed -i 's/targetSdkVersion = [0-9]*/targetSdkVersion = 35/' android/variables.gradle
   fi
-  
+
   # Continue with Android build steps...
   cd android || exit 1
-  
+
   # Update version code and name in build.gradle (signing config is already properly configured)
   echo "Updating version information..."
   sed -i '' "s/versionCode .*/versionCode $VERSION_CODE/" app/build.gradle
   sed -i '' "s/versionName .*/versionName \"$APP_VERSION\"/" app/build.gradle
-  
-  # For development builds, allow clear text traffic (HTTP requests)
-  if [ "$CLIENT" = "dev" ]; then
-    echo "Enabling clear text traffic for development..."
-    # Add usesCleartextTraffic to AndroidManifest.xml if not present
-    if ! grep -q "android:usesCleartextTraffic" app/src/main/AndroidManifest.xml; then
-      sed -i '' 's/<application/<application android:usesCleartextTraffic="true"/' app/src/main/AndroidManifest.xml
-    fi
-    
-    # Handle Firebase configuration based on push notification settings
-    echo "Checking Firebase configuration..."
-    if grep -q "VUE_APP_ENABLE_PUSH_NOTIFICATIONS=true" "../env/.env.${CLIENT}"; then
-      echo "📱 Push notifications enabled - setting up Firebase..."
-      
-      # Ensure Google Services plugin is available in build.gradle
-      if ! grep -q "com.google.gms:google-services" build.gradle; then
-        echo "Adding Google Services plugin to build.gradle..."
-        sed -i '' 's/classpath.*gradle.*8\.5\.2.*/&\n        classpath "com.google.gms:google-services:4.4.0"/' build.gradle
-      fi
-      
-      # Copy Firebase config
-      if [ -f "../res/${CLIENT}/google-services.json" ]; then
-        cp "../res/${CLIENT}/google-services.json" app/google-services.json
-        echo "✅ Firebase config copied from res/${CLIENT}/google-services.json"
-      else
-        echo "⚠️  No Firebase config found in res/${CLIENT}/google-services.json"
-      fi
-    else
-      echo "🚫 Push notifications DISABLED - removing ALL Firebase components..."
-      
-      # NUCLEAR OPTION: Remove ALL Firebase components
-      echo "   - Removing google-services.json..."
-      rm -f app/google-services.json
-      
-      echo "   - Removing Google Services plugin from build.gradle..."
-      # Remove the Google Services classpath from build.gradle
-      sed -i '' '/com\.google\.gms:google-services/d' build.gradle
-      
-      echo "   - Disabling Google Services plugin in app/build.gradle..."
-      # Replace the conditional Firebase plugin application with a complete disable
-      sed -i '' '/def servicesJSON = file/,/^}/c\
-// Firebase/Google Services DISABLED for this client\
-logger.info("🚫 Firebase/Google Services intentionally disabled - no push notifications")' app/build.gradle
-      
-      echo "   - Removing any cached Firebase files..."
-      rm -rf app/build/generated/source/buildConfig/
-      rm -rf app/build/intermediates/
-      
-      echo "✅ All Firebase components removed"
-    fi
-  fi
-  
+
   echo "✅ Android configuration updated with secure keystore path"
-  
+
   # Build APK and AAB
   echo "Building Android release..."
   ./gradlew clean
@@ -362,21 +311,21 @@ logger.info("🚫 Firebase/Google Services intentionally disabled - no push noti
   ./gradlew bundleRelease || {
     echo "[error] Failed to build AAB"
   }
-  
+
   # Copy outputs
   APK_PATH="app/build/outputs/apk/release/app-release.apk"
   AAB_PATH="app/build/outputs/bundle/release/app-release.aab"
-  
+
   if [ -f "$APK_PATH" ]; then
     cp "$APK_PATH" "../res/${CLIENT}/${CLIENT}-release.apk"
     echo "✅ APK saved to res/${CLIENT}/${CLIENT}-release.apk"
   fi
-  
+
   if [ -f "$AAB_PATH" ]; then
     cp "$AAB_PATH" "../res/${CLIENT}/${CLIENT}-release.aab"
     echo "✅ AAB saved to res/${CLIENT}/${CLIENT}-release.aab"
   fi
-  
+
   cd ..
 fi
 
@@ -386,7 +335,7 @@ if [ "$BUILD_IOS" = "true" ]; then
   echo "=========================================="
   echo "🍎 Building iOS"
   echo "=========================================="
-  
+
   # Add iOS to the project
   echo "Capacitor add iOS project..."
   npx cap add ios || {
@@ -398,28 +347,28 @@ if [ "$BUILD_IOS" = "true" ]; then
   npx cap sync ios || {
     echo "[error] Failed to sync iOS to project"; exit 1;
   }
-  
+
   # Restore preserved iOS configurations
   if [ -n "$BACKUP_DIR" ] && [ -d "$BACKUP_DIR" ]; then
     echo "🔄 Restoring preserved iOS configurations..."
-    
+
     # Restore GoogleService-Info.plist
     if [ -f "$BACKUP_DIR/GoogleService-Info.plist" ]; then
       echo "📋 Restoring: GoogleService-Info.plist"
       cp "$BACKUP_DIR/GoogleService-Info.plist" "ios/App/App/GoogleService-Info.plist"
     fi
-    
+
     # Restore AppDelegate.swift
     if [ -f "$BACKUP_DIR/AppDelegate.swift" ]; then
       echo "📋 Restoring: AppDelegate.swift"
       cp "$BACKUP_DIR/AppDelegate.swift" "ios/App/App/AppDelegate.swift"
     fi
-    
+
     # Restore App.entitlements
     if [ -f "$BACKUP_DIR/App.entitlements" ]; then
       echo "📋 Restoring: App.entitlements"
       cp "$BACKUP_DIR/App.entitlements" "ios/App/App/App.entitlements"
-      
+
       # Ensure the entitlements file is properly linked in Xcode project
       PBXPROJ="ios/App/App.xcodeproj/project.pbxproj"
       if [ -f "$PBXPROJ" ]; then
@@ -430,7 +379,7 @@ if [ "$BUILD_IOS" = "true" ]; then
         fi
       fi
     fi
-    
+
     # Ensure entitlements are properly configured in Xcode project
     PBXPROJ="ios/App/App.xcodeproj/project.pbxproj"
     if [ -f "$PBXPROJ" ] && [ -f "ios/App/App/App.entitlements" ]; then
@@ -461,39 +410,39 @@ EOF
         echo "✅ CODE_SIGN_ENTITLEMENTS already configured"
       fi
     fi
-    
+
     # Clean up backup directory
     rm -rf "$BACKUP_DIR"
     echo "✅ iOS configurations restored"
   fi
-  
+
   # Configure iOS settings
   echo "Configuring iOS project..."
-  
+
   INFO_PLIST="ios/App/App/Info.plist"
   if [ -f "$INFO_PLIST" ]; then
     echo "📝 Updating Info.plist..."
-    
+
     # Display name
     /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName '$APP_DISPLAY_NAME'" "$INFO_PLIST"
-    
+
     # Version - IMPORTANT: Use the new build number
     /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $APP_VERSION" "$INFO_PLIST"
     /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $APP_BUILD_NUMBER" "$INFO_PLIST"
-    
+
     # App category
     if [ "$IOS_APP_CATEGORY" = "Sports" ]; then
       /usr/libexec/PlistBuddy -c "Add :LSApplicationCategoryType string public.app-category.sports" "$INFO_PLIST" 2>/dev/null || \
       /usr/libexec/PlistBuddy -c "Set :LSApplicationCategoryType public.app-category.sports" "$INFO_PLIST"
     fi
-    
+
     # Device family
     if [ "$IOS_DEVICE_FAMILY" = "iPhone" ]; then
       /usr/libexec/PlistBuddy -c "Delete :UIDeviceFamily" "$INFO_PLIST" 2>/dev/null || true
       /usr/libexec/PlistBuddy -c "Add :UIDeviceFamily array" "$INFO_PLIST"
       /usr/libexec/PlistBuddy -c "Add :UIDeviceFamily:0 integer 1" "$INFO_PLIST"
     fi
-    
+
     # Orientation
     if [ "$IOS_ORIENTATION" = "Portrait" ]; then
       /usr/libexec/PlistBuddy -c "Delete :UISupportedInterfaceOrientations" "$INFO_PLIST" 2>/dev/null || true
@@ -501,12 +450,12 @@ EOF
       /usr/libexec/PlistBuddy -c "Add :UISupportedInterfaceOrientations:0 string UIInterfaceOrientationPortrait" "$INFO_PLIST"
     fi
   fi
-  
+
   # Update project.pbxproj
   PBXPROJ="ios/App/App.xcodeproj/project.pbxproj"
   if [ -f "$PBXPROJ" ]; then
     echo "🔨 Updating Xcode project settings..."
-    
+
     # Create Python script for robust pbxproj updates
     cat > /tmp/update_pbxproj.py << PYTHON_SCRIPT
 import sys
@@ -527,11 +476,11 @@ def update_or_add_setting(content, key, value, is_string=True):
         value_formatted = f'"{value}"'
     else:
         value_formatted = str(value)
-    
+
     # Check if key exists and update it
     pattern = rf'{key} = [^;]*;'
     replacement = f'{key} = {value_formatted};'
-    
+
     if re.search(pattern, content):
         content = re.sub(pattern, replacement, content)
     else:
@@ -541,7 +490,7 @@ def update_or_add_setting(content, key, value, is_string=True):
             rf'\1\n\t\t\t\t{key} = {value_formatted};',
             content
         )
-    
+
     return content
 
 # Update all required settings
@@ -569,10 +518,10 @@ print(f"   Version: {version}")
 print(f"   Build: {build}")
 print(f"   Display Name: {display_name}")
 PYTHON_SCRIPT
-    
+
     # Run the Python script
     python3 /tmp/update_pbxproj.py "$PBXPROJ" "$APP_VERSION" "$APP_BUILD_NUMBER" "$APP_DISPLAY_NAME" "$APP_ID"
-    
+
     # Clean up
     rm -f /tmp/update_pbxproj.py
   fi
@@ -587,12 +536,12 @@ SPLASH_SRC="res/${CLIENT}/splash.png"
 if [ -f "$ICON_SRC" ] && [ -f "$SPLASH_SRC" ]; then
   echo "Generating assets..."
   mkdir -p "$CAPACITOR_ASSETS_DIR"
-  
+
   cp "$ICON_SRC" "$CAPACITOR_ASSETS_DIR/icon-only.png"
   cp "$ICON_SRC" "$CAPACITOR_ASSETS_DIR/icon-foreground.png"
   cp "$ICON_SRC" "$CAPACITOR_ASSETS_DIR/icon-background.png"
   cp "$SPLASH_SRC" "$CAPACITOR_ASSETS_DIR/splash.png"
-  
+
   npx capacitor-assets generate || {
     echo "[warning] Asset generation failed"
   }
@@ -662,21 +611,21 @@ if [ "$BUILD_IOS" = "true" ]; then
     rm -rf ~/Library/Developer/Xcode/DerivedData/*
     echo "✅ Xcode cache cleared"
   fi
-  
+
   if [ "$OPEN_XCODE" = true ]; then
     echo "🚀 Opening Xcode..."
     open ios/App/App.xcworkspace
   fi
-  
+
   if [ "$OPEN_IOS" = true ]; then
     echo "📱 Opening iOS app in Simulator..."
-    
+
     # Clean up the app name for file paths (remove spaces)
     APP_NAME_SAFE=$(echo "$APP_DISPLAY_NAME" | tr ' ' '_')
-    
+
     # First, build the app for simulator
     cd ios/App
-    
+
     echo "🔨 Building for Simulator..."
     xcodebuild -workspace App.xcworkspace \
       -scheme App \
@@ -684,35 +633,35 @@ if [ "$BUILD_IOS" = "true" ]; then
       -sdk iphonesimulator \
       -derivedDataPath build \
       -quiet 2>&1 | grep -E "(error:|warning:|FAILED|SUCCEEDED|\*\*)" || true
-    
+
     # Check if build succeeded
     if [ ${PIPESTATUS[0]} -ne 0 ]; then
         echo "❌ Build failed"
         cd ../..
         exit 1
     fi
-    
+
     # Find the actual app path (handles spaces in name)
     APP_PATH=$(find build/Build/Products/Debug-iphonesimulator -name "*.app" -type d | head -1)
-    
+
     if [ -z "$APP_PATH" ]; then
       echo "❌ Could not find built app"
       cd ../..
       exit 1
     fi
-    
+
     echo "📦 Found app at: $APP_PATH"
-    
+
     # Open Simulator
     echo "🚀 Starting Simulator..."
     open -a Simulator
-    
+
     # Wait for simulator to boot
     sleep 5
-    
+
     # Get the booted device or boot one
     DEVICE_ID=$(xcrun simctl list devices | grep "Booted" | head -1 | grep -o "[A-F0-9\-]\{36\}")
-    
+
     if [ -z "$DEVICE_ID" ]; then
       echo "📱 Booting iPhone simulator..."
       # Get first available iPhone
@@ -726,19 +675,19 @@ if [ "$BUILD_IOS" = "true" ]; then
         exit 1
       fi
     fi
-    
+
     echo "📲 Installing app..."
     xcrun simctl install "$DEVICE_ID" "$APP_PATH" || {
       echo "❌ Failed to install app"
       cd ../..
       exit 1
     }
-    
+
     echo "🚀 Launching app..."
     xcrun simctl launch "$DEVICE_ID" "$PACKAGE_NAME" || {
       echo "⚠️  Could not launch app, but it's installed. Try launching manually."
     }
-    
+
     echo "✅ iOS app launched in Simulator"
     cd ../..
   fi
@@ -751,13 +700,13 @@ if [ "$BUILD_ANDROID" = "true" ]; then
       echo "⚠️  Android Studio not found. Please open manually."
     }
   fi
-  
+
   if [ "$OPEN_ANDROID" = true ]; then
     echo "📱 Opening Android app..."
-    
+
     # Check if any device/emulator is running
     DEVICE_COUNT=$(adb devices | grep -v "List" | grep -v "^$" | wc -l)
-    
+
     if [ "$DEVICE_COUNT" -eq 0 ]; then
       echo "🚀 Starting Android emulator..."
       # Try to start the first available emulator
@@ -772,12 +721,12 @@ if [ "$BUILD_ANDROID" = "true" ]; then
         echo "   You can create one in Android Studio > AVD Manager"
       fi
     fi
-    
+
     # Install and launch the APK
     if [ -f "res/${CLIENT}/${CLIENT}-release.apk" ]; then
       echo "📲 Installing APK..."
       adb install -r "res/${CLIENT}/${CLIENT}-release.apk"
-      
+
       echo "🚀 Launching app..."
       # Launch the app
       adb shell monkey -p "$PACKAGE_NAME" -c android.intent.category.LAUNCHER 1

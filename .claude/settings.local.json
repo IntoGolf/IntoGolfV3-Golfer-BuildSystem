@@ -19,7 +19,8 @@
       "Bash(find:*)",
       "Bash(gh workflow:*)",
       "Bash(sed:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(ENVIRONMENT=goese node -e \"\nconst envParser = require(''./src/config/envparser.js'');\nconst env = envParser();\nconsole.log(''=== Environment Variables for goese ==='');\nconsole.log(''VUE_APP_BASE_URL:'', env.VUE_APP_BASE_URL);\nconsole.log(''APP_ID:'', env.APP_ID);\nconsole.log(''APP_DISPLAY_NAME:'', env.APP_DISPLAY_NAME);\nconsole.log(''VUE_APP_ENABLE_PUSH_NOTIFICATIONS:'', env.VUE_APP_ENABLE_PUSH_NOTIFICATIONS);\n\")"
     ],
     "deny": [],
     "ask": [],
