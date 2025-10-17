@@ -51,7 +51,9 @@ jobs:
         build-tools: 34.0.0
         
     - name: Install dependencies
-      run: npm install
+      run: |
+        npm install
+        npm install -g @quasar/cli
       
     - name: Create secrets directory
       run: mkdir -p .secrets
@@ -116,7 +118,9 @@ jobs:
       run: sudo gem install cocoapods
       
     - name: Install dependencies
-      run: npm install
+      run: |
+        npm install
+        npm install -g @quasar/cli
       
     - name: Create secrets directory
       run: mkdir -p .secrets
